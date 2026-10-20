@@ -7,6 +7,7 @@
 // - no code: live while today's free quota lasts (FREE_DAILY, default 25 runs, counted in the QUOTA KV namespace), then
 //   synthetic data, clearly labelled. Without DEMO_CODE configured (local dev) everything is live when keys exist.
 import { runAgent, runBaseline, BASELINE_SYSTEM, TOOLS } from "./agent.js";
+import { unbackedBy } from "./evidence.js";
 import { compareMarkets } from "./markets.js";
 import { makeQloo } from "./qloo.js";
 import { mockQloo } from "./mock-qloo.js";
@@ -97,7 +98,10 @@ export default {
           ? await compareMarkets({ qloo, seedIds: out.seeds.slice(0, 3), marketA: market, marketB,
             onStep: (s) => send({ type: "step", run: `${market} vs ${marketB}`, step: s }) }).catch((e) => ({ error: String(e.message || e) }))
           : null;
-        return { ...meta, market, ...out, baseline, markets };
+        // what the plain guess would target that Qloo did not return anywhere in this run (entities, tags or city lists)
+        const returned = [...out.registry, ...(out.tags || []), ...(markets?.types || []).flatMap((t) => [...(t.only_a || []), ...(t.only_b || []), ...(t.shared || [])])];
+        const unbacked = baseline && !baseline.error ? unbackedBy(baseline, returned) : null;
+        return { ...meta, market, ...out, baseline, unbacked, markets };
       };
 
       // stream: true -> NDJSON lines {type:"step"} as the agent works, then {type:"result"} or {type:"error"}: a live run

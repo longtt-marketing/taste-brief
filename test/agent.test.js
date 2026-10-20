@@ -116,6 +116,7 @@ test("a malformed submit_brief (markup in a field, one item) is sent back, and t
     audience_traits: [{ trait: "a", entity_ids: ["X"], evidence: "Qloo: X" }, { trait: "b", entity_ids: ["Y"], evidence: "Qloo: Y" }],
     meta_interests: [{ interest: "X", entity_ids: ["X"], evidence: "Qloo: X" }, { interest: "Y", entity_ids: ["Y"], evidence: "Qloo: Y" }],
     creative_angles: [], partnerships: [], caveats: [],
+    test_plan: [{ hypothesis: "h", ad_set: "X", kpi: "CTR", stop_if: "s", entity_ids: ["X"], evidence: "Qloo: X" }],
   };
   const bad = { audience_traits: [{ trait: '\n<parameter name="trait">Loves minimalist' }] };
   let n = 0;
@@ -281,4 +282,47 @@ test("evidence gate v3: an entity returned by two calls keeps both affinities, a
   const r = checkEvidence({ meta_interests: [{ interest: "Outdoor Voices", entity_ids: ["OV"], evidence: ["0.912"] },
     { interest: "Outdoor Voices", entity_ids: ["OV"], evidence: ["0.950"] }] }, reg);
   assert.deepEqual(r.rows.map((x) => x.grounded), [true, false]);
+});
+
+test("test plan: each ad test goes through the evidence gate like any other line", async () => {
+  const { registryFrom, checkEvidence } = await import("../src/evidence.js");
+  const reg = registryFrom(REG_CALLS);
+  const brief = { test_plan: [
+    { hypothesis: "Studio fitness cues beat running cues", ad_set: "Interest: Outdoor Voices", kpi: "CTR", stop_if: "CTR under control after 3,000 impressions", entity_ids: ["OV"], evidence: ["Outdoor Voices (affinity 0.966)"] },
+    { hypothesis: "Runners convert", ad_set: "Interest: Strava", kpi: "CTR", stop_if: "x", entity_ids: [], evidence: ["guess"] },
+  ] };
+  assert.deepEqual(checkEvidence(brief, reg).rows.map((r) => [r.field, r.grounded]), [["test_plan", true], ["test_plan", false]]);
+  const out = await runAgent({ llm: mockLLM(), qloo: mockQloo(), product: "wool sneakers", market: "London", references: "Allbirds" });
+  assert.ok(out.brief.test_plan.length >= 1 && out.brief.test_plan.every((t) => t.grounded));
+});
+
+test("unbackedBy: the plain guess's interests and partners that Qloo did not return in this run, by name, no model", async () => {
+  const { unbackedBy } = await import("../src/evidence.js");
+  const base = {
+    meta_interests: [{ interest: "Strava" }, { interest: "Outdoor Voices" }, { interest: "parkrun (check in Ads Manager)" }],
+    partnerships: [{ partner: "Peloton" }, { partner: "Local running clubs" }],
+  };
+  const returned = [{ name: "Outdoor Voices" }, { name: "Peloton" }, { name: "Everlane" }];
+  assert.deepEqual(unbackedBy(base, returned).map((x) => x.label), ["Strava", "parkrun (check in Ads Manager)", "Local running clubs"]);
+  assert.deepEqual(unbackedBy(null, returned), []);
+});
+
+test("baseline: a brief with leaked tool markup is asked for again, and the clean one is used", async () => {
+  const { runBaseline } = await import("../src/agent.js");
+  const bad = { audience_summary: "x", meta_interests: ["\n<parameter name=\"interest\">Running"], audience_traits: [] };
+  const good = { audience_summary: "y", meta_interests: [{ interest: "Strava" }, { interest: "parkrun" }], audience_traits: [] };
+  const seen = [];
+  const llm = async (m) => { seen.push(m[0].content); const input = seen.length === 1 ? bad : good; return { raw: [], calls: [{ id: "b", name: "submit_brief", input }] }; };
+  const b = await runBaseline({ llm, product: "p", market: "m" });
+  assert.equal(b.audience_summary, "y");
+  assert.match(seen[1], /rejected: a field contains tool-call markup/);
+  await assert.rejects(runBaseline({ llm: async () => ({ raw: [], calls: [] }), product: "p", market: "m" }), /no brief/);
+});
+
+test("unbackedBy: a tag Qloo returned in the run (e.g. running) counts as returned", async () => {
+  const { unbackedBy } = await import("../src/evidence.js");
+  const out = await runAgent({ llm: mockLLM(), qloo: mockQloo(), product: "running sneakers", market: "London", references: "Allbirds" });
+  assert.ok(out.tags.length >= 1);
+  const name = out.tags[0].name;
+  assert.deepEqual(unbackedBy({ meta_interests: [{ interest: name }, { interest: "Zzz unknown" }] }, [...out.registry, ...out.tags]).map((x) => x.label), ["Zzz unknown"]);
 });

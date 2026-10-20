@@ -2,20 +2,23 @@
 
 An agent for performance marketers. Give it a product and a market; it asks Qloo's taste graph whose tastes overlap with
 the product, what else that audience loves (brands, artists, shows, podcasts, places) and how it skews by age and gender,
-then writes a campaign brief: audience portrait, Meta Ads interests, creative angles, a landing-page headline and
-partnership ideas. Every line is checked against the Qloo results it cites, and a second market is compared on Qloo's own
-numbers, so the brief can be checked instead of trusted.
+then writes a campaign brief: audience portrait, Meta Ads interests, creative angles, a landing-page headline,
+partnership ideas and up to three ad tests to run first (hypothesis, ad set, metric, stop rule). Every line must cite the
+Qloo results it rests on, and code checks the cited ids, names and numbers against what Qloo returned; a second market is
+compared on Qloo's own numbers, so the brief can be checked instead of trusted.
 
 Built for the [Qloo Agentic Hackathon](https://qloo.devpost.com/).
 
 ## How it works
 - `src/agent.js`: tool-using agent loop on Claude. Tools: `search`, `insights`, `demographics`, `tags`, and
-  `submit_brief` (the only way to finish). The agent looks up tags for the product category and passes them next to
+  `submit_brief` (the only way to finish, including the `test_plan`). The agent looks up tags for the product category and passes them next to
   the brand, so the brief reflects the product too. Every item must cite the Qloo `entity_id`s it rests on.
 - `src/evidence.js`: the evidence gate. A claim counts as grounded only when the entity ids it cites were returned by a
   Qloo call in the same run; the seed entity grounds only claims about itself, or an age/gender claim whose numbers are
   Qloo's demographics for that seed; affinity numbers quoted in the text must match what Qloo returned; one Meta interest
-  per line. The page shows the verified Qloo results (name, affinity, type) next to each line, and flags the rest.
+  per line. The page shows the verified Qloo results (name, affinity, type) next to each line, and flags the rest. This
+  proves where a line comes from, not that the marketing idea is right. `unbackedBy` lists what the no-data baseline would
+  target that Qloo returned nowhere in the run.
 - `src/markets.js`: the second market, without a model in between. Places use `filter.location.query`, so each list is
   real places in that city. Brands, artists and TV use the same insights call per city; the city only nudges Qloo's
   ranking, so the top 12 of each list are compared (only in A, only in B, in both).
@@ -37,7 +40,7 @@ live runs. When neither applies the page runs on synthetic data and says so in a
 ## Run
 Requires Node 20 or newer.
 ```bash
-npm test                          # 22 tests, no network
+npm test                          # 26 tests, no network
 node scripts/evidence-gate.mjs    # agent end to end on synthetic data; fails if any claim is unsupported
 npm run dev                       # local Worker on synthetic data (MOCK=1)
 ```
@@ -58,7 +61,9 @@ claim through, and a pipeline-failure triage that never lowers the evidence thre
 - Qloo describes aggregate taste affinities of groups, not purchases and not what any one person will do; a brief is a
   hypothesis to test with ads, not a forecast.
 - Qloo's demographics are for the seed entities and are not location-specific; the market comparison uses insights.
-- Creative angles and the landing page are the model's interpretation of the cited results, and are labelled so.
+- Creative angles, the landing page, the summary and the test plan are the model's interpretation of the cited results,
+  and are labelled so.
+- The city comparison looks at each city's top 12; a name missing from one top 12 may still rank lower there.
 - Interest names must be checked in Meta Ads Manager before use.
 - When Qloo returns a wrong match (e.g. a magazine for a shoe brand) the agent is told to skip it and say so; it may miss.
 

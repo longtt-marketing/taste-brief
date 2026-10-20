@@ -84,6 +84,7 @@ function briefFrom(seen, product) {
     creative_angles: pods.slice(0, 2).map((p) => ({ angle: `Speak like ${p.name}`, hook: "Placeholder hook from a synthetic run", entity_ids: [p.entity_id], evidence: [p.name] })),
     landing_page: { headline: "[SYNTHETIC] Headline written from taste signals", subheadline: "Replace by a live run", entity_ids: brands.slice(0, 1).map((b) => b.entity_id), evidence: brands.slice(0, 1).map((b) => b.name) },
     partnerships: brands.slice(3, 5).map((b) => ({ partner: b.name, idea: "Co-branded drop (synthetic)", entity_ids: [b.entity_id], evidence: [b.name] })),
+    test_plan: brands.slice(0, 2).map((b) => ({ hypothesis: `[SYNTHETIC] This audience responds to ${b.name} cues`, ad_set: `Interest: ${b.name}, creative in its tone`, kpi: "CTR", stop_if: "CTR under the control ad set after 3,000 impressions", entity_ids: [b.entity_id], evidence: [`${b.name} (affinity ${b.affinity})`] })),
     caveats: ["Synthetic run: all Qloo data is made up, not a real recommendation. Live mode uses real Qloo data."],
   };
 }

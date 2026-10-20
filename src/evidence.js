@@ -10,8 +10,8 @@
 // - an affinity number quoted in the evidence text must match the affinity Qloo returned for a cited entity;
 // - a Meta interest or partner must be one thing: "A / B" combinations are flagged.
 
-export const ITEM_FIELDS = ["audience_traits", "meta_interests", "creative_angles", "partnerships"];
-const LABEL = { audience_traits: "trait", meta_interests: "interest", creative_angles: "angle", partnerships: "partner" };
+export const ITEM_FIELDS = ["audience_traits", "meta_interests", "creative_angles", "partnerships", "test_plan"];
+const LABEL = { audience_traits: "trait", meta_interests: "interest", creative_angles: "angle", partnerships: "partner", test_plan: "hypothesis" };
 const SINGLE = new Set(["meta_interests", "partnerships"]);
 
 const norm = (s) => String(s ?? "").toLowerCase().replace(/\(check in ads manager\)/g, "").replace(/[^\p{L}\p{N}]+/gu, " ").trim();
@@ -129,6 +129,24 @@ export function annotateBrief(brief, reg) {
   if (out.landing_page) {
     const v = verifyItem("landing_page", out.landing_page, reg);
     out.landing_page = { ...out.landing_page, verified: v.verified, problems: v.problems, grounded: v.grounded };
+  }
+  return out;
+}
+
+/**
+ * What the no-data baseline would target that Qloo did not return in this run: its Meta interests and partners whose
+ * names match no entity in the registry. Plain code, no model. "Not in Qloo's results this run", not "wrong".
+ * entities: the run's registry as a list of {name}.
+ */
+export function unbackedBy(baseline, entities) {
+  const names = (entities || []).map((e) => norm(e?.name)).filter((n) => n.length >= 3);
+  const hit = (label) => { const l = norm(label); return l.length >= 2 && names.some((n) => l.includes(n) || n.includes(l)); };
+  const out = [];
+  for (const [field, key] of [["meta_interests", "interest"], ["partnerships", "partner"]]) {
+    for (const it of baseline?.[field] || []) {
+      const label = String(it?.[key] ?? "").trim();
+      if (label && !hit(label)) out.push({ field, label });
+    }
   }
   return out;
 }

@@ -54,6 +54,12 @@ ul.items strong{font-weight:600}
 .bad{font-size:12px;background:var(--warn-soft);color:var(--warn);border-radius:999px;padding:3px 9px}
 .bad::before{content:"Not checked: "}
 .hook{color:var(--mute);font-style:italic}
+.tests{list-style:none;margin:0;padding:0;display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr))}
+.tests li{border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.tests dl{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;margin:8px 0 0;font-size:14px}
+.tests dt{color:var(--faint);font-size:12px;text-transform:uppercase;letter-spacing:.06em;padding-top:2px}
+.tests dd{margin:0}
+.unbacked{margin:14px 0 0;padding-top:12px;border-top:1px solid var(--line);font-size:14px;color:var(--mute)}
 .summary{font-size:18px;line-height:1.5;margin:0 0 14px}
 .score{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;background:var(--ok-soft);color:var(--ok);font-size:14px}
 .score b{font-family:var(--mono)}
@@ -88,7 +94,7 @@ details.trace{color:var(--faint);font-size:14px}
 <main>
   <header>
     <div class="brand"><b>Taste Brief</b><span class="pill" id="mode">checking</span></div>
-    <h1>Know who your audience is before you spend on ads.</h1>
+    <h1>Find the audiences worth testing before you spend on ads.</h1>
     <p class="lede">Tell it what you sell and where. Taste Brief asks Qloo what else that audience likes, then writes a campaign brief you can check line by line against Qloo's own results.</p>
   </header>
 
@@ -174,25 +180,25 @@ function markets(m) {
       ${col(`In ${city(m.market_a)}`, list(t.only_a).concat(list(t.shared).map((e) => ({ name: e.name, rank: e.rank_a }))).sort((x, y) => x.rank - y.rank).map((e) => row(e.name, `#${e.rank}`)).join(""))}
       ${col(`In ${city(m.market_b)}`, list(t.only_b).concat(list(t.shared).map((e) => ({ name: e.name, rank: e.rank_b }))).sort((x, y) => x.rank - y.rank).map((e) => row(e.name, `#${e.rank}`)).join(""))}
     </div>` : `<div class="grid" data-pane="${i}"${i ? " hidden" : ""}>
-      ${col(`Only in ${city(m.market_a)}`, list(t.only_a).map((e) => row(e.name, `#${e.rank}`)).join(""))}
-      ${col(`Only in ${city(m.market_b)}`, list(t.only_b).map((e) => row(e.name, `#${e.rank}`)).join(""))}
-      ${col("In both", list(t.shared).map((e) => row(e.name, `#${e.rank_a} / #${e.rank_b}`)).join(""))}
+      ${col(`Only in ${city(m.market_a)}'s top ${esc(m.take || 12)}`, list(t.only_a).map((e) => row(e.name, `#${e.rank}`)).join(""))}
+      ${col(`Only in ${city(m.market_b)}'s top ${esc(m.take || 12)}`, list(t.only_b).map((e) => row(e.name, `#${e.rank}`)).join(""))}
+      ${col(`In both top ${esc(m.take || 12)}`, list(t.shared).map((e) => row(e.name, `#${e.rank_a} / #${e.rank_b}`)).join(""))}
     </div>`).join("");
   const tabs = types.map((t, i) => `<button type="button" data-tab="${i}" aria-pressed="${i ? "false" : "true"}">${t.filtered ? `${esc(LISTS[typeName(t.type)] || typeName(t.type))} in each city` : `${esc(LISTS[typeName(t.type)] || typeName(t.type))} · ${t.overlap} of top ${Math.max(t.size_a, t.size_b)} shared`}</button>`).join("");
   return `<section class="panel card markets"><h2><span>${city(m.market_a)} and ${city(m.market_b)}, side by side</span><small>Same Qloo call for each city. No AI in this step.</small></h2>
     <div class="tabs" role="group" aria-label="List type">${tabs}</div>${panes}
-    <p class="note">Ranks are Qloo's order for each city. Places are filtered to each city. For brands, artists and TV, the city only nudges Qloo's ranking, so the comparison looks at the top ${esc(m.take || 12)} of each list. In both: rank in ${city(m.market_a)} / rank in ${city(m.market_b)}.</p></section>`;
+    <p class="note">Ranks are Qloo's order for each city. Places are filtered to each city. For brands, artists and TV, the city only nudges Qloo's ranking, so the comparison looks at the top ${esc(m.take || 12)} of each list: a name missing from one city's top ${esc(m.take || 12)} can still rank lower there. In both: rank in ${city(m.market_a)} / rank in ${city(m.market_b)}.</p></section>`;
 }
 
 // The same question asked of the model with no data, to show what only Qloo adds.
-function versus(base, b) {
+function versus(base, b, unbacked) {
   if (!base) return "";
   if (base.error) return `<p class="err">The plain AI comparison did not work this time: ${esc(base.error)}</p>`;
   const names = (x) => list(x.meta_interests).map((i) => esc(cleanInterest(i.interest))).join(", ");
   return `<section class="panel card vs"><div class="grid">
     <div class="guess"><h3>Plain AI guess, no data</h3><p>${esc(base.audience_summary)}</p><p><strong>Interests:</strong> ${names(base)}</p></div>
     <div class="ours"><h3>Taste Brief, from Qloo</h3><p>${esc(b.audience_summary)}</p><p><strong>Interests:</strong> ${names(b)}</p></div>
-  </div></section>`;
+  </div>${list(unbacked).length ? `<p class="unbacked"><strong>The plain guess would target these, and Qloo returned none of them in this run:</strong> ${list(unbacked).map((x) => esc(cleanInterest(x.label))).join(", ")}. That does not make them wrong. It means they are a guess, so test them against the Qloo picks or leave them out.</p>` : ""}</section>`;
 }
 
 fetch("/api/health").then((r) => r.json()).then((h) => {
@@ -227,7 +233,7 @@ function stepText(run, s) {
     if (i.filter_type === "urn:entity:place") return `Found places in ${esc(a)} and in ${esc(b)} that this audience likes${err}`;
     return `Compared ${esc(typeName(i.filter_type))} lists for ${esc(a)} and ${esc(b)}${s.n !== undefined ? ` <span class="n">${s.n} of top ${s.of} shared</span>` : ""}${err}`;
   }
-  if (s.tool === "submit_brief") return s.error ? "Sent the first draft back to the model to fix its format" : "Wrote the brief and checked every line against Qloo";
+  if (s.tool === "submit_brief") return s.error ? "Sent the first draft back to the model to fix its format" : "Wrote the brief and checked what each line cites against Qloo's results";
   if (s.tool === "baseline_done") return "Wrote a plain AI guess to compare against";
   return `${esc(s.tool)}${n(s.n)}${err}`;
 }
@@ -244,6 +250,8 @@ const mdBrief = (j) => {
     "## Creative angles (our reading of the data)", ...list(b.creative_angles).map((x) => `- ${x.angle}: ${x.hook || ""}${src(x) ? ` (built on ${src(x)})` : ""}`), "",
     "## Landing page", `${b.landing_page?.headline || ""}`, `${b.landing_page?.subheadline || ""}`, "",
     "## Partnerships", ...list(b.partnerships).map((x) => `- ${x.partner}: ${x.idea || ""}${src(x) ? ` (Qloo: ${src(x)})` : ""}`), "",
+    ...(list(b.test_plan).length ? ["## What to test first", ...list(b.test_plan).map((x) => `- ${x.hypothesis}. Run: ${x.ad_set}. Watch: ${x.kpi}. Stop if: ${x.stop_if}.${src(x) ? ` (Qloo: ${src(x)})` : ""}`), ""] : []),
+    ...(list(j.unbacked).length ? ["## The plain AI guess would also target (not in Qloo's results this run)", list(j.unbacked).map((x) => cleanInterest(x.label)).join(", "), ""] : []),
     ...(list(b.caveats).length ? ["## Notes", ...list(b.caveats).map((c) => `- ${c}`)] : [])].join("\n");
 };
 const csvInterests = (j) => {
@@ -288,8 +296,8 @@ $("#f").addEventListener("submit", async (e) => {
       : `<div class="banner synthetic">Sample data. The names and numbers below are made up to show how it works. Add the access code, or come back tomorrow, for real Qloo data.</div>`;
     $("#out").innerHTML = `${banner}
       <section class="panel card"><div class="grid">
-        <div><p class="eyebrow">The audience in ${esc(String(j.market).split(",")[0])}</p><p class="summary">${esc(b.audience_summary)}</p>
-          <div class="score${c.grounded === c.total ? "" : " part"}"><b>${c.grounded} of ${c.total}</b> lines match a result Qloo returned in this run</div></div>
+        <div><p class="eyebrow">The audience in ${esc(String(j.market).split(",")[0])}</p><p class="summary">${esc(b.audience_summary)}</p><p class="note" style="margin:-8px 0 12px">Summary written by the model. The lines below each cite the Qloo results they rest on.</p>
+          <div class="score${c.grounded === c.total ? "" : " part"}"><b>${c.grounded} of ${c.total}</b> lines cite results Qloo returned in this run, with matching names and numbers</div></div>
         <div>${demographics(j.demographics)}</div>
       </div></section>
       <div class="grid">
@@ -299,8 +307,9 @@ $("#f").addEventListener("submit", async (e) => {
         ${card("Landing page", `<p style="margin:0 0 6px"><strong>${esc(b.landing_page?.headline)}</strong></p><p style="margin:0">${esc(b.landing_page?.subheadline)}</p>${ev(b.landing_page, true)}`, "our reading of the data")}
         ${card("Partnerships", items(b.partnerships, (x) => `<strong>${esc(x.partner)}</strong>: ${esc(x.idea)}`))}
       </div>
+      ${list(b.test_plan).length ? card("What to test first", `<ul class="tests">${list(b.test_plan).map((x) => `<li><strong>${esc(x.hypothesis)}</strong><dl><dt>Run</dt><dd>${esc(x.ad_set)}</dd><dt>Watch</dt><dd>${esc(x.kpi)}</dd><dt>Stop if</dt><dd>${esc(x.stop_if)}</dd></dl>${ev(x, true)}</li>`).join("")}</ul>`, "each test rests on the Qloo results shown") : ""}
+      ${versus(j.baseline, b, j.unbacked)}
       ${markets(j.markets)}
-      ${versus(j.baseline, b)}
       ${list(b.caveats).length ? `<p class="note">${list(b.caveats).map(esc).join("<br>")}</p>` : ""}
       <div class="actions"><button type="button" class="ghost" id="copy-md">Copy the brief</button><button type="button" class="ghost" id="dl-csv">Download interests as CSV</button></div>
       <details class="trace"><summary>Every Qloo call the agent made</summary><ol>${list(j.trace).map((t) =>

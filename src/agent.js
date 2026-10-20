@@ -26,6 +26,10 @@ Method:
    - Affinity describes aggregate taste overlap, not purchases and not any individual: write "over-indexes on",
      "shares taste with", never "buys" or "will".
    - Creative angles and the landing page are your interpretation: cite the results they are built on.
+   - test_plan (required): 1 to 3 ad tests a marketer can run this week. hypothesis = what the Qloo results suggest about this
+     audience; ad_set = the targeting and creative to run; kpi = one metric (e.g. CTR, cost per add to cart); stop_if =
+     a concrete rule to drop it (e.g. "CTR under the control ad set after 3,000 impressions"). Cite the results it rests on.
+   - Any item that quotes the age or gender index must also cite the seed entity id those numbers belong to.
    If Qloo returned nothing useful for a section, leave it short and say so in caveats; never invent.
 Keep copy concrete and short, in plain natural English a marketer would write. Never use dashes (— or –) as
 punctuation: use commas or full stops. No buzzwords. Meta interests must be names that plausibly exist as Meta Ads interests.`;
@@ -89,9 +93,10 @@ export const TOOLS = [
         creative_angles: cited({ angle: str, hook: str }),
         landing_page: { type: "object", properties: { headline: str, subheadline: str, entity_ids: strArr, evidence: strArr } },
         partnerships: cited({ partner: str, idea: str }),
+        test_plan: cited({ hypothesis: str, ad_set: str, kpi: str, stop_if: str }),
         caveats: strArr,
       },
-      required: ["audience_summary", "audience_traits", "meta_interests", "creative_angles", "landing_page"],
+      required: ["audience_summary", "audience_traits", "meta_interests", "creative_angles", "landing_page", "test_plan"],
     },
   },
 ];
@@ -139,6 +144,8 @@ export async function runAgent({ llm, qloo, product, market, references = "", ma
         return {
           brief: annotateBrief(brief, reg), trace, sources: sourcesFrom(seen),
           registry: [...reg.entities.values()], seeds: [...reg.seeds], check: summary(checkEvidence(brief, reg)),
+          // tags have no entity_id, so they are not in the registry; kept so "did Qloo return this?" can see them
+          tags: calls.filter((c) => c.tool === "tags").flatMap((c) => c.output || []).filter((t) => t?.name).map((t) => ({ tag_id: t.tag_id, name: t.name })),
           demographics: demo ? {
             seeds: ids(demo.input?.entity_ids).map((id) => reg.entities.get(id)?.name || id),
             age: demo.output[0]?.age || null, gender: demo.output[0]?.gender || null,
@@ -167,19 +174,34 @@ punctuation. Call submit_brief.`;
 
 /** The comparison column: same brief, same schema, no Qloo. One model call, forced onto submit_brief. */
 export async function runBaseline({ llm, product, market, references = "" }) {
-  const turn = await llm([{ role: "user", content: `Product: ${product}
+  const ask = `Product: ${product}
 Market: ${market}
-References: ${references || "none"}` }]);
-  let call = turn.calls.find((c) => c.name === "submit_brief");
-  if (!call) { // answered in prose: ask once more for the tool
-    const again = await llm([{ role: "user", content: `Product: ${product}. Market: ${market}. Call submit_brief now.` }]);
-    call = again.calls.find((c) => c.name === "submit_brief");
+References: ${references || "none"}`;
+  // A live run (20/10) sent the baseline with tool markup inside the lists, which left the comparison empty:
+  // ask again (at most twice) when there is no brief, or a broken one, as the agent does.
+  let note = "", problem = "no brief";
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const turn = await llm([{ role: "user", content: ask + note }]);
+    const call = turn.calls.find((c) => c.name === "submit_brief");
+    if (call) {
+      const brief = normalizeBrief(call.input);
+      problem = baselineProblem(brief);
+      if (!problem) return brief;
+    }
+    note = `
+Call submit_brief now, with every list field as a JSON list of objects (plain values, no markup).${problem !== "no brief" ? ` The last one was rejected: ${problem}.` : ""}`;
   }
-  if (!call) throw new Error("baseline did not return a brief");
-  return normalizeBrief(call.input);
+  throw new Error(`baseline did not return a usable brief (${problem})`);
 }
 
-const LIST_FIELDS = ["audience_traits", "meta_interests", "creative_angles", "partnerships", "caveats"];
+/** The baseline cites nothing by design, so only shape is checked: no leaked markup, at least two interests. */
+export function baselineProblem(brief) {
+  if (/<\/?(parameter|invoke|function_calls)\b/.test(JSON.stringify(brief))) return "a field contains tool-call markup";
+  if (brief.meta_interests.filter((i) => i && typeof i === "object" && i.interest).length < 2) return "fewer than 2 meta_interests";
+  return null;
+}
+
+const LIST_FIELDS = ["audience_traits", "meta_interests", "creative_angles", "partnerships", "test_plan", "caveats"];
 const OBJ_FIELDS = ["demographics", "landing_page"];
 const ids = (v) => (Array.isArray(v) ? v : v == null || v === "" ? [] : [v]).map(String);
 const summary = (c) => ({ grounded: c.grounded, total: c.total, ratio: c.ratio,
@@ -191,7 +213,8 @@ export function briefProblem(brief) {
   if (/<\/?(parameter|invoke|function_calls)\b/.test(text)) return "a field contains tool-call markup";
   if (brief.audience_traits.length < 2) return "fewer than 2 audience_traits";
   if (brief.meta_interests.length < 2) return "fewer than 2 meta_interests";
-  const items = ["audience_traits", "meta_interests", "creative_angles", "partnerships"].flatMap((k) => brief[k]);
+  if (brief.test_plan.length < 1) return "no test_plan: add 1 to 3 ad tests";
+  const items = ["audience_traits", "meta_interests", "creative_angles", "partnerships", "test_plan"].flatMap((k) => brief[k]);
   const uncited = items.filter((i) => !ids(i?.entity_ids).length).length;
   if (items.length && uncited > items.length / 2) return `${uncited} of ${items.length} items cite no Qloo entity_ids`;
   return null;
