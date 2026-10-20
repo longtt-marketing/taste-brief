@@ -1,6 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { registryFrom, verifyItem, checkEvidence } from "../src/evidence.js";
+import { briefProblem } from "../src/agent.js";
 
 const seed = { tool: "search", input: { query: "Allbirds" }, output: [
   { name: "Allbirds", entity_id: "SEED", type: "urn:entity:brand", affinity: null },
@@ -58,4 +59,18 @@ test("a valid citation must not conceal a search-only citation in the same line"
   }, reg);
   assert.equal(result.grounded, false);
   assert.match(result.problems.join(" "), /Unrelated Brand/);
+});
+
+test("agent refuses empty test rules or more than 3 experiments before finalizing", () => {
+  const full = { audience_traits: [{ trait: "x" }, { trait: "y" }],
+    meta_interests: [{ interest: "x" }, { interest: "y" }],
+    creative_angles: [], partnerships: [], caveats: [],
+    test_plan: [{ hypothesis: "Studio fitness shows stronger relevance",
+      ad_set: "Outdoor Voices inspired creative", kpi: "Link CTR",
+      stop_if: "After 3,000 impressions, CTR below control", entity_ids: ["INSIGHT"] }] };
+  assert.equal(briefProblem(full), null);
+  const missingRule = { ...full, test_plan: [{ ...full.test_plan[0], stop_if: "  " }] };
+  assert.match(briefProblem(missingRule), /non-empty stop_if/);
+  const four = { ...full, test_plan: Array.from({ length: 4 }, () => ({ ...full.test_plan[0] })) };
+  assert.match(briefProblem(four), /1 to 3/);
 });
