@@ -29,6 +29,10 @@ Built for the [Qloo Agentic Hackathon](https://qloo.devpost.com/).
 - `src/worker.js` + `public/`: Cloudflare Worker serving the page and `POST /api/brief`. The agent and a no-data baseline
   (same question, no Qloo) run side by side; every step is streamed to the page as NDJSON while it happens.
 
+## Judge walkthrough (review branch; link works after deployment)
+
+A short, falsifiable decision case is prepared in [public/judge.html](public/judge.html): the $120 wool sneaker example, plain-AI hypothesis versus Qloo signals, exact limits of the data, and steps to reproduce a **live** run. It does not assert that an ad campaign was tested. **This page is not deployed until the PR has passed review.**
+
 ## Live demo
 https://taste-brief.thelongmarketing.workers.dev (Cloudflare Worker). A live run calls Qloo and Claude, so the public
 page allows a limited number of free live runs per day; judges also have an access code in the submission for unlimited
