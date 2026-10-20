@@ -16,6 +16,17 @@ test("mock run ends with a brief whose items all carry evidence", async () => {
   assert.match(brief.caveats.join(" "), /synthetic/i);
 });
 
+test("mock run: every line is verified against the Qloo registry, demographics come from Qloo, the typed product is searched", async () => {
+  const out = await runAgent({ llm: mockLLM(), qloo: mockQloo(), product: "Specialty coffee subscription", market: "Seoul", references: "Blue Bottle Coffee" });
+  assert.equal(out.trace[0].input.query, "Blue Bottle Coffee");
+  assert.equal(out.check.ratio, 1, JSON.stringify(out.check.flagged));
+  for (const it of out.brief.meta_interests) assert.ok(it.grounded && it.verified.length, "interest without verified source");
+  assert.ok(out.demographics?.age && out.demographics?.gender, "demographics must come from the Qloo call");
+  assert.ok(out.seeds.length >= 1);
+  const plain = await runAgent({ llm: mockLLM(), qloo: mockQloo(), product: "Turntable for vinyl beginners", market: "Berlin" });
+  assert.equal(plain.trace[0].input.query, "Turntable for vinyl beginners");
+});
+
 test("Qloo client: hackathon base URL, X-Api-Key header, GET with query params, slim output", async () => {
   const calls = [];
   const fetchImpl = async (url, init) => {
@@ -93,50 +104,17 @@ test("normalizeBrief fixes shapes a real model sent (list as JSON string, single
     landing_page: JSON.stringify({ headline: "H" }),
     caveats: "only one",
   });
-  assert.deepEqual(b.meta_interests, [{ interest: "Running", evidence: ["x"] }]);
+  assert.deepEqual(b.meta_interests, [{ interest: "Running", evidence: ["x"], entity_ids: [] }]);
   assert.equal(b.creative_angles.length, 1);
   assert.equal(b.landing_page.headline, "H");
   assert.deepEqual(b.caveats, ["only one"]);
   assert.deepEqual(b.partnerships, []);
 });
 
-test("two markets: mock data differs by market and compareBriefs separates unique interests", async () => {
-  const { compareBriefs } = await import("../public/compare.js");
-  const a = await runAgent({ llm: mockLLM(), qloo: mockQloo(), product: "wool sneakers", market: "London, UK" });
-  const b = await runAgent({ llm: mockLLM(), qloo: mockQloo(), product: "wool sneakers", market: "Hanoi, Vietnam" });
-  const c = compareBriefs(a.brief, b.brief);
-  assert.ok(c.interests.only_a.length + c.interests.only_b.length > 0, "two markets should differ");
-  const same = compareBriefs(a.brief, a.brief);
-  assert.equal(same.interests.only_a.length, 0);
-  assert.equal(same.interests.shared.length, a.brief.meta_interests.length);
-});
-
-test("evidence gate: mock agent brief is grounded in Qloo results, the no-data baseline is not", async () => {
-  const { checkEvidence } = await import("../src/evidence.js");
-  const { runBaseline } = await import("../src/agent.js");
-  const { mockBaselineLLM } = await import("../src/llm.js");
-  const { brief, sources } = await runAgent({ llm: mockLLM(), qloo: mockQloo(), product: "Allbirds", market: "London" });
-  assert.ok(sources.length > 5, "agent must report what Qloo returned");
-  const a = checkEvidence(brief, sources);
-  assert.ok(a.total >= 5 && a.ratio === 1, `agent grounded ${a.grounded}/${a.total}`);
-  const base = await runBaseline({ llm: mockBaselineLLM(), product: "Allbirds", market: "London" });
-  assert.equal(checkEvidence(base, sources).grounded, 0, "a guess must not pass the gate");
-});
-
-test("evidence gate: an item whose evidence names nothing Qloo returned is flagged", async () => {
-  const { checkEvidence, sourcesFrom } = await import("../src/evidence.js");
-  const sources = sourcesFrom([[{ name: "Sample Oat Milk Cafe" }], [{ age: { "25_to_29": 0.4 }, gender: { female: 0.2 } }]]);
-  const r = checkEvidence({
-    audience_traits: [{ trait: "coffee", evidence: ["Sample Oat Milk Cafe affinity 0.81"] }, { trait: "yoga", evidence: ["everyone knows"] }],
-    demographics: { age: "25_to_29", evidence: ["age 25_to_29 0.41"] },
-  }, sources);
-  assert.deepEqual(r.rows.map((x) => x.grounded), [true, false, true]);
-});
-
 test("a malformed submit_brief (markup in a field, one item) is sent back, and the resubmitted brief is used", async () => {
   const good = {
-    audience_traits: [{ trait: "a", evidence: "Qloo: X" }, { trait: "b", evidence: "Qloo: Y" }],
-    meta_interests: [{ interest: "X", evidence: "Qloo: X" }, { interest: "Y", evidence: "Qloo: Y" }],
+    audience_traits: [{ trait: "a", entity_ids: ["X"], evidence: "Qloo: X" }, { trait: "b", entity_ids: ["Y"], evidence: "Qloo: Y" }],
+    meta_interests: [{ interest: "X", entity_ids: ["X"], evidence: "Qloo: X" }, { interest: "Y", entity_ids: ["Y"], evidence: "Qloo: Y" }],
     creative_angles: [], partnerships: [], caveats: [],
   };
   const bad = { audience_traits: [{ trait: '\n<parameter name="trait">Loves minimalist' }] };
@@ -151,17 +129,6 @@ test("a malformed submit_brief (markup in a field, one item) is sent back, and t
   assert.match(trace[0].error, /markup|fewer/);
   assert.equal(brief.audience_traits.length, 2);
   assert.equal(briefProblem(brief), null);
-});
-
-test("evidence gate: an interest that is exactly a returned Qloo entity counts; a near name or a trait does not", async () => {
-  const { checkEvidence } = await import("../src/evidence.js");
-  const sources = ["Warby Parker", "Everlane"];
-  const brief = {
-    meta_interests: [{ interest: "Warby Parker", evidence: ["Affinity 0.957"] }, { interest: "Warby", evidence: ["Affinity 0.9"] }],
-    audience_traits: [{ trait: "Everlane", evidence: ["guess"] }],
-  };
-  const r = checkEvidence(brief, sources);
-  assert.deepEqual(r.rows.map((x) => [x.label, x.grounded]), [["Everlane", false], ["Warby Parker", true], ["Warby", false]]);
 });
 
 test("onStep reports every trace entry as it happens, ending with submit_brief", async () => {
@@ -192,4 +159,94 @@ test("Qloo client: gives up after the retries and reports the 429", async () => 
   const fetchImpl = async () => new Response(JSON.stringify({ error_msg: "Rate limit exceeded" }), { status: 429 });
   const q = makeQloo({ apiKey: "k", fetchImpl, retries: 2, sleep: async () => {} });
   await assert.rejects(q.search({ query: "x" }), /429/);
+});
+
+// --- evidence gate v2 (entity ids checked against what Qloo returned in the run) ---
+const REG_CALLS = [
+  { tool: "search", input: { query: "Allbirds" }, output: [{ name: "Allbirds", entity_id: "SEED", type: "urn:entity:brand", affinity: null }] },
+  { tool: "insights", input: { filter_type: "urn:entity:brand", entity_ids: ["SEED"], location: "London" }, output: [
+    { name: "Outdoor Voices", entity_id: "OV", type: "urn:entity:brand", affinity: 0.966 },
+    { name: "Everlane", entity_id: "EV", type: "urn:entity:brand", affinity: 0.956 },
+    { name: "Hozier", entity_id: "HZ", type: "urn:entity:artist", affinity: 0.957 }] },
+];
+
+test("evidence gate v2: cited ids must be ones Qloo returned; seed-only, combos, wrong numbers and uncited lines are flagged", async () => {
+  const { registryFrom, checkEvidence } = await import("../src/evidence.js");
+  const reg = registryFrom(REG_CALLS);
+  assert.deepEqual([...reg.seeds], ["SEED"]);
+  const brief = {
+    audience_traits: [
+      { trait: "Studio fitness", entity_ids: ["OV"], evidence: ["Outdoor Voices (affinity 0.966)"] },  // ok
+      { trait: "Runner", entity_ids: ["SEED"], evidence: ["Allbirds tag: Running"] },                  // seed only, not about the seed
+      { trait: "Made up", entity_ids: ["NOPE"], evidence: ["x"] },                                      // id never returned
+      { trait: "No ids", evidence: ["Everlane"] },                                                      // nothing cited
+      { trait: "Wrong number", entity_ids: ["EV"], evidence: ["Everlane (affinity 0.991)"] },           // number mismatch
+    ],
+    meta_interests: [
+      { interest: "Allbirds", entity_ids: ["SEED"], evidence: ["seed"] },                               // ok: about the seed
+      { interest: "Hozier / HONNE", entity_ids: ["HZ"], evidence: ["Hozier 0.957"] },                   // combination
+      { interest: "Everlane (check in Ads Manager)", entity_ids: ["EV"], evidence: ["Everlane 0.956"] }, // ok
+    ],
+  };
+  const r = checkEvidence(brief, reg);
+  assert.deepEqual(r.rows.map((x) => x.grounded), [true, false, false, false, false, true, false, true]);
+  assert.match(r.rows[1].problems.join(), /seed/);
+  assert.match(r.rows[2].problems.join(), /did not return/);
+  assert.match(r.rows[4].problems.join(), /0\.991 does not match/);
+  assert.match(r.rows[6].problems.join(), /combines/);
+});
+
+test("evidence gate v2: the mock agent passes 100%, the no-data baseline scores 0", async () => {
+  const { registryFrom, checkEvidence } = await import("../src/evidence.js");
+  const { runBaseline } = await import("../src/agent.js");
+  const { mockBaselineLLM } = await import("../src/llm.js");
+  const out = await runAgent({ llm: mockLLM(), qloo: mockQloo(), product: "wool sneakers", market: "London", references: "Allbirds" });
+  assert.equal(out.check.ratio, 1, JSON.stringify(out.check.flagged));
+  const reg = { entities: new Map(out.registry.map((e) => [e.entity_id, e])), seeds: new Set(out.seeds) };
+  const base = await runBaseline({ llm: mockBaselineLLM(), product: "wool sneakers", market: "London" });
+  assert.equal(checkEvidence(base, reg).grounded, 0, "a guess must not pass the gate");
+});
+
+test("markets: diffLists splits two Qloo lists into shared (both affinities), only A, only B, in Qloo's order", async () => {
+  const { diffLists } = await import("../src/markets.js");
+  const a = [{ entity_id: "1", name: "A1", affinity: 0.9 }, { entity_id: "2", name: "S", affinity: 0.8 }, { entity_id: "3", name: "A3", affinity: 0.7 }];
+  const b = [{ entity_id: "2", name: "S", affinity: 0.95 }, { entity_id: "9", name: "B9", affinity: 0.6 }];
+  const d = diffLists(a, b);
+  assert.deepEqual(d.shared, [{ entity_id: "2", name: "S", affinity_a: 0.8, affinity_b: 0.95, rank_a: 2, rank_b: 1 }]);
+  assert.deepEqual(d.only_a.map((e) => [e.name, e.rank]), [["A1", 1], ["A3", 3]]);
+  assert.deepEqual(d.only_b.map((e) => e.name), ["B9"]);
+  assert.equal(d.overlap, 1);
+});
+
+test("markets: compareMarkets makes the same Qloo call per market and type, with no model involved, and reports steps", async () => {
+  const { compareMarkets, COMPARE_TYPES } = await import("../src/markets.js");
+  const calls = [], steps = [];
+  const qloo = { ...mockQloo(), async insights(args) { calls.push(args); return mockQloo().insights(args); } };
+  const m = await compareMarkets({ qloo, seedIds: ["S1"], marketA: "London", marketB: "Hanoi", onStep: (s) => steps.push(s) });
+  assert.equal(calls.length, COMPARE_TYPES.length * 2);
+  assert.ok(calls.every((c) => c.entity_ids[0] === "S1"));
+  assert.deepEqual([...new Set(calls.map((c) => c.location))].sort(), ["Hanoi", "London"]);
+  assert.equal(steps.length, COMPARE_TYPES.length);
+  assert.equal(m.types.length, COMPARE_TYPES.length);
+  assert.deepEqual((await compareMarkets({ qloo, seedIds: [], marketA: "a", marketB: "b" })).error, "no seed entity to compare");
+});
+
+test("normalizeBrief: evidence and entity_ids sent as a lone string become lists at every level", async () => {
+  const { normalizeBrief } = await import("../src/agent.js");
+  const b = normalizeBrief({ audience_traits: [{ trait: "t", evidence: "one note", entity_ids: "E1" }], landing_page: { headline: "h", evidence: "x" } });
+  assert.deepEqual(b.audience_traits[0].evidence, ["one note"]);
+  assert.deepEqual(b.audience_traits[0].entity_ids, ["E1"]);
+  assert.deepEqual(b.landing_page.evidence, ["x"]);
+});
+
+test("evidence gate v2: an age/gender line may rest on the seed when its numbers are Qloo's demographics for that seed", async () => {
+  const { registryFrom, checkEvidence } = await import("../src/evidence.js");
+  const reg = registryFrom([...REG_CALLS, { tool: "demographics", input: { entity_ids: ["SEED"] },
+    output: [{ entity_id: "SEED", age: { "30_to_34": 0.42, "45_to_54": -0.53 }, gender: { female: 0.33, male: -0.33 } }] }]);
+  const r = checkEvidence({ audience_traits: [
+    { trait: "Skews female and 30-34", entity_ids: ["SEED"], evidence: ["30_to_34 +0.42, female +0.33, 45_to_54 -0.53"] },
+    { trait: "Skews male", entity_ids: ["SEED"], evidence: ["male +0.71"] },
+  ] }, reg);
+  assert.deepEqual(r.rows.map((x) => x.grounded), [true, false]);
+  assert.match(r.rows[1].problems.join(), /0\.71 does not match/);
 });

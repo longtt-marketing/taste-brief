@@ -8,5 +8,7 @@
   // Run near the US: Anthropic refuses calls from some Cloudflare locations near Vietnam (403 "Request not allowed",
   // seen 20/10 from the Hong Kong colo), while the same key works from Vietnam.
   "placement": { "region": "aws:us-east-1" },
-  "vars": { "MOCK": "0" }
+  // Free live runs per day without the access code (src/worker.js); the count lives in this KV namespace.
+  "kv_namespaces": [{ "binding": "QUOTA", "id": "daaccaa3ddf8419799c074617dd23871" }],
+  "vars": { "MOCK": "0", "FREE_DAILY": "25" }
 }

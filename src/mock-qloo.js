@@ -15,7 +15,9 @@ const DATA = {
 export function mockQloo() {
   return {
     async search({ query, types = "urn:entity:brand", take = 3 }) {
-      return fake("Sample match for", types, [query, query + " (alt)", query + " (similar)"]).slice(0, take);
+      // seed ids must not collide with the insights results, as with the real API
+      return fake("Sample match for", types, [query, query + " (alt)", query + " (similar)"]).slice(0, take)
+        .map((e, i) => ({ ...e, entity_id: `MOCK-SEED-${i + 1}` }));
     },
     async insights({ filter_type, take = 6, location = "" }) {
       // shift the synthetic list by a hash of the location so two markets give visibly different (still fake) answers

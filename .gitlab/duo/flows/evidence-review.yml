@@ -1,4 +1,4 @@
-# Duo custom flow: "evidence reviewer". DRAFT 18/10 — paste into AI > Flows > New flow once the project is provisioned,
+# Duo custom flow: "evidence reviewer". Paste into AI > Flows > New flow in the GitLab project,
 # then confirm tool names against the tools registry (docs: user/duo_agent_platform/flows/custom_flows_schema).
 # Trigger: assign the flow's service account as reviewer on an MR. Goal = MR IID.
 # Supervised: the agent reviews and comments on its own; the human only approves the merge.

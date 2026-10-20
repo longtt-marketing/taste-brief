@@ -1,4 +1,4 @@
-# Duo custom flow: "pipeline triage". DRAFT 18/10 — paste into AI > Flows > New flow; confirm tool names first.
+# Duo custom flow: "pipeline triage". Paste into AI > Flows > New flow; check the tool names first.
 # Trigger: pipeline event (failed). Goal = pipeline webhook payload.
 # Supervised: the agent finds the failing job, fixes it on a branch and opens an MR; a human approves the outcome (the merge).
 # It never edits the evidence threshold or deletes tests to make a build green (stated in the prompt, checked by evidence-review).

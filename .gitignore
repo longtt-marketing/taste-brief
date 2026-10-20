@@ -1,7 +1,6 @@
 node_modules/
 .wrangler/
 .dev.vars
-.ket-qua/
 evidence-report.json
 .results/
 video/

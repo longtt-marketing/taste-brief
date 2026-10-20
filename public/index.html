@@ -3,167 +3,259 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Taste Brief — campaign briefs grounded in Qloo taste data</title>
-<meta name="description" content="An agent that turns a product and a market into an audience and creative brief, where every line cites Qloo taste signals.">
+<title>Taste Brief: campaign briefs you can check against Qloo</title>
+<meta name="description" content="Tell it what you sell and where. Taste Brief asks Qloo what else that audience likes, then writes a campaign brief you can check line by line.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f7f6f2;--card:#fff;--ink:#16161a;--mute:#5c5c66;--line:#e2e0d8;--acc:#3b2bd9;--acc-soft:#ecebff;--ok:#0f7a4a;--warn:#9a5b00}
-@media (prefers-color-scheme:dark){:root{--bg:#121216;--card:#1b1b21;--ink:#f1f0ec;--mute:#a3a3ad;--line:#2c2c35;--acc:#8f86ff;--acc-soft:#25234a;--ok:#4fd39a;--warn:#f0b75a}}
+:root{--bg:#f6f4ee;--card:#fff;--ink:#15161a;--mute:#55565f;--faint:#6a6b73;--line:#e3e0d6;--acc:#3a2fd1;--acc-ink:#fff;--acc-soft:#ebe9ff;--ok:#0d6b41;--ok-soft:#e4f1e9;--warn:#8a4a07;--warn-soft:#fbeedd;--neg:#c7c3b8;--axis:#d8d4c8;
+  --display:"Bricolage Grotesque",system-ui,sans-serif;--body:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace}
+@media (prefers-color-scheme:dark){:root{--bg:#121216;--card:#1b1b21;--ink:#f1f0ec;--mute:#b0b0ba;--faint:#9a9aa5;--line:#2c2c35;--acc:#a49dff;--acc-ink:#121216;--acc-soft:#25234a;--ok:#4fd39a;--ok-soft:#14301f;--warn:#f0b75a;--warn-soft:#3a2a10;--neg:#4a4a55;--axis:#3a3a44}}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
-main{max-width:980px;margin:0 auto;padding:32px 16px 64px}
-h1{font-size:clamp(28px,4vw,40px);line-height:1.1;margin:0 0 8px;letter-spacing:-.02em}
-.lede{color:var(--mute);margin:0 0 24px;max-width:46em}
-form{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 var(--body)}
+main{max-width:1040px;margin:0 auto;padding:40px 16px 72px;display:flex;flex-direction:column;gap:24px}
+.brand{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.brand b{font-family:var(--display);font-size:18px;letter-spacing:-.01em}
+.pill{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:999px;background:var(--acc-soft);color:var(--acc)}
+.pill.live{background:var(--ok-soft);color:var(--ok)}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(34px,5.5vw,52px);line-height:1.02;letter-spacing:-.03em;margin:4px 0 0;max-width:820px}
+.lede{color:var(--mute);font-size:18px;margin:0;max-width:700px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px}
+.presets{display:flex;flex-wrap:wrap;align-items:center;gap:8px;color:var(--mute);font-size:14px;margin:0 0 18px}
+form .fields{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr))}
 label{display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:14px}
-input,textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
-textarea{min-height:80px;resize:vertical}
-.full{grid-column:1/-1}
-button{font:inherit;font-weight:600;background:var(--acc);color:#fff;border:0;border-radius:10px;padding:12px 20px;cursor:pointer;justify-self:start}
+label small{font-weight:400;color:var(--faint)}
+input{font:inherit;font-weight:400;font-size:15px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:11px 12px;min-height:44px}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:16px;margin-top:18px}
+button{font:inherit;font-weight:600;border:0;border-radius:12px;padding:12px 20px;min-height:44px;cursor:pointer;background:var(--acc);color:var(--acc-ink)}
 button:disabled{opacity:.6;cursor:progress}
-button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
-#status{margin:16px 0;color:var(--mute);min-height:1.5em}
-.badge{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:6px;background:var(--acc-soft);color:var(--acc)}
+button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+button.chip{font-size:14px;border-radius:999px;padding:8px 14px;background:var(--acc-soft);color:var(--acc)}
+button.ghost{font-size:14px;background:var(--card);color:var(--acc);border:1px solid var(--line)}
+details.code summary{cursor:pointer;color:var(--faint);font-size:14px}
+details.code label{margin-top:10px;max-width:360px}
+.eyebrow{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin:0 0 10px}
+#status{margin:0;color:var(--mute);min-height:1.5em}
+#live{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:6px 20px;font-size:14px;color:var(--mute)}
+#live li::before{content:"✓ ";color:var(--ok)}
+#live .n{font-family:var(--mono);font-size:12px;color:var(--faint)}
 .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))}
-section.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px}
-section.card h2{font-size:15px;text-transform:uppercase;letter-spacing:.08em;color:var(--mute);margin:0 0 12px}
-ul.items{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
-.ev{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
-.ev span{font-size:12px;background:var(--acc-soft);color:var(--acc);border-radius:999px;padding:2px 8px}
-.ev span::before{content:"Qloo · ";opacity:.7}
+.card h2{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin:0 0 14px}
+.card h2 small{text-transform:none;letter-spacing:0;font-weight:400;font-size:12px}
+ul.items{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px}
+ul.items strong{font-weight:600}
+.ev{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;align-items:center}
+.ev .lbl{font-size:12px;color:var(--faint)}
+.src{font-size:12px;background:var(--acc-soft);color:var(--acc);border-radius:999px;padding:3px 9px}
+.src::before{content:"✓ Qloo · ";opacity:.8}
+.src .num{font-family:var(--mono)}
+.bad{font-size:12px;background:var(--warn-soft);color:var(--warn);border-radius:999px;padding:3px 9px}
+.bad::before{content:"Not checked: "}
 .hook{color:var(--mute);font-style:italic}
-details.trace{margin-top:24px;color:var(--mute);font-size:14px}
+.summary{font-size:18px;line-height:1.5;margin:0 0 14px}
+.score{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;background:var(--ok-soft);color:var(--ok);font-size:14px}
+.score b{font-family:var(--mono)}
+.score.part{background:var(--warn-soft);color:var(--warn)}
+.bars{display:grid;grid-template-columns:max-content minmax(0,1fr) 52px;gap:6px 10px;align-items:center;font-size:13px}
+.track{position:relative;height:12px}
+.track::after{content:"";position:absolute;left:50%;top:-2px;bottom:-2px;border-left:1px solid var(--axis)}
+.fill{position:absolute;top:1px;bottom:1px;border-radius:3px;background:var(--acc)}
+.fill.neg{background:var(--neg)}
+.v{font-family:var(--mono);color:var(--mute)}
+.note{font-size:13px;color:var(--faint);margin:10px 0 0}
+.banner{border-radius:14px;padding:12px 16px;font-size:15px}
+.banner.live{background:var(--ok-soft);color:var(--ok)}
+.banner.synthetic{background:var(--warn-soft);color:var(--warn);font-weight:600}
+.markets h2{font-family:var(--display);font-size:26px;letter-spacing:-.02em;text-transform:none;color:var(--ink);font-weight:700}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+.tabs button{font-size:13px;font-weight:600;padding:6px 12px;min-height:36px;border-radius:999px;background:var(--line);color:var(--ink)}
+.tabs button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.mk h3{font-size:15px;margin:0 0 6px}
+.mk-row{display:flex;justify-content:space-between;gap:8px;font-size:14px;padding:4px 0;border-bottom:1px dashed var(--line)}
+.mk-row span:last-child{font-family:var(--mono);font-size:13px;color:var(--faint);white-space:nowrap}
+.vs h3{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin:0 0 8px}
+.vs .guess{color:var(--mute)}
+.vs .guess h3{color:var(--faint)}
+.vs .ours h3{color:var(--acc)}
+.actions{display:flex;flex-wrap:wrap;gap:10px}
+details.trace{color:var(--faint);font-size:14px}
 .err{color:var(--warn)}
-.compare h3{margin:0 0 4px;font-size:18px}
-.compare .grid>div:first-child{opacity:.75}
-.presets{display:flex;flex-wrap:wrap;align-items:center;gap:8px;color:var(--mute);font-size:14px;margin:0 0 12px}
-button.chip{background:var(--acc-soft);color:var(--acc);padding:6px 12px;border-radius:999px;font-size:14px}
-#live{list-style:none;margin:0 0 16px;padding:0;display:flex;flex-direction:column;gap:6px;font-size:14px}
-#live li{color:var(--mute)}
-#live li b{color:var(--ink);font-weight:600}
-#live li.done::before{content:"✓ ";color:var(--ok)}
-.actions{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
-.actions button{background:var(--card);color:var(--acc);border:1px solid var(--line)}
 </style>
 </head>
 <body>
 <main>
-  <p><span class="badge" id="mode">checking…</span></p>
-  <h1>Taste Brief</h1>
-  <p class="lede">Give it a product and a market. An agent asks Qloo's taste graph who really buys it, what else they love and how old they are,
-    then writes an audience and creative brief where every line shows the Qloo signal behind it.</p>
+  <header>
+    <div class="brand"><b>Taste Brief</b><span class="pill" id="mode">checking</span></div>
+    <h1>Know who your audience is before you spend on ads.</h1>
+    <p class="lede">Tell it what you sell and where. Taste Brief asks Qloo what else that audience likes, then writes a campaign brief you can check line by line against Qloo's own results.</p>
+  </header>
 
-  <p class="presets" aria-label="Examples">Try an example:
-    <button type="button" class="chip" data-p="Wool running sneakers, $120, sustainable|London, UK|Hanoi, Vietnam|Allbirds, Veja">Wool sneakers · London vs Hanoi</button>
-    <button type="button" class="chip" data-p="Specialty coffee subscription, $25 a month|Seoul, South Korea||Blue Bottle Coffee">Coffee subscription · Seoul</button>
-    <button type="button" class="chip" data-p="Turntable for first-time vinyl buyers, $199|Berlin, Germany|Mexico City, Mexico|Audio-Technica">Turntable · Berlin vs Mexico City</button>
-  </p>
-  <form id="f">
-    <label>Product<input name="product" required minlength="3" maxlength="400" placeholder="Wool running sneakers, $120, sustainable"></label>
-    <label>Market<input name="market" required minlength="2" maxlength="120" placeholder="London, UK"></label>
-    <label>Compare with another market <span style="font-weight:400;color:var(--mute)">(optional)</span><input name="compare_market" maxlength="120" placeholder="Hanoi, Vietnam"></label>
-    <label class="full">Reference brands or competitors <span style="font-weight:400;color:var(--mute)">(optional)</span>
-      <textarea name="references" maxlength="300" placeholder="Allbirds, Veja"></textarea></label>
-    <label class="full">Access code for live Qloo data <span style="font-weight:400;color:var(--mute)">(without it the demo runs on synthetic data)</span><input name="code" type="password" maxlength="100" autocomplete="off"></label>
-    <button id="go" type="submit">Build the brief</button>
-  </form>
+  <section class="panel">
+    <p class="presets" aria-label="Examples">Start from an example:
+      <button type="button" class="chip" data-p="Wool running sneakers, $120, sustainable|London, UK|Hanoi, Vietnam|Allbirds">Wool sneakers in London and Hanoi</button>
+      <button type="button" class="chip" data-p="Specialty coffee subscription, $25 a month|Seoul, South Korea|Tokyo, Japan|Blue Bottle Coffee">Coffee subscription in Seoul and Tokyo</button>
+      <button type="button" class="chip" data-p="Turntable for first time vinyl buyers, $199|Berlin, Germany|Mexico City, Mexico|Audio-Technica">Turntable in Berlin and Mexico City</button>
+    </p>
+    <form id="f">
+      <div class="fields">
+        <label>What you sell<input name="product" required minlength="3" maxlength="400" placeholder="Wool running sneakers, $120"></label>
+        <label>Market<input name="market" required minlength="2" maxlength="120" placeholder="London, UK"></label>
+        <label>Compare with <small>optional</small><input name="compare_market" maxlength="120" placeholder="Hanoi, Vietnam"></label>
+        <label>Your brand or a close competitor <small>optional</small><input name="references" maxlength="300" placeholder="Allbirds"></label>
+      </div>
+      <div class="row">
+        <button id="go" type="submit">Build the brief</button>
+        <details class="code" id="code-box"><summary>Have an access code?</summary>
+          <label>Access code <small id="code-help">optional</small><input name="code" type="password" maxlength="100" autocomplete="off"></label>
+        </details>
+      </div>
+    </form>
+  </section>
 
-  <p id="status" role="status" aria-live="polite"></p>
-  <ol id="live" aria-label="What the agent is doing"></ol>
-  <div id="out"></div>
+  <section aria-live="polite">
+    <p id="status" role="status"></p>
+    <ol id="live" aria-label="What the agent did"></ol>
+  </section>
+  <div id="out" style="display:flex;flex-direction:column;gap:16px"></div>
 </main>
 <script type="module">
-import { compareBriefs } from "./compare.js";
 const $ = (s) => document.querySelector(s);
-const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-const ev = (list) => list?.length ? `<div class="ev">${list.map((e) => `<span>${esc(e)}</span>`).join("")}</div>` : "";
-const card = (title, inner) => `<section class="card"><h2>${esc(title)}</h2>${inner}</section>`;
-const items = (arr, fn) => `<ul class="items">${(arr || []).map((x) => `<li>${fn(x)}${ev(x.evidence)}</li>`).join("") || "<li>Qloo returned nothing for this.</li>"}</ul>`;
+// a spaced dash used as punctuation in model text reads as a comma; hyphens inside words stay
+const esc = (s) => String(s ?? "").replace(/\s+[—–]\s+/g, ", ").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const list = (v) => (Array.isArray(v) ? v : v == null || v === "" ? [] : [v]);
+const TYPE = { brand: "brand", artist: "artist", tv_show: "TV show", movie: "film", podcast: "podcast", place: "place", book: "book", destination: "destination", person: "person", video_game: "game" };
+const typeName = (t) => { const k = String(t || "").replace("urn:entity:", ""); return TYPE[k] || k.replace("_", " "); };
+const LISTS = { brand: "Brands", artist: "Artists", "TV show": "TV shows", film: "Films", podcast: "Podcasts", place: "Places" };
+const num = (v) => (typeof v === "number" ? v.toFixed(3) : "");
+const signed = (v) => `${v > 0 ? "+" : v < 0 ? "−" : ""}${Math.abs(Number(v)).toFixed(2)}`;
+const cleanInterest = (s) => String(s ?? "").replace(/\s*\(check in ads manager\)\s*$/i, "");
 
-// Same product, two markets: what Qloo says differently about each (only when a second market was given).
-function markets(j) {
-  const m = j.market_b;
-  if (!m) return "";
-  if (m.error) return `<p class="err">Second market failed: ${esc(m.error)}</p>`;
-  const c = compareBriefs(j.brief, m.brief);
-  const chips = (arr) => arr.length ? arr.map((i) => `<li>${esc(i.label)}${ev(i.evidence)}</li>`).join("") : "<li>none</li>";
-  const clean = (t) => String(t ?? "").trim().replace(/[.,;\s]+$/, ""); // the model writes sentences here
-  const demo = (d) => d ? `Age: ${esc(clean(d.age))}.<br>Gender: ${esc(clean(d.gender))}.` : "n/a";
-  return `<section class="card markets" style="margin-top:16px"><h2>${esc(j.market)} vs ${esc(m.market)}</h2>
-    <div class="grid">
-      <div><h3>Only in ${esc(j.market)}</h3><p class="hook">${demo(c.demographics.a)}</p><ul class="items">${chips(c.interests.only_a)}</ul></div>
-      <div><h3>Only in ${esc(m.market)}</h3><p class="hook">${demo(c.demographics.b)}</p><ul class="items">${chips(c.interests.only_b)}</ul></div>
-      <div><h3>Shared</h3><ul class="items">${chips(c.interests.shared)}</ul></div>
-    </div></section>`;
+// The Qloo results the server checked for a line (name, affinity, type), and anything the check could not confirm.
+const ev = (item, builtOn = false) => {
+  const ok = list(item?.verified).map((e) => `<span class="src">${esc(e.name)}${e.affinity != null ? ` <span class="num">${num(e.affinity)}</span>` : ""}${e.type ? ` · ${esc(typeName(e.type))}` : ""}</span>`);
+  const bad = list(item?.problems).map((p) => `<span class="bad">${esc(p)}</span>`);
+  if (!ok.length && !bad.length) return "";
+  return `<div class="ev">${builtOn && ok.length ? `<span class="lbl">built on</span>` : ""}${ok.join("")}${bad.join("")}</div>`;
+};
+const card = (title, inner, note = "") => `<section class="panel card"><h2><span>${esc(title)}</span>${note ? `<small>${esc(note)}</small>` : ""}</h2>${inner}</section>`;
+const items = (arr, fn, builtOn = false) => `<ul class="items">${list(arr).map((x) => `<li>${fn(x)}${ev(x, builtOn)}</li>`).join("") || "<li>Qloo had nothing useful for this part.</li>"}</ul>`;
+
+const AGE = { "24_and_younger": "24 and under", "25_to_29": "25 to 29", "30_to_34": "30 to 34", "35_to_44": "35 to 44", "45_to_54": "45 to 54", "55_and_older": "55 and over" };
+const GENDER = { female: "Women", male: "Men" };
+function bars(obj, labels) {
+  const rows = Object.entries(obj || {});
+  if (!rows.length) return "";
+  const max = Math.max(0.01, ...rows.map(([, v]) => Math.abs(v)));
+  return rows.map(([k, v]) => {
+    const w = (Math.abs(v) / max) * 50;
+    const pos = v >= 0 ? `left:50%;width:${w}%` : `right:50%;width:${w}%`;
+    return `<span>${esc(labels?.[k] || k)}</span><span class="track"><span class="fill${v < 0 ? " neg" : ""}" style="${pos}"></span></span><span class="v">${signed(v)}</span>`;
+  }).join("");
+}
+function demographics(d) {
+  if (!d || (!d.age && !d.gender)) return `<p class="note">Qloo had no age or gender data for this brand.</p>`;
+  return `<p class="eyebrow">Age and gender index · Qloo</p>
+    <div class="bars" role="img" aria-label="Age and gender index from Qloo">${bars(d.age, AGE)}${bars(d.gender, GENDER)}</div>
+    <p class="note">For ${esc(list(d.seeds).join(" and "))}. Zero is average. Qloo gives this index for the brand, not per city.</p>`;
 }
 
-// Same question asked of the model with no data: shows what only Qloo makes possible.
-function compare(base, b) {
+// Same seed, two cities: Qloo's own lists compared, with no model in between. One list type at a time.
+function markets(m) {
+  if (!m) return "";
+  if (m.error) return `<p class="err">The city comparison did not work this time: ${esc(m.error)}</p>`;
+  const types = list(m.types).filter((t) => !t.error);
+  if (!types.length) return `<p class="err">The city comparison did not work this time.</p>`;
+  const city = (s) => esc(String(s).split(",")[0]);
+  const row = (name, val) => `<div class="mk-row"><span>${esc(name)}</span><span>${esc(val)}</span></div>`;
+  const col = (title, rows) => `<div class="mk"><h3>${title}</h3>${rows || "<p class='note'>none</p>"}</div>`;
+  const panes = types.map((t, i) => `<div class="grid" data-pane="${i}"${i ? " hidden" : ""}>
+      ${col(`Only in ${city(m.market_a)}`, list(t.only_a).map((e) => row(e.name, `#${e.rank}`)).join(""))}
+      ${col(`Only in ${city(m.market_b)}`, list(t.only_b).map((e) => row(e.name, `#${e.rank}`)).join(""))}
+      ${col("In both", list(t.shared).map((e) => row(e.name, `#${e.rank_a} / #${e.rank_b}`)).join(""))}
+    </div>`).join("");
+  const tabs = types.map((t, i) => `<button type="button" data-tab="${i}" aria-pressed="${i ? "false" : "true"}">${esc(LISTS[typeName(t.type)] || typeName(t.type))} · ${t.overlap} of ${Math.max(t.size_a, t.size_b)} shared</button>`).join("");
+  return `<section class="panel card markets"><h2><span>${city(m.market_a)} and ${city(m.market_b)}, side by side</span><small>Same Qloo call for each city. No AI in this step.</small></h2>
+    <div class="tabs" role="group" aria-label="List type">${tabs}</div>${panes}
+    <p class="note">Ranks are Qloo's order for each city. In both: rank in ${city(m.market_a)} / rank in ${city(m.market_b)}.</p></section>`;
+}
+
+// The same question asked of the model with no data, to show what only Qloo adds.
+function versus(base, b) {
   if (!base) return "";
-  if (base.error) return `<p class="err">Comparison unavailable: ${esc(base.error)}</p>`;
-  const col = (title, x, note) => `<div><h3>${esc(title)}</h3><p class="hook">${esc(note)}</p>
-    <p>${esc(x.audience_summary)}</p>
-    <p><strong>Interests</strong><br>${(x.meta_interests || []).map((i) => esc(i.interest)).join("<br>")}</p>
-    <p><strong>Angles</strong><br>${(x.creative_angles || []).map((a) => esc(a.angle)).join("<br>")}</p></div>`;
-  return `<section class="card compare" style="margin-top:16px"><h2>Same question, without Qloo</h2>
-    <div class="grid">${col("Plain AI guess", base, "general knowledge, no data")}${col("Taste Brief", b, "every line traced to a Qloo signal")}</div></section>`;
+  if (base.error) return `<p class="err">The plain AI comparison did not work this time: ${esc(base.error)}</p>`;
+  const names = (x) => list(x.meta_interests).map((i) => esc(cleanInterest(i.interest))).join(", ");
+  return `<section class="panel card vs"><div class="grid">
+    <div class="guess"><h3>Plain AI guess, no data</h3><p>${esc(base.audience_summary)}</p><p><strong>Interests:</strong> ${names(base)}</p></div>
+    <div class="ours"><h3>Taste Brief, from Qloo</h3><p>${esc(b.audience_summary)}</p><p><strong>Interests:</strong> ${names(b)}</p></div>
+  </div></section>`;
 }
 
 fetch("/api/health").then((r) => r.json()).then((h) => {
-  $("#mode").textContent = h.live_qloo && h.live_llm ? (h.code_required ? "live Qloo data with an access code" : "live Qloo data") : "demo mode: synthetic data";
+  const q = h.free_today, liveOk = h.live_qloo && h.live_llm;
+  const free = liveOk && h.code_required && q && q.left > 0;
+  $("#mode").textContent = !liveOk ? "Sample data" : !h.code_required ? "Live Qloo data" : free ? `Live Qloo data · ${q.left} free runs left today` : "Live data with an access code";
+  if (liveOk && (free || !h.code_required)) $("#mode").classList.add("live");
+  $("#code-help").textContent = free ? "not needed while free runs last" : h.code_required ? "needed for live data today" : "not needed here";
   const pre = new URLSearchParams(location.search).get("code");
-  if (pre) $("#f").elements.code.value = pre;
-}).catch(() => { $("#mode").textContent = "offline"; });
+  if (pre) { $("#f").elements.code.value = pre; $("#code-box").open = true; history.replaceState(null, "", location.pathname); }
+}).catch(() => { $("#mode").textContent = "Offline"; });
 
-// Example buttons fill the form; the access code (if any) is kept.
 document.querySelectorAll("button.chip").forEach((b) => b.addEventListener("click", () => {
   const [product, market, compare_market, references] = b.dataset.p.split("|");
   const f = $("#f").elements;
-  Object.assign(f.product, { value: product }); Object.assign(f.market, { value: market });
-  Object.assign(f.compare_market, { value: compare_market }); Object.assign(f.references, { value: references });
+  f.product.value = product; f.market.value = market; f.compare_market.value = compare_market; f.references.value = references;
   $("#go").focus();
 }));
 
-// One line per agent step, in plain words, as it happens.
+// One line per step, as it happens.
 function stepText(run, s) {
   const i = s.input || {};
-  const type = String(i.filter_type || "").replace("urn:entity:", "").replace("_", " ");
-  const n = s.n !== undefined ? ` <span>→ ${s.n} result${s.n === 1 ? "" : "s"}</span>` : "";
-  const err = s.error ? ` <span class="err">${esc(s.error)}</span>` : "";
-  const where = `<b>${esc(run)}</b> · `;
-  if (s.tool === "search") return `${where}finding “${esc(i.query)}” in Qloo${n}${err}`;
-  if (s.tool === "insights") return `${where}reading ${esc(type)} affinities${i.location ? ` in ${esc(i.location)}` : ""}${n}${err}`;
-  if (s.tool === "demographics") return `${where}reading the age and gender skew${n}${err}`;
-  if (s.tool === "tags") return `${where}reading taste tags${n}${err}`;
-  if (s.tool === "submit_brief") return s.error ? `${where}brief sent back to the model (${esc(s.error)})` : `${where}brief written, every line tied to a signal above`;
-  if (s.tool === "baseline_done") return `${where}plain AI guess written, for comparison`;
-  return `${where}${esc(s.tool)}${n}${err}`;
+  const city = String(i.location || run || "").split(",")[0];
+  const n = (k, word = "result") => (k !== undefined ? ` <span class="n">${k} ${word}${k === 1 ? "" : "s"}</span>` : "");
+  const err = s.error ? ` <span class="err">(failed: ${esc(s.error)})</span>` : "";
+  if (s.tool === "search") return `Looked up “${esc(i.query)}” in Qloo${n(s.n)}${err}`;
+  if (s.tool === "insights") return `Read ${esc(typeName(i.filter_type))} tastes${city ? ` in ${esc(city)}` : ""}${n(s.n)}${err}`;
+  if (s.tool === "demographics") return `Read the age and gender index${err}`;
+  if (s.tool === "tags") return `Looked up Qloo tags for “${esc(i.query)}”${n(s.n)}${err}`;
+  if (s.tool === "compare") { const [a, b] = list(i.markets).map((x) => String(x).split(",")[0]); return `Compared ${esc(typeName(i.filter_type))} lists for ${esc(a)} and ${esc(b)}${s.n !== undefined ? ` <span class="n">${s.n} of ${s.of} shared</span>` : ""}${err}`; }
+  if (s.tool === "submit_brief") return s.error ? `Sent the brief back to the model: ${esc(s.error)}` : "Wrote the brief and checked every line against Qloo";
+  if (s.tool === "baseline_done") return "Wrote a plain AI guess to compare against";
+  return `${esc(s.tool)}${n(s.n)}${err}`;
 }
 
 const mdBrief = (j) => {
-  const b = j.brief; const line = (x, k) => `- ${x[k]}${x.evidence?.length ? ` (Qloo: ${x.evidence.join("; ")})` : ""}`;
+  const b = j.brief, d = j.demographics;
+  const src = (x) => list(x.verified).map((e) => `${e.name}${e.affinity != null ? ` ${num(e.affinity)}` : ""}`).join("; ");
+  const line = (x, k) => `- ${cleanInterest(x[k])}${src(x) ? ` (Qloo: ${src(x)})` : ""}`;
   return [`# Taste Brief: ${j.market}`, "", b.audience_summary || "", "",
-    b.demographics ? `Age: ${b.demographics.age}\nGender: ${b.demographics.gender}\n` : "",
-    "## Who they are", ...(b.audience_traits || []).map((x) => line(x, "trait")), "",
-    "## Meta Ads interests (verify each in Ads Manager)", ...(b.meta_interests || []).map((x) => line(x, "interest")), "",
-    "## Creative angles", ...(b.creative_angles || []).map((x) => `- ${x.angle}: ${x.hook || ""}`), "",
+    d?.age ? `Qloo age index for ${list(d.seeds).join(" and ")}: ${Object.entries(d.age).map(([k, v]) => `${AGE[k] || k} ${signed(v)}`).join(", ")}` : "",
+    d?.gender ? `Qloo gender index: ${Object.entries(d.gender).map(([k, v]) => `${GENDER[k] || k} ${signed(v)}`).join(", ")}\n` : "",
+    "## Who they are", ...list(b.audience_traits).map((x) => line(x, "trait")), "",
+    "## Meta interests to test (check each in Ads Manager)", ...list(b.meta_interests).map((x) => line(x, "interest")), "",
+    "## Creative angles (our reading of the data)", ...list(b.creative_angles).map((x) => `- ${x.angle}: ${x.hook || ""}${src(x) ? ` (built on ${src(x)})` : ""}`), "",
     "## Landing page", `${b.landing_page?.headline || ""}`, `${b.landing_page?.subheadline || ""}`, "",
-    "## Partnerships", ...(b.partnerships || []).map((x) => `- ${x.partner}: ${x.idea || ""}`), "",
-    ...(b.caveats?.length ? ["## Caveats", ...b.caveats.map((c) => `- ${c}`)] : [])].join("\n");
+    "## Partnerships", ...list(b.partnerships).map((x) => `- ${x.partner}: ${x.idea || ""}${src(x) ? ` (Qloo: ${src(x)})` : ""}`), "",
+    ...(list(b.caveats).length ? ["## Notes", ...list(b.caveats).map((c) => `- ${c}`)] : [])].join("\n");
 };
 const csvInterests = (j) => {
   const q = (s) => `"${String(s ?? "").replace(/"/g, '""')}"`;
-  return ["interest,qloo_evidence,status", ...(j.brief.meta_interests || []).map((x) =>
-    [q(String(x.interest).replace(/\s*\(check in Ads Manager\)\s*$/i, "")), q((x.evidence || []).join("; ")), q("verify in Meta Ads Manager")].join(","))].join("\n");
+  return ["interest,qloo_results,qloo_affinity,status", ...list(j.brief.meta_interests).map((x) =>
+    [q(cleanInterest(x.interest)), q(list(x.verified).map((e) => e.name).join("; ")), q(list(x.verified).map((e) => num(e.affinity)).join("; ")),
+      q(x.grounded ? "check in Meta Ads Manager" : "not confirmed by Qloo")].join(","))].join("\n");
 };
 
 $("#f").addEventListener("submit", async (e) => {
   e.preventDefault();
   const data = { ...Object.fromEntries(new FormData(e.target)), stream: true };
   $("#go").disabled = true; $("#out").innerHTML = ""; $("#live").innerHTML = "";
-  $("#status").textContent = "The agent is querying Qloo and writing the brief. A live run takes about a minute; each step appears below.";
+  $("#status").textContent = "Working on it. A live run takes about a minute, and each step shows up below.";
+  const ctl = new AbortController();
+  const timer = setTimeout(() => ctl.abort(), 180000);
   try {
-    const r = await fetch("/api/brief", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(data) });
-    if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || r.status);
+    const r = await fetch("/api/brief", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(data), signal: ctl.signal });
+    if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || `HTTP ${r.status}`);
     let j = null, buf = "";
     const reader = r.body.getReader(); const dec = new TextDecoder();
     for (;;) {
@@ -175,31 +267,43 @@ $("#f").addEventListener("submit", async (e) => {
         const line = buf.slice(0, k).trim(); buf = buf.slice(k + 1);
         if (!line) continue;
         const m = JSON.parse(line);
-        if (m.type === "step") { const li = document.createElement("li"); li.className = "done"; li.innerHTML = stepText(m.run, m.step); $("#live").append(li); }
+        if (m.type === "start") $("#status").textContent = m.mode === "live" ? "Live run on real Qloo data. Each step shows up below, about a minute in all." : "Running on sample data. Each step shows up below.";
+        else if (m.type === "step") { const li = document.createElement("li"); li.innerHTML = stepText(m.run, m.step); $("#live").append(li); }
         else if (m.type === "error") throw new Error(m.error);
         else if (m.type === "result") j = m;
       }
     }
-    if (!j) throw new Error("the run ended without a brief");
-    const b = j.brief;
-    $("#status").textContent = `Done in ${j.trace.length} steps (${j.mode}).`;
-    $("#out").innerHTML = `
-      <div class="actions"><button type="button" id="copy-md">Copy brief as Markdown</button><button type="button" id="dl-csv">Download Meta interests (CSV)</button></div>
-      ${card("Audience", `<p>${esc(b.audience_summary)}</p>${b.demographics ? `<p><strong>Age:</strong> ${esc(String(b.demographics.age ?? "").trim())}<br><strong>Gender:</strong> ${esc(String(b.demographics.gender ?? "").trim())}</p>${ev(b.demographics.evidence)}` : ""}`)}
-      <div class="grid" style="margin-top:16px">
+    if (!j) throw new Error("the run stopped before the brief was ready. Please try again.");
+    const b = j.brief, c = j.check || { grounded: 0, total: 0, flagged: [] };
+    $("#status").textContent = `Done. The agent made ${j.trace.length} steps.`;
+    const banner = j.mode === "live"
+      ? `<div class="banner live">Live run on real Qloo data${j.quota ? `. ${j.quota.left} free runs left today` : ""}.</div>`
+      : `<div class="banner synthetic">Sample data. The names and numbers below are made up to show how it works. Add the access code, or come back tomorrow, for real Qloo data.</div>`;
+    $("#out").innerHTML = `${banner}
+      <section class="panel card"><div class="grid">
+        <div><p class="eyebrow">The audience in ${esc(String(j.market).split(",")[0])}</p><p class="summary">${esc(b.audience_summary)}</p>
+          <div class="score${c.grounded === c.total ? "" : " part"}"><b>${c.grounded} of ${c.total}</b> lines match a result Qloo returned in this run</div></div>
+        <div>${demographics(j.demographics)}</div>
+      </div></section>
+      <div class="grid">
         ${card("Who they are", items(b.audience_traits, (x) => esc(x.trait)))}
-        ${card("Meta Ads interests", items(b.meta_interests, (x) => esc(x.interest)))}
-        ${card("Creative angles", items(b.creative_angles, (x) => `<strong>${esc(x.angle)}</strong><br><span class="hook">${esc(x.hook)}</span>`))}
-        ${card("Landing page", `<p><strong>${esc(b.landing_page?.headline)}</strong></p><p>${esc(b.landing_page?.subheadline)}</p>${ev(b.landing_page?.evidence)}`)}
-        ${card("Partnerships", items(b.partnerships, (x) => `<strong>${esc(x.partner)}</strong> — ${esc(x.idea)}`))}
+        ${card("Meta interests to test", items(b.meta_interests, (x) => `<strong>${esc(cleanInterest(x.interest))}</strong>`), "check each in Ads Manager")}
+        ${card("Creative angles", items(b.creative_angles, (x) => `<strong>${esc(x.angle)}</strong><br><span class="hook">${esc(x.hook)}</span>`, true), "our reading of the data")}
+        ${card("Landing page", `<p style="margin:0 0 6px"><strong>${esc(b.landing_page?.headline)}</strong></p><p style="margin:0">${esc(b.landing_page?.subheadline)}</p>${ev(b.landing_page, true)}`, "our reading of the data")}
+        ${card("Partnerships", items(b.partnerships, (x) => `<strong>${esc(x.partner)}</strong>: ${esc(x.idea)}`))}
       </div>
-      ${markets(j)}
-      ${compare(j.baseline, b)}
-      ${b.caveats?.length ? `<p class="err">${b.caveats.map(esc).join("<br>")}</p>` : ""}
-      <details class="trace"><summary>What the agent asked Qloo</summary><ol>${j.trace.map((t) =>
-        `<li>${esc(t.tool)} ${t.input ? esc(JSON.stringify(t.input)) : ""}${t.n !== undefined ? ` → ${t.n} results` : ""}${t.error ? ` <span class="err">${esc(t.error)}</span>` : ""}</li>`).join("")}</ol></details>`;
+      ${markets(j.markets)}
+      ${versus(j.baseline, b)}
+      ${list(b.caveats).length ? `<p class="note">${list(b.caveats).map(esc).join("<br>")}</p>` : ""}
+      <div class="actions"><button type="button" class="ghost" id="copy-md">Copy the brief</button><button type="button" class="ghost" id="dl-csv">Download interests as CSV</button></div>
+      <details class="trace"><summary>Every Qloo call the agent made</summary><ol>${list(j.trace).map((t) =>
+        `<li>${esc(t.tool)} ${t.input ? esc(JSON.stringify(t.input)) : ""}${t.n !== undefined ? `: ${t.n} results` : ""}${t.error ? ` <span class="err">${esc(t.error)}</span>` : ""}</li>`).join("")}</ol></details>`;
+    document.querySelectorAll(".tabs button").forEach((btn) => btn.addEventListener("click", () => {
+      document.querySelectorAll(".tabs button").forEach((x) => x.setAttribute("aria-pressed", String(x === btn)));
+      document.querySelectorAll("[data-pane]").forEach((p) => { p.hidden = p.dataset.pane !== btn.dataset.tab; });
+    }));
     $("#copy-md").addEventListener("click", async (ev2) => {
-      try { await navigator.clipboard.writeText(mdBrief(j)); ev2.target.textContent = "Copied"; } catch { ev2.target.textContent = "Copy failed"; }
+      try { await navigator.clipboard.writeText(mdBrief(j)); ev2.target.textContent = "Copied"; } catch { ev2.target.textContent = "Could not copy"; }
     });
     $("#dl-csv").addEventListener("click", () => {
       const a = document.createElement("a");
@@ -208,8 +312,10 @@ $("#f").addEventListener("submit", async (e) => {
       a.click(); URL.revokeObjectURL(a.href);
     });
   } catch (err) {
-    $("#status").innerHTML = `<span class="err">Failed: ${esc(err.message)}</span>`;
+    const msg = err.name === "AbortError" ? "the run took too long. Please try again." : err.message;
+    $("#status").innerHTML = `<span class="err">Something went wrong: ${esc(msg)}</span>`;
   } finally {
+    clearTimeout(timer);
     $("#go").disabled = false;
   }
 });

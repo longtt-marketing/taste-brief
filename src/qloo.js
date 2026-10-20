@@ -24,7 +24,7 @@ export function slimEntity(e) {
  * The hackathon key is rate limited: two markets in parallel (about 16 calls in a few seconds) got HTTP 429 on a live run
  * (20 Oct). So one client keeps at most `concurrency` requests in flight and retries a 429 with a growing wait.
  */
-export function makeQloo({ apiKey, fetchImpl = fetch, base = QLOO_BASE, concurrency = 2, retries = 4, backoffMs = 700,
+export function makeQloo({ apiKey, fetchImpl = fetch, base = QLOO_BASE, concurrency = 2, retries = 4, backoffMs = 700, timeoutMs = 20000,
   sleep = (ms) => new Promise((r) => setTimeout(r, ms)) }) {
   let active = 0;
   const waiting = [];
@@ -42,7 +42,8 @@ export function makeQloo({ apiKey, fetchImpl = fetch, base = QLOO_BASE, concurre
     }
     // /v2/insights is GET with query params; key goes in X-Api-Key, not Bearer.
     for (let attempt = 0; ; attempt++) {
-      const res = await slot(() => fetchImpl(`${base}${path}?${qs}`, { headers: { "X-Api-Key": apiKey } }));
+      // a hung call must not hold the page forever: give up after timeoutMs (the agent turns the error into data)
+      const res = await slot(() => fetchImpl(`${base}${path}?${qs}`, { headers: { "X-Api-Key": apiKey }, signal: AbortSignal.timeout(timeoutMs) }));
       if (res.status === 429 && attempt < retries) {
         await sleep(backoffMs * 2 ** attempt + Math.floor(Math.random() * 250));
         continue;

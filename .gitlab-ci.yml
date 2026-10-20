@@ -1,5 +1,4 @@
-# Taste Brief — post-code lifecycle on GitLab (Life After Code, Path B, Supervised).
-# DRAFT (18/10): written before the hackathon project is provisioned; check against the GitLab docs on the first real run.
+# Taste Brief: what happens after the code is written, on GitLab.
 #
 # verify  : unit tests + evidence gate (every brief claim must trace to a Qloo result; a guess fails the build)
 # secure  : GitLab secret detection, dependency scanning, SAST (templates; results feed the MR widget)
