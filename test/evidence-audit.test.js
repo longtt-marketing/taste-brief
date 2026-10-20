@@ -62,12 +62,13 @@ test("a valid citation must not conceal a search-only citation in the same line"
 });
 
 test("agent refuses empty test rules or more than 3 experiments before finalizing", () => {
-  const full = { audience_traits: [{ trait: "x" }, { trait: "y" }],
-    meta_interests: [{ interest: "x" }, { interest: "y" }],
+  const citation = { entity_ids: ["INSIGHT"], evidence: ["Outdoor Voices 0.956"] };
+  const full = { audience_traits: [{ trait: "x", ...citation }, { trait: "y", ...citation }],
+    meta_interests: [{ interest: "x", ...citation }, { interest: "y", ...citation }],
     creative_angles: [], partnerships: [], caveats: [],
     test_plan: [{ hypothesis: "Studio fitness shows stronger relevance",
       ad_set: "Outdoor Voices inspired creative", kpi: "Link CTR",
-      stop_if: "After 3,000 impressions, CTR below control", entity_ids: ["INSIGHT"] }] };
+      stop_if: "After 3,000 impressions, CTR below control", ...citation }] };
   assert.equal(briefProblem(full), null);
   const missingRule = { ...full, test_plan: [{ ...full.test_plan[0], stop_if: "  " }] };
   assert.match(briefProblem(missingRule), /non-empty stop_if/);
