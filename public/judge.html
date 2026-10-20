@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="A reproducible judge walkthrough: what Qloo changed in a marketing decision, what the evidence does and does not prove.">
+<title>Taste Brief | A decision Qloo changed</title>
+<style>
+:root{font:16px/1.55 system-ui,-apple-system,Segoe UI,sans-serif;color-scheme:light;--ink:#191920;--muted:#565a66;--border:#dfdfdf;--purple:#4338ca;--bg:#f7f6f2}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink)}
+main{width:min(940px,calc(100% - 36px));margin:auto;padding:32px 0 64px}
+a{color:#352ab5}a:focus-visible{outline:3px solid #4338ca;outline-offset:3px}
+h1{font-size:clamp(2.1rem,6vw,3.3rem);line-height:1.12;letter-spacing:-.04em;margin:22px 0 12px}
+h2{font-size:1.3rem;letter-spacing:-.02em;margin:0 0 12px}
+p{margin:10px 0}small,.muted{color:var(--muted)}
+nav{display:flex;flex-wrap:wrap;gap:14px;align-items:center;font-size:0.94rem}
+nav a:first-child{font-weight:800;text-decoration:none}
+.tag{display:inline-block;padding:4px 11px;background:#ece9fb;color:var(--purple);border-radius:50px;font-size:.78rem;font-weight:750;letter-spacing:.03em}
+.lede{font-size:1.15rem;max-width:750px;color:#34353d}
+.card{background:white;border:1px solid var(--border);border-radius:15px;padding:22px;margin:20px 0}
+.cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+ul{padding-left:22px}li{margin:6px 0}
+table{border-collapse:collapse;width:100%;margin:12px 0}th,td{text-align:left;vertical-align:top;border-bottom:1px solid #dedede;padding:11px 9px}th{font-size:.8rem;text-transform:uppercase;letter-spacing:.04em;color:#555}
+strong{color:#202027}
+label{display:block;font-weight:700;margin-bottom:5px}
+code{background:#f0eef8;border-radius:5px;padding:1px 4px;overflow-wrap:anywhere}
+.btn{display:inline-block;border-radius:12px;background:#4338ca;color:white;text-decoration:none;padding:12px 17px;font-weight:700;margin:10px 0}
+.decision{border-left:5px solid #4338ca;padding-left:15px;font-weight:700;font-size:1.12rem}
+.note{font-size:.89rem;background:#f3f0e2;padding:11px 15px;border-radius:9px;margin-top:14px}
+@media(max-width:680px){.cols{grid-template-columns:1fr}main{width:min(100% - 24px,940px)}.card{padding:17px}table{font-size:.86rem}}
+</style>
+</head>
+<body>
+<main>
+<nav><a href="/">Taste Brief</a><span aria-hidden="true">·</span><a href="https://github.com/longtt-marketing/taste-brief">Public source code</a><span aria-hidden="true">·</span><a href="https://qloo.devpost.com/">Qloo Hackathon</a></nav>
+<p class="tag" style="margin-top:25px">JUDGE WALKTHROUGH · REPRODUCIBLE HYPOTHESIS</p>
+<h1>A decision Qloo changed</h1>
+<p class="lede">The goal is not to predict a customer. It is to help a performance marketer select a more defensible A/B test before spending money on ads.</p>
+<section class="card" aria-labelledby="case"><h2 id="case">The case: $120 wool running sneakers</h2>
+<p><strong>Seed:</strong> Allbirds, a comparable brand; the shoe itself is not known to Qloo. <strong>Primary market:</strong> London. <strong>Comparison:</strong> Hanoi.</p>
+<div class="cols">
+<div><h2>Without Qloo</h2><p>Ungrounded plain-LLM suggestions in the owner's demonstration included runner-oriented interests such as Strava, parkrun and athletic shoe competitors.</p></div>
+<div><h2>With Qloo</h2><p>Owner-reported live results included studio-fitness and wellness affinities: ClassPass, Peloton, Outdoor Voices and Tracksmith.</p></div>
+</div>
+<p class="decision">Decision: test a studio-fitness/wellness creative hypothesis against the original performance-running concept. Do not discard the runner hypothesis merely because it did not appear in one Qloo result set.</p>
+<p class="note"><strong>Precision:</strong> Qloo's seed demographic indexes of women +0.33 and ages 30–34 +0.42 are aggregate indexes for the <em>seed entity</em>, not percentages, not London resident demographics, and not evidence of purchases. The example above is user-reported from a 20 Oct live run; this static page does not independently authenticate that run.</p>
+</section>
+<section class="card"><h2>The decision's next step: a falsifiable ad test</h2>
+<table>
+<thead><tr><th>Arm</th><th>Creative concept</th><th>What to measure</th></tr></thead>
+<tbody>
+<tr><td><strong>A — control</strong></td><td>Running-performance value proposition</td><td>Link CTR and cost per qualified landing-page view</td></tr>
+<tr><td><strong>B — Qloo hypothesis</strong></td><td>Wellness / studio-fitness lifestyle concept supported by retrieved affinity signals</td><td>The same metrics, with matched landing page, price and campaign period</td></tr>
+</tbody>
+</table>
+<p>Decide minimum exposure and a pause threshold <strong>before</strong> spending. Pause B if performance is materially weaker than A after the predefined sample. An observed uplift would require a real experiment; <strong>none is claimed here</strong>.</p>
+</section>
+<section class="card"><h2>Reproduce using the actual live demo</h2>
+<ol>
+<li>Open the <a href="/">Taste Brief demo</a>; enter the private judge access code from the Devpost submission.</li>
+<li>Choose the example <strong>Wool sneakers in London and Hanoi</strong>, or enter wool running sneakers, $120; London, UK; Hanoi, Vietnam; Allbirds.</li>
+<li>Confirm the result banner says <strong>Live run on real Qloo data</strong>. If it says synthetic, it is not evidence of live integration.</li>
+<li>Inspect the Qloo call trace and entity citations for each line. Check the actual returned names and affinities, not just the count of cited lines.</li>
+<li>Review <strong>What to test first</strong>, the comparative top-12 rankings and the no-data baseline. Live outputs may vary by Qloo ranking and generation.</li>
+</ol>
+<a class="btn" href="/">Run the live demo</a>
+<p class="muted">Source: <a href="https://github.com/longtt-marketing/taste-brief/blob/main/src/qloo.js">Qloo client</a>,
+<a href="https://github.com/longtt-marketing/taste-brief/blob/main/src/evidence.js">evidence checks</a>,
+<a href="https://github.com/longtt-marketing/taste-brief/blob/main/src/agent.js">tool-use agent</a>,
+<a href="https://github.com/longtt-marketing/taste-brief/blob/main/src/markets.js">market comparison</a>.</p>
+</section>
+<section class="card"><h2>What the evidence does not establish</h2>
+<ul>
+<li><strong>Source-backed is not factually proven:</strong> the code checks Qloo-returned entity IDs, cited affinity numbers and certain item names, not whether a marketer's causal interpretation is correct.</li>
+<li><strong>Similarity is not demand:</strong> Qloo aggregate taste affinities cannot prove who will purchase a product.</li>
+<li><strong>City signal is not a city survey:</strong> non-place results are location-adjusted ranked lists; “not in the top 12” never means “unpopular in that city”.</li>
+<li><strong>Meta compatibility is unknown:</strong> a Qloo entity name may not exist as a selectable Meta Ads interest.</li>
+<li><strong>No impact measurement yet:</strong> this is a testable campaign hypothesis, not demonstrated incremental sales or ROAS.</li>
+</ul>
+</section>
+<p class="muted">Prepared for transparent technical review, 20 October 2026. No personal, employer, campaign-performance or private API data is published.</p>
+</main>
+</body>
+</html>
