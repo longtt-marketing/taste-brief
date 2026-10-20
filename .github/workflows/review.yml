@@ -25,6 +25,8 @@ jobs:
         run: npm test
       - name: Check evidence gate on synthetic fixtures
         run: node scripts/evidence-gate.mjs
+      - name: Confirm existing public demo still works (read-only)
+        run: node scripts/check-public-demo.mjs
       - name: Preserve evidence-gate metadata
         if: always()
         uses: actions/upload-artifact@v4
