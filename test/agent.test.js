@@ -163,3 +163,10 @@ test("evidence gate: an interest that is exactly a returned Qloo entity counts; 
   const r = checkEvidence(brief, sources);
   assert.deepEqual(r.rows.map((x) => [x.label, x.grounded]), [["Everlane", false], ["Warby Parker", true], ["Warby", false]]);
 });
+
+test("onStep reports every trace entry as it happens, ending with submit_brief", async () => {
+  const seen = [];
+  const { trace } = await runAgent({ llm: mockLLM(), qloo: mockQloo(), product: "wool sneakers", market: "London", onStep: (s) => seen.push(s.tool) });
+  assert.deepEqual(seen, trace.map((t) => t.tool));
+  assert.equal(seen.at(-1), "submit_brief");
+});

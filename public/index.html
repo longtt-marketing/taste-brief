@@ -35,6 +35,14 @@ details.trace{margin-top:24px;color:var(--mute);font-size:14px}
 .err{color:var(--warn)}
 .compare h3{margin:0 0 4px;font-size:18px}
 .compare .grid>div:first-child{opacity:.75}
+.presets{display:flex;flex-wrap:wrap;align-items:center;gap:8px;color:var(--mute);font-size:14px;margin:0 0 12px}
+button.chip{background:var(--acc-soft);color:var(--acc);padding:6px 12px;border-radius:999px;font-size:14px}
+#live{list-style:none;margin:0 0 16px;padding:0;display:flex;flex-direction:column;gap:6px;font-size:14px}
+#live li{color:var(--mute)}
+#live li b{color:var(--ink);font-weight:600}
+#live li.done::before{content:"✓ ";color:var(--ok)}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
+.actions button{background:var(--card);color:var(--acc);border:1px solid var(--line)}
 </style>
 </head>
 <body>
@@ -44,6 +52,11 @@ details.trace{margin-top:24px;color:var(--mute);font-size:14px}
   <p class="lede">Give it a product and a market. An agent asks Qloo's taste graph who really buys it, what else they love and how old they are,
     then writes an audience and creative brief where every line shows the Qloo signal behind it.</p>
 
+  <p class="presets" aria-label="Examples">Try an example:
+    <button type="button" class="chip" data-p="Wool running sneakers, $120, sustainable|London, UK|Hanoi, Vietnam|Allbirds, Veja">Wool sneakers · London vs Hanoi</button>
+    <button type="button" class="chip" data-p="Specialty coffee subscription, $25 a month|Seoul, South Korea||Blue Bottle Coffee">Coffee subscription · Seoul</button>
+    <button type="button" class="chip" data-p="Turntable for first-time vinyl buyers, $199|Berlin, Germany|Mexico City, Mexico|Audio-Technica">Turntable · Berlin vs Mexico City</button>
+  </p>
   <form id="f">
     <label>Product<input name="product" required minlength="3" maxlength="400" placeholder="Wool running sneakers, $120, sustainable"></label>
     <label>Market<input name="market" required minlength="2" maxlength="120" placeholder="London, UK"></label>
@@ -55,6 +68,7 @@ details.trace{margin-top:24px;color:var(--mute);font-size:14px}
   </form>
 
   <p id="status" role="status" aria-live="polite"></p>
+  <ol id="live" aria-label="What the agent is doing"></ol>
   <div id="out"></div>
 </main>
 <script type="module">
@@ -100,18 +114,77 @@ fetch("/api/health").then((r) => r.json()).then((h) => {
   if (pre) $("#f").elements.code.value = pre;
 }).catch(() => { $("#mode").textContent = "offline"; });
 
+// Example buttons fill the form; the access code (if any) is kept.
+document.querySelectorAll("button.chip").forEach((b) => b.addEventListener("click", () => {
+  const [product, market, compare_market, references] = b.dataset.p.split("|");
+  const f = $("#f").elements;
+  Object.assign(f.product, { value: product }); Object.assign(f.market, { value: market });
+  Object.assign(f.compare_market, { value: compare_market }); Object.assign(f.references, { value: references });
+  $("#go").focus();
+}));
+
+// One line per agent step, in plain words, as it happens.
+function stepText(run, s) {
+  const i = s.input || {};
+  const type = String(i.filter_type || "").replace("urn:entity:", "").replace("_", " ");
+  const n = s.n !== undefined ? ` <span>→ ${s.n} results</span>` : "";
+  const err = s.error ? ` <span class="err">${esc(s.error)}</span>` : "";
+  const where = `<b>${esc(run)}</b> · `;
+  if (s.tool === "search") return `${where}finding “${esc(i.query)}” in Qloo${n}${err}`;
+  if (s.tool === "insights") return `${where}reading ${esc(type)} affinities${i.location ? ` in ${esc(i.location)}` : ""}${n}${err}`;
+  if (s.tool === "demographics") return `${where}reading the age and gender skew${n}${err}`;
+  if (s.tool === "tags") return `${where}reading taste tags${n}${err}`;
+  if (s.tool === "submit_brief") return s.error ? `${where}brief sent back to the model (${esc(s.error)})` : `${where}brief written, every line tied to a signal above`;
+  if (s.tool === "baseline_done") return `${where}plain AI guess written, for comparison`;
+  return `${where}${esc(s.tool)}${n}${err}`;
+}
+
+const mdBrief = (j) => {
+  const b = j.brief; const line = (x, k) => `- ${x[k]}${x.evidence?.length ? ` (Qloo: ${x.evidence.join("; ")})` : ""}`;
+  return [`# Taste Brief: ${j.market}`, "", b.audience_summary || "", "",
+    b.demographics ? `Age: ${b.demographics.age}\nGender: ${b.demographics.gender}\n` : "",
+    "## Who they are", ...(b.audience_traits || []).map((x) => line(x, "trait")), "",
+    "## Meta Ads interests (verify each in Ads Manager)", ...(b.meta_interests || []).map((x) => line(x, "interest")), "",
+    "## Creative angles", ...(b.creative_angles || []).map((x) => `- ${x.angle}: ${x.hook || ""}`), "",
+    "## Landing page", `${b.landing_page?.headline || ""}`, `${b.landing_page?.subheadline || ""}`, "",
+    "## Partnerships", ...(b.partnerships || []).map((x) => `- ${x.partner}: ${x.idea || ""}`), "",
+    ...(b.caveats?.length ? ["## Caveats", ...b.caveats.map((c) => `- ${c}`)] : [])].join("\n");
+};
+const csvInterests = (j) => {
+  const q = (s) => `"${String(s ?? "").replace(/"/g, '""')}"`;
+  return ["interest,qloo_evidence,status", ...(j.brief.meta_interests || []).map((x) =>
+    [q(String(x.interest).replace(/\s*\(check in Ads Manager\)\s*$/i, "")), q((x.evidence || []).join("; ")), q("verify in Meta Ads Manager")].join(","))].join("\n");
+};
+
 $("#f").addEventListener("submit", async (e) => {
   e.preventDefault();
-  const data = Object.fromEntries(new FormData(e.target));
-  $("#go").disabled = true; $("#out").innerHTML = "";
-  $("#status").textContent = "The agent is querying Qloo and writing the brief…";
+  const data = { ...Object.fromEntries(new FormData(e.target)), stream: true };
+  $("#go").disabled = true; $("#out").innerHTML = ""; $("#live").innerHTML = "";
+  $("#status").textContent = "The agent is querying Qloo and writing the brief. A live run takes about a minute; each step appears below.";
   try {
     const r = await fetch("/api/brief", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(data) });
-    const j = await r.json();
-    if (!r.ok) throw new Error(j.error || r.status);
+    if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || r.status);
+    let j = null, buf = "";
+    const reader = r.body.getReader(); const dec = new TextDecoder();
+    for (;;) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      buf += dec.decode(value, { stream: true });
+      let k;
+      while ((k = buf.indexOf("\n")) >= 0) {
+        const line = buf.slice(0, k).trim(); buf = buf.slice(k + 1);
+        if (!line) continue;
+        const m = JSON.parse(line);
+        if (m.type === "step") { const li = document.createElement("li"); li.className = "done"; li.innerHTML = stepText(m.run, m.step); $("#live").append(li); }
+        else if (m.type === "error") throw new Error(m.error);
+        else if (m.type === "result") j = m;
+      }
+    }
+    if (!j) throw new Error("the run ended without a brief");
     const b = j.brief;
     $("#status").textContent = `Done in ${j.trace.length} steps (${j.mode}).`;
     $("#out").innerHTML = `
+      <div class="actions"><button type="button" id="copy-md">Copy brief as Markdown</button><button type="button" id="dl-csv">Download Meta interests (CSV)</button></div>
       ${card("Audience", `<p>${esc(b.audience_summary)}</p>${b.demographics ? `<p><strong>Age:</strong> ${esc(String(b.demographics.age ?? "").trim())}<br><strong>Gender:</strong> ${esc(String(b.demographics.gender ?? "").trim())}</p>${ev(b.demographics.evidence)}` : ""}`)}
       <div class="grid" style="margin-top:16px">
         ${card("Who they are", items(b.audience_traits, (x) => esc(x.trait)))}
@@ -125,6 +198,15 @@ $("#f").addEventListener("submit", async (e) => {
       ${b.caveats?.length ? `<p class="err">${b.caveats.map(esc).join("<br>")}</p>` : ""}
       <details class="trace"><summary>What the agent asked Qloo</summary><ol>${j.trace.map((t) =>
         `<li>${esc(t.tool)} ${t.input ? esc(JSON.stringify(t.input)) : ""}${t.n !== undefined ? ` → ${t.n} results` : ""}${t.error ? ` <span class="err">${esc(t.error)}</span>` : ""}</li>`).join("")}</ol></details>`;
+    $("#copy-md").addEventListener("click", async (ev2) => {
+      try { await navigator.clipboard.writeText(mdBrief(j)); ev2.target.textContent = "Copied"; } catch { ev2.target.textContent = "Copy failed"; }
+    });
+    $("#dl-csv").addEventListener("click", () => {
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(new Blob([csvInterests(j)], { type: "text/csv" }));
+      a.download = `taste-brief-interests-${String(j.market).replace(/[^a-z0-9]+/gi, "-").toLowerCase()}.csv`;
+      a.click(); URL.revokeObjectURL(a.href);
+    });
   } catch (err) {
     $("#status").innerHTML = `<span class="err">Failed: ${esc(err.message)}</span>`;
   } finally {

@@ -80,7 +80,8 @@ export const TOOLS = [
 
 /** Run the loop. llm(messages) -> {text, calls:[{id,name,input}]}. Returns {brief, trace, sources}.
  *  sources = names the Qloo tools returned (for the evidence gate, src/evidence.js). */
-export async function runAgent({ llm, qloo, product, market, references = "", maxSteps = 10 }) {
+/** onStep (optional) is called with each trace entry as it happens, so a page can show the agent working live. */
+export async function runAgent({ llm, qloo, product, market, references = "", maxSteps = 10, onStep = () => {} }) {
   const messages = [{
     role: "user",
     content: `Product: ${product}\nMarket: ${market}\nReference brands or competitors (optional): ${references || "none"}`,
@@ -106,10 +107,12 @@ export async function runAgent({ llm, qloo, product, market, references = "", ma
         if (problem && rejected < 2) {
           rejected++;
           trace.push({ tool: "submit_brief", error: `rejected: ${problem}` });
+          onStep(trace.at(-1));
           results.push({ id: call.id, name: call.name, content: JSON.stringify({ error: `Brief rejected: ${problem}. Call submit_brief again with the full brief as plain JSON values.` }) });
           continue;
         }
         trace.push({ tool: "submit_brief" });
+        onStep(trace.at(-1));
         return { brief, trace, sources: sourcesFrom(seen) };
       }
       let out;
@@ -120,6 +123,7 @@ export async function runAgent({ llm, qloo, product, market, references = "", ma
       }
       if (!out?.error) seen.push(out);
       trace.push({ tool: call.name, input: call.input, n: Array.isArray(out) ? out.length : undefined, error: out?.error });
+      onStep(trace.at(-1));
       results.push({ id: call.id, name: call.name, content: JSON.stringify(out).slice(0, 6000) });
     }
     messages.push({ role: "tool", results });
