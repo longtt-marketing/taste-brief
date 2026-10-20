@@ -11,14 +11,18 @@ Method:
 1. search: find 1-3 Qloo entities that stand for the product: the product or brand itself if Qloo knows it, else the
    closest comparable brands (use the reference brands when given). If a search match is clearly the wrong thing (a
    magazine for a shoe brand), do not use it, and say so in caveats.
-2. insights: from those seed entity ids, pull cross-domain affinities in the market: at least brands, artists and one of
-   tv_show / movie / podcast / place. Pass the market as location when it is a city or country.
-3. demographics: get the age and gender skew of the seed entities (Qloo's demographics are not location-specific).
-4. submit_brief. Rules for every item:
+2. tags: look up 1 or 2 Qloo tags for the product category itself (e.g. "running" for running shoes, "coffee" for a
+   coffee subscription); prefer brand or keyword tags. Then make at least one insights call that passes those tag_ids
+   together with the seed entity_ids, so the brief reflects the product and not only the comparable brand.
+3. insights: from the seed entity ids, pull cross-domain affinities in the market: at least brands, artists and one of
+   tv_show / movie / podcast. Pass the market as location. For places, also pass filter_location = the city, so the
+   places are really in that city.
+4. demographics: get the age and gender skew of the seed entities (Qloo's demographics are not location-specific).
+5. submit_brief. Rules for every item:
    - entity_ids: the Qloo entity_id(s) of the results the item rests on, copied exactly from the tool output. Cite the
      non-seed results that support the item. A seed may be cited only for an item about the seed itself.
    - evidence: short notes in the form "Name (affinity 0.956)", using the exact numbers Qloo returned.
-   - One Meta interest or partner per item, never "A / B".
+   - One Meta interest or partner per item, never "A / B", and name it as the Qloo result you cite.
    - Affinity describes aggregate taste overlap, not purchases and not any individual: write "over-indexes on",
      "shares taste with", never "buys" or "will".
    - Creative angles and the landing page are your interpretation: cite the results they are built on.
@@ -56,7 +60,8 @@ export const TOOLS = [
         filter_type: { type: "string", enum: INSIGHT_TYPES },
         entity_ids: strArr,
         tag_ids: strArr,
-        location: { type: "string", description: "city or country in natural language" },
+        location: { type: "string", description: "city or country in natural language: nudges the ranking toward it" },
+        filter_location: { type: "string", description: "for places only: keep places located in this city" },
         take: { type: "integer" },
       },
       required: ["filter_type"],

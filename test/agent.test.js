@@ -250,3 +250,35 @@ test("evidence gate v2: an age/gender line may rest on the seed when its numbers
   assert.deepEqual(r.rows.map((x) => x.grounded), [true, false]);
   assert.match(r.rows[1].problems.join(), /0\.71 does not match/);
 });
+
+test("evidence gate v3: a Meta interest must be named like the Qloo result it cites", async () => {
+  const { registryFrom, checkEvidence } = await import("../src/evidence.js");
+  const reg = registryFrom(REG_CALLS);
+  const r = checkEvidence({ meta_interests: [
+    { interest: "Outdoor Voices", entity_ids: ["OV"], evidence: ["0.966"] },
+    { interest: "Studio fitness", entity_ids: ["OV"], evidence: ["Outdoor Voices"] },
+  ] }, reg);
+  assert.deepEqual(r.rows.map((x) => x.grounded), [true, false]);
+  assert.match(r.rows[1].problems.join(), /named "Studio fitness" but cites Outdoor Voices/);
+});
+
+test("markets: places are filtered to each city, other types only nudged", async () => {
+  const { compareMarkets } = await import("../src/markets.js");
+  const calls = [];
+  const qloo = { ...mockQloo(), async insights(args) { calls.push(args); return mockQloo().insights(args); } };
+  const m = await compareMarkets({ qloo, seedIds: ["S1"], marketA: "London", marketB: "Hanoi" });
+  const place = calls.filter((c) => c.filter_type === "urn:entity:place");
+  assert.deepEqual(place.map((c) => c.filter_location).sort(), ["Hanoi", "London"]);
+  assert.ok(calls.filter((c) => c.filter_type !== "urn:entity:place").every((c) => c.filter_location === undefined));
+  assert.equal(m.types.find((t) => t.type === "urn:entity:place").filtered, true);
+});
+
+test("evidence gate v3: an entity returned by two calls keeps both affinities, and either may be quoted", async () => {
+  const { registryFrom, checkEvidence } = await import("../src/evidence.js");
+  const reg = registryFrom([...REG_CALLS, { tool: "insights", input: { filter_type: "urn:entity:brand", entity_ids: ["SEED"], tag_ids: ["T"] },
+    output: [{ name: "Outdoor Voices", entity_id: "OV", type: "urn:entity:brand", affinity: 0.912 }] }]);
+  assert.equal(reg.entities.get("OV").affinity, 0.966);
+  const r = checkEvidence({ meta_interests: [{ interest: "Outdoor Voices", entity_ids: ["OV"], evidence: ["0.912"] },
+    { interest: "Outdoor Voices", entity_ids: ["OV"], evidence: ["0.950"] }] }, reg);
+  assert.deepEqual(r.rows.map((x) => x.grounded), [true, false]);
+});

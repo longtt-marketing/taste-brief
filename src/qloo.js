@@ -59,13 +59,15 @@ export function makeQloo({ apiKey, fetchImpl = fetch, base = QLOO_BASE, concurre
       const r = await get("/search", { query, types, take });
       return (r.results || []).map(slimEntity);
     },
-    async insights({ filter_type, entity_ids, tag_ids, location, take = 10 }) {
+    // location nudges the ranking toward a city (signal); filter_location keeps only entities located there (places)
+    async insights({ filter_type, entity_ids, tag_ids, location, filter_location, take = 10 }) {
       if (!INSIGHT_TYPES.includes(filter_type)) throw new Error(`unsupported filter.type ${filter_type}`);
       const r = await get("/v2/insights", {
         "filter.type": filter_type,
         "signal.interests.entities": entity_ids,
         "signal.interests.tags": tag_ids,
         "signal.location.query": location,
+        "filter.location.query": filter_location,
         take,
       });
       return (r.results?.entities || []).map(slimEntity);

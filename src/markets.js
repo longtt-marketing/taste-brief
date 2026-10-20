@@ -2,7 +2,10 @@
 // for each market and the two result lists are compared, so every row on the page is a Qloo number, not a choice the
 // model made (the review of 20 Oct 2026 found that the first version only diffed the two model-written briefs).
 
-export const COMPARE_TYPES = ["urn:entity:brand", "urn:entity:artist", "urn:entity:tv_show"];
+export const COMPARE_TYPES = ["urn:entity:place", "urn:entity:brand", "urn:entity:artist", "urn:entity:tv_show"];
+// For places the city is a filter (only places located there); for the rest it only nudges Qloo's ranking, so the
+// comparison looks at the top of each list, where the city signal matters, not at the long tail.
+const FILTERED = new Set(["urn:entity:place"]);
 
 /** Compare two result lists of the same type: shared (with both affinities), only in A, only in B, in Qloo's order. */
 export function diffLists(listA, listB, keep = 6) {
@@ -18,12 +21,13 @@ export function diffLists(listA, listB, keep = 6) {
 }
 
 /** Run the comparison. onStep(entry) reports each pair of calls, like the agent's steps. */
-export async function compareMarkets({ qloo, seedIds, marketA, marketB, types = COMPARE_TYPES, take = 20, onStep = () => {} }) {
+export async function compareMarkets({ qloo, seedIds, marketA, marketB, types = COMPARE_TYPES, take = 12, onStep = () => {} }) {
   if (!seedIds?.length) return { error: "no seed entity to compare" };
   const rows = [];
   for (const type of types) {
     const [a, b] = await Promise.all([marketA, marketB].map((location) =>
-      qloo.insights({ filter_type: type, entity_ids: seedIds, location, take }).catch((e) => ({ error: String(e.message || e) }))));
+      qloo.insights({ filter_type: type, entity_ids: seedIds, location, filter_location: FILTERED.has(type) ? location : undefined, take })
+        .catch((e) => ({ error: String(e.message || e) }))));
     if (a.error || b.error) {
       onStep({ tool: "compare", input: { filter_type: type, markets: [marketA, marketB] }, error: a.error || b.error });
       rows.push({ type, error: a.error || b.error });
@@ -31,7 +35,7 @@ export async function compareMarkets({ qloo, seedIds, marketA, marketB, types = 
     }
     const d = diffLists(a, b);
     onStep({ tool: "compare", input: { filter_type: type, markets: [marketA, marketB] }, n: d.overlap, of: Math.max(d.size_a, d.size_b) });
-    rows.push({ type, ...d });
+    rows.push({ type, filtered: FILTERED.has(type), ...d });
   }
   return { market_a: marketA, market_b: marketB, seeds: seedIds, take, types: rows };
 }

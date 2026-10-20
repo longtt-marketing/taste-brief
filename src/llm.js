@@ -55,10 +55,12 @@ export function mockLLM() {
     const refs = ((first.match(/competitors \(optional\): ([^\n]*)/) || [])[1] || "").split(",").map((x) => x.trim()).filter((x) => x && x !== "none");
     const seedQuery = refs[0] || product;
     const ids = () => (Object.entries(seen).find(([k]) => k.startsWith("search:"))?.[1] || []).map((e) => e.entity_id).slice(0, 2);
+    const tagIds = () => (Object.entries(seen).find(([k]) => k.startsWith("tags:"))?.[1] || []).map((t) => t.tag_id).slice(0, 2);
     const plan = [
       () => [{ name: "search", input: { query: seedQuery, types: "urn:entity:brand", take: 3 } }],
+      () => [{ name: "tags", input: { query: product.split(",")[0], take: 2 } }],
       () => [
-        { name: "insights", input: { filter_type: "urn:entity:brand", entity_ids: ids(), location: market, take: 6 } },
+        { name: "insights", input: { filter_type: "urn:entity:brand", entity_ids: ids(), tag_ids: tagIds(), location: market, take: 6 } },
         { name: "insights", input: { filter_type: "urn:entity:artist", entity_ids: ids(), location: market, take: 6 } },
         { name: "insights", input: { filter_type: "urn:entity:podcast", entity_ids: ids(), location: market, take: 4 } },
         { name: "demographics", input: { entity_ids: ids() } },

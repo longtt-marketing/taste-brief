@@ -170,15 +170,18 @@ function markets(m) {
   const city = (s) => esc(String(s).split(",")[0]);
   const row = (name, val) => `<div class="mk-row"><span>${esc(name)}</span><span>${esc(val)}</span></div>`;
   const col = (title, rows) => `<div class="mk"><h3>${title}</h3>${rows || "<p class='note'>none</p>"}</div>`;
-  const panes = types.map((t, i) => `<div class="grid" data-pane="${i}"${i ? " hidden" : ""}>
+  const panes = types.map((t, i) => t.filtered ? `<div class="grid" data-pane="${i}"${i ? " hidden" : ""}>
+      ${col(`In ${city(m.market_a)}`, list(t.only_a).concat(list(t.shared).map((e) => ({ name: e.name, rank: e.rank_a }))).sort((x, y) => x.rank - y.rank).map((e) => row(e.name, `#${e.rank}`)).join(""))}
+      ${col(`In ${city(m.market_b)}`, list(t.only_b).concat(list(t.shared).map((e) => ({ name: e.name, rank: e.rank_b }))).sort((x, y) => x.rank - y.rank).map((e) => row(e.name, `#${e.rank}`)).join(""))}
+    </div>` : `<div class="grid" data-pane="${i}"${i ? " hidden" : ""}>
       ${col(`Only in ${city(m.market_a)}`, list(t.only_a).map((e) => row(e.name, `#${e.rank}`)).join(""))}
       ${col(`Only in ${city(m.market_b)}`, list(t.only_b).map((e) => row(e.name, `#${e.rank}`)).join(""))}
       ${col("In both", list(t.shared).map((e) => row(e.name, `#${e.rank_a} / #${e.rank_b}`)).join(""))}
     </div>`).join("");
-  const tabs = types.map((t, i) => `<button type="button" data-tab="${i}" aria-pressed="${i ? "false" : "true"}">${esc(LISTS[typeName(t.type)] || typeName(t.type))} · ${t.overlap} of ${Math.max(t.size_a, t.size_b)} shared</button>`).join("");
+  const tabs = types.map((t, i) => `<button type="button" data-tab="${i}" aria-pressed="${i ? "false" : "true"}">${t.filtered ? `${esc(LISTS[typeName(t.type)] || typeName(t.type))} in each city` : `${esc(LISTS[typeName(t.type)] || typeName(t.type))} · ${t.overlap} of top ${Math.max(t.size_a, t.size_b)} shared`}</button>`).join("");
   return `<section class="panel card markets"><h2><span>${city(m.market_a)} and ${city(m.market_b)}, side by side</span><small>Same Qloo call for each city. No AI in this step.</small></h2>
     <div class="tabs" role="group" aria-label="List type">${tabs}</div>${panes}
-    <p class="note">Ranks are Qloo's order for each city. In both: rank in ${city(m.market_a)} / rank in ${city(m.market_b)}.</p></section>`;
+    <p class="note">Ranks are Qloo's order for each city. Places are filtered to each city. For brands, artists and TV, the city only nudges Qloo's ranking, so the comparison looks at the top ${esc(m.take || 12)} of each list. In both: rank in ${city(m.market_a)} / rank in ${city(m.market_b)}.</p></section>`;
 }
 
 // The same question asked of the model with no data, to show what only Qloo adds.
@@ -219,8 +222,12 @@ function stepText(run, s) {
   if (s.tool === "insights") return `Read ${esc(typeName(i.filter_type))} tastes${city ? ` in ${esc(city)}` : ""}${n(s.n)}${err}`;
   if (s.tool === "demographics") return `Read the age and gender index${err}`;
   if (s.tool === "tags") return `Looked up Qloo tags for “${esc(i.query)}”${n(s.n)}${err}`;
-  if (s.tool === "compare") { const [a, b] = list(i.markets).map((x) => String(x).split(",")[0]); return `Compared ${esc(typeName(i.filter_type))} lists for ${esc(a)} and ${esc(b)}${s.n !== undefined ? ` <span class="n">${s.n} of ${s.of} shared</span>` : ""}${err}`; }
-  if (s.tool === "submit_brief") return s.error ? `Sent the brief back to the model: ${esc(s.error)}` : "Wrote the brief and checked every line against Qloo";
+  if (s.tool === "compare") {
+    const [a, b] = list(i.markets).map((x) => String(x).split(",")[0]);
+    if (i.filter_type === "urn:entity:place") return `Found places in ${esc(a)} and in ${esc(b)} that this audience likes${err}`;
+    return `Compared ${esc(typeName(i.filter_type))} lists for ${esc(a)} and ${esc(b)}${s.n !== undefined ? ` <span class="n">${s.n} of top ${s.of} shared</span>` : ""}${err}`;
+  }
+  if (s.tool === "submit_brief") return s.error ? "Sent the first draft back to the model to fix its format" : "Wrote the brief and checked every line against Qloo";
   if (s.tool === "baseline_done") return "Wrote a plain AI guess to compare against";
   return `${esc(s.tool)}${n(s.n)}${err}`;
 }

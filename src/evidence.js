@@ -36,11 +36,14 @@ export function registryFrom(calls) {
     for (const e of output) {
       if (!e?.entity_id) continue;
       const prev = entities.get(e.entity_id);
-      // keep the insights view (it carries the affinity for this audience) over the plain search hit
-      if (prev && prev.via === "insights" && tool !== "insights") continue;
+      // the same entity can come back from several calls (with and without tags, several cities) with different
+      // affinities: keep every number Qloo returned for it, and show the first insights one
+      const affinities = [...(prev?.affinities || []), ...(typeof e.affinity === "number" ? [e.affinity] : [])];
+      if (prev && prev.via === "insights" && tool !== "insights") { prev.affinities = affinities; continue; }
       entities.set(e.entity_id, {
-        entity_id: e.entity_id, name: e.name, type: e.type, affinity: e.affinity ?? null,
-        via: tool, location: tool === "insights" ? input?.location || null : null,
+        entity_id: e.entity_id, name: e.name, type: e.type,
+        affinity: prev?.via === "insights" ? prev.affinity : e.affinity ?? null, affinities,
+        via: prev?.via === "insights" ? "insights" : tool, location: tool === "insights" ? input?.location || prev?.location || null : null,
       });
     }
   }
@@ -80,10 +83,15 @@ export function verifyItem(field, item, reg) {
   const demographic = demoVals.length > 0 && /\b(age|aged|female|male|women|men|gender|younger|older|skew\w*|over-?index\w*|\d{2}\s*(?:-|–|to)\s*\d{2})\b/i.test(`${label} ${text}`);
   if (verified.length && !nonSeed.length && !seedNamed && !demographic) problems.push("only the seed entity is cited, and the claim is not about the seed");
   if (SINGLE.has(field) && /\s\/\s|\s\+\s/.test(label)) problems.push("combines several entities in one line");
+  // a Meta interest or partner names one Qloo result: its label must be that result's name (or contain it, or vice versa)
+  if (SINGLE.has(field) && verified.length && labelN.length >= 2
+    && !verified.some((e) => { const n = norm(e.name); return n.length >= 2 && (labelN.includes(n) || n.includes(labelN)); })) {
+    problems.push(`named "${label}" but cites ${verified.map((e) => e.name).join(", ")}`);
+  }
   // numbers in the free text must be ones Qloo returned for the cited entities: an affinity, or a demographic index
   for (const m of text.matchAll(/\b0\.\d{2,3}\b/g)) {
     const v = Number(m[0]);
-    const isAffinity = verified.some((e) => typeof e.affinity === "number" && Math.abs(e.affinity - v) < 0.0015);
+    const isAffinity = verified.some((e) => [e.affinity, ...(e.affinities || [])].some((a) => typeof a === "number" && Math.abs(a - v) < 0.0015));
     const isDemo = demographic && demoVals.some((d) => Math.abs(d - v) < 0.006);
     if (!isAffinity && !isDemo) problems.push(`${m[0]} does not match a number Qloo returned for the cited entities`);
   }

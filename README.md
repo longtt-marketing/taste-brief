@@ -10,13 +10,15 @@ Built for the [Qloo Agentic Hackathon](https://qloo.devpost.com/).
 
 ## How it works
 - `src/agent.js`: tool-using agent loop on Claude. Tools: `search`, `insights`, `demographics`, `tags`, and
-  `submit_brief` (the only way to finish). Every item of the brief must cite the Qloo `entity_id`s it rests on.
+  `submit_brief` (the only way to finish). The agent looks up tags for the product category and passes them next to
+  the brand, so the brief reflects the product too. Every item must cite the Qloo `entity_id`s it rests on.
 - `src/evidence.js`: the evidence gate. A claim counts as grounded only when the entity ids it cites were returned by a
   Qloo call in the same run; the seed entity grounds only claims about itself, or an age/gender claim whose numbers are
   Qloo's demographics for that seed; affinity numbers quoted in the text must match what Qloo returned; one Meta interest
   per line. The page shows the verified Qloo results (name, affinity, type) next to each line, and flags the rest.
-- `src/markets.js`: the second market, without a model in between: the same Qloo insights call on the agent's seed
-  entities for each market, compared by rank and affinity (what is only in A, only in B, in both).
+- `src/markets.js`: the second market, without a model in between. Places use `filter.location.query`, so each list is
+  real places in that city. Brands, artists and TV use the same insights call per city; the city only nudges Qloo's
+  ranking, so the top 12 of each list are compared (only in A, only in B, in both).
 - `src/qloo.js`: Qloo client for `https://hackathon.api.qloo.com` (GET + `X-Api-Key`), trims verbose fields, keeps at
   most two requests in flight, retries HTTP 429 with backoff, times out hung calls.
 - `src/llm.js`: Claude adapter (Messages API tool use) and a scripted stand-in model for tests and synthetic mode.
@@ -35,7 +37,7 @@ live runs. When neither applies the page runs on synthetic data and says so in a
 ## Run
 Requires Node 20 or newer.
 ```bash
-npm test                          # 19 tests, no network
+npm test                          # 22 tests, no network
 node scripts/evidence-gate.mjs    # agent end to end on synthetic data; fails if any claim is unsupported
 npm run dev                       # local Worker on synthetic data (MOCK=1)
 ```
