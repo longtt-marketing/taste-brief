@@ -170,3 +170,26 @@ test("onStep reports every trace entry as it happens, ending with submit_brief",
   assert.deepEqual(seen, trace.map((t) => t.tool));
   assert.equal(seen.at(-1), "submit_brief");
 });
+
+test("Qloo client: a 429 is retried after a wait, and at most `concurrency` requests run at once", async () => {
+  let inFlight = 0, peak = 0, n = 0;
+  const waits = [];
+  const fetchImpl = async () => {
+    inFlight++; peak = Math.max(peak, inFlight); const mine = ++n;
+    await new Promise((r) => setTimeout(r, 5));
+    inFlight--;
+    if (mine === 1) return new Response(JSON.stringify({ error_msg: "Rate limit exceeded" }), { status: 429 });
+    return new Response(JSON.stringify({ results: [{ name: "A", entity_id: "1" }] }), { status: 200 });
+  };
+  const q = makeQloo({ apiKey: "k", fetchImpl, concurrency: 2, sleep: async (ms) => { waits.push(ms); } });
+  const out = await Promise.all([1, 2, 3, 4, 5].map((i) => q.search({ query: "q" + i })));
+  assert.equal(out.every((r) => r.length === 1), true);
+  assert.equal(waits.length, 1);
+  assert.ok(peak <= 2, `peak ${peak}`);
+});
+
+test("Qloo client: gives up after the retries and reports the 429", async () => {
+  const fetchImpl = async () => new Response(JSON.stringify({ error_msg: "Rate limit exceeded" }), { status: 429 });
+  const q = makeQloo({ apiKey: "k", fetchImpl, retries: 2, sleep: async () => {} });
+  await assert.rejects(q.search({ query: "x" }), /429/);
+});

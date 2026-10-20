@@ -63,7 +63,7 @@ button.chip{background:var(--acc-soft);color:var(--acc);padding:6px 12px;border-
     <label>Compare with another market <span style="font-weight:400;color:var(--mute)">(optional)</span><input name="compare_market" maxlength="120" placeholder="Hanoi, Vietnam"></label>
     <label class="full">Reference brands or competitors <span style="font-weight:400;color:var(--mute)">(optional)</span>
       <textarea name="references" maxlength="300" placeholder="Allbirds, Veja"></textarea></label>
-    <label class="full">Access code for live Qloo data <span style="font-weight:400;color:var(--mute)">(without it the demo runs on synthetic data)</span><input name="code" maxlength="100" autocomplete="off"></label>
+    <label class="full">Access code for live Qloo data <span style="font-weight:400;color:var(--mute)">(without it the demo runs on synthetic data)</span><input name="code" type="password" maxlength="100" autocomplete="off"></label>
     <button id="go" type="submit">Build the brief</button>
   </form>
 
@@ -127,7 +127,7 @@ document.querySelectorAll("button.chip").forEach((b) => b.addEventListener("clic
 function stepText(run, s) {
   const i = s.input || {};
   const type = String(i.filter_type || "").replace("urn:entity:", "").replace("_", " ");
-  const n = s.n !== undefined ? ` <span>→ ${s.n} results</span>` : "";
+  const n = s.n !== undefined ? ` <span>→ ${s.n} result${s.n === 1 ? "" : "s"}</span>` : "";
   const err = s.error ? ` <span class="err">${esc(s.error)}</span>` : "";
   const where = `<b>${esc(run)}</b> · `;
   if (s.tool === "search") return `${where}finding “${esc(i.query)}” in Qloo${n}${err}`;

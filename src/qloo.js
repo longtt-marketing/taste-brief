@@ -20,7 +20,20 @@ export function slimEntity(e) {
   };
 }
 
-export function makeQloo({ apiKey, fetchImpl = fetch, base = QLOO_BASE }) {
+/**
+ * The hackathon key is rate limited: two markets in parallel (about 16 calls in a few seconds) got HTTP 429 on a live run
+ * (20 Oct). So one client keeps at most `concurrency` requests in flight and retries a 429 with a growing wait.
+ */
+export function makeQloo({ apiKey, fetchImpl = fetch, base = QLOO_BASE, concurrency = 2, retries = 4, backoffMs = 700,
+  sleep = (ms) => new Promise((r) => setTimeout(r, ms)) }) {
+  let active = 0;
+  const waiting = [];
+  async function slot(fn) {
+    while (active >= concurrency) await new Promise((r) => waiting.push(r));
+    active++;
+    try { return await fn(); } finally { active--; waiting.shift()?.(); }
+  }
+
   async function get(path, params) {
     const qs = new URLSearchParams();
     for (const [k, v] of Object.entries(params)) {
@@ -28,10 +41,16 @@ export function makeQloo({ apiKey, fetchImpl = fetch, base = QLOO_BASE }) {
       qs.set(k, Array.isArray(v) ? v.join(",") : String(v));
     }
     // /v2/insights is GET with query params; key goes in X-Api-Key, not Bearer.
-    const res = await fetchImpl(`${base}${path}?${qs}`, { headers: { "X-Api-Key": apiKey } });
-    const body = await res.json().catch(() => ({}));
-    if (!res.ok) throw new Error(`Qloo ${path} ${res.status}: ${JSON.stringify(body).slice(0, 200)}`);
-    return body;
+    for (let attempt = 0; ; attempt++) {
+      const res = await slot(() => fetchImpl(`${base}${path}?${qs}`, { headers: { "X-Api-Key": apiKey } }));
+      if (res.status === 429 && attempt < retries) {
+        await sleep(backoffMs * 2 ** attempt + Math.floor(Math.random() * 250));
+        continue;
+      }
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(`Qloo ${path} ${res.status}: ${JSON.stringify(body).slice(0, 200)}`);
+      return body;
+    }
   }
 
   return {

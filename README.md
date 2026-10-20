@@ -28,7 +28,7 @@ synthetic data. A link with `?code=...` fills the code in.
 
 ## Run
 ```bash
-npm test                          # 14 tests, no network
+npm test                          # 16 tests, no network
 node scripts/evidence-gate.mjs    # agent end to end on synthetic data; fails if any claim is unsupported
 npm run dev                       # local Worker on synthetic data (MOCK=1)
 ```
