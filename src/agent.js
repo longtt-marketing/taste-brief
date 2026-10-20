@@ -93,7 +93,7 @@ export const TOOLS = [
         creative_angles: cited({ angle: str, hook: str }),
         landing_page: { type: "object", properties: { headline: str, subheadline: str, entity_ids: strArr, evidence: strArr } },
         partnerships: cited({ partner: str, idea: str }),
-        test_plan: cited({ hypothesis: str, ad_set: str, kpi: str, stop_if: str }),
+        test_plan: { ...cited({ hypothesis: str, ad_set: str, kpi: str, stop_if: str }), minItems: 1, maxItems: 3 },
         caveats: strArr,
       },
       required: ["audience_summary", "audience_traits", "meta_interests", "creative_angles", "landing_page", "test_plan"],
