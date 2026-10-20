@@ -44,7 +44,7 @@ live runs. When neither applies the page runs on synthetic data and says so in a
 ## Run
 Requires Node 20 or newer.
 ```bash
-npm test                          # 26 tests, no network
+npm test                          # offline unit tests, no API keys required
 node scripts/evidence-gate.mjs    # agent end to end on synthetic data; fails if any claim is unsupported
 npm run dev                       # local Worker on synthetic data (MOCK=1)
 ```
