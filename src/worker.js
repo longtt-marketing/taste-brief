@@ -49,7 +49,13 @@ async function access(env, code) {
 }
 
 function withTimeout(promise, ms) {
-  return Promise.race([promise, new Promise((_, reject) => setTimeout(() => reject(new Error(`the run took longer than ${ms / 1000} s; please try again`)), ms))]);
+  // Clear the timer when the work finishes. Leaving it armed holds the Node test
+  // process open and needlessly retains per-request resources on the Worker.
+  let timer;
+  const timeout = new Promise((_, reject) => {
+    timer = setTimeout(() => reject(new Error(`the run took longer than ${ms / 1000} s; please try again`)), ms);
+  });
+  return Promise.race([promise, timeout]).finally(() => clearTimeout(timer));
 }
 
 export default {
