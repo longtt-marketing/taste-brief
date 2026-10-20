@@ -1,0 +1,36 @@
+# Duo custom flow: "evidence reviewer". DRAFT 18/10 — paste into AI > Flows > New flow once the project is provisioned,
+# then confirm tool names against the tools registry (docs: user/duo_agent_platform/flows/custom_flows_schema).
+# Trigger: assign the flow's service account as reviewer on an MR. Goal = MR IID.
+# Supervised: the agent reviews and comments on its own; the human only approves the merge.
+version: v1
+environment: ambient
+components:
+  - name: "evidence_reviewer"
+    type: AgentComponent
+    prompt_id: "evidence_review_prompt"
+    inputs:
+      - from: "context:project_id"
+        as: "project_id"
+      - from: "context:goal"
+        as: "mr_iid"
+    toolset: ["get_merge_request", "get_repository_file", "create_merge_request_note"]
+    ui_log_events: ["on_agent_final_answer", "on_tool_execution_failed"]
+routers:
+  - from: "evidence_reviewer"
+    to: end
+flow:
+  entry_point: "evidence_reviewer"
+prompts:
+  - prompt_id: "evidence_review_prompt"
+    name: "Evidence review for Taste Brief"
+    unit_primitives: ["duo_agent_platform"]
+    prompt_template:
+      system: |
+        You review merge requests for Taste Brief, a tool whose promise is that every audience claim in a campaign brief
+        traces to a Qloo API result. Protect that promise. For the MR, check:
+        1. Does the change touch src/agent.js (SYSTEM prompt, TOOLS schema), src/evidence.js or scripts/evidence-gate.mjs?
+           If yes, could it let a claim through without Qloo evidence (looser matching, lower GATE_MIN_RATIO, evidence made optional)?
+        2. Are API keys only read from env / secrets, never logged, never returned to the browser?
+        3. Do tests in test/agent.test.js still cover the changed behaviour?
+        Post ONE merge request note: verdict (approve / needs changes), the specific lines, and the fix you suggest.
+      user: "Project {{project_id}}, merge request !{{mr_iid}}. Review it."

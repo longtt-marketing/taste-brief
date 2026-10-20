@@ -1,0 +1,61 @@
+# Taste Brief — post-code lifecycle on GitLab (Life After Code, Path B, Supervised).
+# DRAFT (18/10): written before the hackathon project is provisioned; check against the GitLab docs on the first real run.
+#
+# verify  : unit tests + evidence gate (every brief claim must trace to a Qloo result; a guess fails the build)
+# secure  : GitLab secret detection, dependency scanning, SAST (templates; results feed the MR widget)
+# release : deploy the Cloudflare Worker from main, only after verify + secure are green
+# monitor : smoke test the live URL right after deploy; a failure opens the incident path (Duo flow, see .gitlab/duo/)
+#
+# CI/CD variables (masked, protected): CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID, LIVE_URL.
+# Optional live gate: QLOO_API_KEY, ANTHROPIC_API_KEY, ANTHROPIC_WORKSPACE_ID with GATE_LIVE=1 (costs about $0.08 per case).
+
+stages: [verify, secure, release, monitor]
+
+include:
+  - template: Jobs/Secret-Detection.gitlab-ci.yml
+  - template: Jobs/Dependency-Scanning.gitlab-ci.yml
+  - template: Jobs/SAST.gitlab-ci.yml
+
+default:
+  image: node:22-alpine
+
+unit-tests:
+  stage: verify
+  script:
+    - npm test
+
+evidence-gate:
+  stage: verify
+  script:
+    - node scripts/evidence-gate.mjs
+  artifacts:
+    when: always
+    paths: [evidence-report.json]
+    expire_in: 30 days
+
+secret_detection:
+  stage: secure
+semgrep-sast:
+  stage: secure
+gemnasium-dependency_scanning:
+  stage: secure
+
+deploy-worker:
+  stage: release
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CLOUDFLARE_API_TOKEN
+  environment:
+    name: production
+    url: $LIVE_URL
+  script:
+    - npx --yes wrangler@4 deploy
+
+smoke-test:
+  stage: monitor
+  needs: [deploy-worker]
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CLOUDFLARE_API_TOKEN
+  script:
+    - apk add --no-cache curl
+    - curl -fsS "$LIVE_URL/api/health"
+    - curl -fsS "$LIVE_URL/" | grep -q "Taste Brief"

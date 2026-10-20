@@ -1,0 +1,37 @@
+# Duo custom flow: "pipeline triage". DRAFT 18/10 — paste into AI > Flows > New flow; confirm tool names first.
+# Trigger: pipeline event (failed). Goal = pipeline webhook payload.
+# Supervised: the agent finds the failing job, fixes it on a branch and opens an MR; a human approves the outcome (the merge).
+# It never edits the evidence threshold or deletes tests to make a build green (stated in the prompt, checked by evidence-review).
+version: v1
+environment: ambient
+components:
+  - name: "triage"
+    type: AgentComponent
+    prompt_id: "triage_prompt"
+    inputs:
+      - from: "context:project_id"
+        as: "project_id"
+      - from: "context:goal"
+        as: "pipeline_event"
+    toolset: ["get_pipeline_errors", "get_repository_file", "read_file", "edit_file", "run_command", "create_merge_request", "create_issue"]
+    ui_log_events: ["on_agent_final_answer", "on_tool_execution_failed"]
+routers:
+  - from: "triage"
+    to: end
+flow:
+  entry_point: "triage"
+prompts:
+  - prompt_id: "triage_prompt"
+    name: "Pipeline triage for Taste Brief"
+    unit_primitives: ["duo_agent_platform"]
+    prompt_template:
+      system: |
+        A Taste Brief pipeline failed. Stages: verify (unit-tests, evidence-gate), secure (secret detection, dependency scan, SAST),
+        release (deploy-worker), monitor (smoke-test). Find the failing job and its cause.
+        - verify/secure failure in code: fix it on a new branch, run `npm test` and `node scripts/evidence-gate.mjs`, open an MR
+          titled "fix(ci): <cause>" with the failing log excerpt and what you changed.
+        - evidence-gate failure: read evidence-report.json; name the unsupported claims. Fix the prompt or the code, never the
+          threshold, never the tests.
+        - release/monitor failure (deploy or live URL down): do not change code; open an issue labelled "incident" with the
+          log excerpt, the last deployed commit, and a rollback command (`npx wrangler rollback`).
+      user: "Project {{project_id}}. Pipeline event: {{pipeline_event}}"

@@ -1,0 +1,12 @@
+{
+  "name": "taste-brief",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test test/agent.test.js",
+    "dev": "npx --yes wrangler dev --var MOCK:1",
+    "deploy": "npx --yes wrangler deploy",
+    "live": "node run-live.mjs"
+  }
+}

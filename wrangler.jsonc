@@ -1,0 +1,12 @@
+{
+  "name": "taste-brief",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-10-01",
+  "assets": { "directory": "./public", "binding": "ASSETS" },
+  // Secrets (never in git): npx wrangler secret put QLOO_API_KEY / ANTHROPIC_API_KEY
+  // Local dev without keys runs on synthetic data: npx wrangler dev --var MOCK:1
+  // Run near the US: Anthropic refuses calls from some Cloudflare locations near Vietnam (403 "Request not allowed",
+  // seen 20/10 from the Hong Kong colo), while the same key works from Vietnam.
+  "placement": { "region": "aws:us-east-1" },
+  "vars": { "MOCK": "0" }
+}

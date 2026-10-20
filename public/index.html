@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Taste Brief — campaign briefs grounded in Qloo taste data</title>
+<meta name="description" content="An agent that turns a product and a market into an audience and creative brief, where every line cites Qloo taste signals.">
+<style>
+:root{--bg:#f7f6f2;--card:#fff;--ink:#16161a;--mute:#5c5c66;--line:#e2e0d8;--acc:#3b2bd9;--acc-soft:#ecebff;--ok:#0f7a4a;--warn:#9a5b00}
+@media (prefers-color-scheme:dark){:root{--bg:#121216;--card:#1b1b21;--ink:#f1f0ec;--mute:#a3a3ad;--line:#2c2c35;--acc:#8f86ff;--acc-soft:#25234a;--ok:#4fd39a;--warn:#f0b75a}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:980px;margin:0 auto;padding:32px 16px 64px}
+h1{font-size:clamp(28px,4vw,40px);line-height:1.1;margin:0 0 8px;letter-spacing:-.02em}
+.lede{color:var(--mute);margin:0 0 24px;max-width:46em}
+form{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px}
+label{display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:14px}
+input,textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+textarea{min-height:80px;resize:vertical}
+.full{grid-column:1/-1}
+button{font:inherit;font-weight:600;background:var(--acc);color:#fff;border:0;border-radius:10px;padding:12px 20px;cursor:pointer;justify-self:start}
+button:disabled{opacity:.6;cursor:progress}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+#status{margin:16px 0;color:var(--mute);min-height:1.5em}
+.badge{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:6px;background:var(--acc-soft);color:var(--acc)}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))}
+section.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px}
+section.card h2{font-size:15px;text-transform:uppercase;letter-spacing:.08em;color:var(--mute);margin:0 0 12px}
+ul.items{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.ev{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.ev span{font-size:12px;background:var(--acc-soft);color:var(--acc);border-radius:999px;padding:2px 8px}
+.ev span::before{content:"Qloo · ";opacity:.7}
+.hook{color:var(--mute);font-style:italic}
+details.trace{margin-top:24px;color:var(--mute);font-size:14px}
+.err{color:var(--warn)}
+.compare h3{margin:0 0 4px;font-size:18px}
+.compare .grid>div:first-child{opacity:.75}
+</style>
+</head>
+<body>
+<main>
+  <p><span class="badge" id="mode">checking…</span></p>
+  <h1>Taste Brief</h1>
+  <p class="lede">Give it a product and a market. An agent asks Qloo's taste graph who really buys it, what else they love and how old they are,
+    then writes an audience and creative brief where every line shows the Qloo signal behind it.</p>
+
+  <form id="f">
+    <label>Product<input name="product" required minlength="3" maxlength="400" placeholder="Wool running sneakers, $120, sustainable"></label>
+    <label>Market<input name="market" required minlength="2" maxlength="120" placeholder="London, UK"></label>
+    <label>Compare with another market <span style="font-weight:400;color:var(--mute)">(optional)</span><input name="compare_market" maxlength="120" placeholder="Hanoi, Vietnam"></label>
+    <label class="full">Reference brands or competitors <span style="font-weight:400;color:var(--mute)">(optional)</span>
+      <textarea name="references" maxlength="300" placeholder="Allbirds, Veja"></textarea></label>
+    <label class="full">Access code for live Qloo data <span style="font-weight:400;color:var(--mute)">(without it the demo runs on synthetic data)</span><input name="code" maxlength="100" autocomplete="off"></label>
+    <button id="go" type="submit">Build the brief</button>
+  </form>
+
+  <p id="status" role="status" aria-live="polite"></p>
+  <div id="out"></div>
+</main>
+<script type="module">
+import { compareBriefs } from "./compare.js";
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const ev = (list) => list?.length ? `<div class="ev">${list.map((e) => `<span>${esc(e)}</span>`).join("")}</div>` : "";
+const card = (title, inner) => `<section class="card"><h2>${esc(title)}</h2>${inner}</section>`;
+const items = (arr, fn) => `<ul class="items">${(arr || []).map((x) => `<li>${fn(x)}${ev(x.evidence)}</li>`).join("") || "<li>Qloo returned nothing for this.</li>"}</ul>`;
+
+// Same product, two markets: what Qloo says differently about each (only when a second market was given).
+function markets(j) {
+  const m = j.market_b;
+  if (!m) return "";
+  if (m.error) return `<p class="err">Second market failed: ${esc(m.error)}</p>`;
+  const c = compareBriefs(j.brief, m.brief);
+  const chips = (arr) => arr.length ? arr.map((i) => `<li>${esc(i.label)}${ev(i.evidence)}</li>`).join("") : "<li>none</li>";
+  const clean = (t) => String(t ?? "").trim().replace(/[.,;\s]+$/, ""); // the model writes sentences here
+  const demo = (d) => d ? `Age: ${esc(clean(d.age))}.<br>Gender: ${esc(clean(d.gender))}.` : "n/a";
+  return `<section class="card markets" style="margin-top:16px"><h2>${esc(j.market)} vs ${esc(m.market)}</h2>
+    <div class="grid">
+      <div><h3>Only in ${esc(j.market)}</h3><p class="hook">${demo(c.demographics.a)}</p><ul class="items">${chips(c.interests.only_a)}</ul></div>
+      <div><h3>Only in ${esc(m.market)}</h3><p class="hook">${demo(c.demographics.b)}</p><ul class="items">${chips(c.interests.only_b)}</ul></div>
+      <div><h3>Shared</h3><ul class="items">${chips(c.interests.shared)}</ul></div>
+    </div></section>`;
+}
+
+// Same question asked of the model with no data: shows what only Qloo makes possible.
+function compare(base, b) {
+  if (!base) return "";
+  if (base.error) return `<p class="err">Comparison unavailable: ${esc(base.error)}</p>`;
+  const col = (title, x, note) => `<div><h3>${esc(title)}</h3><p class="hook">${esc(note)}</p>
+    <p>${esc(x.audience_summary)}</p>
+    <p><strong>Interests</strong><br>${(x.meta_interests || []).map((i) => esc(i.interest)).join("<br>")}</p>
+    <p><strong>Angles</strong><br>${(x.creative_angles || []).map((a) => esc(a.angle)).join("<br>")}</p></div>`;
+  return `<section class="card compare" style="margin-top:16px"><h2>Same question, without Qloo</h2>
+    <div class="grid">${col("Plain AI guess", base, "general knowledge, no data")}${col("Taste Brief", b, "every line traced to a Qloo signal")}</div></section>`;
+}
+
+fetch("/api/health").then((r) => r.json()).then((h) => {
+  $("#mode").textContent = h.live_qloo && h.live_llm ? (h.code_required ? "live Qloo data with an access code" : "live Qloo data") : "demo mode: synthetic data";
+  const pre = new URLSearchParams(location.search).get("code");
+  if (pre) $("#f").elements.code.value = pre;
+}).catch(() => { $("#mode").textContent = "offline"; });
+
+$("#f").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const data = Object.fromEntries(new FormData(e.target));
+  $("#go").disabled = true; $("#out").innerHTML = "";
+  $("#status").textContent = "The agent is querying Qloo and writing the brief…";
+  try {
+    const r = await fetch("/api/brief", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(data) });
+    const j = await r.json();
+    if (!r.ok) throw new Error(j.error || r.status);
+    const b = j.brief;
+    $("#status").textContent = `Done in ${j.trace.length} steps (${j.mode}).`;
+    $("#out").innerHTML = `
+      ${card("Audience", `<p>${esc(b.audience_summary)}</p>${b.demographics ? `<p><strong>Age:</strong> ${esc(String(b.demographics.age ?? "").trim())}<br><strong>Gender:</strong> ${esc(String(b.demographics.gender ?? "").trim())}</p>${ev(b.demographics.evidence)}` : ""}`)}
+      <div class="grid" style="margin-top:16px">
+        ${card("Who they are", items(b.audience_traits, (x) => esc(x.trait)))}
+        ${card("Meta Ads interests", items(b.meta_interests, (x) => esc(x.interest)))}
+        ${card("Creative angles", items(b.creative_angles, (x) => `<strong>${esc(x.angle)}</strong><br><span class="hook">${esc(x.hook)}</span>`))}
+        ${card("Landing page", `<p><strong>${esc(b.landing_page?.headline)}</strong></p><p>${esc(b.landing_page?.subheadline)}</p>${ev(b.landing_page?.evidence)}`)}
+        ${card("Partnerships", items(b.partnerships, (x) => `<strong>${esc(x.partner)}</strong> — ${esc(x.idea)}`))}
+      </div>
+      ${markets(j)}
+      ${compare(j.baseline, b)}
+      ${b.caveats?.length ? `<p class="err">${b.caveats.map(esc).join("<br>")}</p>` : ""}
+      <details class="trace"><summary>What the agent asked Qloo</summary><ol>${j.trace.map((t) =>
+        `<li>${esc(t.tool)} ${t.input ? esc(JSON.stringify(t.input)) : ""}${t.n !== undefined ? ` → ${t.n} results` : ""}${t.error ? ` <span class="err">${esc(t.error)}</span>` : ""}</li>`).join("")}</ol></details>`;
+  } catch (err) {
+    $("#status").innerHTML = `<span class="err">Failed: ${esc(err.message)}</span>`;
+  } finally {
+    $("#go").disabled = false;
+  }
+});
+</script>
+</body>
+</html>
