@@ -1,0 +1,394 @@
+{
+ "note": "Exploratory, not pre-registered (22 Oct 2026). URL-confirmed labels: strict sponsor reads whose episode also carries a web address built on the brand's own name.",
+ "shows": 216,
+ "brands": 53,
+ "strict_carries": 1446,
+ "url_confirmed_carries": 1211,
+ "mean_auc": {
+  "qloo": 0.6436,
+  "chart": 0.5209,
+  "ad_volume": 0.5885
+ },
+ "qloo_ci95_brands": [
+  0.6019,
+  0.6868
+ ],
+ "qloo_minus_chart_ci95_brands": [
+  0.0858,
+  0.1597
+ ],
+ "qloo_above_half": "41 of 53",
+ "rows": [
+  {
+   "brand": "BetterHelp",
+   "positives": 60,
+   "qloo": 0.5902,
+   "chart": 0.4989,
+   "ad_volume": 0.6217
+  },
+  {
+   "brand": "Mint Mobile",
+   "positives": 37,
+   "qloo": 0.4642,
+   "chart": 0.4803,
+   "ad_volume": 0.6153
+  },
+  {
+   "brand": "ButcherBox",
+   "positives": 36,
+   "qloo": 0.4788,
+   "chart": 0.5299,
+   "ad_volume": 0.5741
+  },
+  {
+   "brand": "Home Chef",
+   "positives": 16,
+   "qloo": 0.4583,
+   "chart": 0.4636,
+   "ad_volume": 0.5725
+  },
+  {
+   "brand": "Wayfair",
+   "positives": 41,
+   "qloo": 0.658,
+   "chart": 0.4694,
+   "ad_volume": 0.6523
+  },
+  {
+   "brand": "HelloFresh",
+   "positives": 20,
+   "qloo": 0.4496,
+   "chart": 0.4833,
+   "ad_volume": 0.6546
+  },
+  {
+   "brand": "Shopify",
+   "positives": 77,
+   "qloo": 0.56,
+   "chart": 0.488,
+   "ad_volume": 0.4916
+  },
+  {
+   "brand": "Indeed",
+   "positives": 11,
+   "qloo": 0.6038,
+   "chart": 0.4231,
+   "ad_volume": 0.2849
+  },
+  {
+   "brand": "Gusto",
+   "positives": 22,
+   "qloo": 0.7008,
+   "chart": 0.5834,
+   "ad_volume": 0.5966
+  },
+  {
+   "brand": "Ritual",
+   "positives": 12,
+   "qloo": 0.8158,
+   "chart": 0.6487,
+   "ad_volume": 0.7016
+  },
+  {
+   "brand": "Netflix",
+   "positives": 5,
+   "qloo": 0.4654,
+   "chart": 0.4725,
+   "ad_volume": 0.5938
+  },
+  {
+   "brand": "Athletic Greens",
+   "positives": 35,
+   "qloo": 0.6316,
+   "chart": 0.498,
+   "ad_volume": 0.476
+  },
+  {
+   "brand": "Squarespace",
+   "positives": 17,
+   "qloo": 0.6292,
+   "chart": 0.5786,
+   "ad_volume": 0.5819
+  },
+  {
+   "brand": "Drink LMNT",
+   "positives": 14,
+   "qloo": 0.889,
+   "chart": 0.622,
+   "ad_volume": 0.3561
+  },
+  {
+   "brand": "Factor",
+   "positives": 50,
+   "qloo": 0.4169,
+   "chart": 0.5064,
+   "ad_volume": 0.5751
+  },
+  {
+   "brand": "Rosetta Stone",
+   "positives": 4,
+   "qloo": 0.8685,
+   "chart": 0.7017,
+   "ad_volume": 0.3237
+  },
+  {
+   "brand": "Warby Parker",
+   "positives": 22,
+   "qloo": 0.6052,
+   "chart": 0.4705,
+   "ad_volume": 0.7082
+  },
+  {
+   "brand": "Macy's",
+   "positives": 3,
+   "qloo": 0.7833,
+   "chart": 0.6526,
+   "ad_volume": 0.6033
+  },
+  {
+   "brand": "Nutrafol",
+   "positives": 30,
+   "qloo": 0.7155,
+   "chart": 0.5877,
+   "ad_volume": 0.6531
+  },
+  {
+   "brand": "Blueland",
+   "positives": 7,
+   "qloo": 0.5068,
+   "chart": 0.4805,
+   "ad_volume": 0.5981
+  },
+  {
+   "brand": "Casper",
+   "positives": 8,
+   "qloo": 0.3657,
+   "chart": 0.4258,
+   "ad_volume": 0.6052
+  },
+  {
+   "brand": "Honeylove",
+   "positives": 14,
+   "qloo": 0.7733,
+   "chart": 0.3647,
+   "ad_volume": 0.6135
+  },
+  {
+   "brand": "MasterClass",
+   "positives": 9,
+   "qloo": 0.8081,
+   "chart": 0.711,
+   "ad_volume": 0.427
+  },
+  {
+   "brand": "Skims",
+   "positives": 22,
+   "qloo": 0.7871,
+   "chart": 0.498,
+   "ad_volume": 0.5842
+  },
+  {
+   "brand": "Caraway",
+   "positives": 7,
+   "qloo": 0.8281,
+   "chart": 0.4569,
+   "ad_volume": 0.7515
+  },
+  {
+   "brand": "Booking.com",
+   "positives": 8,
+   "qloo": 0.6001,
+   "chart": 0.3567,
+   "ad_volume": 0.6295
+  },
+  {
+   "brand": "hims",
+   "positives": 30,
+   "qloo": 0.7035,
+   "chart": 0.3837,
+   "ad_volume": 0.474
+  },
+  {
+   "brand": "Walmart",
+   "positives": 5,
+   "qloo": 0.7028,
+   "chart": 0.4223,
+   "ad_volume": 0.8986
+  },
+  {
+   "brand": "Zocdoc",
+   "positives": 27,
+   "qloo": 0.4307,
+   "chart": 0.4684,
+   "ad_volume": 0.5953
+  },
+  {
+   "brand": "Audible",
+   "positives": 6,
+   "qloo": 0.6917,
+   "chart": 0.4274,
+   "ad_volume": 0.4631
+  },
+  {
+   "brand": "Notion",
+   "positives": 6,
+   "qloo": 0.6849,
+   "chart": 0.6726,
+   "ad_volume": 0.602
+  },
+  {
+   "brand": "Airbnb",
+   "positives": 3,
+   "qloo": 0.885,
+   "chart": 0.7621,
+   "ad_volume": 0.5336
+  },
+  {
+   "brand": "DraftKings",
+   "positives": 6,
+   "qloo": 0.8032,
+   "chart": 0.523,
+   "ad_volume": 0.8048
+  },
+  {
+   "brand": "FanDuel",
+   "positives": 12,
+   "qloo": 0.8137,
+   "chart": 0.454,
+   "ad_volume": 0.2823
+  },
+  {
+   "brand": "Eight Sleep",
+   "positives": 4,
+   "qloo": 0.9558,
+   "chart": 0.6857,
+   "ad_volume": 0.3402
+  },
+  {
+   "brand": "Lululemon",
+   "positives": 5,
+   "qloo": 0.9502,
+   "chart": 0.5327,
+   "ad_volume": 0.9739
+  },
+  {
+   "brand": "ZipRecruiter",
+   "positives": 10,
+   "qloo": 0.5102,
+   "chart": 0.6913,
+   "ad_volume": 0.475
+  },
+  {
+   "brand": "Huel",
+   "positives": 10,
+   "qloo": 0.5325,
+   "chart": 0.4532,
+   "ad_volume": 0.5961
+  },
+  {
+   "brand": "Chime",
+   "positives": 17,
+   "qloo": 0.6443,
+   "chart": 0.4463,
+   "ad_volume": 0.6701
+  },
+  {
+   "brand": "Magic Spoon",
+   "positives": 4,
+   "qloo": 0.4587,
+   "chart": 0.4387,
+   "ad_volume": 0.7476
+  },
+  {
+   "brand": "Fabletics",
+   "positives": 25,
+   "qloo": 0.5,
+   "chart": 0.5561,
+   "ad_volume": 0.6101
+  },
+  {
+   "brand": "Raycon",
+   "positives": 9,
+   "qloo": 0.533,
+   "chart": 0.6028,
+   "ad_volume": 0.3561
+  },
+  {
+   "brand": "Liquid I.V.",
+   "positives": 8,
+   "qloo": 0.604,
+   "chart": 0.5619,
+   "ad_volume": 0.6836
+  },
+  {
+   "brand": "Hungryroot",
+   "positives": 20,
+   "qloo": 0.6265,
+   "chart": 0.4902,
+   "ad_volume": 0.5829
+  },
+  {
+   "brand": "Olipop",
+   "positives": 7,
+   "qloo": 0.5834,
+   "chart": 0.5379,
+   "ad_volume": 0.9163
+  },
+  {
+   "brand": "Thrive Market",
+   "positives": 7,
+   "qloo": 0.5485,
+   "chart": 0.446,
+   "ad_volume": 0.6316
+  },
+  {
+   "brand": "Green Chef",
+   "positives": 8,
+   "qloo": 0.6935,
+   "chart": 0.3972,
+   "ad_volume": 0.3792
+  },
+  {
+   "brand": "Talkspace",
+   "positives": 5,
+   "qloo": 0.5308,
+   "chart": 0.4389,
+   "ad_volume": 0.6256
+  },
+  {
+   "brand": "Manscaped",
+   "positives": 3,
+   "qloo": 0.608,
+   "chart": 0.446,
+   "ad_volume": 0.7465
+  },
+  {
+   "brand": "Knix",
+   "positives": 4,
+   "qloo": 0.9328,
+   "chart": 0.7771,
+   "ad_volume": 0.6085
+  },
+  {
+   "brand": "Stitch Fix",
+   "positives": 4,
+   "qloo": 0.4864,
+   "chart": 0.4764,
+   "ad_volume": 0.7895
+  },
+  {
+   "brand": "NordVPN",
+   "positives": 7,
+   "qloo": 0.3862,
+   "chart": 0.4033,
+   "ad_volume": 0.4149
+  },
+  {
+   "brand": "Vuori",
+   "positives": 3,
+   "qloo": 0.8599,
+   "chart": 0.6628,
+   "ad_volume": 0.5423
+  }
+ ]
+}

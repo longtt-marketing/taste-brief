@@ -1,0 +1,410 @@
+{
+ "note": "Second rater, blind: ChatGPT (OpenAI, Making real money project thread, 22 Oct 2026) labelled the same 100 strict-label samples from the snippets alone, without Claude's labels. Y = paid sponsor read.",
+ "labels": [
+  {
+   "i": 0,
+   "sponsor": true
+  },
+  {
+   "i": 1,
+   "sponsor": true
+  },
+  {
+   "i": 2,
+   "sponsor": true
+  },
+  {
+   "i": 3,
+   "sponsor": true
+  },
+  {
+   "i": 4,
+   "sponsor": true
+  },
+  {
+   "i": 5,
+   "sponsor": true
+  },
+  {
+   "i": 6,
+   "sponsor": true
+  },
+  {
+   "i": 7,
+   "sponsor": true
+  },
+  {
+   "i": 8,
+   "sponsor": false
+  },
+  {
+   "i": 9,
+   "sponsor": true
+  },
+  {
+   "i": 10,
+   "sponsor": true
+  },
+  {
+   "i": 11,
+   "sponsor": true
+  },
+  {
+   "i": 12,
+   "sponsor": true
+  },
+  {
+   "i": 13,
+   "sponsor": true
+  },
+  {
+   "i": 14,
+   "sponsor": true
+  },
+  {
+   "i": 15,
+   "sponsor": true
+  },
+  {
+   "i": 16,
+   "sponsor": true
+  },
+  {
+   "i": 17,
+   "sponsor": true
+  },
+  {
+   "i": 18,
+   "sponsor": true
+  },
+  {
+   "i": 19,
+   "sponsor": true
+  },
+  {
+   "i": 20,
+   "sponsor": true
+  },
+  {
+   "i": 21,
+   "sponsor": true
+  },
+  {
+   "i": 22,
+   "sponsor": true
+  },
+  {
+   "i": 23,
+   "sponsor": true
+  },
+  {
+   "i": 24,
+   "sponsor": false
+  },
+  {
+   "i": 25,
+   "sponsor": true
+  },
+  {
+   "i": 26,
+   "sponsor": true
+  },
+  {
+   "i": 27,
+   "sponsor": true
+  },
+  {
+   "i": 28,
+   "sponsor": true
+  },
+  {
+   "i": 29,
+   "sponsor": true
+  },
+  {
+   "i": 30,
+   "sponsor": false
+  },
+  {
+   "i": 31,
+   "sponsor": false
+  },
+  {
+   "i": 32,
+   "sponsor": false
+  },
+  {
+   "i": 33,
+   "sponsor": true
+  },
+  {
+   "i": 34,
+   "sponsor": true
+  },
+  {
+   "i": 35,
+   "sponsor": false
+  },
+  {
+   "i": 36,
+   "sponsor": true
+  },
+  {
+   "i": 37,
+   "sponsor": true
+  },
+  {
+   "i": 38,
+   "sponsor": true
+  },
+  {
+   "i": 39,
+   "sponsor": true
+  },
+  {
+   "i": 40,
+   "sponsor": false
+  },
+  {
+   "i": 41,
+   "sponsor": true
+  },
+  {
+   "i": 42,
+   "sponsor": true
+  },
+  {
+   "i": 43,
+   "sponsor": true
+  },
+  {
+   "i": 44,
+   "sponsor": true
+  },
+  {
+   "i": 45,
+   "sponsor": true
+  },
+  {
+   "i": 46,
+   "sponsor": true
+  },
+  {
+   "i": 47,
+   "sponsor": true
+  },
+  {
+   "i": 48,
+   "sponsor": true
+  },
+  {
+   "i": 49,
+   "sponsor": true
+  },
+  {
+   "i": 50,
+   "sponsor": true
+  },
+  {
+   "i": 51,
+   "sponsor": true
+  },
+  {
+   "i": 52,
+   "sponsor": false
+  },
+  {
+   "i": 53,
+   "sponsor": true
+  },
+  {
+   "i": 54,
+   "sponsor": true
+  },
+  {
+   "i": 55,
+   "sponsor": true
+  },
+  {
+   "i": 56,
+   "sponsor": false
+  },
+  {
+   "i": 57,
+   "sponsor": false
+  },
+  {
+   "i": 58,
+   "sponsor": false
+  },
+  {
+   "i": 59,
+   "sponsor": true
+  },
+  {
+   "i": 60,
+   "sponsor": true
+  },
+  {
+   "i": 61,
+   "sponsor": true
+  },
+  {
+   "i": 62,
+   "sponsor": true
+  },
+  {
+   "i": 63,
+   "sponsor": true
+  },
+  {
+   "i": 64,
+   "sponsor": true
+  },
+  {
+   "i": 65,
+   "sponsor": true
+  },
+  {
+   "i": 66,
+   "sponsor": false
+  },
+  {
+   "i": 67,
+   "sponsor": true
+  },
+  {
+   "i": 68,
+   "sponsor": false
+  },
+  {
+   "i": 69,
+   "sponsor": true
+  },
+  {
+   "i": 70,
+   "sponsor": true
+  },
+  {
+   "i": 71,
+   "sponsor": true
+  },
+  {
+   "i": 72,
+   "sponsor": true
+  },
+  {
+   "i": 73,
+   "sponsor": true
+  },
+  {
+   "i": 74,
+   "sponsor": true
+  },
+  {
+   "i": 75,
+   "sponsor": false
+  },
+  {
+   "i": 76,
+   "sponsor": true
+  },
+  {
+   "i": 77,
+   "sponsor": true
+  },
+  {
+   "i": 78,
+   "sponsor": true
+  },
+  {
+   "i": 79,
+   "sponsor": true
+  },
+  {
+   "i": 80,
+   "sponsor": true
+  },
+  {
+   "i": 81,
+   "sponsor": true
+  },
+  {
+   "i": 82,
+   "sponsor": true
+  },
+  {
+   "i": 83,
+   "sponsor": true
+  },
+  {
+   "i": 84,
+   "sponsor": true
+  },
+  {
+   "i": 85,
+   "sponsor": false
+  },
+  {
+   "i": 86,
+   "sponsor": true
+  },
+  {
+   "i": 87,
+   "sponsor": true
+  },
+  {
+   "i": 88,
+   "sponsor": false
+  },
+  {
+   "i": 89,
+   "sponsor": true
+  },
+  {
+   "i": 90,
+   "sponsor": true
+  },
+  {
+   "i": 91,
+   "sponsor": false
+  },
+  {
+   "i": 92,
+   "sponsor": true
+  },
+  {
+   "i": 93,
+   "sponsor": false
+  },
+  {
+   "i": 94,
+   "sponsor": true
+  },
+  {
+   "i": 95,
+   "sponsor": true
+  },
+  {
+   "i": 96,
+   "sponsor": true
+  },
+  {
+   "i": 97,
+   "sponsor": true
+  },
+  {
+   "i": 98,
+   "sponsor": true
+  },
+  {
+   "i": 99,
+   "sponsor": true
+  }
+ ],
+ "yes": 82,
+ "claude_yes": 82,
+ "agreement": 100,
+ "both_yes": 82,
+ "cohen_kappa": 1.0
+}
