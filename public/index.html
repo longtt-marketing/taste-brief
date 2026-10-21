@@ -59,6 +59,18 @@ ul.items strong{font-weight:600}
 .tests dl{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;margin:8px 0 0;font-size:14px}
 .tests dt{color:var(--faint);font-size:12px;text-transform:uppercase;letter-spacing:.06em;padding-top:2px}
 .tests dd{margin:0}
+.loop{border-top:1px solid var(--line);margin-top:16px;padding-top:16px;display:flex;flex-direction:column;gap:12px}
+.loop h3{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--acc);margin:0}
+.loop .steps{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr))}
+.loop .step{border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:14px;color:var(--mute)}
+.loop .step b{display:block;color:var(--ink);font-size:14px;margin-bottom:4px}
+.loop .lockid{font-family:var(--mono);font-size:13px;background:var(--ok-soft);color:var(--ok);border-radius:10px;padding:8px 12px}
+.loop .row{margin-top:0}
+.loop input[type=file]{font-size:13px;min-height:auto;padding:6px;background:var(--card)}
+.verdicts{width:100%;border-collapse:collapse;font-size:14px}
+.verdicts th,.verdicts td{text-align:left;padding:8px;border-bottom:1px solid var(--line);vertical-align:top}
+.verdicts th{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
+.v-ahead{color:var(--ok);font-weight:600}.v-pause{color:var(--warn);font-weight:600}.v-other{color:var(--mute);font-weight:600}
 .gline{font-size:14px;margin:12px 0 8px}
 .gchips{display:flex;flex-wrap:wrap;gap:6px}
 .gchip{font-size:13px;border-radius:999px;padding:3px 10px;background:var(--line);color:var(--ink)}
@@ -136,6 +148,7 @@ details.trace{color:var(--faint);font-size:14px}
   <div id="out" style="display:flex;flex-direction:column;gap:16px"></div>
 </main>
 <script type="module">
+import { RULE, canonicalPlan, planHash, adSetRows, toCsv, parseCsv, readResults, verdicts } from "/verdict.js";
 const $ = (s) => document.querySelector(s);
 // a spaced dash used as punctuation in model text reads as a comma; hyphens inside words stay
 const esc = (s) => String(s ?? "").replace(/\s+[—–]\s+/g, ", ").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -290,6 +303,66 @@ const csvInterests = (j) => {
       q(x.grounded ? "check in Meta Ads Manager" : "not confirmed by Qloo")].join(","))].join("\n");
 };
 
+// Lock the plan, run it, read the results back with the rule that was locked. Plain code (verdict.js), no model.
+function loopPanel() {
+  return `<div class="loop" id="loop"><h3>Lock it, run it, read it back</h3>
+    <div class="steps">
+      <div class="step"><b>1. Lock the plan</b>A SHA-256 fingerprint of the control, the tests and the rule, with the time, before any money is spent.</div>
+      <div class="step"><b>2. Run it</b>An ad set sheet for Ads Manager: the control and each test, named with the plan id, ${RULE.cap} cap per arm.</div>
+      <div class="step"><b>3. Read it back</b>Upload the Ads Manager export. The locked rule judges each test: ahead, pause, no clear difference or inconclusive.</div>
+    </div>
+    <p class="note" style="margin:0">Rule: at least ${RULE.minAddsToCart} adds to cart in the test and the control, then pause a test whose cost per add to cart is more than ${Math.round(RULE.worseBy * 100)}% above the control's. An arm that hits the ${RULE.cap} cap first is inconclusive, not a loss.</p>
+    <div class="row"><button type="button" id="lock">Lock this test plan</button><span id="lock-out"></span></div>
+    <div id="after-lock" hidden>
+      <div class="row"><button type="button" class="ghost" id="dl-sheet">Download the ad set sheet (CSV)</button><button type="button" class="ghost" id="dl-plan">Download the locked plan (JSON)</button></div>
+      <div class="row"><label style="flex-direction:row;align-items:center;gap:10px;font-weight:600">Upload Ads Manager results (CSV)<input type="file" id="results-file" accept=".csv,text/csv"></label>
+        <button type="button" class="ghost" id="sample-results">Try with sample numbers</button></div>
+      <div id="verdict-out"></div>
+    </div></div>`;
+}
+
+const download = (name, text, type) => {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([text], { type }));
+  a.download = name; a.click(); URL.revokeObjectURL(a.href);
+};
+
+function wireLoop(j) {
+  const btn = $("#lock");
+  if (!btn) return;
+  const tests = list(j.brief?.test_plan);
+  let locked = null;
+  btn.addEventListener("click", async () => {
+    const lockedAt = new Date().toISOString();
+    const canonical = canonicalPlan({ product: j.product, market: j.market, references: j.references, tests, lockedAt });
+    const hash = await planHash(canonical);
+    locked = { canonical, hash, id: hash.slice(0, 8), lockedAt };
+    btn.disabled = true; btn.textContent = "Locked";
+    $("#lock-out").innerHTML = `<span class="lockid">Plan ${esc(locked.id)} · SHA-256 ${esc(hash.slice(0, 16))}… · ${esc(new Date(lockedAt).toLocaleString())}</span>`;
+    $("#after-lock").hidden = false;
+  });
+  const slug = () => String(j.market).replace(/[^a-z0-9]+/gi, "-").toLowerCase();
+  $("#dl-sheet").addEventListener("click", () => locked && download(`taste-brief-ad-sets-${locked.id}-${slug()}.csv`, toCsv(adSetRows({ market: j.market, tests, planId: locked.id })), "text/csv"));
+  $("#dl-plan").addEventListener("click", () => locked && download(`taste-brief-plan-${locked.id}.json`, JSON.stringify({ sha256: locked.hash, plan: JSON.parse(locked.canonical) }, null, 2), "application/json"));
+  const show = (csvText, sample) => {
+    const v = verdicts(readResults(parseCsv(csvText), locked.id));
+    const cls = (x) => (x === "ahead" ? "v-ahead" : x === "pause" ? "v-pause" : "v-other");
+    const money = (x) => (x == null ? "n/a" : x.toFixed(2));
+    $("#verdict-out").innerHTML = (sample ? `<div class="banner synthetic">Sample numbers, made up to show how the rule reads results. No ads were run.</div>` : "")
+      + (v.length ? `<div class="scroll"><table class="verdicts"><thead><tr><th>Arm</th><th>Spend</th><th>Adds to cart</th><th>Cost per add to cart (control)</th><th>Verdict</th></tr></thead><tbody>${v.map((r) =>
+        `<tr><td>${esc(r.arm)}</td><td>${money(r.spend)}</td><td>${esc(r.addsToCart)}</td><td>${money(r.cost)} (${money(r.controlCost)})</td><td><span class="${cls(r.verdict)}">${esc(r.verdict)}</span><br><span class="note">${esc(r.why)}</span></td></tr>`).join("")}</tbody></table></div>`
+        : `<p class="err">No ad sets named TB-${esc(locked.id)} in that file. Export from Ads Manager at the ad set level, with Amount spent and Adds to cart.</p>`);
+  };
+  $("#results-file").addEventListener("change", async (e) => { const f = e.target.files?.[0]; if (f && locked) show(await f.text(), false); });
+  $("#sample-results").addEventListener("click", () => {
+    if (!locked) return;
+    // made-up numbers that exercise each verdict once; labelled as such on the page
+    const demo = [["Control", 268.4, 24], ["Test 1", 251.9, 31], ["Test 2", 300, 14], ["Test 3", 296.5, 20]];
+    const rows = demo.slice(0, tests.length + 1).map(([arm, spend, atc]) => ({ "Ad set name": `TB-${locked.id} ${arm}`, "Amount spent": spend, "Adds to cart": atc }));
+    show(toCsv(rows), true);
+  });
+}
+
 // Draw one result: from a run that just finished, or the recorded run of the example.
 function showResult(j) {
   const b = j.brief, c = j.check || { grounded: 0, total: 0, flagged: [] };
@@ -316,12 +389,13 @@ function showResult(j) {
       ${card("Landing page", `<p style="margin:0 0 6px"><strong>${esc(b.landing_page?.headline)}</strong></p><p style="margin:0">${esc(b.landing_page?.subheadline)}</p>${ev(b.landing_page, true)}`, "our reading of the data")}
       ${card("Partnerships", items(b.partnerships, (x) => `<strong>${esc(x.partner)}</strong>: ${esc(x.idea)}`))}
     </div>
-    ${list(b.test_plan).length ? card("What to test first", `<ul class="tests">${list(b.test_plan).map((x) => `<li><strong>${esc(x.hypothesis)}</strong><dl><dt>Changes</dt><dd>${x.variable === "targeting" ? "Targeting only, with your usual creative" : x.variable === "creative" ? "Creative only, on the broad audience" : esc(x.variable)}</dd><dt>Run</dt><dd>${esc(x.ad_set)}</dd>${x.why ? `<dt>Why</dt><dd>${esc(x.why)}</dd>` : ""}<dt>Judge on</dt><dd>${esc(x.kpi)}</dd><dt>Pause rule</dt><dd>${esc(x.stop_if)}</dd></dl>${ev(x, true)}</li>`).join("")}</ul><p class="note" style="margin:12px 0 0">Control for every test: broad targeting in ${esc(String(j.market).split(",")[0])}, same ages, your usual message. Each test changes one thing from it, so a difference can be traced. The pause rule is for spending a small budget, not statistical proof. Check each interest's audience size in Ads Manager first.</p>`, "each test rests on the Qloo results shown") : ""}
+    ${list(b.test_plan).length ? card("What to test first", `<ul class="tests">${list(b.test_plan).map((x) => `<li><strong>${esc(x.hypothesis)}</strong><dl><dt>Changes</dt><dd>${x.variable === "targeting" ? "Targeting only, with your usual creative" : x.variable === "creative" ? "Creative only, on the broad audience" : esc(x.variable)}</dd><dt>Run</dt><dd>${esc(x.ad_set)}</dd>${x.why ? `<dt>Why</dt><dd>${esc(x.why)}</dd>` : ""}<dt>Judge on</dt><dd>${esc(x.kpi)}</dd><dt>Pause rule</dt><dd>${esc(x.stop_if)}</dd></dl>${ev(x, true)}</li>`).join("")}</ul><p class="note" style="margin:12px 0 0">Control for every test: broad targeting in ${esc(String(j.market).split(",")[0])}, same ages, your usual message. Each test changes one thing from it, so a difference can be traced. The pause rule is for spending a small budget, not statistical proof. Check each interest's audience size in Ads Manager first.</p>${loopPanel()}`, "each test rests on the Qloo results shown") : ""}
     ${markets(j.markets)}
     ${list(b.caveats).length ? `<p class="note">${list(b.caveats).map(esc).join("<br>")}</p>` : ""}
     <div class="actions"><button type="button" class="ghost" id="copy-md">Copy the brief</button><button type="button" class="ghost" id="dl-csv">Download interests as CSV</button></div>
     <details class="trace"><summary>Every Qloo call the agent made</summary>${j.run ? `<p class="note">This run: ${esc(j.run.seconds)} s, ${esc(j.run.qloo_calls)} Qloo calls, ${esc(j.run.model_calls)} model calls, version ${esc(String(j.run.version).slice(0, 8))}, ${esc(j.run.at)}.</p>` : ""}<ol>${list(j.trace).map((t) =>
       `<li>${esc(t.tool)} ${t.input ? esc(JSON.stringify(t.input)) : ""}${t.n !== undefined ? `: ${t.n} results` : ""}${t.error ? ` <span class="err">${esc(t.error)}</span>` : ""}</li>`).join("")}</ol></details>`;
+  wireLoop(j);
   document.querySelectorAll(".tabs button").forEach((btn) => btn.addEventListener("click", () => {
     document.querySelectorAll(".tabs button").forEach((x) => x.setAttribute("aria-pressed", String(x === btn)));
     document.querySelectorAll("[data-pane]").forEach((p) => { p.hidden = p.dataset.pane !== btn.dataset.tab; });

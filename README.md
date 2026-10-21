@@ -29,6 +29,8 @@ The page shows the same scoring for every run.
   per line. The page shows the verified Qloo results (name, affinity, type) next to each line, and flags the rest. This
   proves where a line comes from, not that the marketing idea is right. `unbackedBy` lists what the no-data baseline would
   target that Qloo returned nowhere in the run.
+- `public/verdict.js`: lock the test plan (SHA-256 of the control, tests and rule, with a timestamp), write the ad set
+  sheet named with the plan id, and read an Ads Manager export back with the locked rule. Pure functions, no model.
 - `src/grade.js`: one grader for any list of picks: exact name lookup in Qloo, then the affinity Qloo gives that
   entity for the brand's audience in the market (`filter.results.entities`). Used by the page and the benchmark.
 - `src/markets.js`: the second market, without a model in between. Places use `filter.location.query`, so each list is

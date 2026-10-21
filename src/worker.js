@@ -143,7 +143,8 @@ export default {
           + 2 * (markets?.types || []).length + graded.length + graded.filter((g) => g.match).length;
         const runInfo = { version: env.CF_VERSION_METADATA?.id || "local", seconds: Math.round((Date.now() - t0) / 1000),
           qloo_calls: qlooCalls, model_calls: (llm.usage?.calls || 0) + (baseLLM.usage?.calls || 0), at: new Date().toISOString() };
-        const result = { ...meta, market, ...out, baseline, unbacked, scored, markets, run: runInfo };
+        // the inputs go back to the same visitor only, so the page can lock the test plan with them
+        const result = { ...meta, product, references, compare_market: marketB, market, ...out, baseline, unbacked, scored, markets, run: runInfo };
         if (live && isExample(body) && env.QUOTA && !result.incomplete) {
           const { quota, access, ...keep } = result;
           await env.QUOTA.put(REPLAY_KEY, JSON.stringify({ ...keep, mode: "replay", recorded: { at: runInfo.at, version: runInfo.version, inputs: EXAMPLE } })).catch(() => {});
