@@ -12,7 +12,7 @@ export function slimEntity(e) {
   return {
     name: e.name,
     entity_id: e.entity_id,
-    type: e.subtype || e.type,
+    type: e.subtype || e.type || e.types?.[0], // search results carry types[], insights results carry type
     affinity: e.query?.affinity ?? e.affinity ?? null,
     popularity: e.popularity ?? null,
     tags: (e.tags || []).slice(0, 6).map((t) => t.name || t.tag_id || t.id),
@@ -60,7 +60,8 @@ export function makeQloo({ apiKey, fetchImpl = fetch, base = QLOO_BASE, concurre
       return (r.results || []).map(slimEntity);
     },
     // location nudges the ranking toward a city (signal); filter_location keeps only entities located there (places)
-    async insights({ filter_type, entity_ids, tag_ids, location, filter_location, take = 10 }) {
+    // result_ids restricts the results to given entities: used to score a named pick against the same audience
+    async insights({ filter_type, entity_ids, tag_ids, location, filter_location, result_ids, take = 10 }) {
       if (!INSIGHT_TYPES.includes(filter_type)) throw new Error(`unsupported filter.type ${filter_type}`);
       const r = await get("/v2/insights", {
         "filter.type": filter_type,
@@ -68,6 +69,7 @@ export function makeQloo({ apiKey, fetchImpl = fetch, base = QLOO_BASE, concurre
         "signal.interests.tags": tag_ids,
         "signal.location.query": location,
         "filter.location.query": filter_location,
+        "filter.results.entities": result_ids,
         take,
       });
       return (r.results?.entities || []).map(slimEntity);

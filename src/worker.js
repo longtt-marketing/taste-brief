@@ -8,6 +8,9 @@
 //   synthetic data, clearly labelled. Without DEMO_CODE configured (local dev) everything is live when keys exist.
 import { runAgent, runBaseline, BASELINE_SYSTEM, TOOLS } from "./agent.js";
 import { unbackedBy } from "./evidence.js";
+import { gradePicks, summarize } from "./grade.js";
+
+const list = (v) => (Array.isArray(v) ? v : []);
 import { compareMarkets } from "./markets.js";
 import { makeQloo } from "./qloo.js";
 import { mockQloo } from "./mock-qloo.js";
@@ -101,20 +104,34 @@ export default {
           const d = await qloo.demographics({ entity_ids: out.seeds }).catch(() => []);
           if (d[0]) out.demographics = { seeds: out.seeds.map((id) => out.registry.find((e) => e.entity_id === id)?.name || id), age: d[0].age, gender: d[0].gender };
         }
-        const markets = marketB.length >= 2
-          ? await compareMarkets({ qloo, seedIds: out.seeds.slice(0, 3), marketA: market, marketB,
-            onStep: (s) => send({ type: "step", run: `${market} vs ${marketB}`, step: s }) }).catch((e) => ({ error: String(e.message || e) }))
-          : null;
+        // the plain guess and the brief's interests, scored by the same Qloo grader (src/grade.js), next to the city comparison
+        const seedNames = new Set(out.seeds.map((id) => String(out.registry.find((e) => e.entity_id === id)?.name || "").toLowerCase()));
+        const picks = (b) => list(b?.meta_interests).map((i) => String(i?.interest || "").trim())
+          .filter((n) => n && !seedNames.has(n.toLowerCase().replace(/\s*\(check in ads manager\)\s*/i, ""))).slice(0, 10);
+        const gradeBoth = async () => {
+          if (!baseline || baseline.error || !out.seeds.length) return null;
+          const [tb, plain] = [await gradePicks(qloo, picks(out.brief), out.seeds, market), await gradePicks(qloo, picks(baseline), out.seeds, market)];
+          send({ type: "step", run: market, step: { tool: "graded", n: tb.length + plain.length } });
+          return { taste_brief: { graded: tb, ...summarize(tb) }, plain: { graded: plain, ...summarize(plain) } };
+        };
+        const [markets, scored] = await Promise.all([
+          marketB.length >= 2
+            ? compareMarkets({ qloo, seedIds: out.seeds.slice(0, 3), marketA: market, marketB,
+              onStep: (s) => send({ type: "step", run: `${market} vs ${marketB}`, step: s }) }).catch((e) => ({ error: String(e.message || e) }))
+            : null,
+          gradeBoth().catch(() => null),
+        ]);
         // what the plain guess would target that Qloo did not return anywhere in this run (entities, tags or city lists)
         const returned = [...out.registry, ...(out.tags || []), ...(markets?.types || []).flatMap((t) => [...(t.only_a || []), ...(t.only_b || []), ...(t.shared || [])])];
         const unbacked = baseline && !baseline.error ? unbackedBy(baseline, returned) : null;
         // enough to check a run later without publishing Qloo payloads: which deployed version, how long, how many calls
         // the city comparison makes one insights call per city for each list type
+        const graded = [...(scored?.taste_brief?.graded || []), ...(scored?.plain?.graded || [])];
         const qlooCalls = out.trace.filter((s) => ["search", "insights", "demographics", "tags"].includes(s.tool)).length
-          + 2 * (markets?.types || []).length;
+          + 2 * (markets?.types || []).length + graded.length + graded.filter((g) => g.match).length;
         const runInfo = { version: env.CF_VERSION_METADATA?.id || "local", seconds: Math.round((Date.now() - t0) / 1000),
           qloo_calls: qlooCalls, model_calls: (llm.usage?.calls || 0) + (baseLLM.usage?.calls || 0), at: new Date().toISOString() };
-        return { ...meta, market, ...out, baseline, unbacked, markets, run: runInfo };
+        return { ...meta, market, ...out, baseline, unbacked, scored, markets, run: runInfo };
       };
 
       // stream: true -> NDJSON lines {type:"step"} as the agent works, then {type:"result"} or {type:"error"}: a live run

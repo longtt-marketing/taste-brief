@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Taste Brief: a decision Qloo changed</title>
-<meta name="description" content="For judges: one real run of Taste Brief, the decision Qloo changed, a blind check of the two plans, and how to reproduce it in two minutes.">
+<title>Taste Brief: for judges</title>
+<meta name="description" content="For judges: a 20 brief benchmark with and without Qloo, the run in the video, and how to reproduce it in two minutes.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -47,51 +47,46 @@ code{font-family:var(--mono);font-size:13px;background:var(--acc-soft);border-ra
 </head>
 <body>
 <main>
-  <nav><b>Taste Brief</b><a href="/">Live demo</a><a href="https://github.com/longtt-marketing/taste-brief">Source code</a><a href="https://github.com/longtt-marketing/taste-brief/tree/main/docs/blind-check">Blind check files</a></nav>
+  <nav><b>Taste Brief</b><a href="/">Live demo</a><a href="https://github.com/longtt-marketing/taste-brief">Source code</a><a href="https://github.com/longtt-marketing/taste-brief/tree/main/docs/benchmark">Benchmark files</a></nav>
 
   <header>
     <p class="eyebrow">For judges · two minute read</p>
-    <h1>A decision Qloo changed</h1>
-    <p class="lede">Taste Brief does not predict who will buy. It helps a performance marketer find ad hypotheses worth testing before committing real spend. Structured recommendations show the Qloo results they cite; the interpretations stay hypotheses.</p>
+    <h1>With Qloo, the picks fit the audience</h1>
+    <p class="lede">Taste Brief helps a performance marketer find ad hypotheses worth testing before committing real spend. Structured recommendations show the Qloo results they cite; the interpretations stay hypotheses.</p>
   </header>
 
   <section class="panel">
-    <h2>The case: wool running sneakers, $120, London</h2>
-    <p>Closest brand: Allbirds (Qloo knows the brand, not this shoe). Second city: Hanoi. One live run on 21 Oct 2026, the one in the video.</p>
-    <div class="grid">
-      <div class="guess"><h3>Plain AI, no data</h3>
-        <p>Targets runners and eco shoppers.</p>
-        <div class="chips"><span class="chip">Parkrun</span><span class="chip">Running</span><span class="chip">Veja or On Running</span><span class="chip">Wellness and yoga</span><span class="chip">Local run clubs</span></div>
-        <p class="note">Parkrun, Wellness and yoga and the run clubs appeared in no Qloo result in this run (Qloo did return a Running tag). That is not evidence against them; it means they are a guess.</p>
-      </div>
-      <div class="ours"><h3>Taste Brief, from Qloo</h3>
-        <p>Points to design led, transparent brands and studio fitness.</p>
-        <div class="chips">
-          <span class="chip q">Outdoor Voices <span class="n">0.966</span></span><span class="chip q">ClassPass <span class="n">0.962</span></span>
-          <span class="chip q">Peloton <span class="n">0.957</span></span><span class="chip q">Everlane <span class="n">0.956</span></span>
-          <span class="chip q">Tracksmith <span class="n">0.922</span></span><span class="chip q">Nike Training Club <span class="n">0.912</span></span>
-        </div>
-        <p class="note">Numbers are Qloo affinity scores returned in that run, London signal, Allbirds as seed.</p>
-      </div>
-    </div>
-    <p class="decision">Decision: keep the runner plan as the control, and set aside a small, capped budget for three tests, each meant to change one thing (the code checks the ad set matches the variable): the usual creative shown to Tracksmith and Nike Training Club fans; the usual creative shown to Everlane and Outdoor Voices fans; and a nature and conservation story (Down to Earth with Zac Efron, 0.975, was the top TV result) shown to the control's broad audience.</p>
-    <p class="note">Pause rule in that run: up to £300 per arm (the model wrote London's currency); pause as worse if cost per add to cart is 30% above the control once each arm has 20 add to carts. An arm that hits the cap first is inconclusive, not a loss. A rule for spending a small budget, not statistical proof.</p>
-    <p class="note">Qloo's age and gender index for Allbirds (women +0.33, ages 30 to 34 +0.42) is for the brand's audience, not London residents and not purchases.</p>
+    <h2>Benchmark: 20 briefs, with and without Qloo</h2>
+    <p>Same model (Claude Sonnet 5.5), 20 products and cities. Every suggested Meta interest is graded by the same rule: find the entity in Qloo by its exact name, then ask Qloo how much the reference brand's audience in that city likes it.</p>
+    <div class="scroll"><table>
+      <thead><tr><th>Who wrote the interests</th><th>Found and scored on Qloo</th><th>Affinity 0.9 or more</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Taste Brief</strong> (with Qloo)</td><td class="n">118 / 143 · 83%</td><td class="n"><strong>105 / 143 · 73%</strong></td></tr>
+        <tr><td>Same model, no data, told to name specific brands and shows</td><td class="n">54 / 140 · 39%</td><td class="n">25 / 140 · 18%</td></tr>
+        <tr><td>Same model, no data, as the app asks it</td><td class="n">6 / 117 · 5%</td><td class="n">3 / 117 · 3%</td></tr>
+      </tbody>
+    </table></div>
+    <p>Against the stronger baseline Taste Brief is ahead in 19 of 20 briefs (one tie): +55 points, 95% bootstrap interval +43 to +67.</p>
+    <p class="note">The grader is Qloo, so for Taste Brief's picks it is partly circular: it measures distance from Qloo's view of the audience, not ad results. Scripts: <code>scripts/benchmark.mjs</code>, <code>scripts/benchmark-strong.mjs</code>.</p>
   </section>
 
   <section class="panel">
-    <h2>A blind check</h2>
-    <p>Two plans from an earlier live run (20 Oct, same product and cities) were shown to ChatGPT (temporary chat, no memory) and to a fresh Claude instance as "two strategists' plans" for a $3,000, four week Meta test, with numbers and the word Qloo removed. Each saw both orders.</p>
-    <div class="scroll"><table>
-      <thead><tr><th>Reviewer</th><th>Shown first</th><th>Funds first</th><th>Different from competitors, Qloo plan / plain plan</th><th>Runs a Qloo test first</th></tr></thead>
-      <tbody>
-        <tr><td>ChatGPT</td><td>Plain</td><td>Plain</td><td class="n">6 / 3</td><td>Yes</td></tr>
-        <tr><td>ChatGPT</td><td>Qloo</td><td>Plain</td><td class="n">8 / 4</td><td>Yes</td></tr>
-        <tr><td>Claude</td><td>Qloo</td><td>Qloo</td><td class="n">9 / 3</td><td>Yes</td></tr>
-        <tr><td>Claude</td><td>Plain</td><td>Plain</td><td class="n">8 / 4</td><td>Yes</td></tr>
-      </tbody>
-    </table></div>
-    <p>Across four AI review runs, three preferred funding the plain plan first, but all four included at least one Qloo derived test among the first tests they would run. So the tool now frames Qloo as a source of hypotheses to test against the obvious plan, not a replacement for it. This is an exploratory check with two AI models, not a panel of marketers, and no ads were run.</p>
+    <h2>The run in the video: wool running sneakers, $120, London</h2>
+    <p>Closest brand: Allbirds (Qloo knows the brand, not this shoe). Second city: Hanoi. Live run on 21 Oct 2026.</p>
+    <div class="grid">
+      <div class="guess"><h3>Plain AI, no data · 0 of 5 at 0.9+</h3>
+        <div class="chips"><span class="chip">Running · no score</span><span class="chip">Sustainable living · not in Qloo</span><span class="chip">Parkrun · not in Qloo</span><span class="chip">Minimalism · not in Qloo</span><span class="chip">Strava <span class="n">0.850</span></span></div>
+      </div>
+      <div class="ours"><h3>Taste Brief · 6 of 7 at 0.9+</h3>
+        <div class="chips">
+          <span class="chip q">Down to Earth with Zac Efron <span class="n">0.975</span></span><span class="chip q">Outdoor Voices <span class="n">0.966</span></span>
+          <span class="chip q">ClassPass <span class="n">0.962</span></span><span class="chip q">Peloton <span class="n">0.957</span></span>
+          <span class="chip q">Everlane <span class="n">0.956</span></span><span class="chip q">Tracksmith <span class="n">0.914</span></span><span class="chip">Nike Training Club <span class="n">0.883</span></span>
+        </div>
+      </div>
+    </div>
+    <p class="decision">Decision: keep the runner plan as the control, and test what Qloo surfaced, one change at a time: the usual creative shown to fans of Tracksmith, Outdoor Voices, Everlane and ClassPass; then two new creatives on the broad audience, a materials and price story and an everyday movement and style story.</p>
+    <p class="note">Pause rule in that run: up to £300 per arm (the model wrote London's currency); pause as worse if cost per add to cart is 30% above the control once each arm has 20 add to carts. An arm that hits the cap first is inconclusive, not a loss. A rule for spending a small budget, not statistical proof. Qloo's age and gender index for Allbirds (women +0.33, ages 30 to 34 +0.42) is for the brand's audience, not London residents.</p>
   </section>
 
   <section class="panel">
@@ -100,8 +95,8 @@ code{font-family:var(--mono);font-size:13px;background:var(--acc-soft);border-ra
       <li>Open the <a href="/">live demo</a> with the judge link from the submission (it carries the access code), or use one of today's free live runs.</li>
       <li>Click the example <strong>Wool sneakers in London and Hanoi</strong> and press Build the brief. A live run usually takes one to two minutes; every Qloo call shows up as it happens.</li>
       <li>Check the green banner says <strong>Live run on real Qloo data</strong>. Sample data is labelled as such.</li>
-      <li>Next to each line, the Qloo result it cites, with its affinity score. Anything the code could not match is flagged in orange.</li>
-      <li>Read <strong>What to test first</strong>, the plain AI comparison and the city lists. Qloo rankings and the model's wording vary a little between runs.</li>
+      <li>Read <strong>The same question, with and without Qloo</strong>: both lists scored by Qloo for this audience. Then the brief, with the Qloo result next to each item, and <strong>What to test first</strong>.</li>
+      <li>Qloo rankings and the model's wording vary a little between runs.</li>
     </ol>
     <a class="btn" href="/">Run the live demo</a>
   </section>
@@ -109,12 +104,12 @@ code{font-family:var(--mono);font-size:13px;background:var(--acc-soft);border-ra
   <section class="panel">
     <h2>What the checks prove, and what they don't</h2>
     <ul>
-      <li>Taste citations for anything other than the seed brand are checked against Qloo insights results from the same run. Claims about the seed brand and its age and gender index have their own checks, quoted names and numbers must match, and a simple pattern flags lines that say the audience buys. The code does not verify the full meaning of each claim. This checks where a line comes from, not whether the marketing idea is right. The test plan is how a marketer finds that out.</li>
-      <li>Qloo affinity is aggregate taste overlap, not purchase intent and not a forecast.</li>
-      <li>For brands, artists and TV the city only nudges Qloo's ranking; a name missing from one city's top 12 may still rank lower there. Places are filtered to each city.</li>
-      <li>Interest names still need checking in Meta Ads Manager.</li>
+      <li>Taste citations for anything other than the seed brand are checked against Qloo insights results from the same run; quoted names and numbers must match; a simple pattern flags lines that say the audience buys. The code does not verify the full meaning of each claim.</li>
+      <li>Qloo affinity is aggregate taste overlap, not purchase intent. No ads have been run yet; the tests are how a marketer finds out.</li>
+      <li>An exploratory blind check with two AI models (<a href="https://github.com/longtt-marketing/taste-brief/tree/main/docs/blind-check">files</a>) found they still wanted the obvious plan funded first, and all picked a Qloo test to run early, which is why Qloo is framed as tests against the obvious plan.</li>
+      <li>For brands, artists and TV the city only nudges Qloo's ranking; places are filtered to each city. Interest names still need checking in Meta Ads Manager.</li>
     </ul>
-    <p class="note">Code: <a href="https://github.com/longtt-marketing/taste-brief/blob/main/src/agent.js">agent</a>, <a href="https://github.com/longtt-marketing/taste-brief/blob/main/src/evidence.js">evidence checks</a>, <a href="https://github.com/longtt-marketing/taste-brief/blob/main/src/markets.js">city comparison</a>, <a href="https://github.com/longtt-marketing/taste-brief/blob/main/src/qloo.js">Qloo client</a>.</p>
+    <p class="note">Code: <a href="https://github.com/longtt-marketing/taste-brief/blob/main/src/agent.js">agent</a>, <a href="https://github.com/longtt-marketing/taste-brief/blob/main/src/evidence.js">evidence checks</a>, <a href="https://github.com/longtt-marketing/taste-brief/blob/main/src/grade.js">grader</a>, <a href="https://github.com/longtt-marketing/taste-brief/blob/main/src/markets.js">city comparison</a>, <a href="https://github.com/longtt-marketing/taste-brief/blob/main/src/qloo.js">Qloo client</a>.</p>
   </section>
 </main>
 </body>

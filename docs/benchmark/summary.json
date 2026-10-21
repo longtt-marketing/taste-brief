@@ -1,0 +1,478 @@
+{
+  "run_at": "2026-10-21T10:25:36.705Z",
+  "cases": 20,
+  "completed": 20,
+  "model": "claude-sonnet-5-5 (same for both)",
+  "grader": "Qloo insights restricted to the named entity, seed brand audience, market as location; exact name match in Qloo search",
+  "taste_brief": {
+    "picks": 143,
+    "checkable": 118,
+    "high": 105,
+    "mean_affinity_of_checkable": 0.9435390499911388,
+    "share_checkable": 0.8251748251748252,
+    "share_high": 0.7342657342657343
+  },
+  "plain_model": {
+    "picks": 117,
+    "checkable": 6,
+    "high": 3,
+    "mean_affinity_of_checkable": 0.8756694704940506,
+    "share_checkable": 0.05128205128205128,
+    "share_high": 0.02564102564102564
+  },
+  "per_case_share_high_difference": {
+    "mean": 0.7083333333333333,
+    "ci95": [
+      0.6005952380952382,
+      0.7997023809523809
+    ]
+  },
+  "cases_where_taste_brief_has_more_high": 19,
+  "picks_in_both_lists": 0,
+  "limits": "Graded by Qloo, so partly circular for Taste Brief's picks, which come from Qloo results. It measures distance from Qloo's view of the audience, not ad performance. Generic picks such as 'Running' cannot be checked and count as not high.",
+  "per_case": [
+    {
+      "product": "Wool running sneakers, $120, sustainable",
+      "market": "London, UK",
+      "taste_brief": {
+        "picks": 7,
+        "checkable": 7,
+        "high": 6
+      },
+      "plain": {
+        "picks": 6,
+        "checkable": 1,
+        "high": 0
+      }
+    },
+    {
+      "product": "Wool running sneakers, $120, sustainable",
+      "market": "New York, USA",
+      "taste_brief": {
+        "picks": 9,
+        "checkable": 7,
+        "high": 6
+      },
+      "plain": {
+        "picks": 6,
+        "checkable": 1,
+        "high": 0
+      }
+    },
+    {
+      "product": "Specialty coffee subscription, $25 a month",
+      "market": "Seoul, South Korea",
+      "taste_brief": {
+        "picks": 7,
+        "checkable": 5,
+        "high": 5
+      },
+      "plain": {
+        "picks": 4,
+        "checkable": 0,
+        "high": 0
+      }
+    },
+    {
+      "product": "Turntable for first time vinyl buyers, $199",
+      "market": "Berlin, Germany",
+      "taste_brief": {
+        "picks": 7,
+        "checkable": 6,
+        "high": 0
+      },
+      "plain": {
+        "picks": 5,
+        "checkable": 0,
+        "high": 0
+      }
+    },
+    {
+      "product": "Plant based protein bars",
+      "market": "Los Angeles, USA",
+      "taste_brief": {
+        "picks": 9,
+        "checkable": 9,
+        "high": 9
+      },
+      "plain": {
+        "picks": 6,
+        "checkable": 1,
+        "high": 1
+      }
+    },
+    {
+      "product": "Flavored sparkling water",
+      "market": "Chicago, USA",
+      "taste_brief": {
+        "picks": 6,
+        "checkable": 4,
+        "high": 4
+      },
+      "plain": {
+        "picks": 8,
+        "checkable": 1,
+        "high": 1
+      }
+    },
+    {
+      "product": "Affordable skincare serum, $15",
+      "market": "Paris, France",
+      "taste_brief": {
+        "picks": 6,
+        "checkable": 3,
+        "high": 3
+      },
+      "plain": {
+        "picks": 6,
+        "checkable": 0,
+        "high": 0
+      }
+    },
+    {
+      "product": "Yoga leggings",
+      "market": "Sydney, Australia",
+      "taste_brief": {
+        "picks": 8,
+        "checkable": 7,
+        "high": 7
+      },
+      "plain": {
+        "picks": 6,
+        "checkable": 0,
+        "high": 0
+      }
+    },
+    {
+      "product": "Hard seltzer",
+      "market": "Austin, USA",
+      "taste_brief": {
+        "picks": 8,
+        "checkable": 7,
+        "high": 7
+      },
+      "plain": {
+        "picks": 5,
+        "checkable": 0,
+        "high": 0
+      }
+    },
+    {
+      "product": "Hazy IPA craft beer",
+      "market": "Portland, USA",
+      "taste_brief": {
+        "picks": 7,
+        "checkable": 6,
+        "high": 6
+      },
+      "plain": {
+        "picks": 6,
+        "checkable": 0,
+        "high": 0
+      }
+    },
+    {
+      "product": "Language learning app subscription",
+      "market": "Mexico City, Mexico",
+      "taste_brief": {
+        "picks": 6,
+        "checkable": 6,
+        "high": 5
+      },
+      "plain": {
+        "picks": 6,
+        "checkable": 1,
+        "high": 1
+      }
+    },
+    {
+      "product": "Meal kit delivery",
+      "market": "Toronto, Canada",
+      "taste_brief": {
+        "picks": 7,
+        "checkable": 6,
+        "high": 6
+      },
+      "plain": {
+        "picks": 6,
+        "checkable": 0,
+        "high": 0
+      }
+    },
+    {
+      "product": "Streetwear hoodies, limited drops",
+      "market": "Tokyo, Japan",
+      "taste_brief": {
+        "picks": 6,
+        "checkable": 5,
+        "high": 5
+      },
+      "plain": {
+        "picks": 8,
+        "checkable": 0,
+        "high": 0
+      }
+    },
+    {
+      "product": "Party card game for adults",
+      "market": "London, UK",
+      "taste_brief": {
+        "picks": 7,
+        "checkable": 5,
+        "high": 3
+      },
+      "plain": {
+        "picks": 5,
+        "checkable": 0,
+        "high": 0
+      }
+    },
+    {
+      "product": "Natural deodorant",
+      "market": "Melbourne, Australia",
+      "taste_brief": {
+        "picks": 7,
+        "checkable": 7,
+        "high": 7
+      },
+      "plain": {
+        "picks": 6,
+        "checkable": 0,
+        "high": 0
+      }
+    },
+    {
+      "product": "Recycled outdoor jacket",
+      "market": "Denver, USA",
+      "taste_brief": {
+        "picks": 8,
+        "checkable": 4,
+        "high": 4
+      },
+      "plain": {
+        "picks": 6,
+        "checkable": 0,
+        "high": 0
+      }
+    },
+    {
+      "product": "Noise cancelling headphones",
+      "market": "Singapore",
+      "taste_brief": {
+        "picks": 6,
+        "checkable": 6,
+        "high": 6
+      },
+      "plain": {
+        "picks": 6,
+        "checkable": 0,
+        "high": 0
+      }
+    },
+    {
+      "product": "Matcha latte powder",
+      "market": "Los Angeles, USA",
+      "taste_brief": {
+        "picks": 7,
+        "checkable": 7,
+        "high": 5
+      },
+      "plain": {
+        "picks": 5,
+        "checkable": 1,
+        "high": 0
+      }
+    },
+    {
+      "product": "Minimalist leather wallet",
+      "market": "Amsterdam, Netherlands",
+      "taste_brief": {
+        "picks": 8,
+        "checkable": 7,
+        "high": 7
+      },
+      "plain": {
+        "picks": 5,
+        "checkable": 0,
+        "high": 0
+      }
+    },
+    {
+      "product": "Indie horror video game",
+      "market": "Seattle, USA",
+      "taste_brief": {
+        "picks": 7,
+        "checkable": 4,
+        "high": 4
+      },
+      "plain": {
+        "picks": 6,
+        "checkable": 0,
+        "high": 0
+      }
+    }
+  ],
+  "failed": [],
+  "plain_model_named_entities": {
+    "picks": 140,
+    "checkable": 54,
+    "high": 25,
+    "share_checkable": 0.38571428571428573,
+    "share_high": 0.17857142857142858,
+    "mean_affinity_of_checkable_cases_avg": 0.8964755981092782,
+    "per_case": [
+      {
+        "product": "Wool running sneakers, $120, sustainable",
+        "market": "London, UK",
+        "picks": 7,
+        "checkable": 1,
+        "high": 0
+      },
+      {
+        "product": "Wool running sneakers, $120, sustainable",
+        "market": "New York, USA",
+        "picks": 7,
+        "checkable": 4,
+        "high": 3
+      },
+      {
+        "product": "Specialty coffee subscription, $25 a month",
+        "market": "Seoul, South Korea",
+        "picks": 7,
+        "checkable": 2,
+        "high": 1
+      },
+      {
+        "product": "Turntable for first time vinyl buyers, $199",
+        "market": "Berlin, Germany",
+        "picks": 7,
+        "checkable": 5,
+        "high": 0
+      },
+      {
+        "product": "Plant based protein bars",
+        "market": "Los Angeles, USA",
+        "picks": 7,
+        "checkable": 5,
+        "high": 5
+      },
+      {
+        "product": "Flavored sparkling water",
+        "market": "Chicago, USA",
+        "picks": 7,
+        "checkable": 4,
+        "high": 4
+      },
+      {
+        "product": "Affordable skincare serum, $15",
+        "market": "Paris, France",
+        "picks": 7,
+        "checkable": 1,
+        "high": 0
+      },
+      {
+        "product": "Yoga leggings",
+        "market": "Sydney, Australia",
+        "picks": 7,
+        "checkable": 4,
+        "high": 2
+      },
+      {
+        "product": "Hard seltzer",
+        "market": "Austin, USA",
+        "picks": 7,
+        "checkable": 0,
+        "high": 0
+      },
+      {
+        "product": "Hazy IPA craft beer",
+        "market": "Portland, USA",
+        "picks": 7,
+        "checkable": 5,
+        "high": 0
+      },
+      {
+        "product": "Language learning app subscription",
+        "market": "Mexico City, Mexico",
+        "picks": 7,
+        "checkable": 3,
+        "high": 1
+      },
+      {
+        "product": "Meal kit delivery",
+        "market": "Toronto, Canada",
+        "picks": 7,
+        "checkable": 3,
+        "high": 0
+      },
+      {
+        "product": "Streetwear hoodies, limited drops",
+        "market": "Tokyo, Japan",
+        "picks": 7,
+        "checkable": 0,
+        "high": 0
+      },
+      {
+        "product": "Party card game for adults",
+        "market": "London, UK",
+        "picks": 7,
+        "checkable": 1,
+        "high": 1
+      },
+      {
+        "product": "Natural deodorant",
+        "market": "Melbourne, Australia",
+        "picks": 7,
+        "checkable": 2,
+        "high": 2
+      },
+      {
+        "product": "Recycled outdoor jacket",
+        "market": "Denver, USA",
+        "picks": 7,
+        "checkable": 3,
+        "high": 3
+      },
+      {
+        "product": "Noise cancelling headphones",
+        "market": "Singapore",
+        "picks": 7,
+        "checkable": 3,
+        "high": 1
+      },
+      {
+        "product": "Matcha latte powder",
+        "market": "Los Angeles, USA",
+        "picks": 7,
+        "checkable": 4,
+        "high": 0
+      },
+      {
+        "product": "Minimalist leather wallet",
+        "market": "Amsterdam, Netherlands",
+        "picks": 7,
+        "checkable": 3,
+        "high": 1
+      },
+      {
+        "product": "Indie horror video game",
+        "market": "Seattle, USA",
+        "picks": 7,
+        "checkable": 1,
+        "high": 1
+      }
+    ],
+    "note": "Same model, no data, told to name specific entities; seed = the reference brand found in Qloo search."
+  },
+  "vs_named_entity_baseline": {
+    "per_case_share_high_difference": {
+      "mean": 0.5526785714285714,
+      "ci95": [
+        0.42470238095238094,
+        0.6681547619047619
+      ]
+    },
+    "cases_taste_brief_ahead": 19,
+    "ties": 1
+  }
+}

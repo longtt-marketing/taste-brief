@@ -10,6 +10,14 @@ of trusted.
 
 Built for the [Qloo Agentic Hackathon](https://qloo.devpost.com/).
 
+## Does Qloo make a difference?
+
+Across 20 briefs, 73% of the Meta interests Taste Brief suggests score an affinity of 0.9 or more on Qloo for the brand's
+audience in that city. The same model with no data reaches 18% when told to name specific brands and shows, and 3% as the
+app asks it. Taste Brief is ahead in 19 of 20 briefs (+55 points, 95% bootstrap interval +43 to +67). Graded by Qloo, so
+partly circular for Taste Brief's own picks; details and limits in [docs/benchmark](docs/benchmark/README.md). The page
+shows the same scoring for every run.
+
 ## How it works
 - `src/agent.js`: tool-using agent loop on Claude. Tools: `search`, `insights`, `demographics`, `tags`, and
   `submit_brief` (the only way to finish, including the `test_plan`). The agent looks up tags for the product category and passes them next to
@@ -20,6 +28,8 @@ Built for the [Qloo Agentic Hackathon](https://qloo.devpost.com/).
   per line. The page shows the verified Qloo results (name, affinity, type) next to each line, and flags the rest. This
   proves where a line comes from, not that the marketing idea is right. `unbackedBy` lists what the no-data baseline would
   target that Qloo returned nowhere in the run.
+- `src/grade.js`: one grader for any list of picks: exact name lookup in Qloo, then the affinity Qloo gives that
+  entity for the brand's audience in the market (`filter.results.entities`). Used by the page and the benchmark.
 - `src/markets.js`: the second market, without a model in between. Places use `filter.location.query`, so each list is
   real places in that city. Brands, artists and TV use the same insights call per city; the city only nudges Qloo's
   ranking, so the top 12 of each list are compared (only in A, only in B, in both).
@@ -35,9 +45,9 @@ https://taste-brief.thelongmarketing.workers.dev (Cloudflare Worker). A live run
 page allows a limited number of free live runs per day; judges also have an access code in the submission for unlimited
 live runs. When neither applies the page runs on synthetic data and says so in a banner.
 
+![The same question with and without Qloo, both lists scored by Qloo for the audience](docs/screenshots/0-with-and-without.png)
 ![What to test first: each test changes one thing from the obvious ad set, with the Qloo results it rests on](docs/screenshots/1-what-to-test.png)
 ![The brief, with the Qloo result each item cites](docs/screenshots/2-brief.png)
-![The same question without Qloo, and what the plain guess targets that Qloo never returned](docs/screenshots/3-plain-vs-qloo.png)
 
 ## Run
 Requires Node 20 or newer.

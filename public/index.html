@@ -59,6 +59,13 @@ ul.items strong{font-weight:600}
 .tests dl{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;margin:8px 0 0;font-size:14px}
 .tests dt{color:var(--faint);font-size:12px;text-transform:uppercase;letter-spacing:.06em;padding-top:2px}
 .tests dd{margin:0}
+.gline{font-size:14px;margin:12px 0 8px}
+.gchips{display:flex;flex-wrap:wrap;gap:6px}
+.gchip{font-size:13px;border-radius:999px;padding:3px 10px;background:var(--line);color:var(--ink)}
+.gchip.hi{background:var(--acc-soft);color:var(--acc)}
+.gchip.none{background:transparent;border:1px dashed var(--line);color:var(--faint)}
+.gchip .num{font-family:var(--mono)}
+.gchip .why{font-size:12px}
 .unbacked{margin:14px 0 0;padding-top:12px;border-top:1px solid var(--line);font-size:14px;color:var(--mute)}
 .summary{font-size:18px;line-height:1.5;margin:0 0 14px}
 .score{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;background:var(--ok-soft);color:var(--ok);font-size:14px}
@@ -96,7 +103,7 @@ details.trace{color:var(--faint);font-size:14px}
     <div class="brand"><b>Taste Brief</b><span class="pill" id="mode">checking</span></div>
     <h1>Find the audiences worth testing before you spend on ads.</h1>
     <p class="lede">Tell it what you sell and where. Taste Brief asks Qloo what else that audience likes, then writes a campaign brief you can check line by line against Qloo's own results.</p>
-    <p class="note" style="margin:6px 0 0"><a href="/judge">For judges: a decision Qloo changed, a blind check, and how to reproduce it</a></p>
+    <p class="note" style="margin:6px 0 0"><a href="/judge">For judges: a 20 brief benchmark with and without Qloo, and how to reproduce it</a></p>
   </header>
 
   <section class="panel">
@@ -192,14 +199,21 @@ function markets(m) {
 }
 
 // The same question asked of the model with no data, to show what only Qloo adds.
-function versus(base, b, unbacked) {
+// One pick scored by Qloo for this audience: the affinity, or why there is none.
+const gradedChip = (g) => g.status === "scored"
+  ? `<span class="gchip${g.affinity >= 0.9 ? " hi" : ""}">${esc(cleanInterest(g.name))} <span class="num">${num(g.affinity)}</span></span>`
+  : `<span class="gchip none">${esc(cleanInterest(g.name))} <span class="why">${g.status === "no_match" ? "not in Qloo" : "no score for this audience"}</span></span>`;
+const gradedLine = (x) => `<p class="gline"><strong>${x.high} of ${x.picks}</strong> at affinity 0.9 or more · ${x.checkable} of ${x.picks} found and scored</p><div class="gchips">${list(x.graded).map(gradedChip).join("")}</div>`;
+
+function versus(base, b, unbacked, scored, market) {
   if (!base) return "";
   if (base.error) return `<p class="err">The plain AI comparison did not work this time: ${esc(base.error)}</p>`;
   const names = (x) => list(x.meta_interests).map((i) => esc(cleanInterest(i.interest))).join(", ");
-  return `<section class="panel card vs"><div class="grid">
-    <div class="guess"><h3>Plain AI guess, no data</h3><p>${esc(base.audience_summary)}</p><p><strong>Interests:</strong> ${names(base)}</p></div>
-    <div class="ours"><h3>Taste Brief, from Qloo</h3><p>${esc(b.audience_summary)}</p><p><strong>Interests:</strong> ${names(b)}</p></div>
-  </div>${list(unbacked).length ? `<p class="unbacked"><strong>The plain guess would target these, and Qloo returned none of them in this run:</strong> ${list(unbacked).map((x) => esc(cleanInterest(x.label))).join(", ")}. That does not make them wrong. It means they are a guess, so test them against the Qloo picks or leave them out.</p>` : ""}</section>`;
+  const city = esc(String(market || "").split(",")[0]);
+  return `<section class="panel card vs">${scored ? `<h2><span>The same question, with and without Qloo</span><small>every interest scored by Qloo for this brand's audience in ${city}</small></h2>` : ""}<div class="grid">
+    <div class="guess"><h3>Plain AI guess, no data</h3><p>${esc(base.audience_summary)}</p>${scored ? gradedLine(scored.plain) : `<p><strong>Interests:</strong> ${names(base)}</p>`}</div>
+    <div class="ours"><h3>Taste Brief, from Qloo</h3><p>${esc(b.audience_summary)}</p>${scored ? gradedLine(scored.taste_brief) : `<p><strong>Interests:</strong> ${names(b)}</p>`}</div>
+  </div>${scored ? `<p class="note">Same grader for both: each interest is looked up in Qloo by its exact name, then Qloo scores how much this audience likes it. Generic interests such as "Running" can't be scored. For Taste Brief's picks this is partly circular, since they come from Qloo; it shows how far each pick is from Qloo's view of the audience, not how an ad will do.</p>` : ""}${!scored && list(unbacked).length ? `<p class="unbacked"><strong>The plain guess would target these, and Qloo returned none of them in this run:</strong> ${list(unbacked).map((x) => esc(cleanInterest(x.label))).join(", ")}. That does not make them wrong. It means they are a guess, so test them against the Qloo picks or leave them out.</p>` : ""}</section>`;
 }
 
 fetch("/api/health").then((r) => r.json()).then((h) => {
@@ -236,6 +250,7 @@ function stepText(run, s) {
   }
   if (s.tool === "submit_brief") return s.error ? "Sent the first draft back to the model to fix its format" : "Wrote the brief and checked what each line cites against Qloo's results";
   if (s.tool === "baseline_done") return "Wrote a plain AI guess to compare against";
+  if (s.tool === "graded") return `Scored both lists of interests with Qloo for this audience <span class="n">${s.n} picks</span>`;
   return `${esc(s.tool)}${n(s.n)}${err}`;
 }
 
@@ -303,6 +318,7 @@ $("#f").addEventListener("submit", async (e) => {
           <div class="score${c.grounded === c.total ? "" : " part"}"><b>${c.grounded} of ${c.total}</b> structured items cite Qloo results returned in this run, with matching ids and values</div></div>
         <div>${demographics(j.demographics)}</div>
       </div></section>
+      ${versus(j.baseline, b, j.unbacked, j.scored, j.market)}
       <div class="grid">
         ${card("Who they are", items(b.audience_traits, (x) => esc(x.trait)))}
         ${card("Meta interests to test", items(b.meta_interests, (x) => `<strong>${esc(cleanInterest(x.interest))}</strong>`), "check each in Ads Manager")}
@@ -311,7 +327,6 @@ $("#f").addEventListener("submit", async (e) => {
         ${card("Partnerships", items(b.partnerships, (x) => `<strong>${esc(x.partner)}</strong>: ${esc(x.idea)}`))}
       </div>
       ${list(b.test_plan).length ? card("What to test first", `<ul class="tests">${list(b.test_plan).map((x) => `<li><strong>${esc(x.hypothesis)}</strong><dl><dt>Changes</dt><dd>${x.variable === "targeting" ? "Targeting only, with your usual creative" : x.variable === "creative" ? "Creative only, on the broad audience" : esc(x.variable)}</dd><dt>Run</dt><dd>${esc(x.ad_set)}</dd>${x.why ? `<dt>Why</dt><dd>${esc(x.why)}</dd>` : ""}<dt>Judge on</dt><dd>${esc(x.kpi)}</dd><dt>Pause rule</dt><dd>${esc(x.stop_if)}</dd></dl>${ev(x, true)}</li>`).join("")}</ul><p class="note" style="margin:12px 0 0">Control for every test: broad targeting in ${esc(String(j.market).split(",")[0])}, same ages, your usual message. Each test changes one thing from it, so a difference can be traced. The pause rule is for spending a small budget, not statistical proof. Check each interest's audience size in Ads Manager first.</p>`, "each test rests on the Qloo results shown") : ""}
-      ${versus(j.baseline, b, j.unbacked)}
       ${markets(j.markets)}
       ${list(b.caveats).length ? `<p class="note">${list(b.caveats).map(esc).join("<br>")}</p>` : ""}
       <div class="actions"><button type="button" class="ghost" id="copy-md">Copy the brief</button><button type="button" class="ghost" id="dl-csv">Download interests as CSV</button></div>
