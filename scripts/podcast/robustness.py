@@ -10,7 +10,8 @@ docs/podcast-check/robustness.json.
 - symmetric selection: only shows carrying 3 or more OTHER brands, so ad volume is measured fairly
 - genre prior: the brand's carry rate in the show's genre (cross-fitted, shrunk); its shrinkage flattens it for brands
   with few positives, so the fair comparison is the group with 10 or more
-- precision at 10: expected sponsored shows in each ranking's top 10, ties split evenly
+- precision at 10: expected sponsored shows in each ranking's top 10, ties split evenly; also for the pre-registered H3
+  combination (Qloo rank plus ad-volume rank), which is how the app now orders podcasts
 
 Usage: python scripts/podcast/robustness.py
 """
@@ -125,6 +126,7 @@ def run(strict):
                      "sym_qloo": wauc(q[sym], lab[sym]), "sym_ad_volume": wauc(others[sym], lab[sym]),
                      "within_genre_qloo": w_q / t if t else None, "within_genre_chart": w_c / t if t else None,
                      "p10_qloo": p_at_10(q, lab), "p10_chart": p_at_10(chart, lab), "p10_ad_volume": p_at_10(others, lab),
+                     "p10_qloo_plus_ad_volume": p_at_10(np.array(ranks(list(q))) + np.array(ranks(list(others))), lab),
                      "p10_random": 10 * lab.mean()})
         rows[-1]["_lab"], rows[-1]["_q"], rows[-1]["_c"], rows[-1]["_g"] = lab, q, chart, generic
 
@@ -146,6 +148,9 @@ def run(strict):
     for r in rows:
         other_aucs = [wauc(Q[o], r["_lab"]) for o in scorable if o != r["brand"]]
         own_beats.append(float(np.mean([r["qloo"] > a for a in other_aucs])))
+    d10 = np.array([r["p10_qloo_plus_ad_volume"] - r["p10_ad_volume"] for r in rows])
+    bs10 = [d10[rng.integers(0, len(d10), len(d10))].mean() for _ in range(B_ITER)]
+    p10ci = [round(float(np.percentile(bs10, 2.5)), 3), round(float(np.percentile(bs10, 97.5)), 3)]
     big = [r for r in rows if r["positives"] >= 10]
     small = [r for r in rows if r["positives"] < 10]
     above = sum(r["qloo"] > 0.5 for r in rows); ties = sum(r["qloo"] == 0.5 for r in rows); nn = len(rows) - ties
@@ -168,7 +173,8 @@ def run(strict):
         "genre_prior_by_positives": {"10_or_more": {"n": len(big), "qloo": m("qloo", big), "genre_prior": m("genre_prior", big), "chart": m("chart", big), "ad_volume": m("ad_volume", big)},
                                      "3_to_9": {"n": len(small), "qloo": m("qloo", small), "genre_prior": m("genre_prior", small)},
                                      "note": "the prior is shrunk toward the brand's overall rate, which flattens it for brands with few positives; compare on 10 or more"},
-        "precision_at_10_expected": {"qloo": m("p10_qloo"), "chart": m("p10_chart"), "ad_volume": m("p10_ad_volume"), "random": m("p10_random")},
+        "precision_at_10_expected": {"qloo": m("p10_qloo"), "chart": m("p10_chart"), "ad_volume": m("p10_ad_volume"), "random": m("p10_random"),
+                                     "qloo_plus_ad_volume": m("p10_qloo_plus_ad_volume"), "ci95_combined_minus_ad_volume": p10ci},
         "rows": out_rows,
     }
 

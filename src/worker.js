@@ -147,7 +147,7 @@ export default {
               onStep: (s) => send({ type: "step", run: `${market} vs ${marketB}`, step: s }) }).catch((e) => ({ error: String(e.message || e) }))
             : null,
           gradeBoth().catch(() => null),
-          seedEntities.length ? podcastPartners({ qloo, seeds: seedEntities }).catch((e) => ({ error: String(e.message || e) })) : null,
+          seedEntities.length ? podcastPartners({ qloo, seeds: seedEntities, take: 20 }).catch((e) => ({ error: String(e.message || e) })) : null,
         ]);
         // what the plain guess would target that Qloo did not return anywhere in this run (entities, tags or city lists)
         const returned = [...out.registry, ...(out.tags || []), ...(markets?.types || []).flatMap((t) => [...(t.only_a || []), ...(t.only_b || []), ...(t.shared || [])])];

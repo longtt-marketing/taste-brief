@@ -19,8 +19,10 @@ it doesn't 65% of the time (AUC 0.647, 95% CI 0.611 to 0.684), against Apple cha
 ad volume 0.582. With the pre-registered label: 0.663 on 259 shows and 76 brands. All pre-registered hypotheses pass on
 both. Exploratory checks after two independent audits ([robustness.json](docs/podcast-check/robustness.json),
 [recency.json](docs/podcast-check/recency.json)): the brand's own Qloo score beats other brands' scores on the same shows
-(0.65 against 0.57), Qloo beats the chart inside every genre (0.62 against 0.55), it holds for deals too new to be in
-Qloo's data (0.62 against 0.45, 43 placements), and resampling shows as well as brands gives 0.60 to 0.70. Details and
+(0.65 against 0.57), Qloo beats the chart inside every genre (0.62 against 0.55), it holds for the most recent deals (0.62 against 0.45, 43 placements, suggestive only), and resampling shows as well as brands gives 0.60 to 0.70. In the top 10,
+Qloo plus ad volume (the pre-registered H3 combination, which the app uses to order podcasts) finds 1.9 sponsored shows
+against 1.6 for either alone. A prospective check is locked: Qloo's ranks were frozen on 21 Oct 2026 and sponsorships in
+later episodes are read on 29 or 30 Oct ([PREREGISTRATION-2.md](docs/podcast-check/PREREGISTRATION-2.md)). Details and
 scripts: [docs/podcast-check](docs/podcast-check/), [scripts/podcast](scripts/podcast/).
 
 A second set of benchmarks is graded by Qloo itself on a held-out competitor's audience (61% of Taste Brief's interests

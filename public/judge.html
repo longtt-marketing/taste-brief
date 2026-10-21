@@ -56,6 +56,11 @@ ul ul{margin:4px 0 0}
 .btn:hover{color:var(--acc-ink)}
 code{font-family:var(--mono);font-size:13px;background:var(--code);border-radius:6px;padding:1px 5px;overflow-wrap:anywhere}
 .decision{background:var(--code);border-radius:14px;padding:14px 16px;font-weight:600;margin:16px 0 0}
+.pts{display:flex;flex-direction:column;gap:10px;max-width:640px;margin:16px 0 4px}
+.pt{display:grid;grid-template-columns:170px minmax(0,1fr) 56px;gap:12px;align-items:center;font-size:14px}
+.pt i{display:block;height:12px;border-radius:6px;background:#1c2a44}.pt b{display:block;height:12px;border-radius:6px;background:var(--ok)}.pt b.base{background:#3a4a63}
+.pt span:last-child{font-family:var(--mono);text-align:right}.axis{margin:0;font-family:var(--mono);font-size:12px;color:var(--faint)}
+@media (max-width:640px){.pt{grid-template-columns:1fr auto;gap:4px 10px}.pt i{grid-column:1/-1;grid-row:2;height:8px}.pt b{height:8px}}
 </style>
 </head>
 <body>
@@ -75,16 +80,23 @@ code{font-family:var(--mono);font-size:13px;background:var(--code);border-radius
     <h2>The test: which podcasts do brands really sponsor?</h2>
     <p>Sponsor reads in the shows' own episode notes (public RSS) are the answer key; Qloo never sees them. For each brand, Qloo ranks the shows by how much the brand's audience likes them, and we check how often a show the brand sponsors ranks above one it doesn't (AUC; 0.50 is a coin flip). A show counts as sponsored when it reads the brand in at least 2 episodes of the past year.</p>
     <p>Locked first: hypotheses, measures, baselines and pass rules were fingerprinted with SHA-256 and pushed to the public repo before any held-out show was read (<code>PREREGISTRATION.md</code>, commit c4d6732), and the analysis code before any score was fetched. The pilot shows (Apple's US top 200) are not in the test, which uses Apple's US charts in 12 genres. Check the fingerprints on any OS with <code>python scripts/podcast/verify_lock.py</code>.</p>
+    <div class="pts" role="img" aria-label="Points above a coin flip, strict labels">
+      <div class="pt"><span>Qloo taste</span><i><b style="width:100%"></b></i><span>+14.7</span></div>
+      <div class="pt"><span>Ad volume</span><i><b class="base" style="width:56%"></b></i><span>+8.2</span></div>
+      <div class="pt"><span>Qloo popularity</span><i><b class="base" style="width:18%"></b></i><span>+2.6</span></div>
+      <div class="pt"><span>Chart rank</span><i><b class="base" style="width:15%"></b></i><span>+2.2</span></div>
+      <p class="axis">AUC points above a coin flip (0 = 50%), strict labels</p>
+    </div>
     <table>
       <thead><tr><th>Ranking the shows by</th><th>Strict labels: 216 shows, 62 brands</th><th>Pre-registered: 259 shows, 76 brands</th></tr></thead>
       <tbody>
-        <tr><td><strong>Qloo affinity for the brand</strong> (what Taste Brief uses)</td><td class="n" data-label="Strict"><span><strong>0.647</strong> (0.611 to 0.684)</span></td><td class="n" data-label="Pre-registered"><span><strong>0.663</strong> (0.630 to 0.697)</span></td></tr>
-        <tr><td>Ad volume: how many other brands the show carries</td><td class="n" data-label="Strict"><span>0.582 (fair*: 0.615)</span></td><td class="n" data-label="Pre-registered"><span>0.581 (fair*: 0.627)</span></td></tr>
+        <tr><td><strong>Qloo affinity for the brand</strong> (what Taste Brief uses)</td><td class="n" data-label="Strict"><span><strong>0.647</strong> (0.60 to 0.70)</span></td><td class="n" data-label="Pre-registered"><span><strong>0.663</strong> (0.61 to 0.71)</span></td></tr>
+        <tr><td>Ad volume: how many other brands the show carries</td><td class="n" data-label="Strict"><span>0.582</span></td><td class="n" data-label="Pre-registered"><span>0.581</span></td></tr>
         <tr><td>Qloo popularity of the show</td><td class="n" data-label="Strict"><span>0.526</span></td><td class="n" data-label="Pre-registered"><span>0.517</span></td></tr>
         <tr><td>Apple chart rank in its genre</td><td class="n" data-label="Strict"><span>0.522</span></td><td class="n" data-label="Pre-registered"><span>0.528</span></td></tr>
       </tbody>
     </table>
-    <p class="note">95% intervals by resampling brands, as pre-registered. *Only shows carrying 3 or more other brands, so both sides face the same entry rule; Qloo there: 0.651 and 0.664.</p>
+    <p class="note">95% intervals resampling both brands and shows, leaving out Quince (no Qloo data); the pre-registered brand-only intervals are narrower (0.611 to 0.684; 0.630 to 0.697). On shows carrying 3 or more other brands, so both sides face the same entry rule, ad volume reaches 0.615 and 0.627 and Qloo 0.651 and 0.664.</p>
     <h3>Pre-registered hypotheses: all pass on both labels</h3>
     <ul>
       <li><strong>H1, Qloo beats chance:</strong> above 0.5 for 51 of 62 brands (65 of 76).</li>
@@ -92,14 +104,17 @@ code{font-family:var(--mono);font-size:13px;background:var(--code);border-radius
       <li><strong>H3, Qloo adds to ad volume:</strong> the two ranks combined beat ad volume alone by +4 to +10 points (+5 to +11).</li>
       <li><strong>H4, exploratory:</strong> brands whose Qloo scores spread more across shows do better: 0.66 against 0.64 (0.70 against 0.62).</li>
     </ul>
-    <h3>Exploratory checks, after two independent audits</h3>
+    <h3>The shortlist a buyer sees</h3>
+    <p>In each ranking's top 10, Qloo finds 1.6 sponsored shows on average, ad volume 1.6, the chart 0.8, random 0.8. Qloo and ad volume together, the H3 combination, find <strong>1.9</strong>, ahead of ad volume alone by +0.03 to +0.76 (1.7 against 1.3 on the pre-registered labels). The app orders its podcasts this way (<code>public/rank.js</code>).</p>
+    <h3>Locked, still to come: a prospective check</h3>
+    <p>Qloo's ranks for all 259 shows and every episode already published were frozen at 17:14 UTC on 21 Oct 2026 and pushed to the public repo (<code>PREREGISTRATION-2.md</code>, <code>LOCK-2.sha256</code>). Sponsorships that appear in episodes released after the lock are read once on 29 or 30 Oct; the result is added here whatever it shows.</p>
+    <h3>Exploratory checks, after two reviews by separate AI agents</h3>
     <ul>
-      <li><strong>Specific to the brand:</strong> ranked by other brands' Qloo scores, the same shows score 0.57; by the brand's own, 0.65. Ahead for 47 of 61 brands, +4 to +13 points. Qloo is not just picking shows every advertiser likes.</li>
+      <li><strong>Specific to the brand:</strong> ranked by other brands' Qloo scores, the same shows score 0.57; by the brand's own, 0.65. Ahead for 47 of 61 brands, +4 to +13 points. Part of the signal is shows advertisers like in general; most is the brand's own audience.</li>
       <li><strong>Within genre:</strong> only shows in the same genre compared: Qloo 0.62, chart 0.55. Ahead of the chart in all 12 genres; weakest in leisure (below chance) and sports.</li>
-      <li><strong>New deals:</strong> 43 sponsorships that appear only in a show's 10 newest episodes, too recent to have shaped Qloo's data: Qloo 0.62 (0.51 to 0.72), chart 0.45. Established deals: 0.65.</li>
-      <li><strong>Uncertainty:</strong> the same shows serve every brand, so resampling shows as well as brands gives a wider interval: 0.60 to 0.70.</li>
-      <li><strong>Where it adds least:</strong> for the 36 brands with 10 or more sponsored shows, a genre-based prior does almost as well (0.61 against 0.63). In each ranking's top 10, Qloo finds 1.6 sponsored shows on average, the chart 0.8, ad volume 1.6, random 0.8; the app shows Qloo's ranking next to each show's advertisers.</li>
-      <li><strong>By brand:</strong> it works for brands bought on audience fit, such as Ritual 0.82, Skims 0.79, Honeylove 0.77, each above its genre prior and other brands' scores; it fails for meal kits and mass-reach buyers (Factor 0.42, Zocdoc 0.45, Casper 0.37).</li>
+      <li><strong>Recent deals:</strong> 43 sponsorships that appear only in a show's 10 newest episodes: Qloo 0.62 (0.51 to 0.72), chart 0.45; established deals 0.65. Suggestive only; the prospective check above is the real test.</li>
+      <li><strong>Where it adds least:</strong> for the 36 brands with 10 or more sponsored shows, a genre-based prior does almost as well (0.61 against 0.63).</li>
+      <li><strong>By brand</strong> (per-brand AUC on 12 to 22 shows, so noisy): it works for brands bought on audience fit, such as Ritual 0.82, Skims 0.79, Honeylove 0.77, each above its genre prior and other brands' scores; it fails for meal kits and mass-reach buyers (Factor 0.42, Zocdoc 0.45, Casper 0.37).</li>
       <li><strong>Competitor pairs</strong> fixed in advance: 4 of the 6 could run (ExpressVPN and Helix Sleep are not in Qloo). In betting a competitor's audience predicts almost as well (DraftKings from FanDuel 0.70 against 0.72), but sports genre alone does too; the other pairs are mixed. Descriptive only.</li>
     </ul>
     <p class="note">Labels: 43 of 100 random matches of the pre-registered dictionary were sponsor reads, so a stricter label (whole word plus a sponsor cue nearby) was declared in <code>DEVIATION-1.md</code> before any analysis: 82 of 100. Both samples were read by Claude, not by a person. Sponsor reads in notes miss dynamically inserted ads; US shows and brands that Qloo knows by exact name only. The test checks Qloo's brand-to-podcast affinity (the same call the app makes) on chart shows, not the app's picks from Qloo's whole catalogue. Files: <code>results-strict.json</code>, <code>results.json</code>, <code>robustness.json</code>, <code>recency.json</code>; scripts in <code>scripts/podcast/</code>.</p>
@@ -123,7 +138,7 @@ code{font-family:var(--mono);font-size:13px;background:var(--code);border-radius
   <section class="panel">
     <h2>The run in the video: wool running sneakers, $120, London</h2>
     <p>Closest brand: Allbirds (Qloo knows the brand, not this shoe). Second city: Hanoi. Live run on 21 Oct 2026; it is the recorded run on the demo.</p>
-    <p><strong>Podcasts to sponsor first</strong>, ranked for Allbirds' audience: Absolutely Not (0.954; its notes already run Quince, Nutrafol, Squarespace), Armchair Expert with Dax Shepard (0.926; Allstate), Be There in Five (0.915), Young House Love Has A Podcast (0.912).</p>
+    <p><strong>Podcasts to sponsor first</strong>, shows Allbirds fans like ordered by taste and ad demand: Absolutely Not (0.954; its notes already run 18 advertisers, including Quince, Nutrafol and Squarespace), Armchair Expert with Dax Shepard (0.926; Allstate), A Beautiful Mess Podcast (0.911; Drink LMNT, Shopify, Wayfair, MasterClass). Mostly US shows.</p>
     <div class="grid">
       <div class="guess"><h3>Plain AI, no data · 0 of 6 scored</h3>
         <div class="chips"><span class="chip">Running · no score</span><span class="chip">Sustainable fashion · not in Qloo</span><span class="chip">Parkrun · not in Qloo</span><span class="chip">Veja · no score</span><span class="chip">Cycling to work · not in Qloo</span><span class="chip">Minimalism · not in Qloo</span></div>
@@ -157,7 +172,7 @@ code{font-family:var(--mono);font-size:13px;background:var(--code);border-radius
   <section class="panel">
     <h2>What the checks prove, and what they don't</h2>
     <ul>
-      <li>Sponsorships show where brands spend, not that the spend paid off. No ads have been run by us; the tests in the app are how a marketer finds out.</li>
+      <li>Sponsorships show where brands spend, not that the spend paid off. No ads have been run by us; the tests in the app are how a marketer finds out. The sponsor labels were checked by an AI, not a person.</li>
       <li>Citations for anything other than the seed brand are checked against Qloo results from the same run, with matching names and numbers. The code does not verify the full meaning of each claim.</li>
       <li>For brands, artists and TV the city only nudges Qloo's ranking; places are filtered to each city. Interest names still need checking in Meta Ads Manager.</li>
     </ul>

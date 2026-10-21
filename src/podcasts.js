@@ -1,6 +1,6 @@
 // Podcast partners: shows the brand's audience over-indexes on, ranked by Qloo, with Qloo's own explanation of which
 // input drove each pick. Next to each show, the advertisers its own episode notes already name (public RSS, read for the
-// podcast check in docs/podcast-check); that list is evidence a show sells ads, it never feeds the ranking.
+// podcast check in docs/podcast-check). The page orders the shows by Qloo's rank plus this ad-demand rank (public/rank.js).
 import SPONSORS from "./data/podcast-sponsors.json" with { type: "json" };
 
 const norm = (s) => String(s || "").toLowerCase().replace(/[^a-z0-9]/g, "");
