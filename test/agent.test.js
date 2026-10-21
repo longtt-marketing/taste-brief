@@ -326,3 +326,14 @@ test("unbackedBy: a tag Qloo returned in the run (e.g. running) counts as return
   const name = out.tags[0].name;
   assert.deepEqual(unbackedBy({ meta_interests: [{ interest: name }, { interest: "Zzz unknown" }] }, [...out.registry, ...out.tags]).map((x) => x.label), ["Zzz unknown"]);
 });
+
+test("evidence gate: a popularity score Qloo returned for the cited entity may be quoted, a made up one may not", async () => {
+  const { registryFrom, checkEvidence } = await import("../src/evidence.js");
+  const reg = registryFrom([{ tool: "insights", input: { filter_type: "urn:entity:brand", entity_ids: ["SEED"] }, output: [
+    { name: "Herschel Supply Co", entity_id: "HS", type: "urn:entity:brand", affinity: 0.919, popularity: 0.986 }] }]);
+  const r = checkEvidence({ meta_interests: [
+    { interest: "Herschel Supply Co", entity_ids: ["HS"], evidence: ["Herschel Supply Co (affinity 0.919), popularity 0.986"] },
+    { interest: "Herschel Supply Co", entity_ids: ["HS"], evidence: ["Herschel Supply Co (affinity 0.919), popularity 0.777"] },
+  ] }, reg);
+  assert.deepEqual(r.rows.map((x) => x.grounded), [true, false]);
+});

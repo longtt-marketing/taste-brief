@@ -307,7 +307,7 @@ $("#f").addEventListener("submit", async (e) => {
         ${card("Landing page", `<p style="margin:0 0 6px"><strong>${esc(b.landing_page?.headline)}</strong></p><p style="margin:0">${esc(b.landing_page?.subheadline)}</p>${ev(b.landing_page, true)}`, "our reading of the data")}
         ${card("Partnerships", items(b.partnerships, (x) => `<strong>${esc(x.partner)}</strong>: ${esc(x.idea)}`))}
       </div>
-      ${list(b.test_plan).length ? card("What to test first", `<ul class="tests">${list(b.test_plan).map((x) => `<li><strong>${esc(x.hypothesis)}</strong><dl><dt>Run</dt><dd>${esc(x.ad_set)}</dd><dt>Watch</dt><dd>${esc(x.kpi)}</dd><dt>Stop if</dt><dd>${esc(x.stop_if)}</dd></dl>${ev(x, true)}</li>`).join("")}</ul>`, "each test rests on the Qloo results shown") : ""}
+      ${list(b.test_plan).length ? card("What to test first", `<ul class="tests">${list(b.test_plan).map((x) => `<li><strong>${esc(x.hypothesis)}</strong><dl><dt>Run</dt><dd>${esc(x.ad_set)}</dd><dt>Watch</dt><dd>${esc(x.kpi)}</dd><dt>Stop if</dt><dd>${esc(x.stop_if)}</dd></dl>${ev(x, true)}</li>`).join("")}</ul><p class="note" style="margin:12px 0 0">Control for every test: broad targeting in ${esc(String(j.market).split(",")[0])}, same ages, your usual message. These tests add angles to try against it; they do not replace it. Check each interest's audience size in Ads Manager first.</p>`, "each test rests on the Qloo results shown") : ""}
       ${versus(j.baseline, b, j.unbacked)}
       ${markets(j.markets)}
       ${list(b.caveats).length ? `<p class="note">${list(b.caveats).map(esc).join("<br>")}</p>` : ""}

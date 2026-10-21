@@ -39,10 +39,11 @@ export function registryFrom(calls) {
       // the same entity can come back from several calls (with and without tags, several cities) with different
       // affinities: keep every number Qloo returned for it, and show the first insights one
       const affinities = [...(prev?.affinities || []), ...(typeof e.affinity === "number" ? [e.affinity] : [])];
-      if (prev && prev.via === "insights" && tool !== "insights") { prev.affinities = affinities; continue; }
+      const popularity = typeof e.popularity === "number" ? e.popularity : prev?.popularity ?? null;
+      if (prev && prev.via === "insights" && tool !== "insights") { prev.affinities = affinities; prev.popularity = popularity; continue; }
       entities.set(e.entity_id, {
         entity_id: e.entity_id, name: e.name, type: e.type,
-        affinity: prev?.via === "insights" ? prev.affinity : e.affinity ?? null, affinities,
+        affinity: prev?.via === "insights" ? prev.affinity : e.affinity ?? null, affinities, popularity,
         via: prev?.via === "insights" ? "insights" : tool, location: tool === "insights" ? input?.location || prev?.location || null : null,
       });
     }
@@ -88,10 +89,11 @@ export function verifyItem(field, item, reg) {
     && !verified.some((e) => { const n = norm(e.name); return n.length >= 2 && (labelN.includes(n) || n.includes(labelN)); })) {
     problems.push(`named "${label}" but cites ${verified.map((e) => e.name).join(", ")}`);
   }
-  // numbers in the free text must be ones Qloo returned for the cited entities: an affinity, or a demographic index
+  // numbers in the free text must be ones Qloo returned for the cited entities: an affinity, a popularity score, or a
+  // demographic index
   for (const m of text.matchAll(/\b0\.\d{2,3}\b/g)) {
     const v = Number(m[0]);
-    const isAffinity = verified.some((e) => [e.affinity, ...(e.affinities || [])].some((a) => typeof a === "number" && Math.abs(a - v) < 0.0015));
+    const isAffinity = verified.some((e) => [e.affinity, e.popularity, ...(e.affinities || [])].some((a) => typeof a === "number" && Math.abs(a - v) < 0.0015));
     const isDemo = demographic && demoVals.some((d) => Math.abs(d - v) < 0.006);
     if (!isAffinity && !isDemo) problems.push(`${m[0]} does not match a number Qloo returned for the cited entities`);
   }

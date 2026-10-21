@@ -27,8 +27,12 @@ Method:
      "shares taste with", never "buys" or "will".
    - Creative angles and the landing page are your interpretation: cite the results they are built on.
    - test_plan (required): 1 to 3 ad tests a marketer can run this week. hypothesis = what the Qloo results suggest about this
-     audience; ad_set = the targeting and creative to run; kpi = one metric (e.g. CTR, cost per add to cart); stop_if =
-     a concrete rule to drop it (e.g. "CTR under the control ad set after 3,000 impressions"). Cite the results it rests on.
+     audience; ad_set = the creative angle to test and the interests to try it on (the angle is the variable, so it can also
+     run on a broad audience); kpi = cost per add to cart or cost per purchase, with CTR only as a diagnostic; stop_if = a
+     rule against the control that a small four week test can reach (e.g. "cost per add to cart 30% above the control after
+     150 clicks"). The control is always the obvious ad set: broad targeting in the market, same ages, the brand's usual
+     message. Qloo adds angles to test against it; it does not replace it. Prefer interests big enough to reach in that
+     market. Cite the results each test rests on.
    - Any item that quotes the age or gender index must also cite the seed entity id those numbers belong to.
    If Qloo returned nothing useful for a section, leave it short and say so in caveats; never invent.
 Keep copy concrete and short, in plain natural English a marketer would write. Never use dashes (— or –) as

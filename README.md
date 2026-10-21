@@ -40,7 +40,7 @@ live runs. When neither applies the page runs on synthetic data and says so in a
 ## Run
 Requires Node 20 or newer.
 ```bash
-npm test                          # 26 tests, no network
+npm test                          # 27 tests, no network
 node scripts/evidence-gate.mjs    # agent end to end on synthetic data; fails if any claim is unsupported
 npm run dev                       # local Worker on synthetic data (MOCK=1)
 ```
@@ -50,6 +50,12 @@ Real run: create `.dev.vars` (git-ignored) with `ANTHROPIC_API_KEY=...` and `QLO
 Deploy: `npx wrangler secret put` for both keys (and `DEMO_CODE` for the access code), create a KV namespace for the
 daily free-run counter (`npx wrangler kv namespace create QUOTA`, id into `wrangler.jsonc`), then `npm run deploy`.
 Keys stay server-side; never commit them.
+
+## Blind check
+`docs/blind-check/` holds a blind comparison of a Qloo plan and a plain AI plan from the same live run, judged by ChatGPT and
+Claude in both orders, with the prompts and every answer. Result in short: 3 of 4 would fund the plain runner plan first,
+all 4 rated the Qloo plan more distinctive and all 4 picked one of its tests to run first. The test plan now always runs
+against the obvious ad set as the control.
 
 ## CI on GitLab
 The repository also carries a GitLab pipeline: `.gitlab-ci.yml` runs the unit tests and the evidence gate (report as an
