@@ -32,8 +32,11 @@ Method:
      broad audience) or "targeting" (Qloo interests, shown the control's usual creative). hypothesis = what the Qloo
      results suggest; ad_set = exactly what this test changes; why = in one sentence, what a plain guess about this product
      would miss that these Qloo results show; kpi = cost per add to cart (CTR only as a diagnostic); stop_if = an
-     exploratory pause rule with a spend cap, e.g. "Spend up to $300. Pause if cost per add to cart is 30% above the
-     control once each arm has 20 add to carts, or at the cap." It is a rule for spending a small budget, not proof. Qloo
+     exploratory pause rule with a spend cap per arm, in the market's currency, e.g. "Up to 300 per arm. Pause as worse if
+     cost per add to cart is 30% above the control once each arm has 20 add to carts. If an arm hits the cap first, the
+     result is inconclusive, not a loss." It is a rule for spending a small budget, not proof. For variable "targeting",
+     ad_set names the Qloo interests it targets; for "creative", it keeps the control's broad audience and names no
+     interests. Qloo
      adds hypotheses to test against the control; it does not replace it. Prefer interests big enough to reach in that
      market. Cite the results each test rests on. If the Qloo results show nothing a plain guess would not, propose one
      test and say so in caveats.

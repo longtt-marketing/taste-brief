@@ -109,8 +109,9 @@ export default {
         const returned = [...out.registry, ...(out.tags || []), ...(markets?.types || []).flatMap((t) => [...(t.only_a || []), ...(t.only_b || []), ...(t.shared || [])])];
         const unbacked = baseline && !baseline.error ? unbackedBy(baseline, returned) : null;
         // enough to check a run later without publishing Qloo payloads: which deployed version, how long, how many calls
+        // the city comparison makes one insights call per city for each list type
         const qlooCalls = out.trace.filter((s) => ["search", "insights", "demographics", "tags"].includes(s.tool)).length
-          + (markets?.types || []).length;
+          + 2 * (markets?.types || []).length;
         const runInfo = { version: env.CF_VERSION_METADATA?.id || "local", seconds: Math.round((Date.now() - t0) / 1000),
           qloo_calls: qlooCalls, model_calls: (llm.usage?.calls || 0) + (baseLLM.usage?.calls || 0), at: new Date().toISOString() };
         return { ...meta, market, ...out, baseline, unbacked, markets, run: runInfo };

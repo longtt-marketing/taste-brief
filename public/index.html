@@ -296,7 +296,7 @@ $("#f").addEventListener("submit", async (e) => {
       ? `<div class="banner live">Live run on real Qloo data${j.quota ? `. ${j.quota.left} free runs left today` : ""}.</div>`
       : `<div class="banner synthetic">Sample data. The names and numbers below are made up to show how it works. Add the access code, or come back tomorrow, for real Qloo data.</div>`;
     const warn = [j.incomplete ? `The model's brief still had a problem after two resends (${esc(j.incomplete)}). Treat it as a draft.` : "",
-      j.signal?.weak ? `Qloo returned only ${j.signal.strong} strong matches (affinity 0.9 or more) for this seed. Treat the tests as low confidence, or try a closer comparable brand.` : ""].filter(Boolean);
+      j.mode === "live" && j.signal?.weak ? `Limited high affinity results: Qloo returned ${j.signal.strong} results with affinity 0.9 or more for this seed. That threshold is this tool's rule of thumb, not a confidence score; a closer comparable brand may give more to work with.` : ""].filter(Boolean);
     $("#out").innerHTML = `${banner}${warn.map((w) => `<div class="banner synthetic">${w}</div>`).join("")}
       <section class="panel card"><div class="grid">
         <div><p class="eyebrow">Taste signals for this brand · ${esc(String(j.market).split(",")[0])} as location</p><p class="summary">${esc(b.audience_summary)}</p><p class="note" style="margin:-8px 0 12px">Summary written by the model. The lines below each cite the Qloo results they rest on.</p>

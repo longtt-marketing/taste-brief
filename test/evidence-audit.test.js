@@ -102,3 +102,27 @@ test("signal strength counts strong non-seed insights results and calls fewer th
   assert.deepEqual(strong, { results: 6, strong: 6, weak: false });
   assert.equal(signalFrom(registryFrom([seed, insight])).weak, true);
 });
+
+test("the one variable is checked against the ad set: targeting names its Qloo interests, creative keeps the broad audience", () => {
+  const reg = registryFrom([seed, insight]);
+  const base = { hypothesis: "h", why: "w", kpi: "Cost per add to cart", stop_if: "Up to 300 per arm", entity_ids: ["INSIGHT"], evidence: ["Outdoor Voices 0.956"] };
+  const ok = (t) => verifyItem("test_plan", { ...base, ...t }, reg);
+  assert.equal(ok({ variable: "targeting", ad_set: "Usual creative, shown to Outdoor Voices fans" }).grounded, true);
+  assert.match(ok({ variable: "targeting", ad_set: "Usual creative, shown to sneaker fans" }).problems.join(), /does not name the Qloo interests/);
+  assert.equal(ok({ variable: "creative", ad_set: "A materials story in an Outdoor Voices tone, shown to the control's broad audience" }).grounded, true);
+  assert.match(ok({ variable: "creative", ad_set: "A materials story shown to the Outdoor Voices interest" }).problems.join(), /also seems to change the targeting/);
+});
+
+test("purchase language: 'they buy' is flagged, 'cost per purchase' as a metric is not", () => {
+  const reg = registryFrom([seed, insight]);
+  assert.match(verifyItem("audience_traits", { trait: "They buy Outdoor Voices", entity_ids: ["INSIGHT"], evidence: ["Outdoor Voices 0.956"] }, reg).problems.join(), /purchase behaviour/);
+  const t = verifyItem("test_plan", { hypothesis: "A materials story lowers cost per purchase", variable: "creative", ad_set: "Materials story, broad audience", why: "w", kpi: "Cost per purchase", stop_if: "s", entity_ids: ["INSIGHT"], evidence: ["Outdoor Voices 0.956"] }, reg);
+  assert.equal(t.grounded, true, t.problems.join("; "));
+});
+
+test("a creative test that says 'No interest targeting' passes; one that lists 'Interests:' does not", () => {
+  const reg = registryFrom([seed, insight]);
+  const base = { hypothesis: "h", variable: "creative", why: "w", kpi: "Cost per add to cart", stop_if: "s", entity_ids: ["INSIGHT"], evidence: ["Outdoor Voices 0.956"] };
+  assert.equal(verifyItem("test_plan", { ...base, ad_set: "Control's broad London audience and ages. New creative: a materials story. No interest targeting." }, reg).grounded, true);
+  assert.match(verifyItem("test_plan", { ...base, ad_set: "New creative: a materials story. Interests: Outdoor Voices." }, reg).problems.join(), /also seems to change the targeting/);
+});

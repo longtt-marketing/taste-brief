@@ -1,7 +1,7 @@
 # Blind check: a Qloo plan against a plain AI plan
 
-21 Oct 2026. Two plans for the same brief (wool running sneakers, $120, London, Allbirds as the closest brand) came from one
-live run: RUNNER is what the model wrote with no data, TASTE is the Taste Brief built on Qloo. Both are in `plans.md`, with
+Run 21 Oct 2026 on two plans from a live run on 20 Oct (wool running sneakers, $120, London, Allbirds as the closest brand),
+before tests had to change one variable: RUNNER is what the model wrote with no data, TASTE is the Taste Brief built on Qloo. Both are in `plans.md`, with
 numbers, sources and the word Qloo removed. Reviewers were told only that two strategists sent them.
 
 Each reviewer saw both orders, in separate fresh sessions:

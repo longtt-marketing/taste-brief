@@ -52,7 +52,7 @@ code{font-family:var(--mono);font-size:13px;background:var(--acc-soft);border-ra
   <header>
     <p class="eyebrow">For judges · two minute read</p>
     <h1>A decision Qloo changed</h1>
-    <p class="lede">Taste Brief does not predict who will buy. It helps a performance marketer pick which ad tests are worth paying for, and shows the Qloo result behind every suggestion so the marketer can check it.</p>
+    <p class="lede">Taste Brief does not predict who will buy. It helps a performance marketer find ad hypotheses worth testing before committing real spend. Structured recommendations show the Qloo results they cite; the interpretations stay hypotheses.</p>
   </header>
 
   <section class="panel">
@@ -74,8 +74,8 @@ code{font-family:var(--mono);font-size:13px;background:var(--acc-soft);border-ra
         <p class="note">Numbers are Qloo affinity scores returned in that run, London signal, Allbirds as seed.</p>
       </div>
     </div>
-    <p class="decision">Decision: keep the runner plan as the control, and set aside a small, capped budget for three tests, each changing one thing: the usual creative shown to Tracksmith and Nike Training Club fans; the usual creative shown to Everlane and Outdoor Voices fans; and a nature and conservation story (Down to Earth with Zac Efron, 0.975, was the top TV result) shown to the control's broad audience.</p>
-    <p class="note">Pause rule for each: spend up to $300, and pause if cost per add to cart is 30% above the control once each arm has 20 add to carts, or at the cap. A rule for spending a small budget, not statistical proof.</p>
+    <p class="decision">Decision: keep the runner plan as the control, and set aside a small, capped budget for three tests, each meant to change one thing (the code checks the ad set matches the variable): the usual creative shown to Tracksmith and Nike Training Club fans; the usual creative shown to Everlane and Outdoor Voices fans; and a nature and conservation story (Down to Earth with Zac Efron, 0.975, was the top TV result) shown to the control's broad audience.</p>
+    <p class="note">Pause rule in that run: up to £300 per arm (the model wrote London's currency); pause as worse if cost per add to cart is 30% above the control once each arm has 20 add to carts. An arm that hits the cap first is inconclusive, not a loss. A rule for spending a small budget, not statistical proof.</p>
     <p class="note">Qloo's age and gender index for Allbirds (women +0.33, ages 30 to 34 +0.42) is for the brand's audience, not London residents and not purchases.</p>
   </section>
 
@@ -109,7 +109,7 @@ code{font-family:var(--mono);font-size:13px;background:var(--acc-soft);border-ra
   <section class="panel">
     <h2>What the checks prove, and what they don't</h2>
     <ul>
-      <li>A taste claim about anything other than the seed brand must cite entities returned by a Qloo insights call in the same run. Claims about the seed brand and its age and gender index have their own checks, quoted names and numbers must match, and a line that reads as purchase behaviour is flagged. This checks where a line comes from, not whether the marketing idea is right. The test plan is how a marketer finds that out.</li>
+      <li>Taste citations for anything other than the seed brand are checked against Qloo insights results from the same run. Claims about the seed brand and its age and gender index have their own checks, quoted names and numbers must match, and a simple pattern flags lines that say the audience buys. The code does not verify the full meaning of each claim. This checks where a line comes from, not whether the marketing idea is right. The test plan is how a marketer finds that out.</li>
       <li>Qloo affinity is aggregate taste overlap, not purchase intent and not a forecast.</li>
       <li>For brands, artists and TV the city only nudges Qloo's ranking; a name missing from one city's top 12 may still rank lower there. Places are filtered to each city.</li>
       <li>Interest names still need checking in Meta Ads Manager.</li>

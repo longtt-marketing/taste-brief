@@ -92,6 +92,16 @@ export function verifyItem(field, item, reg) {
     for (const key of ["hypothesis", "variable", "ad_set", "why", "kpi", "stop_if"]) {
       if (typeof item?.[key] !== "string" || !item[key].trim()) problems.push(`ad test is missing ${key}`);
     }
+    // the one variable is checked against what the ad set says, not taken on the model's word
+    const adSet = norm(item?.ad_set);
+    const namesCited = verified.some((e) => { const n = norm(e.name); return n.length >= 3 && adSet.includes(n); });
+    if (item?.variable === "targeting" && !namesCited) problems.push("targeting test does not name the Qloo interests it targets");
+    // "No interest targeting" is the right thing for a creative test to say; "Interests: X" or "targeting X fans" is not
+    const targetsInterests = /\b(interests? (stack|targeting of)|targets? (the )?(meta )?interests?|targeting (the )?(meta )?interests?)\b/.test(adSet)
+      || /\binterests?\s*:/i.test(String(item?.ad_set ?? ""));
+    if (item?.variable === "creative" && !/\bno (meta )?interests?\b/.test(adSet) && (targetsInterests || (namesCited && !/\b(broad|control)\b/.test(adSet)))) {
+      problems.push("creative test also seems to change the targeting");
+    }
   }
   // a Meta interest or partner names one Qloo result: its label must be that result's name (or contain it, or vice versa)
   if (SINGLE.has(field) && verified.length && labelN.length >= 2
@@ -109,7 +119,7 @@ export function verifyItem(field, item, reg) {
   // a content check, not only provenance: Qloo affinity is taste overlap, so a line that says the audience buys or will
   // buy something claims more than the data shows
   const claim = [label, item?.why, item?.hook].filter(Boolean).join(" ");
-  if (/\b(will (buy|purchase)|likely to (buy|purchase)|(buys|purchases|bought|purchased) (it|them|this|these|our|the)\b|are (buyers|customers) of|customers who (buy|purchase))/i.test(claim)) {
+  if (/\b(will (buy|purchase)|likely to (buy|purchase)|(they|who|fans|audience|people|shoppers) (buy|purchase)s?\b|(buys|purchases|bought|purchased) (it|them|this|these|our|the)\b|are (buyers|customers) of|customers who (buy|purchase))/i.test(claim)) {
     problems.push("reads as purchase behaviour; Qloo affinity is taste overlap, not purchases");
   }
   if (!cited.length) problems.push("cites no Qloo entity");
