@@ -358,14 +358,14 @@ const csvInterests = (j) => {
 function loopPanel() {
   return `<div class="loop" id="loop"><h3>Lock it, run it, read it back</h3>
     <div class="steps">
-      <div class="step"><b>1. Lock the plan</b>A SHA-256 fingerprint of the control, the tests and the rule, with the time, before any money is spent.</div>
-      <div class="step"><b>2. Run it</b>An ad set sheet for Ads Manager: the control and each test, named with the plan id, with a spend cap of ${RULE.cap} per arm in your currency.</div>
-      <div class="step"><b>3. Read it back</b>Upload the Ads Manager export. The locked rule judges each test: ahead, pause, no clear difference or inconclusive.</div>
+      <div class="step"><b>1. Lock the plan</b>A SHA-256 fingerprint of the control, the tests and the rule. The server keeps a receipt with its own time, once, before any money is spent.</div>
+      <div class="step"><b>2. Run it</b>A planning sheet to build the ad sets in Ads Manager by hand (not an import file): the control and each test, named with the plan id, with a spend cap of ${RULE.cap} per arm in your currency.</div>
+      <div class="step"><b>3. Read it back</b>Upload the Ads Manager export. It is checked against the receipt, and the locked rule classifies each test: ahead, pause, no clear difference or inconclusive. Exploratory calls, not proof.</div>
     </div>
     <p class="note" style="margin:0">Rule: at least ${RULE.minAddsToCart} adds to cart in the test and the control, then pause a test whose cost per add to cart is more than ${Math.round(RULE.worseBy * 100)}% above the control's. An arm that hits its ${RULE.cap} spend cap first is inconclusive, not a loss.</p>
     <div class="row"><button type="button" id="lock">Lock this test plan</button><span id="lock-out"></span></div>
     <div id="after-lock" hidden>
-      <div class="row"><button type="button" class="ghost" id="dl-sheet">Download the ad set sheet (CSV)</button><button type="button" class="ghost" id="dl-plan">Download the locked plan (JSON)</button></div>
+      <div class="row"><button type="button" class="ghost" id="dl-sheet">Download the planning sheet (CSV)</button><button type="button" class="ghost" id="dl-plan">Download the locked plan (JSON)</button></div>
       <div class="row"><label style="flex-direction:row;align-items:center;gap:10px;font-weight:600">Upload Ads Manager results (CSV)<input type="file" id="results-file" accept=".csv,text/csv"></label>
         <button type="button" class="ghost" id="sample-results">Try with sample numbers</button></div>
       <div id="verdict-out"></div>
@@ -387,19 +387,34 @@ function wireLoop(j) {
     const lockedAt = new Date().toISOString();
     const canonical = canonicalPlan({ product: j.product, market: j.market, references: j.references, tests, lockedAt });
     const hash = await planHash(canonical);
-    locked = { canonical, hash, id: hash.slice(0, 8), lockedAt };
+    locked = { canonical, hash, id: hash.slice(0, 8), lockedAt, receipt: null };
     btn.disabled = true; btn.textContent = "Locked";
-    $("#lock-out").innerHTML = `<span class="lockid">Plan ${esc(locked.id)} · SHA-256 ${esc(hash.slice(0, 16))}… · ${esc(new Date(lockedAt).toLocaleString())}</span>`;
+    // the server hashes the same text again and keeps the first receipt with its own clock; it never overwrites one
+    try {
+      const r = await fetch("/api/lock", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ canonical }) });
+      const out = await r.json();
+      if (r.ok && out.receipt?.hash === hash) locked.receipt = out.receipt;
+    } catch {}
+    const when = locked.receipt ? `server receipt ${new Date(locked.receipt.received_at).toLocaleString()}` : `not stored on the server, browser time ${new Date(lockedAt).toLocaleString()}`;
+    $("#lock-out").innerHTML = `<span class="lockid">Plan ${esc(locked.id)} · SHA-256 ${esc(hash.slice(0, 16))}… · ${esc(when)}</span>`;
     $("#after-lock").hidden = false;
   });
   const slug = () => String(j.market).replace(/[^a-z0-9]+/gi, "-").toLowerCase();
   $("#dl-sheet").addEventListener("click", () => locked && download(`taste-brief-ad-sets-${locked.id}-${slug()}.csv`, toCsv(adSetRows({ market: j.market, tests, planId: locked.id })), "text/csv"));
   $("#dl-plan").addEventListener("click", () => locked && download(`taste-brief-plan-${locked.id}.json`, JSON.stringify({ sha256: locked.hash, plan: JSON.parse(locked.canonical) }, null, 2), "application/json"));
-  const show = (csvText, sample) => {
+  const show = async (csvText, sample) => {
     const v = verdicts(readResults(parseCsv(csvText), locked.id));
+    // read the receipt back from the server and check it is the plan on this page
+    let check = `<p class="note">No server receipt for this plan, so its lock time is the browser's word only.</p>`;
+    try {
+      const r = await fetch(`/api/lock/${locked.hash}`);
+      const got = r.ok ? (await r.json()).receipt : null;
+      if (got && got.canonical === locked.canonical) check = `<p class="note">Checked against the server receipt: this plan, unchanged, was received at ${esc(new Date(got.received_at).toLocaleString())}. Results are read with the rule in that receipt.</p>`;
+      else if (got) check = `<p class="err">The server receipt does not match this plan. Do not trust these verdicts.</p>`;
+    } catch {}
     const cls = (x) => (x === "ahead" ? "v-ahead" : x === "pause" ? "v-pause" : "v-other");
     const money = (x) => (x == null ? "n/a" : x.toFixed(2));
-    $("#verdict-out").innerHTML = (sample ? `<div class="banner synthetic">Sample numbers, made up to show how the rule reads results. No ads were run.</div>` : "")
+    $("#verdict-out").innerHTML = (sample ? `<div class="banner synthetic">Sample numbers, made up to show how the rule reads results. No ads were run.</div>` : "") + check
       + (v.length ? `<div class="scroll"><table class="verdicts"><thead><tr><th>Arm</th><th>Spend</th><th>Adds to cart</th><th>Cost per add to cart (control)</th><th>Verdict</th></tr></thead><tbody>${v.map((r) =>
         `<tr><td>${esc(r.arm)}</td><td>${money(r.spend)}</td><td>${esc(r.addsToCart)}</td><td>${money(r.cost)} (${money(r.controlCost)})</td><td><span class="${cls(r.verdict)}">${esc(r.verdict)}</span><br><span class="note">${esc(r.why)}</span></td></tr>`).join("")}</tbody></table></div>`
         : `<p class="err">No ad sets named TB-${esc(locked.id)} in that file. Export from Ads Manager at the ad set level, with Amount spent and Adds to cart.</p>`);

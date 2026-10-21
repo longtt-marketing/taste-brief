@@ -12,6 +12,7 @@ import { gradePicks, summarize } from "./grade.js";
 
 const list = (v) => (Array.isArray(v) ? v : []);
 import { compareMarkets } from "./markets.js";
+import { makeReceipts } from "./receipt.js";
 import { makeQloo } from "./qloo.js";
 import { mockQloo } from "./mock-qloo.js";
 import { anthropicLLM, mockLLM, mockBaselineLLM } from "./llm.js";
@@ -75,6 +76,18 @@ export default {
       const saved = env.QUOTA ? await env.QUOTA.get(REPLAY_KEY).catch(() => null) : null;
       return saved ? new Response(saved, { headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" } })
         : json({ error: "no recorded run yet" }, 404);
+    }
+    if (url.pathname === "/api/lock" && req.method === "POST") {
+      if (!env.QUOTA) return json({ error: "receipts are not stored here" }, 503);
+      let body;
+      try { body = await req.json(); } catch { return json({ error: "send JSON" }, 400); }
+      const out = await makeReceipts(env.QUOTA).lock(body?.canonical);
+      return out.error ? json({ error: out.error }, 400) : json(out, out.created ? 201 : 200);
+    }
+    if (url.pathname.startsWith("/api/lock/")) {
+      if (!env.QUOTA) return json({ error: "receipts are not stored here" }, 503);
+      const receipt = await makeReceipts(env.QUOTA).get(url.pathname.slice("/api/lock/".length));
+      return receipt ? json({ receipt }) : json({ error: "no receipt for that plan" }, 404);
     }
     if (url.pathname === "/api/health") {
       const keys = env.MOCK !== "1" && !!env.QLOO_API_KEY && !!env.ANTHROPIC_API_KEY;

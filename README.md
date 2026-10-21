@@ -33,7 +33,9 @@ The page shows the same scoring for every run.
   proves where a line comes from, not that the marketing idea is right. `unbackedBy` lists what the no-data baseline would
   target that Qloo returned nowhere in the run.
 - `src/meta.js`: Meta Marketing API interest search, the check that doesn't use Qloo (`scripts/benchmark-meta.mjs`).
-- `public/verdict.js`: lock the test plan (SHA-256 of the control, tests and rule, with a timestamp), write the ad set
+- `src/receipt.js`: write-once server receipts for locked plans (`POST /api/lock`, `GET /api/lock/<sha256>`), kept in KV with the
+  server's time; a results upload is checked against the receipt.
+- `public/verdict.js`: lock the test plan (SHA-256 of the control, tests and rule, with a timestamp), write the planning
   sheet named with the plan id, and read an Ads Manager export back with the locked rule. Pure functions, no model.
 - `src/grade.js`: one grader for any list of picks: exact name lookup in Qloo, then the affinity Qloo gives that
   entity for the brand's audience in the market (`filter.results.entities`). Used by the page and the benchmark.
