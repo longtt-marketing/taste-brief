@@ -65,7 +65,7 @@ function withTimeout(promise, ms) {
 
 // The example on the page. Its last live run is kept so a judge can see a real result at once, without a code or a
 // two minute wait. Only this exact example is kept, never what a visitor typed, and only in KV, not in git.
-export const EXAMPLE = { product: "Wool running sneakers, $120, sustainable", market: "London, UK", compare_market: "Hanoi, Vietnam", references: "Allbirds" };
+export const EXAMPLE = { product: "Wool running sneakers, $120, sustainable", market: "New York, NY", compare_market: "London, UK", references: "Allbirds" };
 const sameText = (a, b) => String(a || "").trim().toLowerCase() === String(b || "").trim().toLowerCase();
 export const isExample = (b) => Object.keys(EXAMPLE).every((k) => sameText(b?.[k], EXAMPLE[k]));
 const REPLAY_KEY = "replay:example";

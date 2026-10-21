@@ -183,7 +183,7 @@ body.result #how{display:none}
 @media (max-width:600px){.verdicts thead{display:none}.verdicts,.verdicts tbody,.verdicts tr,.verdicts td{display:block}.verdicts tr{padding:10px 0;border-bottom:1px solid var(--dark-line)}.verdicts td{border:0;padding:2px 0}.verdicts td[data-label]::before{content:attr(data-label) ": ";color:#9aa0ad;font-size:12px}}
 @media (max-width:600px){.tests-card-inner .loop,.loop{margin-left:-12px;margin-right:-12px;padding:16px}.loop .steps{gap:8px}.runbar .acts{margin-left:0}}
 .pods-note{margin:14px 0 0;font-size:14px;color:var(--mute)}
-.step{margin:0 0 6px;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ok)}
+.stepk{margin:0 0 6px;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ok)}
 .ptable{overflow-x:auto}.ptable>div{min-width:760px}
 .phead,.prow{display:grid;grid-template-columns:40px minmax(0,2.1fr) minmax(0,1.2fr) minmax(0,1.7fr) 140px;gap:16px;align-items:center}
 .phead{padding:0 0 10px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:12px;color:var(--faint)}
@@ -229,15 +229,15 @@ body.result #how{display:none}
 
   <section class="panel">
     <p class="presets" aria-label="Examples">Start from an example:
-      <button type="button" class="chip" data-p="Wool running sneakers, $120, sustainable|London, UK|Hanoi, Vietnam|Allbirds">Wool sneakers in London and Hanoi</button>
+      <button type="button" class="chip" data-p="Wool running sneakers, $120, sustainable|New York, NY|London, UK|Allbirds">Wool sneakers in New York and London</button>
       <button type="button" class="chip" data-p="Specialty coffee subscription, $25 a month|Seoul, South Korea|Tokyo, Japan|Blue Bottle Coffee">Coffee subscription in Seoul and Tokyo</button>
       <button type="button" class="chip" data-p="Turntable for first time vinyl buyers, $199|Berlin, Germany|Mexico City, Mexico|Audio-Technica">Turntable in Berlin and Mexico City</button>
     </p>
     <form id="f">
       <div class="fields">
         <label>What you sell<input name="product" required minlength="3" maxlength="400" placeholder="Wool running sneakers, $120"></label>
-        <label>Market<input name="market" required minlength="2" maxlength="120" placeholder="London, UK"></label>
-        <label>Compare with <small>optional</small><input name="compare_market" maxlength="120" placeholder="Hanoi, Vietnam"></label>
+        <label>Market<input name="market" required minlength="2" maxlength="120" placeholder="New York, NY"></label>
+        <label>Compare with <small>optional</small><input name="compare_market" maxlength="120" placeholder="London, UK"></label>
         <label>Brand or competitor <small>optional</small><input name="references" maxlength="300" placeholder="Allbirds"></label>
       </div>
       <div class="row">
@@ -340,7 +340,7 @@ function versus(base, b, unbacked, scored, market) {
   if (base.error) return `<p class="err">The plain AI comparison did not work this time: ${esc(base.error)}</p>`;
   const names = (x) => list(x.meta_interests).map((i) => esc(cleanInterest(i.interest))).join(", ");
   const city = esc(String(market || "").split(",")[0]);
-  return `<section class="panel card vs"><p class="step">Step 2 · Meta interests</p>${scored ? `<h2><span>The same question, with and without Qloo</span><small>every interest scored by Qloo for this brand's audience in ${city}</small></h2>` : ""}<div class="grid">
+  return `<section class="panel card vs"><p class="stepk">Step 2 · Meta interests</p>${scored ? `<h2><span>The same question, with and without Qloo</span><small>every interest scored by Qloo for this brand's audience in ${city}</small></h2>` : ""}<div class="grid">
     <div class="guess"><h3>Plain AI guess, no data</h3>${scored ? gradedLine(scored.plain) : `<p><strong>Interests:</strong> ${names(base)}</p>`}</div>
     <div class="ours"><h3>Taste Brief, from Qloo</h3>${scored ? gradedLine(scored.taste_brief) : `<p><strong>Interests:</strong> ${names(b)}</p>`}</div>
   </div>${scored ? `<p class="note">Same grader for both: each interest is looked up in Qloo by its exact name, then Qloo scores how much this audience likes it. Generic interests such as "Running" can't be scored. For Taste Brief's picks this is partly circular, since they come from Qloo; it shows how far each pick is from Qloo's view of the audience, not how an ad will do. A score here can differ slightly from the one cited in the brief below, which came from the agent's own call (some narrowed to a product tag).</p>` : ""}${!scored && list(unbacked).length ? `<p class="unbacked"><strong>The plain guess would target these, and Qloo returned none of them in this run:</strong> ${list(unbacked).map((x) => esc(cleanInterest(x.label))).join(", ")}. That does not make them wrong. It means they are a guess, so test them against the Qloo picks or leave them out.</p>` : ""}</section>`;
@@ -518,7 +518,7 @@ function podcastPanel(p) {
       + `<span class="ads"><span class="cnt${ads.length ? "" : " none"}">${ads.length ? `${ads.length} advertiser${ads.length === 1 ? "" : "s"}` : "None found"}</span>${ads.length ? `<span>${ads.slice(0, 3).map(esc).join(", ")}${ads.length > 3 ? ` +${ads.length - 3}` : ""}</span>` : ""}</span>`
       + `<span class="next${ads.length ? "" : " none"}">${ads.length ? "Request rates" : "Ask if it sells ads"}</span></div>`;
   });
-  return `<section class="panel card pods-card"><p class="step">Step 1 · Podcasts to sponsor first</p><h2><span>Shows ${seeds.length === 1 ? `${esc(seeds[0])} fans love` : "this audience loves"} that already sell ads</span><small>taste fit from Qloo (explainability: ${seeds.length === 1 ? `driven by ${esc(seeds[0])} fans` : "per show"}), ordered by taste and proven ad demand</small></h2>
+  return `<section class="panel card pods-card"><p class="stepk">Step 1 · Podcasts to sponsor first</p><h2><span>Shows ${seeds.length === 1 ? `${esc(seeds[0])} fans love` : "this audience loves"} that already sell ads</span><small>taste fit from Qloo (explainability: ${seeds.length === 1 ? `driven by ${esc(seeds[0])} fans` : "per show"}), ordered by taste and proven ad demand</small></h2>
     <div class="ptable"><div class="phead"><span>#</span><span>Show</span><span>Taste fit</span><span>Proven ad demand</span><span>Next step</span></div>${li.join("")}</div>
     <p class="pods-note">Taste fit: how much the brand's fans like the show (Qloo). Proven ad demand: advertisers its episode notes already run. In the locked test on ${t.shows} held-out US podcasts and ${t.brands} brands, Qloo's taste rank put a show the brand sponsors above one it doesn't ${Math.round(t.qloo * 100)}% of the time (the chart ${Math.round(t.chart * 100)}%), and this order, taste plus ad demand, found 1.9 sponsored shows in a top 10 on average in an exploratory count, against 1.6 for either alone and 0.8 for the chart. Mostly US shows: check reach in your market. <a href="/judge#podcasts">The test</a></p></section>`;
 }
@@ -550,7 +550,7 @@ function testsCard(b, j) {
   const same = tp.every((x) => x.kpi === tp[0].kpi && x.stop_if === tp[0].stop_if);
   const city = esc(String(j.market).split(",")[0]);
   const lines = tp.map((x) => `<li><strong>${esc(x.hypothesis)}</strong><dl><dt>Changes</dt><dd>${x.variable === "targeting" ? "Targeting only, with your usual creative" : x.variable === "creative" ? "Creative only, on the broad audience" : esc(x.variable)}</dd><dt>Run</dt><dd>${esc(x.ad_set)}</dd>${x.why ? `<dt>Why</dt><dd>${esc(x.why)}</dd>` : ""}${same ? "" : `<dt>Judge on</dt><dd>${esc(x.kpi)}</dd><dt>Pause rule</dt><dd>${esc(x.stop_if)}</dd>`}</dl>${ev(x, true)}</li>`).join("");
-  return card("What to test first", `<p class="step" style="margin-top:-6px">Step 3 · Against the usual ad</p><p class="tests-rule">Control for every test: broad targeting in ${city}, same ages, your usual message. Each test changes one thing${same ? `, judged on ${esc(lc(tp[0].kpi))}` : ""}. The rule for reading results is locked below.</p><ul class="tests">${lines}</ul>${loopPanel()}`, "each test rests on the Qloo results shown");
+  return card("What to test first", `<p class="stepk" style="margin-top:-6px">Step 3 · Against the usual ad</p><p class="tests-rule">Control for every test: broad targeting in ${city}, same ages, your usual message. Each test changes one thing${same ? `, judged on ${esc(lc(tp[0].kpi))}` : ""}. The rule for reading results is locked below.</p><ul class="tests">${lines}</ul>${loopPanel()}`, "each test rests on the Qloo results shown");
 }
 
 // Draw one result: from a run that just finished, or the recorded run of the example.

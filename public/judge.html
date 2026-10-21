@@ -130,42 +130,41 @@ code{font-family:var(--mono);font-size:13px;background:var(--code);border-radius
       <thead><tr><th>Who wrote the interests</th><th>0.9+ on the held-out competitor</th><th>Targetable in Meta</th><th>Both</th></tr></thead>
       <tbody>
         <tr><td><strong>Taste Brief</strong> (with Qloo)</td><td class="n" data-label="0.9+ on competitor"><span><strong>86 / 140 · 61%</strong></span></td><td class="n" data-label="In Meta"><span>74 / 140 · 53%</span></td><td class="n" data-label="Both"><span><strong>49 / 140 · 35%</strong></span></td></tr>
-        <tr><td>Same model, no data, told to name specific brands, artists and shows</td><td class="n" data-label="0.9+ on competitor"><span>25 / 133 · 19%</span></td><td class="n" data-label="In Meta"><span>65 / 136 · 48%</span></td><td class="n" data-label="Both"><span>18 / 136 · 13%</span></td></tr>
+        <tr><td>Same model, no data, told to name specific brands, artists and shows</td><td class="n" data-label="0.9+ on competitor"><span>27 / 136 · 20%</span></td><td class="n" data-label="In Meta"><span>65 / 136 · 48%</span></td><td class="n" data-label="Both"><span>18 / 136 · 13%</span></td></tr>
         <tr><td>Same model, no data, as the app asks it</td><td class="n" data-label="0.9+ on competitor"><span>1 / 115 · 1%</span></td><td class="n" data-label="In Meta"><span>36 / 115 · 31%</span></td><td class="n" data-label="Both"><span>0 / 115 · 0%</span></td></tr>
       </tbody>
     </table>
     <p>On Qloo, +42 points against the stronger baseline (95% interval +32 to +53, ahead in 19 of 20 briefs). On Meta alone it is close: Meta has dropped many niche brands and shows. On both, +22 points (+10 to +34). <strong>Negative control:</strong> graded on an unrelated brand in the same city (paired before the run: Allbirds briefs on Babbel), Taste Brief's picks fall from 62% to 27% at 0.9+; the named baseline from 20% to 7%. Most of the fit is specific to the category.</p>
-    <p class="note">Qloo and Meta measure fit and whether an interest exists, not ad results. The Meta and Both columns come from <code>docs/benchmark/combined.json</code>, where the no-data baseline was run again (27 of 136 at 0.9+ on Qloo in that run); <code>meta-targeting.json</code> counts every pick. Scripts: <code>scripts/benchmark*.mjs</code>.</p>
+    <p class="note">Qloo and Meta measure fit and whether an interest exists, not ad results. The Meta and Both columns come from <code>docs/benchmark/combined.json</code>, where the no-data baseline was run again (27 of 136 at 0.9+ on Qloo there); <code>meta-targeting.json</code> counts every pick. Scripts: <code>scripts/benchmark*.mjs</code>.</p>
   </section>
 
   <section class="panel">
-    <h2>The run in the video: wool running sneakers, $120, London</h2>
-    <p>Closest brand: Allbirds (Qloo knows the brand, not this shoe). Second city: Hanoi. Live run on 21 Oct 2026; it is the recorded run on the demo.</p>
-    <p><strong>Podcasts to sponsor first</strong>, shows Allbirds fans like ordered by taste and ad demand: Absolutely Not (0.954; its notes already run 18 advertisers, including Quince, Nutrafol and Squarespace), Armchair Expert with Dax Shepard (0.926; Allstate), A Beautiful Mess Podcast (0.911; Drink LMNT, Shopify, Wayfair, MasterClass). Mostly US shows.</p>
+    <h2>The run in the video: wool running sneakers, $120, New York</h2>
+    <p>Closest brand: Allbirds (Qloo knows the brand, not this shoe). Second city: London. Live run on 21 Oct 2026, 59 seconds, 40 Qloo calls; it is the recorded run on the demo.</p>
+    <p><strong>Podcasts to sponsor first</strong>, shows Allbirds fans like ordered by taste and ad demand: Absolutely Not (0.954; its notes already run 18 advertisers, including Quince, Nutrafol and Squarespace), Armchair Expert with Dax Shepard (0.926; Allstate), A Beautiful Mess Podcast (0.911; Drink LMNT, Shopify, Wayfair, MasterClass).</p>
     <div class="grid">
-      <div class="guess"><h3>Plain AI, no data · 0 of 6 scored</h3>
-        <div class="chips"><span class="chip">Running · no score</span><span class="chip">Sustainable fashion · not in Qloo</span><span class="chip">Parkrun · not in Qloo</span><span class="chip">Veja · no score</span><span class="chip">Cycling to work · not in Qloo</span><span class="chip">Minimalism · not in Qloo</span></div>
+      <div class="guess"><h3>Plain AI, no data · 0 of 5 scored</h3>
+        <div class="chips"><span class="chip">Running · no score</span><span class="chip">Sustainable living · not in Qloo</span><span class="chip">Central Park and outdoor recreation · no score</span><span class="chip">Yoga and wellness · no score</span><span class="chip">Minimalist fashion · not in Qloo</span></div>
       </div>
-      <div class="ours"><h3>Taste Brief · 7 of 8 at 0.9+</h3>
+      <div class="ours"><h3>Taste Brief · 5 of 7 at 0.9+</h3>
         <div class="chips">
-          <span class="chip q">Down to Earth with Zac Efron <span class="n">0.975</span></span><span class="chip q">Outdoor Voices <span class="n">0.966</span></span>
-          <span class="chip q">ClassPass <span class="n">0.962</span></span><span class="chip q">Warby Parker <span class="n">0.959</span></span>
-          <span class="chip q">Peloton <span class="n">0.957</span></span><span class="chip q">Everlane <span class="n">0.956</span></span>
-          <span class="chip q">Tracksmith <span class="n">0.914</span></span><span class="chip">Nike Training Club <span class="n">0.883</span></span>
+          <span class="chip q">Outdoor Voices <span class="n">0.970</span></span><span class="chip q">Maggie Rogers <span class="n">0.970</span></span>
+          <span class="chip q">ClassPass <span class="n">0.963</span></span><span class="chip q">Everlane <span class="n">0.957</span></span>
+          <span class="chip q">Tracksmith <span class="n">0.916</span></span><span class="chip">Bombas · no score</span><span class="chip">Saturdays NYC · no score</span>
         </div>
       </div>
     </div>
     <p class="note">Scored on Allbirds' own audience, so this shows fit, not proof; the benchmark above is the held-out version.</p>
-    <p>All 23 items in that brief cite results Qloo returned in the run, with matching ids and values. The test plan is locked with a SHA-256 fingerprint and a server receipt before any spend (real results get verdicts only when the receipt matches), run from a planning sheet, and read back from the Ads Manager export by the rule fixed in advance. Press <strong>Try with sample numbers</strong> after locking to see it work; sample numbers are labelled and no ads were run.</p>
-    <p class="decision">Decision: keep the runner plan as the control and test what Qloo surfaced, one change at a time: the usual creative shown to fans of Tracksmith, Outdoor Voices and Everlane; then two new creatives on the broad audience, "A running shoe that looks this good with jeans" and an open breakdown of wool sourcing.</p>
+    <p>All 22 items in that brief cite results Qloo returned in the run, with matching ids and values. The test plan is locked with a SHA-256 fingerprint and a server receipt before any spend (real results get verdicts only when the receipt matches), run from a planning sheet, and read back from the Ads Manager export by the rule fixed in advance. Press <strong>Try with sample numbers</strong> after locking to see it work; sample numbers are labelled and no ads were run.</p>
+    <p class="decision">Decision: keep the usual ad as the control and test one change at a time: a casual everyday-run creative ("Run in the morning. Wear them all day."), then the usual creative shown to fans of Everlane, Bombas and Warby Parker, then to fans of Tracksmith, ClassPass and Outdoor Voices.</p>
   </section>
 
   <section class="panel">
     <h2>Reproduce it</h2>
     <ol>
       <li><strong>Fastest:</strong> open the <a href="/">demo</a> and press <strong>See a real run now</strong>. It shows the last real run of the example instantly, with when it was recorded.</li>
-      <li>For a fresh run, use the judge link from the submission (it carries the access code), or one of today's free live runs.</li>
-      <li>Click the example <strong>Wool sneakers in London and Hanoi</strong> and press <strong>Build the brief</strong>. A live run takes one to two minutes; every step shows up as it happens.</li>
+      <li>For a fresh run: anyone gets 25 free live runs a day, no code needed.</li>
+      <li>Click the example <strong>Wool sneakers in New York and London</strong> and press <strong>Build the brief</strong>. A live run takes about a minute; every step shows up as it happens.</li>
       <li>The strip above the result says <strong>Live run on real Qloo data</strong>. Sample data is labelled as such.</li>
       <li>Qloo rankings and the model's wording vary a little between runs.</li>
     </ol>
