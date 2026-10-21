@@ -1,0 +1,2232 @@
+{
+  "run_at": "2026-10-21T12:36:00.072Z",
+  "cases": 20,
+  "rule": "targetable in Meta Ads under that name AND Qloo affinity 0.9+ for a held-out competitor's audience in the same city",
+  "taste_brief": {
+    "picks": 140,
+    "targetable": 74,
+    "high_on_qloo": 86,
+    "both": 49,
+    "share_both": 0.35
+  },
+  "named_entity_baseline": {
+    "picks": 136,
+    "targetable": 65,
+    "high_on_qloo": 27,
+    "both": 18,
+    "share_both": 0.1323529411764706
+  },
+  "app_baseline": {
+    "picks": 115,
+    "targetable": 36,
+    "high_on_qloo": 1,
+    "both": 0,
+    "share_both": 0
+  },
+  "vs_named_baseline": {
+    "mean_difference": 0.22053571428571422,
+    "ci95": [
+      0.09880952380952382,
+      0.34404761904761905
+    ],
+    "taste_brief_ahead": 12,
+    "ties": 5
+  },
+  "per_case": [
+    {
+      "product": "Wool running sneakers, $120, sustainable",
+      "market": "London, UK",
+      "reference": "Allbirds",
+      "held_out": "Veja",
+      "taste_brief": [
+        {
+          "name": "Tracksmith",
+          "targetable": false,
+          "affinity": 0.7782515173003097
+        },
+        {
+          "name": "Nike Training Club",
+          "targetable": false,
+          "affinity": 0.8318863287134969
+        },
+        {
+          "name": "Herschel Supply Co",
+          "targetable": true,
+          "affinity": 0.8129400099763178
+        },
+        {
+          "name": "GREATS",
+          "targetable": false,
+          "affinity": 0.7851291073191704
+        },
+        {
+          "name": "Down to Earth with Zac Efron",
+          "targetable": false,
+          "affinity": 0.9775246427843921
+        },
+        {
+          "name": "Goop",
+          "targetable": true,
+          "affinity": 0.8678779886298738
+        },
+        {
+          "name": "Maggie Rogers",
+          "targetable": false,
+          "affinity": 0.8787165153465638
+        }
+      ],
+      "named_baseline": [
+        {
+          "name": "Patagonia",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Parkrun",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Strava",
+          "targetable": true,
+          "affinity": 0.8429166854287485
+        },
+        {
+          "name": "Monocle",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Hoka",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Kinfolk",
+          "targetable": true,
+          "affinity": 0.8447527714725116
+        }
+      ],
+      "app_baseline": [
+        {
+          "name": "Running",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Sustainable living",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Parkrun",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Ethical fashion",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Strava",
+          "targetable": true,
+          "affinity": 0.8429166854287485
+        },
+        {
+          "name": "Minimalism",
+          "targetable": true,
+          "affinity": null
+        }
+      ]
+    },
+    {
+      "product": "Wool running sneakers, $120, sustainable",
+      "market": "New York, USA",
+      "reference": "Allbirds",
+      "held_out": "Veja",
+      "taste_brief": [
+        {
+          "name": "Tracksmith",
+          "targetable": false,
+          "affinity": 0.7805723366972944
+        },
+        {
+          "name": "GREATS",
+          "targetable": false,
+          "affinity": 0.7944484989554517
+        },
+        {
+          "name": "Native Shoes",
+          "targetable": false,
+          "affinity": 0.7990564904592972
+        },
+        {
+          "name": "Saturdays NYC",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Fjällräven",
+          "targetable": true,
+          "affinity": 0.7944592326280365
+        },
+        {
+          "name": "Herschel Supply Co.",
+          "targetable": true,
+          "affinity": 0.8138885792305298
+        },
+        {
+          "name": "Lord Huron",
+          "targetable": true,
+          "affinity": 0.868367308460086
+        },
+        {
+          "name": "The Lumineers",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Somebody Feed Phil",
+          "targetable": false,
+          "affinity": 0.9667362177169925
+        }
+      ],
+      "named_baseline": [
+        {
+          "name": "Patagonia",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "On Running",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Brooklyn Half Marathon",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "New York Road Runners",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Strava",
+          "targetable": true,
+          "affinity": 0.8422931639539257
+        },
+        {
+          "name": "Outdoor Voices",
+          "targetable": false,
+          "affinity": 0.8246690111264241
+        },
+        {
+          "name": "Rothy's",
+          "targetable": false,
+          "affinity": 0.819684803922035
+        }
+      ],
+      "app_baseline": [
+        {
+          "name": "Running",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Sustainable living",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "New York Road Runners",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Strava",
+          "targetable": true,
+          "affinity": 0.8422931639539257
+        },
+        {
+          "name": "Patagonia",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "On Running",
+          "targetable": false,
+          "affinity": null
+        }
+      ]
+    },
+    {
+      "product": "Specialty coffee subscription, $25 a month",
+      "market": "Seoul, South Korea",
+      "reference": "Blue Bottle Coffee",
+      "held_out": "Intelligentsia Coffee",
+      "taste_brief": [
+        {
+          "name": "Stumptown Coffee Roasters",
+          "targetable": true,
+          "affinity": 0.9437869730421745
+        },
+        {
+          "name": "Verve Coffee Roasters",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "La Colombe Coffee Roasters",
+          "targetable": false,
+          "affinity": 0.9516868259030644
+        },
+        {
+          "name": "Eater",
+          "targetable": false,
+          "affinity": 0.9292439246903592
+        },
+        {
+          "name": "Momofuku",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Jamie xx",
+          "targetable": true,
+          "affinity": 0.9535917138134368
+        },
+        {
+          "name": "Single's Inferno",
+          "targetable": false,
+          "affinity": 0.9476204400026985
+        }
+      ],
+      "named_baseline": [
+        {
+          "name": "Fritz Coffee Company",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Anthracite Coffee Roasters",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Terarosa Coffee",
+          "targetable": false,
+          "affinity": 0.8584255013865567
+        },
+        {
+          "name": "Stumptown Coffee Roasters",
+          "targetable": true,
+          "affinity": 0.9437869730421745
+        },
+        {
+          "name": "Monocle",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Kinfolk",
+          "targetable": true,
+          "affinity": 0.9016194563925718
+        },
+        {
+          "name": "Aesop",
+          "targetable": true,
+          "affinity": null
+        }
+      ],
+      "app_baseline": [
+        {
+          "name": "Specialty coffee",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Home brewing and pour over",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Minimalist interior design and lifestyle",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Cafe culture and brunch",
+          "targetable": false,
+          "affinity": null
+        }
+      ]
+    },
+    {
+      "product": "Turntable for first time vinyl buyers, $199",
+      "market": "Berlin, Germany",
+      "reference": "Audio-Technica",
+      "held_out": "Sonos",
+      "taste_brief": [
+        {
+          "name": "Discogs",
+          "targetable": true,
+          "affinity": 0.939693359159372
+        },
+        {
+          "name": "Bandcamp",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Ableton",
+          "targetable": true,
+          "affinity": 0.9393876195609805
+        },
+        {
+          "name": "Native Instruments",
+          "targetable": true,
+          "affinity": 0.92166571510344
+        },
+        {
+          "name": "SoundCloud",
+          "targetable": true,
+          "affinity": 0.9154415333255027
+        },
+        {
+          "name": "Sennheiser",
+          "targetable": true,
+          "affinity": 0.9397683872887762
+        },
+        {
+          "name": "Stones Throw Records",
+          "targetable": true,
+          "affinity": 0.9210567428004335
+        }
+      ],
+      "named_baseline": [
+        {
+          "name": "Rough Trade",
+          "targetable": false,
+          "affinity": 0.9018993054327177
+        },
+        {
+          "name": "Pitchfork",
+          "targetable": false,
+          "affinity": 0.9267866975574515
+        },
+        {
+          "name": "Berghain",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Tame Impala",
+          "targetable": true,
+          "affinity": 0.8856985821111728
+        },
+        {
+          "name": "Fleetwood Mac",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Kraftwerk",
+          "targetable": true,
+          "affinity": 0.94070306419839
+        },
+        {
+          "name": "Hard Wax",
+          "targetable": true,
+          "affinity": null
+        }
+      ],
+      "app_baseline": [
+        {
+          "name": "Vinyl records",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Techno and electronic music",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Interior design",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Independent record stores",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Spotify and music streaming",
+          "targetable": false,
+          "affinity": null
+        }
+      ]
+    },
+    {
+      "product": "Plant based protein bars",
+      "market": "Los Angeles, USA",
+      "reference": "RXBAR",
+      "held_out": "Kind Snacks",
+      "taste_brief": [
+        {
+          "name": "Larabar",
+          "targetable": false,
+          "affinity": 0.9761548764016522
+        },
+        {
+          "name": "Perfect Bar",
+          "targetable": false,
+          "affinity": 0.9411295634753593
+        },
+        {
+          "name": "Orgain",
+          "targetable": true,
+          "affinity": 0.9324914329627876
+        },
+        {
+          "name": "Athleta",
+          "targetable": true,
+          "affinity": 0.9430105779850267
+        },
+        {
+          "name": "Ragnar Relay",
+          "targetable": false,
+          "affinity": 0.904516001608542
+        },
+        {
+          "name": "Health-Ade Kombucha",
+          "targetable": false,
+          "affinity": 0.9501995494852579
+        },
+        {
+          "name": "Jack Johnson",
+          "targetable": true,
+          "affinity": 0.955531755949601
+        },
+        {
+          "name": "Somebody Feed Phil",
+          "targetable": false,
+          "affinity": 0.9722999649346727
+        }
+      ],
+      "named_baseline": [
+        {
+          "name": "Erewhon Market",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Whole Foods Market",
+          "targetable": true,
+          "affinity": 0.9645629873147886
+        },
+        {
+          "name": "Gwyneth Paltrow's Goop",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Rich Roll Podcast",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Equinox",
+          "targetable": false,
+          "affinity": 0.9210003283737102
+        },
+        {
+          "name": "Sweetgreen",
+          "targetable": true,
+          "affinity": 0.9028810985990663
+        },
+        {
+          "name": "Thrive Market",
+          "targetable": true,
+          "affinity": null
+        }
+      ],
+      "app_baseline": [
+        {
+          "name": "Plant based diet",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Pilates and yoga",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Trail running and hiking",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Whole Foods Market and Erewhon",
+          "targetable": false,
+          "affinity": 0.9645629873147886
+        },
+        {
+          "name": "Clean eating and organic food",
+          "targetable": false,
+          "affinity": null
+        }
+      ]
+    },
+    {
+      "product": "Flavored sparkling water",
+      "market": "Chicago, USA",
+      "reference": "LaCroix",
+      "held_out": "Perrier",
+      "taste_brief": [
+        {
+          "name": "Trader Joe's",
+          "targetable": true,
+          "affinity": 0.8313271692741661
+        },
+        {
+          "name": "Orangetheory Fitness",
+          "targetable": false,
+          "affinity": 0.8454525816681039
+        },
+        {
+          "name": "RXBAR",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Sylvan Esso",
+          "targetable": true,
+          "affinity": 0.9002741527826192
+        },
+        {
+          "name": "Grace and Frankie",
+          "targetable": true,
+          "affinity": 0.9273184505870874
+        },
+        {
+          "name": "Care/of",
+          "targetable": false,
+          "affinity": null
+        }
+      ],
+      "named_baseline": [
+        {
+          "name": "Bubly",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Spindrift",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Topo Chico",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Whole Foods Market",
+          "targetable": true,
+          "affinity": 0.8735797961033823
+        },
+        {
+          "name": "Trader Joe's",
+          "targetable": true,
+          "affinity": 0.8313271692741661
+        },
+        {
+          "name": "Peloton",
+          "targetable": true,
+          "affinity": 0.8443345695351978
+        },
+        {
+          "name": "Chicago Cubs",
+          "targetable": true,
+          "affinity": 0.8657300177500667
+        }
+      ],
+      "app_baseline": [
+        {
+          "name": "Sparkling water",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Healthy living",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Running",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Yoga and fitness classes",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Mocktails and non alcoholic drinks",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Craft beer and local restaurants",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Whole Foods Market",
+          "targetable": true,
+          "affinity": 0.8735797961033823
+        }
+      ]
+    },
+    {
+      "product": "Affordable skincare serum, $15",
+      "market": "Paris, France",
+      "reference": "The Ordinary",
+      "held_out": "CeraVe",
+      "taste_brief": [
+        {
+          "name": "Vichy",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Avène",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Clarins",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Kiehl's",
+          "targetable": true,
+          "affinity": 0.9362054716041768
+        },
+        {
+          "name": "Emily in Paris",
+          "targetable": false,
+          "affinity": 0.9699778922381608
+        },
+        {
+          "name": "Dior Beauty",
+          "targetable": false,
+          "affinity": 0.9336768500212573
+        }
+      ],
+      "named_baseline": [
+        {
+          "name": "Typology Paris",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "La Roche-Posay",
+          "targetable": true,
+          "affinity": 0.9175119360929669
+        },
+        {
+          "name": "Sephora",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Beauty Garden",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Emily in Paris",
+          "targetable": false,
+          "affinity": 0.9699778922381608
+        },
+        {
+          "name": "Cult Beauty",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Caudalie",
+          "targetable": true,
+          "affinity": 0.9083676805051633
+        }
+      ],
+      "app_baseline": [
+        {
+          "name": "Skin care",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "The Ordinary (brand)",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Sephora",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Clean beauty and minimalism",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Cosmetics and beauty influencers",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Sustainable living",
+          "targetable": false,
+          "affinity": null
+        }
+      ]
+    },
+    {
+      "product": "Yoga leggings",
+      "market": "Sydney, Australia",
+      "reference": "Lululemon",
+      "held_out": "Alo Yoga",
+      "taste_brief": [
+        {
+          "name": "ClassPass",
+          "targetable": true,
+          "affinity": 0.9520718827811346
+        },
+        {
+          "name": "Sweat",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Aritzia",
+          "targetable": true,
+          "affinity": 0.9499293516309983
+        },
+        {
+          "name": "Spiritual Gangster",
+          "targetable": true,
+          "affinity": 0.9553035032458999
+        },
+        {
+          "name": "Vance Joy",
+          "targetable": true,
+          "affinity": 0.9770435561812195
+        },
+        {
+          "name": "The Paper Kites",
+          "targetable": true,
+          "affinity": 0.9638491090798547
+        },
+        {
+          "name": "Jay Shetty",
+          "targetable": false,
+          "affinity": 0.9407523374302212
+        },
+        {
+          "name": "Emily in Paris",
+          "targetable": false,
+          "affinity": 0.9593142794744061
+        }
+      ],
+      "named_baseline": [
+        {
+          "name": "Sporteluxe",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Gymshark",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Sweaty Betty",
+          "targetable": true,
+          "affinity": 0.9184775234809281
+        },
+        {
+          "name": "Lorna Jane",
+          "targetable": true,
+          "affinity": 0.9302150178041168
+        },
+        {
+          "name": "Bondi Beach",
+          "targetable": false,
+          "affinity": 0.7812049133830964
+        },
+        {
+          "name": "Down Dog",
+          "targetable": false,
+          "affinity": null
+        }
+      ],
+      "app_baseline": [
+        {
+          "name": "Yoga",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Pilates",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Activewear",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Athleisure",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Wellness and mindfulness",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Online shopping",
+          "targetable": true,
+          "affinity": null
+        }
+      ]
+    },
+    {
+      "product": "Hard seltzer",
+      "market": "Austin, USA",
+      "reference": "White Claw",
+      "held_out": "Truly Hard Seltzer",
+      "taste_brief": [
+        {
+          "name": "Parker McCollum",
+          "targetable": false,
+          "affinity": 0.8868001510901463
+        },
+        {
+          "name": "Cody Johnson",
+          "targetable": false,
+          "affinity": 0.8431865966144019
+        },
+        {
+          "name": "Chris Stapleton",
+          "targetable": true,
+          "affinity": 0.9607058667878964
+        },
+        {
+          "name": "Orangetheory Fitness",
+          "targetable": false,
+          "affinity": 0.9467893765856964
+        },
+        {
+          "name": "Peloton",
+          "targetable": true,
+          "affinity": 0.946770387058677
+        },
+        {
+          "name": "Liquid I.V.",
+          "targetable": false,
+          "affinity": 0.9575821623235635
+        },
+        {
+          "name": "LaCroix",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Barstool Sports",
+          "targetable": true,
+          "affinity": 0.9237405338123248
+        }
+      ],
+      "named_baseline": [
+        {
+          "name": "Topo Chico",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Austin City Limits Music Festival",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Barton Springs Pool",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Tito's Handmade Vodka",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Modelo",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Lady Bird Lake",
+          "targetable": false,
+          "affinity": 0.8332534594675525
+        },
+        {
+          "name": "Yeti Coolers",
+          "targetable": true,
+          "affinity": null
+        }
+      ],
+      "app_baseline": [
+        {
+          "name": "Austin City Limits Music Festival",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Paddleboarding and kayaking",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Craft beer and local breweries",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Running and fitness studios",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Food trucks and patio dining",
+          "targetable": false,
+          "affinity": null
+        }
+      ]
+    },
+    {
+      "product": "Hazy IPA craft beer",
+      "market": "Portland, USA",
+      "reference": "Sierra Nevada",
+      "held_out": "Lagunitas Brewing Company",
+      "taste_brief": [
+        {
+          "name": "Rogue Ales",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Deschutes Brewery",
+          "targetable": true,
+          "affinity": 0.9881144831071004
+        },
+        {
+          "name": "Portlandia",
+          "targetable": true,
+          "affinity": 0.9768993866360918
+        },
+        {
+          "name": "Primus",
+          "targetable": true,
+          "affinity": 0.9504914694898483
+        },
+        {
+          "name": "Tool",
+          "targetable": true,
+          "affinity": 0.9405578668767302
+        },
+        {
+          "name": "Soundgarden",
+          "targetable": true,
+          "affinity": 0.9328175059010595
+        }
+      ],
+      "named_baseline": [
+        {
+          "name": "Deschutes Brewery",
+          "targetable": true,
+          "affinity": 0.9881144831071004
+        },
+        {
+          "name": "Bridgeport Brewing Company",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Pokay Pliny the Elder",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Portland Timbers",
+          "targetable": true,
+          "affinity": 0.8831680780645846
+        },
+        {
+          "name": "Powell's Books",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Breaking Bad",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Hop Valley Brewing",
+          "targetable": false,
+          "affinity": null
+        }
+      ],
+      "app_baseline": [
+        {
+          "name": "Craft beer",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "India pale ale",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Homebrewing",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Hiking and backpacking",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Food trucks and street food",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Sustainable living",
+          "targetable": false,
+          "affinity": null
+        }
+      ]
+    },
+    {
+      "product": "Language learning app subscription",
+      "market": "Mexico City, Mexico",
+      "reference": "Duolingo",
+      "held_out": "Babbel",
+      "taste_brief": [
+        {
+          "name": "Google Maps",
+          "targetable": true,
+          "affinity": 0.8681715194033759
+        },
+        {
+          "name": "Waze",
+          "targetable": true,
+          "affinity": 0.8461797362802592
+        },
+        {
+          "name": "Kindle",
+          "targetable": false,
+          "affinity": 0.8212805760509189
+        },
+        {
+          "name": "edX",
+          "targetable": true,
+          "affinity": 0.8644445123783174
+        },
+        {
+          "name": "The Economist",
+          "targetable": false,
+          "affinity": 0.8948560947601837
+        },
+        {
+          "name": "Emily in Paris",
+          "targetable": false,
+          "affinity": 0.9754433991322612
+        }
+      ],
+      "named_baseline": [
+        {
+          "name": "Netflix",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "TED Talks",
+          "targetable": false,
+          "affinity": 0.9343941224349318
+        },
+        {
+          "name": "Coursera",
+          "targetable": true,
+          "affinity": 0.9087424350770227
+        },
+        {
+          "name": "British Council",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Casa del Lago UNAM",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Easy Languages",
+          "targetable": false,
+          "affinity": null
+        }
+      ],
+      "app_baseline": [
+        {
+          "name": "Language learning",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Online education and e-learning",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Study abroad and international travel",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "LinkedIn and career development",
+          "targetable": false,
+          "affinity": 0.8645249174533045
+        },
+        {
+          "name": "Netflix and international series",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "TOEFL and IELTS test preparation",
+          "targetable": false,
+          "affinity": null
+        }
+      ]
+    },
+    {
+      "product": "Meal kit delivery",
+      "market": "Toronto, Canada",
+      "reference": "HelloFresh",
+      "held_out": "Blue Apron",
+      "taste_brief": [
+        {
+          "name": "MyFitnessPal",
+          "targetable": true,
+          "affinity": 0.9192344386101003
+        },
+        {
+          "name": "Headspace",
+          "targetable": false,
+          "affinity": 0.9136944645725464
+        },
+        {
+          "name": "Fitbit",
+          "targetable": true,
+          "affinity": 0.9257173808650463
+        },
+        {
+          "name": "Vitamix",
+          "targetable": true,
+          "affinity": 0.9320651047895018
+        },
+        {
+          "name": "Williams-Sonoma",
+          "targetable": true,
+          "affinity": 0.9540033828303833
+        },
+        {
+          "name": "Deliciously Ella",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Somebody Feed Phil",
+          "targetable": false,
+          "affinity": 0.9600949275834048
+        }
+      ],
+      "named_baseline": [
+        {
+          "name": "Chef's Plate",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Bon Appétit",
+          "targetable": true,
+          "affinity": 0.9313502181254396
+        },
+        {
+          "name": "Gordon Ramsay",
+          "targetable": true,
+          "affinity": 0.871503042396463
+        },
+        {
+          "name": "Salt Fat Acid Heat",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Loblaws",
+          "targetable": false,
+          "affinity": 0.8004127032014331
+        },
+        {
+          "name": "Instagram: Budget Bytes",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "The Great Canadian Baking Show",
+          "targetable": false,
+          "affinity": null
+        }
+      ],
+      "app_baseline": [
+        {
+          "name": "Meal kits and HelloFresh",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Cooking and recipes",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Healthy eating and nutrition",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Online grocery shopping",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Sustainable living and reducing food waste",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Foodie culture and restaurants in Toronto",
+          "targetable": false,
+          "affinity": null
+        }
+      ]
+    },
+    {
+      "product": "Streetwear hoodies, limited drops",
+      "market": "Tokyo, Japan",
+      "reference": "Supreme",
+      "held_out": "Stüssy",
+      "taste_brief": [
+        {
+          "name": "Palace Skateboards",
+          "targetable": false,
+          "affinity": 0.9769474363051326
+        },
+        {
+          "name": "Kith",
+          "targetable": false,
+          "affinity": 0.9706734662182619
+        },
+        {
+          "name": "Neighborhood",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Comme des Garcons",
+          "targetable": false,
+          "affinity": 0.957764654528533
+        },
+        {
+          "name": "Off-White",
+          "targetable": false,
+          "affinity": 0.9706222309773758
+        },
+        {
+          "name": "Y-3",
+          "targetable": false,
+          "affinity": 0.9798763391865165
+        }
+      ],
+      "named_baseline": [
+        {
+          "name": "A Bathing Ape",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "NEIGHBORHOOD",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "BEAMS",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "atmos",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Fragment Design",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "WTAPS",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Palace Skateboards",
+          "targetable": false,
+          "affinity": 0.9769474363051326
+        }
+      ],
+      "app_baseline": [
+        {
+          "name": "Streetwear",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Supreme (brand)",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "A Bathing Ape",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Harajuku fashion",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Sneakers and sneaker culture",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Skateboarding",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Hip hop music",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Vintage and secondhand clothing",
+          "targetable": false,
+          "affinity": null
+        }
+      ]
+    },
+    {
+      "product": "Party card game for adults",
+      "market": "London, UK",
+      "reference": "Exploding Kittens",
+      "held_out": "Hasbro",
+      "taste_brief": [
+        {
+          "name": "Kickstarter",
+          "targetable": true,
+          "affinity": 0.8768008581539936
+        },
+        {
+          "name": "BrewDog",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Honest Burgers",
+          "targetable": false,
+          "affinity": 0.8164473621415943
+        },
+        {
+          "name": "What We Do in the Shadows",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Avenue 5",
+          "targetable": false,
+          "affinity": 0.94037051799804
+        },
+        {
+          "name": "Good Omens",
+          "targetable": false,
+          "affinity": 0.9413201671387399
+        },
+        {
+          "name": "BuzzFeed",
+          "targetable": false,
+          "affinity": 0.8694916415045688
+        }
+      ],
+      "named_baseline": [
+        {
+          "name": "Cards Against Humanity",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "What Do You Meme?",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Taskmaster",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Jackbox Games",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Codenames",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "The Traitors",
+          "targetable": false,
+          "affinity": 0.9314145262965056
+        },
+        {
+          "name": "Richard Osman's House of Games",
+          "targetable": false,
+          "affinity": null
+        }
+      ],
+      "app_baseline": [
+        {
+          "name": "Board games and tabletop games",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Cards Against Humanity",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Pub quizzes and nightlife in London",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Stand up comedy",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Gift ideas and Secret Santa",
+          "targetable": false,
+          "affinity": null
+        }
+      ]
+    },
+    {
+      "product": "Natural deodorant",
+      "market": "Melbourne, Australia",
+      "reference": "Native",
+      "held_out": "Schmidt's Naturals",
+      "taste_brief": [
+        {
+          "name": "Thinx",
+          "targetable": false,
+          "affinity": 0.9477240076103745
+        },
+        {
+          "name": "Function of Beauty",
+          "targetable": false,
+          "affinity": 0.9358033183105923
+        },
+        {
+          "name": "Rodan + Fields",
+          "targetable": false,
+          "affinity": 0.9328180995347235
+        },
+        {
+          "name": "Jay Shetty",
+          "targetable": false,
+          "affinity": 0.9304118888733182
+        },
+        {
+          "name": "Brené Brown",
+          "targetable": true,
+          "affinity": 0.956968374069301
+        },
+        {
+          "name": "Grace and Frankie",
+          "targetable": true,
+          "affinity": 0.9421720058671023
+        },
+        {
+          "name": "Keith Urban",
+          "targetable": true,
+          "affinity": 0.9300156132854419
+        }
+      ],
+      "named_baseline": [
+        {
+          "name": "Aesop",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Frank Body",
+          "targetable": true,
+          "affinity": 0.9116361800854728
+        },
+        {
+          "name": "Sans Soucis",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Kinfolk",
+          "targetable": true,
+          "affinity": 0.848017065109996
+        },
+        {
+          "name": "Lord Huron",
+          "targetable": true,
+          "affinity": 0.8856787643778019
+        },
+        {
+          "name": "The Details Podcast",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Queen Victoria Market",
+          "targetable": false,
+          "affinity": 0.7638416438581843
+        }
+      ],
+      "app_baseline": [
+        {
+          "name": "Natural skincare and clean beauty",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Sustainable living",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Yoga and pilates",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Organic food and wholefoods",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Native (deodorant brand) and similar natural personal care brands",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Running and cycling",
+          "targetable": false,
+          "affinity": null
+        }
+      ]
+    },
+    {
+      "product": "Recycled outdoor jacket",
+      "market": "Denver, USA",
+      "reference": "Patagonia",
+      "held_out": "The North Face",
+      "taste_brief": [
+        {
+          "name": "Backcountry.com",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "REI",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Backpacker Magazine",
+          "targetable": false,
+          "affinity": 0.9585718076911502
+        },
+        {
+          "name": "Osprey Packs",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Arc'teryx",
+          "targetable": true,
+          "affinity": 0.979444762827444
+        },
+        {
+          "name": "Hipcamp",
+          "targetable": false,
+          "affinity": 0.9267231285687457
+        },
+        {
+          "name": "Gregory Alan Isakov",
+          "targetable": true,
+          "affinity": 0.9511291048347671
+        },
+        {
+          "name": "The Lumineers",
+          "targetable": true,
+          "affinity": null
+        }
+      ],
+      "named_baseline": [
+        {
+          "name": "REI",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Arc'teryx",
+          "targetable": true,
+          "affinity": 0.979444762827444
+        },
+        {
+          "name": "Red Rocks Amphitheatre",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Outside Magazine",
+          "targetable": false,
+          "affinity": 0.9561223693371378
+        },
+        {
+          "name": "Yvon Chouinard's Let My People Go Surfing",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Rocky Mountain National Park",
+          "targetable": true,
+          "affinity": null
+        }
+      ],
+      "app_baseline": [
+        {
+          "name": "Patagonia (brand)",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Hiking and backpacking",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Skiing and snowboarding",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Rock climbing",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Sustainable living",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Craft beer",
+          "targetable": false,
+          "affinity": null
+        }
+      ]
+    },
+    {
+      "product": "Noise cancelling headphones",
+      "market": "Singapore",
+      "reference": "Sony",
+      "held_out": "Bose Corporation",
+      "taste_brief": [
+        {
+          "name": "Sennheiser",
+          "targetable": true,
+          "affinity": 0.9383395687643729
+        },
+        {
+          "name": "Harman Kardon",
+          "targetable": true,
+          "affinity": 0.9581185850185877
+        },
+        {
+          "name": "Razer",
+          "targetable": true,
+          "affinity": 0.9047458174235594
+        },
+        {
+          "name": "Tiësto",
+          "targetable": true,
+          "affinity": 0.9659360437251981
+        },
+        {
+          "name": "Swedish House Mafia",
+          "targetable": true,
+          "affinity": 0.9634294138963971
+        },
+        {
+          "name": "Hospital Playlist",
+          "targetable": false,
+          "affinity": 0.9457418942551767
+        }
+      ],
+      "named_baseline": [
+        {
+          "name": "Bose",
+          "targetable": false,
+          "affinity": 0.7079783559743594
+        },
+        {
+          "name": "Apple AirPods Max",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Sennheiser",
+          "targetable": true,
+          "affinity": 0.9383395687643729
+        },
+        {
+          "name": "Audio-Technica",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Spotify",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Changi Airport",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Channel NewsAsia",
+          "targetable": false,
+          "affinity": null
+        }
+      ],
+      "app_baseline": [
+        {
+          "name": "Headphones and audiophile gear",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Consumer electronics and gadgets",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Frequent international travel",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Online shopping and Shopee or Lazada",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Productivity, remote work and study",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Podcasts and music streaming",
+          "targetable": false,
+          "affinity": null
+        }
+      ]
+    },
+    {
+      "product": "Matcha latte powder",
+      "market": "Los Angeles, USA",
+      "reference": "Starbucks",
+      "held_out": "Dunkin' Donuts",
+      "taste_brief": [
+        {
+          "name": "Sweetgreen",
+          "targetable": true,
+          "affinity": 0.9087615861506055
+        },
+        {
+          "name": "Alo Yoga",
+          "targetable": false,
+          "affinity": 0.8302220995459534
+        },
+        {
+          "name": "Pressed Juicery",
+          "targetable": true,
+          "affinity": 0.8646693496516562
+        },
+        {
+          "name": "ClassPass",
+          "targetable": true,
+          "affinity": 0.8653886579047948
+        },
+        {
+          "name": "Whole Foods Market",
+          "targetable": true,
+          "affinity": 0.9111226800707414
+        },
+        {
+          "name": "The Skinny Confidential",
+          "targetable": false,
+          "affinity": 0.8037841329566583
+        },
+        {
+          "name": "Lorde",
+          "targetable": true,
+          "affinity": 0.9213736717673245
+        }
+      ],
+      "named_baseline": [
+        {
+          "name": "Erewhon Market",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Blank Street Coffee",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Jade Leaf Matcha",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Goop",
+          "targetable": true,
+          "affinity": 0.8396042234127452
+        },
+        {
+          "name": "The Huberman Lab Podcast",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Alo Yoga",
+          "targetable": false,
+          "affinity": 0.8302220995459534
+        },
+        {
+          "name": "Sweetgreen",
+          "targetable": true,
+          "affinity": 0.9087615861506055
+        }
+      ],
+      "app_baseline": [
+        {
+          "name": "Matcha",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Yoga and pilates",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Healthy eating and organic food",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Erewhon and farmers markets",
+          "targetable": false,
+          "affinity": 0.7927091536093973
+        },
+        {
+          "name": "Plant based milks such as oat milk",
+          "targetable": false,
+          "affinity": null
+        }
+      ]
+    },
+    {
+      "product": "Minimalist leather wallet",
+      "market": "Amsterdam, Netherlands",
+      "reference": "Bellroy",
+      "held_out": "Herschel Supply Co",
+      "taste_brief": [
+        {
+          "name": "Rains",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Norse Projects",
+          "targetable": true,
+          "affinity": 0.9331127190111952
+        },
+        {
+          "name": "Komono",
+          "targetable": false,
+          "affinity": 0.9310809426554917
+        },
+        {
+          "name": "Triwa",
+          "targetable": true,
+          "affinity": 0.944231718501259
+        },
+        {
+          "name": "MR PORTER",
+          "targetable": true,
+          "affinity": 0.9357429851623255
+        },
+        {
+          "name": "The Tim Ferriss Show",
+          "targetable": false,
+          "affinity": 0.9423678572365525
+        },
+        {
+          "name": "Leica Camera",
+          "targetable": true,
+          "affinity": 0.9206689395857962
+        }
+      ],
+      "named_baseline": [
+        {
+          "name": "Secrid",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Apple Inc.",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Filippa K",
+          "targetable": true,
+          "affinity": 0.8707999859197006
+        },
+        {
+          "name": "COS (clothing retailer)",
+          "targetable": false,
+          "affinity": 0.9131040757740938
+        },
+        {
+          "name": "Monocle (magazine)",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "The Verge",
+          "targetable": true,
+          "affinity": 0.8656504863938241
+        },
+        {
+          "name": "Peak Design",
+          "targetable": false,
+          "affinity": 0.8945426533345102
+        }
+      ],
+      "app_baseline": [
+        {
+          "name": "Minimalism",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Industrial design",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Sustainable fashion",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Cycling",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Apple Pay and Google Pay",
+          "targetable": false,
+          "affinity": null
+        }
+      ]
+    },
+    {
+      "product": "Indie horror video game",
+      "market": "Seattle, USA",
+      "reference": "Steam",
+      "held_out": "Epic Games",
+      "taste_brief": [
+        {
+          "name": "Reddit",
+          "targetable": false,
+          "affinity": 0.9384450414499781
+        },
+        {
+          "name": "Shudder",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Imgur",
+          "targetable": true,
+          "affinity": 0.9140628672397236
+        },
+        {
+          "name": "Oculus",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Underoath",
+          "targetable": false,
+          "affinity": 0.87740604352554
+        },
+        {
+          "name": "Mythic Quest",
+          "targetable": false,
+          "affinity": 0.9192744633497093
+        },
+        {
+          "name": "The Lighthouse",
+          "targetable": false,
+          "affinity": null
+        }
+      ],
+      "named_baseline": [
+        {
+          "name": "Phasmophobia",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Resident Evil",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Silent Hill",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Five Nights at Freddy's",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Itch.io",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Markiplier",
+          "targetable": true,
+          "affinity": 0.9239351242049395
+        },
+        {
+          "name": "Stranger Things",
+          "targetable": true,
+          "affinity": 0.9397047511822506
+        }
+      ],
+      "app_baseline": [
+        {
+          "name": "Steam (service)",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Survival horror",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Indie game",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "Twitch",
+          "targetable": true,
+          "affinity": null
+        },
+        {
+          "name": "Horror films and A24 style horror",
+          "targetable": false,
+          "affinity": null
+        },
+        {
+          "name": "PC gaming",
+          "targetable": false,
+          "affinity": null
+        }
+      ]
+    }
+  ]
+}

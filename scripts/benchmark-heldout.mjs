@@ -9,14 +9,8 @@ import { makeQloo } from "../src/qloo.js";
 import { anthropicLLM } from "../src/llm.js";
 import { gradePicks, summarize } from "../src/grade.js";
 
-// reference brand the agent saw -> held-out competitor used only for grading
-export const HELD_OUT = {
-  "Allbirds": "Veja", "Blue Bottle Coffee": "Intelligentsia Coffee", "Audio-Technica": "Sonos", "RXBAR": "Kind Snacks",
-  "LaCroix": "Perrier", "The Ordinary": "CeraVe", "Lululemon": "Alo Yoga", "White Claw": "Truly Hard Seltzer",
-  "Sierra Nevada": "Lagunitas Brewing Company", "Duolingo": "Babbel", "HelloFresh": "Blue Apron", "Supreme": "Stüssy",
-  "Exploding Kittens": "Hasbro", "Native": "Schmidt's Naturals", "Patagonia": "The North Face", "Sony": "Bose Corporation",
-  "Starbucks": "Dunkin' Donuts", "Bellroy": "Herschel Supply Co", "Steam": "Epic Games",
-};
+import { HELD_OUT } from "./benchmark-heldout-map.mjs";
+export { HELD_OUT };
 
 const SYSTEM = `You are a senior paid social strategist with no data access. Name the Meta Ads interests you would test for
 this product's audience. Use only specific, named entities: brands, artists, TV shows, films, podcasts, books or places.

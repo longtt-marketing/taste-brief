@@ -67,7 +67,18 @@ code{font-family:var(--mono);font-size:13px;background:var(--acc-soft);border-ra
       </tbody>
     </table></div>
     <p>Against the stronger baseline Taste Brief is ahead in 19 of 20 briefs (one tie): +42 points, 95% bootstrap interval +32 to +53. On the reference brand's own audience the gap is wider: 73% against 18%.</p>
-    <p class="note">The grader is still Qloo: it measures fit with Qloo's view of the category's audience, not ad results. Scripts: <code>scripts/benchmark.mjs</code>, <code>scripts/benchmark-strong.mjs</code>, <code>scripts/benchmark-heldout.mjs</code>.</p>
+    <h3>A second judge that isn't Qloo: can Meta target it?</h3>
+    <p>Every pick looked up in Meta's own interest search (Marketing API). It counts only if Meta has an interest with that name.</p>
+    <div class="scroll"><table>
+      <thead><tr><th>Who wrote the interests</th><th>Targetable in Meta</th><th>Targetable and 0.9+ on Qloo</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Taste Brief</strong> (with Qloo)</td><td class="n">74 / 140 · 53%</td><td class="n"><strong>49 / 140 · 35%</strong></td></tr>
+        <tr><td>Same model, no data, told to name specific entities</td><td class="n">65 / 136 · 48%</td><td class="n">18 / 136 · 13%</td></tr>
+        <tr><td>Same model, no data, as the app asks it</td><td class="n">36 / 115 · 31%</td><td class="n">0 / 115 · 0%</td></tr>
+      </tbody>
+    </table></div>
+    <p>On Meta alone the named baseline is close: Meta no longer lists many niche brands and shows. On both together Taste Brief is ahead by 22 points (95% interval +10 to +34), in 12 of 20 briefs with 5 ties.</p>
+    <p class="note">Qloo and Meta measure fit and whether an interest exists, not ad results. Scripts: <code>scripts/benchmark.mjs</code>, <code>scripts/benchmark-strong.mjs</code>, <code>scripts/benchmark-heldout.mjs</code>, <code>scripts/benchmark-meta.mjs</code>, <code>scripts/benchmark-combined.mjs</code>.</p>
   </section>
 
   <section class="panel">

@@ -16,7 +16,10 @@ On 20 briefs, each graded on the audience of a competitor the agent never saw (w
 61% of the Meta interests Taste Brief suggests score an affinity of 0.9 or more on Qloo. The same model with no data
 reaches 19% when told to name specific brands and shows, and 1% as the app asks it. Taste Brief is ahead in 19 of 20 briefs
 (+42 points, 95% bootstrap interval +32 to +53); on the reference brand's own audience it is 73% against 18%. Graded by
-Qloo, so it measures fit with the category's audience, not ad results; details in [docs/benchmark](docs/benchmark/README.md).
+Qloo, so it measures fit with the category's audience, not ad results. A second check that isn't Qloo: looked up in
+Meta's own interest list, 35% of Taste Brief's picks are both targetable and 0.9+, against 13% and 0% (+22 points,
+interval +10 to +34); on targetability alone the named baseline is close (53% against 48%). Details in
+[docs/benchmark](docs/benchmark/README.md).
 The page shows the same scoring for every run.
 
 ## How it works
@@ -29,6 +32,7 @@ The page shows the same scoring for every run.
   per line. The page shows the verified Qloo results (name, affinity, type) next to each line, and flags the rest. This
   proves where a line comes from, not that the marketing idea is right. `unbackedBy` lists what the no-data baseline would
   target that Qloo returned nowhere in the run.
+- `src/meta.js`: Meta Marketing API interest search, the check that doesn't use Qloo (`scripts/benchmark-meta.mjs`).
 - `public/verdict.js`: lock the test plan (SHA-256 of the control, tests and rule, with a timestamp), write the ad set
   sheet named with the plan id, and read an Ads Manager export back with the locked rule. Pure functions, no model.
 - `src/grade.js`: one grader for any list of picks: exact name lookup in Qloo, then the affinity Qloo gives that

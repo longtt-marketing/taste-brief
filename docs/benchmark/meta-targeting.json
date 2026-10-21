@@ -1,0 +1,4563 @@
+{
+  "run_at": "2026-10-21T12:31:03.129Z",
+  "cases": 20,
+  "picks_from": "benchmark-2026-10-21-10-25.json",
+  "grader": "Meta Ads interest search (adinterest): the interest exists in Meta under the same name. Audience sizes are Meta's worldwide estimates.",
+  "taste_brief": {
+    "picks": 143,
+    "targetable": 76,
+    "share_targetable": 0.5314685314685315,
+    "median_audience_upper": 2423890
+  },
+  "named_entity_baseline": {
+    "picks": 140,
+    "targetable": 67,
+    "share_targetable": 0.4785714285714286,
+    "median_audience_upper": 2655742
+  },
+  "app_baseline": {
+    "picks": 115,
+    "targetable": 36,
+    "share_targetable": 0.3130434782608696,
+    "median_audience_upper": 32817315
+  },
+  "per_case": [
+    {
+      "product": "Wool running sneakers, $120, sustainable",
+      "market": "London, UK",
+      "reference": "Allbirds",
+      "taste_brief": [
+        {
+          "name": "Tracksmith",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Nike Training Club",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Herschel Supply Co",
+          "status": "targetable",
+          "interest": {
+            "id": "6014726841666",
+            "name": "Herschel Supply Co.",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Herschel Supply Co."
+            ]
+          },
+          "audience": [
+            1071301,
+            1259850
+          ]
+        },
+        {
+          "name": "GREATS",
+          "status": "not_found",
+          "nearest": [
+            "Philosophy, Politics and Economics"
+          ]
+        },
+        {
+          "name": "Down to Earth with Zac Efron",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Goop",
+          "status": "targetable",
+          "interest": {
+            "id": "6003393062743",
+            "name": "Goop",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Goop"
+            ]
+          },
+          "audience": [
+            2840768,
+            3340744
+          ]
+        },
+        {
+          "name": "Maggie Rogers",
+          "status": "not_found",
+          "nearest": [
+            "Country music"
+          ]
+        }
+      ],
+      "named_baseline": [
+        {
+          "name": "Patagonia",
+          "status": "targetable",
+          "interest": {
+            "id": "6003413530453",
+            "name": "Patagonia",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Patagonia"
+            ]
+          },
+          "audience": [
+            15838137,
+            18625650
+          ]
+        },
+        {
+          "name": "Parkrun",
+          "status": "targetable",
+          "interest": {
+            "id": "6003459401689",
+            "name": "Parkrun",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Parkrun"
+            ]
+          },
+          "audience": [
+            1115170,
+            1311440
+          ]
+        },
+        {
+          "name": "Strava",
+          "status": "targetable",
+          "interest": {
+            "id": "6003401026143",
+            "name": "strava",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "strava"
+            ]
+          },
+          "audience": [
+            4157457,
+            4889170
+          ]
+        },
+        {
+          "name": "Veja",
+          "status": "not_found",
+          "nearest": [
+            "Veja Sneakers",
+            "Damon Wayans"
+          ]
+        },
+        {
+          "name": "Monocle",
+          "status": "targetable",
+          "interest": {
+            "id": "6003389906405",
+            "name": "Monocle (media company)",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Monocle (media company)"
+            ]
+          },
+          "audience": [
+            36437,
+            42850
+          ]
+        },
+        {
+          "name": "Hoka",
+          "status": "not_found",
+          "nearest": [
+            "Hoka One One",
+            "Hokkaido",
+            "Hokkaido University"
+          ]
+        },
+        {
+          "name": "Kinfolk",
+          "status": "targetable",
+          "interest": {
+            "id": "6012848190757",
+            "name": "Kinfolk",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Kinfolk"
+            ]
+          },
+          "audience": [
+            168039,
+            197615
+          ]
+        }
+      ],
+      "app_baseline": [
+        {
+          "name": "Running",
+          "status": "targetable",
+          "interest": {
+            "id": "6003397496347",
+            "name": "Running",
+            "path": [
+              "Interests",
+              "Fitness and wellness",
+              "Running"
+            ]
+          },
+          "audience": [
+            295862363,
+            347934139
+          ]
+        },
+        {
+          "name": "Sustainable living",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Parkrun",
+          "status": "targetable",
+          "interest": {
+            "id": "6003459401689",
+            "name": "Parkrun",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Parkrun"
+            ]
+          },
+          "audience": [
+            1115170,
+            1311440
+          ]
+        },
+        {
+          "name": "Ethical fashion",
+          "status": "not_found",
+          "nearest": [
+            "Sustainable fashion"
+          ]
+        },
+        {
+          "name": "Strava",
+          "status": "targetable",
+          "interest": {
+            "id": "6003401026143",
+            "name": "strava",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "strava"
+            ]
+          },
+          "audience": [
+            4157457,
+            4889170
+          ]
+        },
+        {
+          "name": "Minimalism",
+          "status": "targetable",
+          "interest": {
+            "id": "6003007706419",
+            "name": "Minimalism",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Minimalism"
+            ]
+          },
+          "audience": [
+            49973205,
+            58768490
+          ]
+        }
+      ]
+    },
+    {
+      "product": "Wool running sneakers, $120, sustainable",
+      "market": "New York, USA",
+      "reference": "Allbirds",
+      "taste_brief": [
+        {
+          "name": "Tracksmith",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "GREATS",
+          "status": "not_found",
+          "nearest": [
+            "Philosophy, Politics and Economics"
+          ]
+        },
+        {
+          "name": "Native Shoes",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Saturdays NYC",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Fjällräven",
+          "status": "targetable",
+          "interest": {
+            "id": "6003372684395",
+            "name": "Fjällräven",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Fjällräven"
+            ]
+          },
+          "audience": [
+            4022848,
+            4730870
+          ]
+        },
+        {
+          "name": "Herschel Supply Co.",
+          "status": "targetable",
+          "interest": {
+            "id": "6014726841666",
+            "name": "Herschel Supply Co.",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Herschel Supply Co."
+            ]
+          },
+          "audience": [
+            1071301,
+            1259850
+          ]
+        },
+        {
+          "name": "Lord Huron",
+          "status": "targetable",
+          "interest": {
+            "id": "6006940616079",
+            "name": "Lord Huron",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Lord Huron"
+            ]
+          },
+          "audience": [
+            111360,
+            130960
+          ]
+        },
+        {
+          "name": "The Lumineers",
+          "status": "targetable",
+          "interest": {
+            "id": "6008824127395",
+            "name": "The Lumineers",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "The Lumineers"
+            ]
+          },
+          "audience": [
+            1287746,
+            1514390
+          ]
+        },
+        {
+          "name": "Somebody Feed Phil",
+          "status": "not_found",
+          "nearest": []
+        }
+      ],
+      "named_baseline": [
+        {
+          "name": "Patagonia",
+          "status": "targetable",
+          "interest": {
+            "id": "6003413530453",
+            "name": "Patagonia",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Patagonia"
+            ]
+          },
+          "audience": [
+            15838137,
+            18625650
+          ]
+        },
+        {
+          "name": "On Running",
+          "status": "not_found",
+          "nearest": [
+            "Heavy metal music",
+            "Sports comedy movies"
+          ]
+        },
+        {
+          "name": "Brooklyn Half Marathon",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "New York Road Runners",
+          "status": "targetable",
+          "interest": {
+            "id": "6002949839079",
+            "name": "New York Road Runners",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "New York Road Runners"
+            ]
+          },
+          "audience": [
+            141394,
+            166280
+          ]
+        },
+        {
+          "name": "Strava",
+          "status": "targetable",
+          "interest": {
+            "id": "6003401026143",
+            "name": "strava",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "strava"
+            ]
+          },
+          "audience": [
+            4157457,
+            4889170
+          ]
+        },
+        {
+          "name": "Outdoor Voices",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Rothy's",
+          "status": "not_found",
+          "nearest": []
+        }
+      ],
+      "app_baseline": [
+        {
+          "name": "Running",
+          "status": "targetable",
+          "interest": {
+            "id": "6003397496347",
+            "name": "Running",
+            "path": [
+              "Interests",
+              "Fitness and wellness",
+              "Running"
+            ]
+          },
+          "audience": [
+            295862363,
+            347934139
+          ]
+        },
+        {
+          "name": "Sustainable living",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "New York Road Runners",
+          "status": "targetable",
+          "interest": {
+            "id": "6002949839079",
+            "name": "New York Road Runners",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "New York Road Runners"
+            ]
+          },
+          "audience": [
+            141394,
+            166280
+          ]
+        },
+        {
+          "name": "Strava",
+          "status": "targetable",
+          "interest": {
+            "id": "6003401026143",
+            "name": "strava",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "strava"
+            ]
+          },
+          "audience": [
+            4157457,
+            4889170
+          ]
+        },
+        {
+          "name": "Patagonia",
+          "status": "targetable",
+          "interest": {
+            "id": "6003413530453",
+            "name": "Patagonia",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Patagonia"
+            ]
+          },
+          "audience": [
+            15838137,
+            18625650
+          ]
+        },
+        {
+          "name": "On Running",
+          "status": "not_found",
+          "nearest": [
+            "Heavy metal music",
+            "Sports comedy movies"
+          ]
+        }
+      ]
+    },
+    {
+      "product": "Specialty coffee subscription, $25 a month",
+      "market": "Seoul, South Korea",
+      "reference": "Blue Bottle Coffee",
+      "taste_brief": [
+        {
+          "name": "Stumptown Coffee Roasters",
+          "status": "targetable",
+          "interest": {
+            "id": "6003197219926",
+            "name": "Stumptown Coffee Roasters",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Stumptown Coffee Roasters"
+            ]
+          },
+          "audience": [
+            40322,
+            47419
+          ]
+        },
+        {
+          "name": "Verve Coffee Roasters",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "La Colombe Coffee Roasters",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Eater",
+          "status": "not_found",
+          "nearest": [
+            "MeatEater",
+            "Eater LA",
+            "Eater SF"
+          ]
+        },
+        {
+          "name": "Momofuku",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Jamie xx",
+          "status": "targetable",
+          "interest": {
+            "id": "6003108518590",
+            "name": "Jamie xx",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Jamie xx"
+            ]
+          },
+          "audience": [
+            161326,
+            189720
+          ]
+        },
+        {
+          "name": "Single's Inferno",
+          "status": "not_found",
+          "nearest": []
+        }
+      ],
+      "named_baseline": [
+        {
+          "name": "Fritz Coffee Company",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Anthracite Coffee Roasters",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Terarosa Coffee",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Stumptown Coffee Roasters",
+          "status": "targetable",
+          "interest": {
+            "id": "6003197219926",
+            "name": "Stumptown Coffee Roasters",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Stumptown Coffee Roasters"
+            ]
+          },
+          "audience": [
+            40322,
+            47419
+          ]
+        },
+        {
+          "name": "Monocle",
+          "status": "targetable",
+          "interest": {
+            "id": "6003389906405",
+            "name": "Monocle (media company)",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Monocle (media company)"
+            ]
+          },
+          "audience": [
+            36437,
+            42850
+          ]
+        },
+        {
+          "name": "Kinfolk",
+          "status": "targetable",
+          "interest": {
+            "id": "6012848190757",
+            "name": "Kinfolk",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Kinfolk"
+            ]
+          },
+          "audience": [
+            168039,
+            197615
+          ]
+        },
+        {
+          "name": "Aesop",
+          "status": "targetable",
+          "interest": {
+            "id": "6003043223515",
+            "name": "Aesop",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Aesop"
+            ]
+          },
+          "audience": [
+            1244699,
+            1463767
+          ]
+        }
+      ],
+      "app_baseline": [
+        {
+          "name": "Specialty coffee",
+          "status": "targetable",
+          "interest": {
+            "id": "6003029703455",
+            "name": "Specialty coffee",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Specialty coffee"
+            ]
+          },
+          "audience": [
+            12758278,
+            15003736
+          ]
+        },
+        {
+          "name": "Home brewing and pour over",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Minimalist interior design and lifestyle",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Cafe culture and brunch",
+          "status": "not_found",
+          "nearest": []
+        }
+      ]
+    },
+    {
+      "product": "Turntable for first time vinyl buyers, $199",
+      "market": "Berlin, Germany",
+      "reference": "Audio-Technica",
+      "taste_brief": [
+        {
+          "name": "Discogs",
+          "status": "targetable",
+          "interest": {
+            "id": "6003141932739",
+            "name": "Discogs",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Discogs"
+            ]
+          },
+          "audience": [
+            606785,
+            713580
+          ]
+        },
+        {
+          "name": "Bandcamp",
+          "status": "targetable",
+          "interest": {
+            "id": "6003780841452",
+            "name": "Bandcamp",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Bandcamp"
+            ]
+          },
+          "audience": [
+            3260722,
+            3834610
+          ]
+        },
+        {
+          "name": "Ableton",
+          "status": "targetable",
+          "interest": {
+            "id": "6003287387800",
+            "name": "Ableton",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Ableton"
+            ]
+          },
+          "audience": [
+            3124289,
+            3674164
+          ]
+        },
+        {
+          "name": "Native Instruments",
+          "status": "targetable",
+          "interest": {
+            "id": "6003290908938",
+            "name": "Native Instruments",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Native Instruments"
+            ]
+          },
+          "audience": [
+            3654047,
+            4297160
+          ]
+        },
+        {
+          "name": "SoundCloud",
+          "status": "targetable",
+          "interest": {
+            "id": "6003253526111",
+            "name": "SoundCloud",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "SoundCloud"
+            ]
+          },
+          "audience": [
+            57273222,
+            67353310
+          ]
+        },
+        {
+          "name": "Sennheiser",
+          "status": "targetable",
+          "interest": {
+            "id": "6003280302010",
+            "name": "Sennheiser",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Sennheiser"
+            ]
+          },
+          "audience": [
+            6612287,
+            7776050
+          ]
+        },
+        {
+          "name": "Stones Throw Records",
+          "status": "targetable",
+          "interest": {
+            "id": "6003241832011",
+            "name": "Stones Throw Records",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Stones Throw Records"
+            ]
+          },
+          "audience": [
+            545680,
+            641720
+          ]
+        }
+      ],
+      "named_baseline": [
+        {
+          "name": "Rough Trade",
+          "status": "not_found",
+          "nearest": [
+            "Rough Trade Records",
+            "Alternative rock"
+          ]
+        },
+        {
+          "name": "Pitchfork",
+          "status": "not_found",
+          "nearest": [
+            "Pitchfork Music Festival",
+            "Pitchfork Media"
+          ]
+        },
+        {
+          "name": "Berghain",
+          "status": "targetable",
+          "interest": {
+            "id": "6002998072244",
+            "name": "Berghain",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Berghain"
+            ]
+          },
+          "audience": [
+            676258,
+            795280
+          ]
+        },
+        {
+          "name": "Tame Impala",
+          "status": "targetable",
+          "interest": {
+            "id": "6003650993090",
+            "name": "Tame Impala",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Tame Impala"
+            ]
+          },
+          "audience": [
+            2103397,
+            2473595
+          ]
+        },
+        {
+          "name": "Fleetwood Mac",
+          "status": "targetable",
+          "interest": {
+            "id": "6002868459710",
+            "name": "Fleetwood Mac",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Fleetwood Mac"
+            ]
+          },
+          "audience": [
+            2378341,
+            2796930
+          ]
+        },
+        {
+          "name": "Kraftwerk",
+          "status": "targetable",
+          "interest": {
+            "id": "6003650521113",
+            "name": "Kraftwerk",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Kraftwerk"
+            ]
+          },
+          "audience": [
+            957142,
+            1125600
+          ]
+        },
+        {
+          "name": "Hard Wax",
+          "status": "targetable",
+          "interest": {
+            "id": "6008254093742",
+            "name": "Hard Wax",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Hard Wax"
+            ]
+          },
+          "audience": [
+            36241,
+            42620
+          ]
+        }
+      ],
+      "app_baseline": [
+        {
+          "name": "Vinyl records",
+          "status": "targetable",
+          "interest": {
+            "id": "6003134679647",
+            "name": "Vinyl Records",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Vinyl Records"
+            ]
+          },
+          "audience": [
+            15662831,
+            18419490
+          ]
+        },
+        {
+          "name": "Techno and electronic music",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Interior design",
+          "status": "targetable",
+          "interest": {
+            "id": "6002920953955",
+            "name": "Interior design",
+            "path": [
+              "Interests",
+              "Design",
+              "Interior design"
+            ]
+          },
+          "audience": [
+            488461241,
+            574430420
+          ]
+        },
+        {
+          "name": "Independent record stores",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Spotify and music streaming",
+          "status": "not_found",
+          "nearest": []
+        }
+      ]
+    },
+    {
+      "product": "Plant based protein bars",
+      "market": "Los Angeles, USA",
+      "reference": "RXBAR",
+      "taste_brief": [
+        {
+          "name": "Larabar",
+          "status": "not_found",
+          "nearest": [
+            "Lärabar"
+          ]
+        },
+        {
+          "name": "KIND Snacks",
+          "status": "not_found",
+          "nearest": [
+            "KIND Healthy Snacks"
+          ]
+        },
+        {
+          "name": "Perfect Bar",
+          "status": "not_found",
+          "nearest": [
+            "Alternative rock",
+            "Wedding websites and blogs"
+          ]
+        },
+        {
+          "name": "Orgain",
+          "status": "targetable",
+          "interest": {
+            "id": "6003201240265",
+            "name": "Orgain",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Orgain"
+            ]
+          },
+          "audience": [
+            233375,
+            274450
+          ]
+        },
+        {
+          "name": "Athleta",
+          "status": "targetable",
+          "interest": {
+            "id": "6003258364769",
+            "name": "Athleta",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Athleta"
+            ]
+          },
+          "audience": [
+            8622814,
+            10140430
+          ]
+        },
+        {
+          "name": "Ragnar Relay",
+          "status": "not_found",
+          "nearest": [
+            "Ragnar Relay Series",
+            "Running races and events"
+          ]
+        },
+        {
+          "name": "Health-Ade Kombucha",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Jack Johnson",
+          "status": "targetable",
+          "interest": {
+            "id": "6003486968564",
+            "name": "Jack Johnson (musician)",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Jack Johnson (musician)"
+            ]
+          },
+          "audience": [
+            1026164,
+            1206770
+          ]
+        },
+        {
+          "name": "Somebody Feed Phil",
+          "status": "not_found",
+          "nearest": []
+        }
+      ],
+      "named_baseline": [
+        {
+          "name": "Erewhon Market",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Whole Foods Market",
+          "status": "targetable",
+          "interest": {
+            "id": "6003323351097",
+            "name": "Whole Foods Market",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Whole Foods Market"
+            ]
+          },
+          "audience": [
+            12381750,
+            14560939
+          ]
+        },
+        {
+          "name": "Gwyneth Paltrow's Goop",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Rich Roll Podcast",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Equinox",
+          "status": "not_found",
+          "nearest": [
+            "Chevrolet Equinox",
+            "Equinox Fitness"
+          ]
+        },
+        {
+          "name": "Sweetgreen",
+          "status": "targetable",
+          "interest": {
+            "id": "815423978507331",
+            "name": "Sweetgreen",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Sweetgreen"
+            ]
+          },
+          "audience": [
+            219489,
+            258120
+          ]
+        },
+        {
+          "name": "Thrive Market",
+          "status": "targetable",
+          "interest": {
+            "id": "888946574506161",
+            "name": "Thrive Market",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Thrive Market"
+            ]
+          },
+          "audience": [
+            1220654,
+            1435490
+          ]
+        }
+      ],
+      "app_baseline": [
+        {
+          "name": "Plant based diet",
+          "status": "targetable",
+          "interest": {
+            "id": "761327907335202",
+            "name": "Plant-based diet",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Plant-based diet"
+            ]
+          },
+          "audience": [
+            4985670,
+            5863148
+          ]
+        },
+        {
+          "name": "Pilates and yoga",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Trail running and hiking",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Whole Foods Market and Erewhon",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Clean eating and organic food",
+          "status": "not_found",
+          "nearest": []
+        }
+      ]
+    },
+    {
+      "product": "Flavored sparkling water",
+      "market": "Chicago, USA",
+      "reference": "LaCroix",
+      "taste_brief": [
+        {
+          "name": "Trader Joe's",
+          "status": "targetable",
+          "interest": {
+            "id": "6003306155621",
+            "name": "Trader Joe's",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Trader Joe's"
+            ]
+          },
+          "audience": [
+            4814574,
+            5661940
+          ]
+        },
+        {
+          "name": "Orangetheory Fitness",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "RXBAR",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Sylvan Esso",
+          "status": "targetable",
+          "interest": {
+            "id": "391261564389969",
+            "name": "Sylvan Esso",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Sylvan Esso"
+            ]
+          },
+          "audience": [
+            73656,
+            86620
+          ]
+        },
+        {
+          "name": "Grace and Frankie",
+          "status": "targetable",
+          "interest": {
+            "id": "481763051997323",
+            "name": "Grace and Frankie",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Grace and Frankie"
+            ]
+          },
+          "audience": [
+            564022,
+            663290
+          ]
+        },
+        {
+          "name": "Care/of",
+          "status": "not_found",
+          "nearest": [
+            "Insurance",
+            "Veterinary medicine",
+            "Animal welfare"
+          ]
+        }
+      ],
+      "named_baseline": [
+        {
+          "name": "Bubly",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Spindrift",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Topo Chico",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Whole Foods Market",
+          "status": "targetable",
+          "interest": {
+            "id": "6003323351097",
+            "name": "Whole Foods Market",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Whole Foods Market"
+            ]
+          },
+          "audience": [
+            12381750,
+            14560939
+          ]
+        },
+        {
+          "name": "Trader Joe's",
+          "status": "targetable",
+          "interest": {
+            "id": "6003306155621",
+            "name": "Trader Joe's",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Trader Joe's"
+            ]
+          },
+          "audience": [
+            4814574,
+            5661940
+          ]
+        },
+        {
+          "name": "Peloton",
+          "status": "targetable",
+          "interest": {
+            "id": "6003048430281",
+            "name": "Peloton",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Peloton"
+            ]
+          },
+          "audience": [
+            9141300,
+            10750169
+          ]
+        },
+        {
+          "name": "Chicago Cubs",
+          "status": "targetable",
+          "interest": {
+            "id": "6003312988159",
+            "name": "Chicago Cubs",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Chicago Cubs"
+            ]
+          },
+          "audience": [
+            6386896,
+            7510990
+          ]
+        }
+      ],
+      "app_baseline": [
+        {
+          "name": "Sparkling water",
+          "status": "not_found",
+          "nearest": [
+            "La Croix Sparkling Water",
+            "Carbonated water"
+          ]
+        },
+        {
+          "name": "Healthy living",
+          "status": "not_found",
+          "nearest": [
+            "Fitness and wellness",
+            "Self care",
+            "Living Healthy"
+          ]
+        },
+        {
+          "name": "Running",
+          "status": "targetable",
+          "interest": {
+            "id": "6003397496347",
+            "name": "Running",
+            "path": [
+              "Interests",
+              "Fitness and wellness",
+              "Running"
+            ]
+          },
+          "audience": [
+            295862363,
+            347934139
+          ]
+        },
+        {
+          "name": "Yoga and fitness classes",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Mocktails and non alcoholic drinks",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Craft beer and local restaurants",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Whole Foods Market",
+          "status": "targetable",
+          "interest": {
+            "id": "6003323351097",
+            "name": "Whole Foods Market",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Whole Foods Market"
+            ]
+          },
+          "audience": [
+            12381750,
+            14560939
+          ]
+        }
+      ]
+    },
+    {
+      "product": "Affordable skincare serum, $15",
+      "market": "Paris, France",
+      "reference": "The Ordinary",
+      "taste_brief": [
+        {
+          "name": "Vichy",
+          "status": "targetable",
+          "interest": {
+            "id": "6003306314421",
+            "name": "Vichy",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Vichy"
+            ]
+          },
+          "audience": [
+            26878611,
+            31609247
+          ]
+        },
+        {
+          "name": "Avène",
+          "status": "targetable",
+          "interest": {
+            "id": "6002964543517",
+            "name": "Avène",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Avène"
+            ]
+          },
+          "audience": [
+            7464628,
+            8778403
+          ]
+        },
+        {
+          "name": "Clarins",
+          "status": "targetable",
+          "interest": {
+            "id": "6003187431255",
+            "name": "Clarins",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Clarins"
+            ]
+          },
+          "audience": [
+            17434802,
+            20503328
+          ]
+        },
+        {
+          "name": "Kiehl's",
+          "status": "targetable",
+          "interest": {
+            "id": "6003103741634",
+            "name": "Kiehl's",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Kiehl's"
+            ]
+          },
+          "audience": [
+            19566149,
+            23009792
+          ]
+        },
+        {
+          "name": "Emily in Paris",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Dior Beauty",
+          "status": "not_found",
+          "nearest": [
+            "Beauty Dior"
+          ]
+        }
+      ],
+      "named_baseline": [
+        {
+          "name": "Typology Paris",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "La Roche-Posay",
+          "status": "targetable",
+          "interest": {
+            "id": "6003121295122",
+            "name": "La Roche-Posay",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "La Roche-Posay"
+            ]
+          },
+          "audience": [
+            26050994,
+            30635970
+          ]
+        },
+        {
+          "name": "Sephora",
+          "status": "targetable",
+          "interest": {
+            "id": "6003059617332",
+            "name": "Sephora",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Sephora"
+            ]
+          },
+          "audience": [
+            116237769,
+            136695617
+          ]
+        },
+        {
+          "name": "Beauty Garden",
+          "status": "not_found",
+          "nearest": [
+            "Drama movies"
+          ]
+        },
+        {
+          "name": "Emily in Paris",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Cult Beauty",
+          "status": "targetable",
+          "interest": {
+            "id": "6003954475666",
+            "name": "Cult Beauty",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Cult Beauty"
+            ]
+          },
+          "audience": [
+            907826,
+            1067604
+          ]
+        },
+        {
+          "name": "Caudalie",
+          "status": "targetable",
+          "interest": {
+            "id": "6003695187719",
+            "name": "Caudalie",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Caudalie"
+            ]
+          },
+          "audience": [
+            2990892,
+            3517289
+          ]
+        }
+      ],
+      "app_baseline": [
+        {
+          "name": "Skin care",
+          "status": "targetable",
+          "interest": {
+            "id": "664130153728886",
+            "name": "Skin care",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Skin care"
+            ]
+          },
+          "audience": [
+            257137942,
+            302394220
+          ]
+        },
+        {
+          "name": "The Ordinary (brand)",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Sephora",
+          "status": "targetable",
+          "interest": {
+            "id": "6003059617332",
+            "name": "Sephora",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Sephora"
+            ]
+          },
+          "audience": [
+            116237769,
+            136695617
+          ]
+        },
+        {
+          "name": "Clean beauty and minimalism",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Cosmetics and beauty influencers",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Sustainable living",
+          "status": "not_found",
+          "nearest": []
+        }
+      ]
+    },
+    {
+      "product": "Yoga leggings",
+      "market": "Sydney, Australia",
+      "reference": "Lululemon",
+      "taste_brief": [
+        {
+          "name": "ClassPass",
+          "status": "targetable",
+          "interest": {
+            "id": "6015919764283",
+            "name": "ClassPass",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "ClassPass"
+            ]
+          },
+          "audience": [
+            922907,
+            1085339
+          ]
+        },
+        {
+          "name": "Sweat",
+          "status": "not_found",
+          "nearest": [
+            "Sweater",
+            "Cardigan (sweater)",
+            "Sweatpants"
+          ]
+        },
+        {
+          "name": "Aritzia",
+          "status": "targetable",
+          "interest": {
+            "id": "6003583348707",
+            "name": "Aritzia",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Aritzia"
+            ]
+          },
+          "audience": [
+            581090,
+            683362
+          ]
+        },
+        {
+          "name": "Spiritual Gangster",
+          "status": "targetable",
+          "interest": {
+            "id": "6003316918901",
+            "name": "Spiritual Gangster",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Spiritual Gangster"
+            ]
+          },
+          "audience": [
+            211309,
+            248500
+          ]
+        },
+        {
+          "name": "Vance Joy",
+          "status": "targetable",
+          "interest": {
+            "id": "6015905009157",
+            "name": "Vance Joy",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Vance Joy"
+            ]
+          },
+          "audience": [
+            355748,
+            418360
+          ]
+        },
+        {
+          "name": "The Paper Kites",
+          "status": "targetable",
+          "interest": {
+            "id": "6010283570488",
+            "name": "The Paper Kites",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "The Paper Kites"
+            ]
+          },
+          "audience": [
+            54124,
+            63650
+          ]
+        },
+        {
+          "name": "Jay Shetty",
+          "status": "not_found",
+          "nearest": [
+            "Filmmakers, Directors, and Producers",
+            "Actors"
+          ]
+        },
+        {
+          "name": "Emily in Paris",
+          "status": "not_found",
+          "nearest": []
+        }
+      ],
+      "named_baseline": [
+        {
+          "name": "Sporteluxe",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Gymshark",
+          "status": "targetable",
+          "interest": {
+            "id": "251115188565016",
+            "name": "Gymshark",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Gymshark"
+            ]
+          },
+          "audience": [
+            10470232,
+            12312993
+          ]
+        },
+        {
+          "name": "Alo Yoga",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Sweaty Betty",
+          "status": "targetable",
+          "interest": {
+            "id": "6004957931902",
+            "name": "Sweaty Betty",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Sweaty Betty"
+            ]
+          },
+          "audience": [
+            2352210,
+            2766200
+          ]
+        },
+        {
+          "name": "Lorna Jane",
+          "status": "targetable",
+          "interest": {
+            "id": "6003525810494",
+            "name": "lorna jane",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "lorna jane"
+            ]
+          },
+          "audience": [
+            941348,
+            1107026
+          ]
+        },
+        {
+          "name": "Bondi Beach",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Down Dog",
+          "status": "not_found",
+          "nearest": [
+            "Alternative rock",
+            "Sitcoms",
+            "Children's Animated Movies"
+          ]
+        }
+      ],
+      "app_baseline": [
+        {
+          "name": "Yoga",
+          "status": "targetable",
+          "interest": {
+            "id": "6003306084421",
+            "name": "Yoga",
+            "path": [
+              "Interests",
+              "Fitness and wellness",
+              "Yoga"
+            ]
+          },
+          "audience": [
+            382445073,
+            449755406
+          ]
+        },
+        {
+          "name": "Pilates",
+          "status": "targetable",
+          "interest": {
+            "id": "6003159020675",
+            "name": "Pilates",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Pilates"
+            ]
+          },
+          "audience": [
+            38336386,
+            45083590
+          ]
+        },
+        {
+          "name": "Activewear",
+          "status": "not_found",
+          "nearest": [
+            "Sportswear (activewear)"
+          ]
+        },
+        {
+          "name": "Athleisure",
+          "status": "targetable",
+          "interest": {
+            "id": "1676701349243874",
+            "name": "Athleisure",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Athleisure"
+            ]
+          },
+          "audience": [
+            10516062,
+            12366890
+          ]
+        },
+        {
+          "name": "Wellness and mindfulness",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Online shopping",
+          "status": "targetable",
+          "interest": {
+            "id": "6003346592981",
+            "name": "Online shopping",
+            "path": [
+              "Interests",
+              "Shopping",
+              "Online shopping"
+            ]
+          },
+          "audience": [
+            1347410025,
+            1584554190
+          ]
+        }
+      ]
+    },
+    {
+      "product": "Hard seltzer",
+      "market": "Austin, USA",
+      "reference": "White Claw",
+      "taste_brief": [
+        {
+          "name": "Parker McCollum",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Cody Johnson",
+          "status": "not_found",
+          "nearest": [
+            "Cody Johnson Band",
+            "Country music",
+            "Actors"
+          ]
+        },
+        {
+          "name": "Chris Stapleton",
+          "status": "targetable",
+          "interest": {
+            "id": "6003632267583",
+            "name": "Chris Stapleton",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Chris Stapleton"
+            ]
+          },
+          "audience": [
+            1490943,
+            1753350
+          ]
+        },
+        {
+          "name": "Orangetheory Fitness",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Peloton",
+          "status": "targetable",
+          "interest": {
+            "id": "6003048430281",
+            "name": "Peloton",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Peloton"
+            ]
+          },
+          "audience": [
+            9141300,
+            10750169
+          ]
+        },
+        {
+          "name": "Liquid I.V.",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "LaCroix",
+          "status": "not_found",
+          "nearest": [
+            "Christian Lacroix",
+            "Maurice Lacroix"
+          ]
+        },
+        {
+          "name": "Barstool Sports",
+          "status": "targetable",
+          "interest": {
+            "id": "6013592768865",
+            "name": "Barstool Sports",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Barstool Sports"
+            ]
+          },
+          "audience": [
+            26996989,
+            31748460
+          ]
+        }
+      ],
+      "named_baseline": [
+        {
+          "name": "Topo Chico",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Austin City Limits Music Festival",
+          "status": "targetable",
+          "interest": {
+            "id": "6003127087124",
+            "name": "Austin City Limits Music Festival",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Austin City Limits Music Festival"
+            ]
+          },
+          "audience": [
+            553852,
+            651330
+          ]
+        },
+        {
+          "name": "Barton Springs Pool",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Tito's Handmade Vodka",
+          "status": "not_found",
+          "nearest": [
+            "Tito's Vodka"
+          ]
+        },
+        {
+          "name": "Modelo",
+          "status": "not_found",
+          "nearest": [
+            "Grupo Modelo",
+            "Cerveza Modelo",
+            "agencia de azafatas y modelos"
+          ]
+        },
+        {
+          "name": "Lady Bird Lake",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Yeti Coolers",
+          "status": "targetable",
+          "interest": {
+            "id": "6003158657705",
+            "name": "YETI Coolers",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "YETI Coolers"
+            ]
+          },
+          "audience": [
+            637,
+            750
+          ]
+        }
+      ],
+      "app_baseline": [
+        {
+          "name": "Austin City Limits Music Festival",
+          "status": "targetable",
+          "interest": {
+            "id": "6003127087124",
+            "name": "Austin City Limits Music Festival",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Austin City Limits Music Festival"
+            ]
+          },
+          "audience": [
+            553852,
+            651330
+          ]
+        },
+        {
+          "name": "Paddleboarding and kayaking",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Craft beer and local breweries",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Running and fitness studios",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Food trucks and patio dining",
+          "status": "not_found",
+          "nearest": []
+        }
+      ]
+    },
+    {
+      "product": "Hazy IPA craft beer",
+      "market": "Portland, USA",
+      "reference": "Sierra Nevada",
+      "taste_brief": [
+        {
+          "name": "Rogue Ales",
+          "status": "not_found",
+          "nearest": [
+            "Rogue Ales & Spirits",
+            "Brewery"
+          ]
+        },
+        {
+          "name": "Deschutes Brewery",
+          "status": "targetable",
+          "interest": {
+            "id": "6003650963890",
+            "name": "Deschutes Brewery",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Deschutes Brewery"
+            ]
+          },
+          "audience": [
+            85187,
+            100180
+          ]
+        },
+        {
+          "name": "Lagunitas Brewing Company",
+          "status": "targetable",
+          "interest": {
+            "id": "6003303433260",
+            "name": "Lagunitas Brewing Company",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Lagunitas Brewing Company"
+            ]
+          },
+          "audience": [
+            506590,
+            595750
+          ]
+        },
+        {
+          "name": "Portlandia",
+          "status": "targetable",
+          "interest": {
+            "id": "6003549288198",
+            "name": "Portlandia (TV series)",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Portlandia (TV series)"
+            ]
+          },
+          "audience": [
+            402278,
+            473080
+          ]
+        },
+        {
+          "name": "Primus",
+          "status": "targetable",
+          "interest": {
+            "id": "6003341500854",
+            "name": "Primus (band)",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Primus (band)"
+            ]
+          },
+          "audience": [
+            3231437,
+            3800170
+          ]
+        },
+        {
+          "name": "Tool",
+          "status": "targetable",
+          "interest": {
+            "id": "6003317881341",
+            "name": "Tool",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Tool"
+            ]
+          },
+          "audience": [
+            145076581,
+            170610060
+          ]
+        },
+        {
+          "name": "Soundgarden",
+          "status": "targetable",
+          "interest": {
+            "id": "6003331717637",
+            "name": "Soundgarden",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Soundgarden"
+            ]
+          },
+          "audience": [
+            1685765,
+            1982460
+          ]
+        }
+      ],
+      "named_baseline": [
+        {
+          "name": "Deschutes Brewery",
+          "status": "targetable",
+          "interest": {
+            "id": "6003650963890",
+            "name": "Deschutes Brewery",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Deschutes Brewery"
+            ]
+          },
+          "audience": [
+            85187,
+            100180
+          ]
+        },
+        {
+          "name": "Bridgeport Brewing Company",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Pokay Pliny the Elder",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Portland Timbers",
+          "status": "targetable",
+          "interest": {
+            "id": "6003636470583",
+            "name": "Portland Timbers",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Portland Timbers"
+            ]
+          },
+          "audience": [
+            606794,
+            713590
+          ]
+        },
+        {
+          "name": "Powell's Books",
+          "status": "targetable",
+          "interest": {
+            "id": "6003366869077",
+            "name": "Powell's Books, Inc.",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Powell's Books, Inc."
+            ]
+          },
+          "audience": [
+            89183,
+            104880
+          ]
+        },
+        {
+          "name": "Breaking Bad",
+          "status": "targetable",
+          "interest": {
+            "id": "6002966778574",
+            "name": "Breaking Bad",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Breaking Bad"
+            ]
+          },
+          "audience": [
+            14165875,
+            16659070
+          ]
+        },
+        {
+          "name": "Hop Valley Brewing",
+          "status": "not_found",
+          "nearest": []
+        }
+      ],
+      "app_baseline": [
+        {
+          "name": "Craft beer",
+          "status": "not_found",
+          "nearest": [
+            "Craft Beer and Brewing",
+            "American Craft Beer Week",
+            "Doolally Craft Beers (and a Cider!)"
+          ]
+        },
+        {
+          "name": "India pale ale",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Homebrewing",
+          "status": "targetable",
+          "interest": {
+            "id": "6004114906824",
+            "name": "Homebrewing",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Homebrewing"
+            ]
+          },
+          "audience": [
+            2115204,
+            2487480
+          ]
+        },
+        {
+          "name": "Hiking and backpacking",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Food trucks and street food",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Sustainable living",
+          "status": "not_found",
+          "nearest": []
+        }
+      ]
+    },
+    {
+      "product": "Language learning app subscription",
+      "market": "Mexico City, Mexico",
+      "reference": "Duolingo",
+      "taste_brief": [
+        {
+          "name": "Google Maps",
+          "status": "targetable",
+          "interest": {
+            "id": "6003732035904",
+            "name": "Google Maps",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Google Maps"
+            ]
+          },
+          "audience": [
+            50733767,
+            59662910
+          ]
+        },
+        {
+          "name": "Waze",
+          "status": "targetable",
+          "interest": {
+            "id": "6003255335688",
+            "name": "Waze",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Waze"
+            ]
+          },
+          "audience": [
+            76248086,
+            89667750
+          ]
+        },
+        {
+          "name": "Kindle",
+          "status": "not_found",
+          "nearest": [
+            "Amazon Kindle",
+            "Kindle Store",
+            "Kindle Fire"
+          ]
+        },
+        {
+          "name": "edX",
+          "status": "targetable",
+          "interest": {
+            "id": "6009143161184",
+            "name": "EdX",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "EdX"
+            ]
+          },
+          "audience": [
+            2319200,
+            2727380
+          ]
+        },
+        {
+          "name": "The Economist",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Emily in Paris",
+          "status": "not_found",
+          "nearest": []
+        }
+      ],
+      "named_baseline": [
+        {
+          "name": "Babbel",
+          "status": "targetable",
+          "interest": {
+            "id": "6003648360438",
+            "name": "Babbel",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Babbel"
+            ]
+          },
+          "audience": [
+            6649710,
+            7820060
+          ]
+        },
+        {
+          "name": "Netflix",
+          "status": "targetable",
+          "interest": {
+            "id": "6003378723965",
+            "name": "Netflix",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Netflix"
+            ]
+          },
+          "audience": [
+            469131972,
+            551699200
+          ]
+        },
+        {
+          "name": "TED Talks",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Coursera",
+          "status": "targetable",
+          "interest": {
+            "id": "6007069252238",
+            "name": "Coursera",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Coursera"
+            ]
+          },
+          "audience": [
+            3940051,
+            4633500
+          ]
+        },
+        {
+          "name": "British Council",
+          "status": "targetable",
+          "interest": {
+            "id": "6003352693319",
+            "name": "British Council",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "British Council"
+            ]
+          },
+          "audience": [
+            20530110,
+            24143410
+          ]
+        },
+        {
+          "name": "Casa del Lago UNAM",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Easy Languages",
+          "status": "not_found",
+          "nearest": []
+        }
+      ],
+      "app_baseline": [
+        {
+          "name": "Language learning",
+          "status": "not_found",
+          "nearest": [
+            "Fluenz (language learning software)",
+            "English as a second or foreign language",
+            "Language education"
+          ]
+        },
+        {
+          "name": "Online education and e-learning",
+          "status": "not_found",
+          "nearest": [
+            "Educational technology"
+          ]
+        },
+        {
+          "name": "Study abroad and international travel",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "LinkedIn and career development",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Netflix and international series",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "TOEFL and IELTS test preparation",
+          "status": "not_found",
+          "nearest": []
+        }
+      ]
+    },
+    {
+      "product": "Meal kit delivery",
+      "market": "Toronto, Canada",
+      "reference": "HelloFresh",
+      "taste_brief": [
+        {
+          "name": "MyFitnessPal",
+          "status": "targetable",
+          "interest": {
+            "id": "6009539829781",
+            "name": "MyFitnessPal",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "MyFitnessPal"
+            ]
+          },
+          "audience": [
+            8017448,
+            9428520
+          ]
+        },
+        {
+          "name": "Headspace",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Fitbit",
+          "status": "targetable",
+          "interest": {
+            "id": "6002995668044",
+            "name": "Fitbit",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Fitbit"
+            ]
+          },
+          "audience": [
+            14558775,
+            17121120
+          ]
+        },
+        {
+          "name": "Vitamix",
+          "status": "targetable",
+          "interest": {
+            "id": "6003175930728",
+            "name": "Vitamix",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Vitamix"
+            ]
+          },
+          "audience": [
+            904600,
+            1063810
+          ]
+        },
+        {
+          "name": "Williams-Sonoma",
+          "status": "targetable",
+          "interest": {
+            "id": "6002878996572",
+            "name": "Williams-Sonoma",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Williams-Sonoma"
+            ]
+          },
+          "audience": [
+            10527500,
+            12380340
+          ]
+        },
+        {
+          "name": "Deliciously Ella",
+          "status": "targetable",
+          "interest": {
+            "id": "585894701552081",
+            "name": "Deliciously Ella",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Deliciously Ella"
+            ]
+          },
+          "audience": [
+            239013,
+            281080
+          ]
+        },
+        {
+          "name": "Somebody Feed Phil",
+          "status": "not_found",
+          "nearest": []
+        }
+      ],
+      "named_baseline": [
+        {
+          "name": "Chef's Plate",
+          "status": "not_found",
+          "nearest": [
+            "Recipes"
+          ]
+        },
+        {
+          "name": "Bon Appétit",
+          "status": "targetable",
+          "interest": {
+            "id": "6003288054951",
+            "name": "Bon Appétit",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Bon Appétit"
+            ]
+          },
+          "audience": [
+            8454557,
+            9942560
+          ]
+        },
+        {
+          "name": "Gordon Ramsay",
+          "status": "targetable",
+          "interest": {
+            "id": "6004179045695",
+            "name": "Gordon Ramsay",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Gordon Ramsay"
+            ]
+          },
+          "audience": [
+            15913180,
+            18713900
+          ]
+        },
+        {
+          "name": "Salt Fat Acid Heat",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Loblaws",
+          "status": "not_found",
+          "nearest": [
+            "Real Canadian Superstore"
+          ]
+        },
+        {
+          "name": "Instagram: Budget Bytes",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "The Great Canadian Baking Show",
+          "status": "not_found",
+          "nearest": []
+        }
+      ],
+      "app_baseline": [
+        {
+          "name": "Meal kits and HelloFresh",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Cooking and recipes",
+          "status": "not_found",
+          "nearest": [
+            "Recipes",
+            "Food media and content"
+          ]
+        },
+        {
+          "name": "Healthy eating and nutrition",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Online grocery shopping",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Sustainable living and reducing food waste",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Foodie culture and restaurants in Toronto",
+          "status": "not_found",
+          "nearest": []
+        }
+      ]
+    },
+    {
+      "product": "Streetwear hoodies, limited drops",
+      "market": "Tokyo, Japan",
+      "reference": "Supreme",
+      "taste_brief": [
+        {
+          "name": "Palace Skateboards",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Kith",
+          "status": "not_found",
+          "nearest": [
+            "Guitar",
+            "Electric guitar",
+            "Acoustic guitar"
+          ]
+        },
+        {
+          "name": "Neighborhood",
+          "status": "not_found",
+          "nearest": [
+            "Mister Rogers' Neighborhood",
+            "Daniel Tiger's Neighborhood",
+            "Children's television series"
+          ]
+        },
+        {
+          "name": "Comme des Garcons",
+          "status": "not_found",
+          "nearest": [
+            "Comme des Garçons"
+          ]
+        },
+        {
+          "name": "Off-White",
+          "status": "not_found",
+          "nearest": [
+            "Action movies"
+          ]
+        },
+        {
+          "name": "Y-3",
+          "status": "not_found",
+          "nearest": [
+            "Design",
+            "Do it yourself (DIY)",
+            "Sound recording and reproduction"
+          ]
+        }
+      ],
+      "named_baseline": [
+        {
+          "name": "A Bathing Ape",
+          "status": "targetable",
+          "interest": {
+            "id": "6003007607019",
+            "name": "A Bathing Ape",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "A Bathing Ape"
+            ]
+          },
+          "audience": [
+            15117477,
+            17778153
+          ]
+        },
+        {
+          "name": "NEIGHBORHOOD",
+          "status": "not_found",
+          "nearest": [
+            "Mister Rogers' Neighborhood",
+            "Daniel Tiger's Neighborhood",
+            "Children's television series"
+          ]
+        },
+        {
+          "name": "BEAMS",
+          "status": "targetable",
+          "interest": {
+            "id": "6003738311104",
+            "name": "Beams",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Beams"
+            ]
+          },
+          "audience": [
+            13831428,
+            16265760
+          ]
+        },
+        {
+          "name": "atmos",
+          "status": "not_found",
+          "nearest": [
+            "National Oceanic and Atmospheric Administration",
+            "Atmosphere (music group)",
+            "Dolby Atmos"
+          ]
+        },
+        {
+          "name": "Fragment Design",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "WTAPS",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Palace Skateboards",
+          "status": "not_found",
+          "nearest": []
+        }
+      ],
+      "app_baseline": [
+        {
+          "name": "Streetwear",
+          "status": "targetable",
+          "interest": {
+            "id": "6003299417538",
+            "name": "Streetwear",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Streetwear"
+            ]
+          },
+          "audience": [
+            100994436,
+            118769457
+          ]
+        },
+        {
+          "name": "Supreme (brand)",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "A Bathing Ape",
+          "status": "targetable",
+          "interest": {
+            "id": "6003007607019",
+            "name": "A Bathing Ape",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "A Bathing Ape"
+            ]
+          },
+          "audience": [
+            15117477,
+            17778153
+          ]
+        },
+        {
+          "name": "Harajuku fashion",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Sneakers and sneaker culture",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Skateboarding",
+          "status": "targetable",
+          "interest": {
+            "id": "6003374530525",
+            "name": "Skateboarding",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Skateboarding"
+            ]
+          },
+          "audience": [
+            93964532,
+            110502290
+          ]
+        },
+        {
+          "name": "Hip hop music",
+          "status": "targetable",
+          "interest": {
+            "id": "6003225556345",
+            "name": "Hip hop music",
+            "path": [
+              "Interests",
+              "Entertainment",
+              "Music",
+              "Hip hop music"
+            ]
+          },
+          "audience": [
+            824386198,
+            969478170
+          ]
+        },
+        {
+          "name": "Vintage and secondhand clothing",
+          "status": "not_found",
+          "nearest": []
+        }
+      ]
+    },
+    {
+      "product": "Party card game for adults",
+      "market": "London, UK",
+      "reference": "Exploding Kittens",
+      "taste_brief": [
+        {
+          "name": "Kickstarter",
+          "status": "targetable",
+          "interest": {
+            "id": "6003131536236",
+            "name": "Kickstarter",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Kickstarter"
+            ]
+          },
+          "audience": [
+            24647695,
+            28985690
+          ]
+        },
+        {
+          "name": "BrewDog",
+          "status": "targetable",
+          "interest": {
+            "id": "6002953310955",
+            "name": "BrewDog",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "BrewDog"
+            ]
+          },
+          "audience": [
+            2471819,
+            2906860
+          ]
+        },
+        {
+          "name": "Honest Burgers",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "What We Do in the Shadows",
+          "status": "targetable",
+          "interest": {
+            "id": "6018948079906",
+            "name": "What We Do in the Shadows",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "What We Do in the Shadows"
+            ]
+          },
+          "audience": [
+            364472,
+            428620
+          ]
+        },
+        {
+          "name": "Avenue 5",
+          "status": "not_found",
+          "nearest": [
+            "Shopping",
+            "Alternative rock",
+            "Brazil"
+          ]
+        },
+        {
+          "name": "Good Omens",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "BuzzFeed",
+          "status": "not_found",
+          "nearest": [
+            "BuzzFeed Entertainment",
+            "BuzzFeed Animals",
+            "BuzzFeed DIY"
+          ]
+        }
+      ],
+      "named_baseline": [
+        {
+          "name": "Cards Against Humanity",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "What Do You Meme?",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Taskmaster",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Jackbox Games",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Codenames",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "The Traitors",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Richard Osman's House of Games",
+          "status": "not_found",
+          "nearest": []
+        }
+      ],
+      "app_baseline": [
+        {
+          "name": "Board games and tabletop games",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Cards Against Humanity",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Pub quizzes and nightlife in London",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Stand up comedy",
+          "status": "targetable",
+          "interest": {
+            "id": "6003273904571",
+            "name": "Stand-up comedy",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Stand-up comedy"
+            ]
+          },
+          "audience": [
+            127597559,
+            150054730
+          ]
+        },
+        {
+          "name": "Gift ideas and Secret Santa",
+          "status": "not_found",
+          "nearest": []
+        }
+      ]
+    },
+    {
+      "product": "Natural deodorant",
+      "market": "Melbourne, Australia",
+      "reference": "Native",
+      "taste_brief": [
+        {
+          "name": "Thinx",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Function of Beauty",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Rodan + Fields",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Jay Shetty",
+          "status": "not_found",
+          "nearest": [
+            "Filmmakers, Directors, and Producers",
+            "Actors"
+          ]
+        },
+        {
+          "name": "Brené Brown",
+          "status": "targetable",
+          "interest": {
+            "id": "6003212935886",
+            "name": "Brené Brown",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Brené Brown"
+            ]
+          },
+          "audience": [
+            3358018,
+            3949030
+          ]
+        },
+        {
+          "name": "Grace and Frankie",
+          "status": "targetable",
+          "interest": {
+            "id": "481763051997323",
+            "name": "Grace and Frankie",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Grace and Frankie"
+            ]
+          },
+          "audience": [
+            564022,
+            663290
+          ]
+        },
+        {
+          "name": "Keith Urban",
+          "status": "targetable",
+          "interest": {
+            "id": "6003280487023",
+            "name": "Keith Urban",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Keith Urban"
+            ]
+          },
+          "audience": [
+            4502397,
+            5294820
+          ]
+        }
+      ],
+      "named_baseline": [
+        {
+          "name": "Aesop",
+          "status": "targetable",
+          "interest": {
+            "id": "6003043223515",
+            "name": "Aesop",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Aesop"
+            ]
+          },
+          "audience": [
+            1244699,
+            1463767
+          ]
+        },
+        {
+          "name": "Frank Body",
+          "status": "targetable",
+          "interest": {
+            "id": "6011573564529",
+            "name": "Frank Body",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Frank Body"
+            ]
+          },
+          "audience": [
+            145918,
+            171600
+          ]
+        },
+        {
+          "name": "Sans Soucis",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Kinfolk",
+          "status": "targetable",
+          "interest": {
+            "id": "6012848190757",
+            "name": "Kinfolk",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Kinfolk"
+            ]
+          },
+          "audience": [
+            168039,
+            197615
+          ]
+        },
+        {
+          "name": "Lord Huron",
+          "status": "targetable",
+          "interest": {
+            "id": "6006940616079",
+            "name": "Lord Huron",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Lord Huron"
+            ]
+          },
+          "audience": [
+            111360,
+            130960
+          ]
+        },
+        {
+          "name": "The Details Podcast",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Queen Victoria Market",
+          "status": "not_found",
+          "nearest": []
+        }
+      ],
+      "app_baseline": [
+        {
+          "name": "Natural skincare and clean beauty",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Sustainable living",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Yoga and pilates",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Organic food and wholefoods",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Native (deodorant brand) and similar natural personal care brands",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Running and cycling",
+          "status": "not_found",
+          "nearest": []
+        }
+      ]
+    },
+    {
+      "product": "Recycled outdoor jacket",
+      "market": "Denver, USA",
+      "reference": "Patagonia",
+      "taste_brief": [
+        {
+          "name": "Backcountry.com",
+          "status": "targetable",
+          "interest": {
+            "id": "6002989823520",
+            "name": "Backcountry.com",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Backcountry.com"
+            ]
+          },
+          "audience": [
+            1687687,
+            1984720
+          ]
+        },
+        {
+          "name": "REI",
+          "status": "targetable",
+          "interest": {
+            "id": "6003322136697",
+            "name": "REI",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "REI"
+            ]
+          },
+          "audience": [
+            15214447,
+            17892190
+          ]
+        },
+        {
+          "name": "Backpacker Magazine",
+          "status": "not_found",
+          "nearest": [
+            "Travel content and inspiration",
+            "Backpacker (magazine)"
+          ]
+        },
+        {
+          "name": "Osprey Packs",
+          "status": "targetable",
+          "interest": {
+            "id": "6003445345083",
+            "name": "Osprey Packs",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Osprey Packs"
+            ]
+          },
+          "audience": [
+            179931,
+            211600
+          ]
+        },
+        {
+          "name": "Arc'teryx",
+          "status": "targetable",
+          "interest": {
+            "id": "6003479006364",
+            "name": "Arc'teryx",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Arc'teryx"
+            ]
+          },
+          "audience": [
+            1804022,
+            2121530
+          ]
+        },
+        {
+          "name": "Hipcamp",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Gregory Alan Isakov",
+          "status": "targetable",
+          "interest": {
+            "id": "6002969600092",
+            "name": "Gregory Alan Isakov",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Gregory Alan Isakov"
+            ]
+          },
+          "audience": [
+            202780,
+            238470
+          ]
+        },
+        {
+          "name": "The Lumineers",
+          "status": "targetable",
+          "interest": {
+            "id": "6008824127395",
+            "name": "The Lumineers",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "The Lumineers"
+            ]
+          },
+          "audience": [
+            1287746,
+            1514390
+          ]
+        }
+      ],
+      "named_baseline": [
+        {
+          "name": "REI",
+          "status": "targetable",
+          "interest": {
+            "id": "6003322136697",
+            "name": "REI",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "REI"
+            ]
+          },
+          "audience": [
+            15214447,
+            17892190
+          ]
+        },
+        {
+          "name": "The North Face",
+          "status": "targetable",
+          "interest": {
+            "id": "6003286570927",
+            "name": "The North Face",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "The North Face"
+            ]
+          },
+          "audience": [
+            19889576,
+            23390142
+          ]
+        },
+        {
+          "name": "Arc'teryx",
+          "status": "targetable",
+          "interest": {
+            "id": "6003479006364",
+            "name": "Arc'teryx",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Arc'teryx"
+            ]
+          },
+          "audience": [
+            1804022,
+            2121530
+          ]
+        },
+        {
+          "name": "Red Rocks Amphitheatre",
+          "status": "targetable",
+          "interest": {
+            "id": "6003989186906",
+            "name": "Red Rocks Amphitheatre",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Red Rocks Amphitheatre"
+            ]
+          },
+          "audience": [
+            903460,
+            1062470
+          ]
+        },
+        {
+          "name": "Outside Magazine",
+          "status": "not_found",
+          "nearest": [
+            "INSIDE OUTSIDE Magazine",
+            "Outside (magazine)",
+            "Interior Design Content"
+          ]
+        },
+        {
+          "name": "Yvon Chouinard's Let My People Go Surfing",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Rocky Mountain National Park",
+          "status": "targetable",
+          "interest": {
+            "id": "6003346940674",
+            "name": "Rocky Mountain National Park",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Rocky Mountain National Park"
+            ]
+          },
+          "audience": [
+            851879,
+            1001810
+          ]
+        }
+      ],
+      "app_baseline": [
+        {
+          "name": "Patagonia (brand)",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Hiking and backpacking",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Skiing and snowboarding",
+          "status": "targetable",
+          "interest": {
+            "id": "6836098865566",
+            "name": "Skiing and snowboarding",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Skiing and snowboarding"
+            ]
+          },
+          "audience": [
+            850340,
+            1000000
+          ]
+        },
+        {
+          "name": "Rock climbing",
+          "status": "targetable",
+          "interest": {
+            "id": "6003290283169",
+            "name": "Rock climbing",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Rock climbing"
+            ]
+          },
+          "audience": [
+            8451062,
+            9938450
+          ]
+        },
+        {
+          "name": "Sustainable living",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Craft beer",
+          "status": "not_found",
+          "nearest": [
+            "Craft Beer and Brewing",
+            "American Craft Beer Week",
+            "Doolally Craft Beers (and a Cider!)"
+          ]
+        }
+      ]
+    },
+    {
+      "product": "Noise cancelling headphones",
+      "market": "Singapore",
+      "reference": "Sony",
+      "taste_brief": [
+        {
+          "name": "Sennheiser",
+          "status": "targetable",
+          "interest": {
+            "id": "6003280302010",
+            "name": "Sennheiser",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Sennheiser"
+            ]
+          },
+          "audience": [
+            6612287,
+            7776050
+          ]
+        },
+        {
+          "name": "Harman Kardon",
+          "status": "targetable",
+          "interest": {
+            "id": "6004051067896",
+            "name": "Harman Kardon",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Harman Kardon"
+            ]
+          },
+          "audience": [
+            4582857,
+            5389440
+          ]
+        },
+        {
+          "name": "Razer",
+          "status": "targetable",
+          "interest": {
+            "id": "922348221121163",
+            "name": "Razer Inc.",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Razer Inc."
+            ]
+          },
+          "audience": [
+            18036122,
+            21210480
+          ]
+        },
+        {
+          "name": "Tiësto",
+          "status": "targetable",
+          "interest": {
+            "id": "6003243745001",
+            "name": "Tiësto",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Tiësto"
+            ]
+          },
+          "audience": [
+            20267508,
+            23834590
+          ]
+        },
+        {
+          "name": "Swedish House Mafia",
+          "status": "targetable",
+          "interest": {
+            "id": "6003368990002",
+            "name": "Swedish House Mafia",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Swedish House Mafia"
+            ]
+          },
+          "audience": [
+            2318239,
+            2726250
+          ]
+        },
+        {
+          "name": "Hospital Playlist",
+          "status": "not_found",
+          "nearest": []
+        }
+      ],
+      "named_baseline": [
+        {
+          "name": "Bose",
+          "status": "not_found",
+          "nearest": [
+            "Bose Corporation",
+            "Bose headphones",
+            "Chadwick Boseman"
+          ]
+        },
+        {
+          "name": "Apple AirPods Max",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Sennheiser",
+          "status": "targetable",
+          "interest": {
+            "id": "6003280302010",
+            "name": "Sennheiser",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Sennheiser"
+            ]
+          },
+          "audience": [
+            6612287,
+            7776050
+          ]
+        },
+        {
+          "name": "Audio-Technica",
+          "status": "targetable",
+          "interest": {
+            "id": "6003316314791",
+            "name": "Audio-Technica",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Audio-Technica"
+            ]
+          },
+          "audience": [
+            2258284,
+            2655742
+          ]
+        },
+        {
+          "name": "Spotify",
+          "status": "targetable",
+          "interest": {
+            "id": "6002969794329",
+            "name": "Spotify",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Spotify"
+            ]
+          },
+          "audience": [
+            315204149,
+            370680080
+          ]
+        },
+        {
+          "name": "Changi Airport",
+          "status": "not_found",
+          "nearest": [
+            "Singapore Changi Airport",
+            "Airport"
+          ]
+        },
+        {
+          "name": "Channel NewsAsia",
+          "status": "not_found",
+          "nearest": []
+        }
+      ],
+      "app_baseline": [
+        {
+          "name": "Headphones and audiophile gear",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Consumer electronics and gadgets",
+          "status": "not_found",
+          "nearest": [
+            "Consumer electronics media and content"
+          ]
+        },
+        {
+          "name": "Frequent international travel",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Online shopping and Shopee or Lazada",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Productivity, remote work and study",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Podcasts and music streaming",
+          "status": "not_found",
+          "nearest": []
+        }
+      ]
+    },
+    {
+      "product": "Matcha latte powder",
+      "market": "Los Angeles, USA",
+      "reference": "Starbucks",
+      "taste_brief": [
+        {
+          "name": "Sweetgreen",
+          "status": "targetable",
+          "interest": {
+            "id": "815423978507331",
+            "name": "Sweetgreen",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Sweetgreen"
+            ]
+          },
+          "audience": [
+            219489,
+            258120
+          ]
+        },
+        {
+          "name": "Alo Yoga",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Pressed Juicery",
+          "status": "targetable",
+          "interest": {
+            "id": "6003181200352",
+            "name": "Pressed Juicery",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Pressed Juicery"
+            ]
+          },
+          "audience": [
+            55603,
+            65390
+          ]
+        },
+        {
+          "name": "ClassPass",
+          "status": "targetable",
+          "interest": {
+            "id": "6015919764283",
+            "name": "ClassPass",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "ClassPass"
+            ]
+          },
+          "audience": [
+            922907,
+            1085339
+          ]
+        },
+        {
+          "name": "Whole Foods Market",
+          "status": "targetable",
+          "interest": {
+            "id": "6003323351097",
+            "name": "Whole Foods Market",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Whole Foods Market"
+            ]
+          },
+          "audience": [
+            12381750,
+            14560939
+          ]
+        },
+        {
+          "name": "The Skinny Confidential",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Lorde",
+          "status": "targetable",
+          "interest": {
+            "id": "6018616059273",
+            "name": "Lorde",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Lorde"
+            ]
+          },
+          "audience": [
+            7038784,
+            8277610
+          ]
+        }
+      ],
+      "named_baseline": [
+        {
+          "name": "Erewhon Market",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Blank Street Coffee",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Jade Leaf Matcha",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Goop",
+          "status": "targetable",
+          "interest": {
+            "id": "6003393062743",
+            "name": "Goop",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Goop"
+            ]
+          },
+          "audience": [
+            2840768,
+            3340744
+          ]
+        },
+        {
+          "name": "The Huberman Lab Podcast",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Alo Yoga",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Sweetgreen",
+          "status": "targetable",
+          "interest": {
+            "id": "815423978507331",
+            "name": "Sweetgreen",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Sweetgreen"
+            ]
+          },
+          "audience": [
+            219489,
+            258120
+          ]
+        }
+      ],
+      "app_baseline": [
+        {
+          "name": "Matcha",
+          "status": "targetable",
+          "interest": {
+            "id": "6003117735068",
+            "name": "Matcha",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Matcha"
+            ]
+          },
+          "audience": [
+            21997091,
+            25868580
+          ]
+        },
+        {
+          "name": "Yoga and pilates",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Healthy eating and organic food",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Erewhon and farmers markets",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Plant based milks such as oat milk",
+          "status": "not_found",
+          "nearest": []
+        }
+      ]
+    },
+    {
+      "product": "Minimalist leather wallet",
+      "market": "Amsterdam, Netherlands",
+      "reference": "Bellroy",
+      "taste_brief": [
+        {
+          "name": "Rains",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Norse Projects",
+          "status": "targetable",
+          "interest": {
+            "id": "6003381432712",
+            "name": "Norse Projects",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Norse Projects"
+            ]
+          },
+          "audience": [
+            11785,
+            13860
+          ]
+        },
+        {
+          "name": "Komono",
+          "status": "not_found",
+          "nearest": [
+            "Komono, Mie",
+            "Japan"
+          ]
+        },
+        {
+          "name": "Triwa",
+          "status": "targetable",
+          "interest": {
+            "id": "6002979714819",
+            "name": "TRIWA",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "TRIWA"
+            ]
+          },
+          "audience": [
+            82508,
+            97030
+          ]
+        },
+        {
+          "name": "MR PORTER",
+          "status": "targetable",
+          "interest": {
+            "id": "6003711925965",
+            "name": "Mr. Porter",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Mr. Porter"
+            ]
+          },
+          "audience": [
+            3488013,
+            4101904
+          ]
+        },
+        {
+          "name": "Herschel Supply Co",
+          "status": "targetable",
+          "interest": {
+            "id": "6014726841666",
+            "name": "Herschel Supply Co.",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Herschel Supply Co."
+            ]
+          },
+          "audience": [
+            1071301,
+            1259850
+          ]
+        },
+        {
+          "name": "The Tim Ferriss Show",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Leica Camera",
+          "status": "targetable",
+          "interest": {
+            "id": "6004044009748",
+            "name": "Leica Camera",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Leica Camera"
+            ]
+          },
+          "audience": [
+            9173035,
+            10787490
+          ]
+        }
+      ],
+      "named_baseline": [
+        {
+          "name": "Secrid",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Apple Inc.",
+          "status": "targetable",
+          "interest": {
+            "id": "6003442322883",
+            "name": "Apple Inc.",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Apple Inc."
+            ]
+          },
+          "audience": [
+            313646564,
+            368848360
+          ]
+        },
+        {
+          "name": "Filippa K",
+          "status": "targetable",
+          "interest": {
+            "id": "6003058887932",
+            "name": "Filippa K",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Filippa K"
+            ]
+          },
+          "audience": [
+            491726,
+            578270
+          ]
+        },
+        {
+          "name": "COS (clothing retailer)",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Monocle (magazine)",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "The Verge",
+          "status": "targetable",
+          "interest": {
+            "id": "6003642179146",
+            "name": "The Verge",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "The Verge"
+            ]
+          },
+          "audience": [
+            6211615,
+            7304860
+          ]
+        },
+        {
+          "name": "Peak Design",
+          "status": "not_found",
+          "nearest": []
+        }
+      ],
+      "app_baseline": [
+        {
+          "name": "Minimalism",
+          "status": "targetable",
+          "interest": {
+            "id": "6003007706419",
+            "name": "Minimalism",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Minimalism"
+            ]
+          },
+          "audience": [
+            49973205,
+            58768490
+          ]
+        },
+        {
+          "name": "Industrial design",
+          "status": "targetable",
+          "interest": {
+            "id": "6003347115474",
+            "name": "Industrial design",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Industrial design"
+            ]
+          },
+          "audience": [
+            115746751,
+            136118180
+          ]
+        },
+        {
+          "name": "Sustainable fashion",
+          "status": "targetable",
+          "interest": {
+            "id": "6003379668581",
+            "name": "Sustainable fashion",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Sustainable fashion"
+            ]
+          },
+          "audience": [
+            14407646,
+            16943392
+          ]
+        },
+        {
+          "name": "Cycling",
+          "status": "targetable",
+          "interest": {
+            "id": "6003402532547",
+            "name": "Cycling",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Cycling"
+            ]
+          },
+          "audience": [
+            196664226,
+            231277130
+          ]
+        },
+        {
+          "name": "Apple Pay and Google Pay",
+          "status": "not_found",
+          "nearest": []
+        }
+      ]
+    },
+    {
+      "product": "Indie horror video game",
+      "market": "Seattle, USA",
+      "reference": "Steam",
+      "taste_brief": [
+        {
+          "name": "Reddit",
+          "status": "not_found",
+          "nearest": [
+            "Income"
+          ]
+        },
+        {
+          "name": "Shudder",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Imgur",
+          "status": "targetable",
+          "interest": {
+            "id": "6003198855167",
+            "name": "Imgur",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Imgur"
+            ]
+          },
+          "audience": [
+            2725068,
+            3204680
+          ]
+        },
+        {
+          "name": "Oculus",
+          "status": "targetable",
+          "interest": {
+            "id": "6014974028929",
+            "name": "Oculus (film)",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Oculus (film)"
+            ]
+          },
+          "audience": [
+            43299,
+            50920
+          ]
+        },
+        {
+          "name": "Underoath",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Mythic Quest",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "The Lighthouse",
+          "status": "not_found",
+          "nearest": [
+            "Yarmouth, Nova Scotia"
+          ]
+        }
+      ],
+      "named_baseline": [
+        {
+          "name": "Phasmophobia",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Resident Evil",
+          "status": "targetable",
+          "interest": {
+            "id": "6003252135711",
+            "name": "Resident Evil",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Resident Evil"
+            ]
+          },
+          "audience": [
+            8286683,
+            9745140
+          ]
+        },
+        {
+          "name": "Silent Hill",
+          "status": "targetable",
+          "interest": {
+            "id": "6003039410515",
+            "name": "silent hill",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "silent hill"
+            ]
+          },
+          "audience": [
+            580195,
+            682310
+          ]
+        },
+        {
+          "name": "Five Nights at Freddy's",
+          "status": "targetable",
+          "interest": {
+            "id": "645630415563123",
+            "name": "Five Nights at Freddy's",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Five Nights at Freddy's"
+            ]
+          },
+          "audience": [
+            811921,
+            954820
+          ]
+        },
+        {
+          "name": "Itch.io",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Markiplier",
+          "status": "targetable",
+          "interest": {
+            "id": "6015394709964",
+            "name": "Markiplier",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Markiplier"
+            ]
+          },
+          "audience": [
+            1230467,
+            1447030
+          ]
+        },
+        {
+          "name": "Stranger Things",
+          "status": "targetable",
+          "interest": {
+            "id": "206658226354084",
+            "name": "Stranger Things (TV series)",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Stranger Things (TV series)"
+            ]
+          },
+          "audience": [
+            10411377,
+            12243780
+          ]
+        }
+      ],
+      "app_baseline": [
+        {
+          "name": "Steam (service)",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "Survival horror",
+          "status": "targetable",
+          "interest": {
+            "id": "6003641867020",
+            "name": "Survival horror",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Survival horror"
+            ]
+          },
+          "audience": [
+            33814668,
+            39766050
+          ]
+        },
+        {
+          "name": "Indie game",
+          "status": "not_found",
+          "nearest": [
+            "Tabletop role-playing game",
+            "Indie role-playing game"
+          ]
+        },
+        {
+          "name": "Twitch",
+          "status": "targetable",
+          "interest": {
+            "id": "6003440235625",
+            "name": "Twitch",
+            "path": [
+              "Interests",
+              "Additional interests",
+              "Twitch"
+            ]
+          },
+          "audience": [
+            13429574,
+            15793180
+          ]
+        },
+        {
+          "name": "Horror films and A24 style horror",
+          "status": "not_found",
+          "nearest": []
+        },
+        {
+          "name": "PC gaming",
+          "status": "not_found",
+          "nearest": [
+            "Gaming computer",
+            "PC game",
+            "CrossFire (game)"
+          ]
+        }
+      ]
+    }
+  ]
+}

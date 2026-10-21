@@ -18,6 +18,23 @@ from the reference brand's Qloo results, not the held-out brand's.
 Ahead of the named-entity baseline in 19 of 20 briefs (one tie): +42 points, 95% bootstrap interval +32 to +53. The
 named-entity baseline was asked again for this run, so its lists differ slightly from the run below.
 
+## Checked against Meta's interest list (`scripts/benchmark-meta.mjs`, `meta-targeting.json`; `scripts/benchmark-combined.mjs`, `combined.json`)
+
+A grader that isn't Qloo. Every pick was looked up in Meta's Marketing API interest search (`type=adinterest`,
+`locale=en_US`); it counts as targetable only if Meta has an interest with the same name (a qualifier such as
+"Peloton (cycling)" or "Inc." is ignored). The named-entity baseline was asked again and its names saved. Audience sizes are
+Meta's worldwide estimates. Then the same picks were graded on Qloo for the held-out competitor.
+
+| Who wrote the Meta interests | Targetable in Meta | 0.9+ on Qloo (held-out) | Both |
+|---|---|---|---|
+| Taste Brief | 74 of 140 (53%) | 86 of 140 (61%) | 49 of 140 (35%) |
+| Same model, no data, told to name specific entities | 65 of 136 (48%) | 27 of 136 (20%) | 18 of 136 (13%) |
+| Same model, no data, as the app asks it | 36 of 115 (31%) | 1 of 115 (1%) | 0 of 115 (0%) |
+
+Meta alone: Taste Brief against the named baseline +5 points, interval minus 7 to plus 17 (ahead in 12 of 20); against the
+app baseline +22 points (+6 to +38). Both tests: +22 points against the named baseline, interval +10 to +34, ahead in 12,
+5 ties, behind in 3. Many niche picks (Tracksmith, GREATS, Down to Earth with Zac Efron) are not Meta interests any more.
+
 ## Graded on the reference brand's own audience (`summary.json`)
 
 | Who wrote the Meta interests | Found and scored on Qloo | Affinity 0.9 or more |
