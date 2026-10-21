@@ -35,6 +35,20 @@ Meta alone: Taste Brief against the named baseline +5 points, interval minus 7 t
 app baseline +22 points (+6 to +38). Both tests: +22 points against the named baseline, interval +10 to +34, ahead in 12,
 5 ties, behind in 3. Many niche picks (Tracksmith, GREATS, Down to Earth with Zac Efron) are not Meta interests any more.
 
+## Negative control (`scripts/benchmark-negative.mjs`, `negative-control.json`)
+
+The same picks (names from `meta-targeting.json`) graded twice in the same city: on the held-out competitor and on an
+unrelated brand, the held-out brand of the case ten places further on in the list (pairing fixed before the run).
+
+| Who wrote the Meta interests | 0.9+ on the same-category competitor | 0.9+ on an unrelated brand |
+|---|---|---|
+| Taste Brief | 86 of 139 (62%) | 37 of 139 (27%) |
+| Same model, no data, told to name specific entities | 27 of 135 (20%) | 9 of 135 (7%) |
+
+Taste Brief, competitor minus unrelated: +36 points, 95% bootstrap interval +20 to +51, higher in 13 of 20 briefs, 5 ties.
+Most of the fit is specific to the category. Part of it is not: 27% of Taste Brief's picks score 0.9+ even for an
+unrelated brand's audience, more than the baseline reaches on the right one.
+
 ## Graded on the reference brand's own audience (`summary.json`)
 
 | Who wrote the Meta interests | Found and scored on Qloo | Affinity 0.9 or more |
