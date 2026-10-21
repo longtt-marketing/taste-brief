@@ -57,30 +57,31 @@ code{font-family:var(--mono);font-size:13px;background:var(--acc-soft);border-ra
 
   <section class="panel">
     <h2>The case: wool running sneakers, $120, London</h2>
-    <p>Closest brand: Allbirds (Qloo knows the brand, not this shoe). Second city: Hanoi. One live run on 20 Oct 2026.</p>
+    <p>Closest brand: Allbirds (Qloo knows the brand, not this shoe). Second city: Hanoi. One live run on 21 Oct 2026, the one in the video.</p>
     <div class="grid">
       <div class="guess"><h3>Plain AI, no data</h3>
         <p>Targets runners and eco shoppers.</p>
-        <div class="chips"><span class="chip">Parkrun</span><span class="chip">Strava</span><span class="chip">London Marathon</span><span class="chip">Local run clubs</span><span class="chip">Veja</span></div>
-        <p class="note">Qloo returned none of these anywhere in the run.</p>
+        <div class="chips"><span class="chip">Parkrun</span><span class="chip">Running</span><span class="chip">Veja or On Running</span><span class="chip">Wellness and yoga</span><span class="chip">Local run clubs</span></div>
+        <p class="note">Parkrun, Wellness and yoga and the run clubs appeared in no Qloo result in this run (Qloo did return a Running tag). That is not evidence against them; it means they are a guess.</p>
       </div>
       <div class="ours"><h3>Taste Brief, from Qloo</h3>
-        <p>Points to studio fitness, design minded brands and folk and soul fans.</p>
+        <p>Points to design led, transparent brands and studio fitness.</p>
         <div class="chips">
-          <span class="chip q">Tracksmith <span class="n">0.922</span></span><span class="chip q">Outdoor Voices <span class="n">0.966</span></span>
-          <span class="chip q">ClassPass <span class="n">0.962</span></span><span class="chip q">Everlane <span class="n">0.956</span></span>
-          <span class="chip q">Peloton <span class="n">0.957</span></span><span class="chip q">Maggie Rogers <span class="n">0.969</span></span>
+          <span class="chip q">Outdoor Voices <span class="n">0.966</span></span><span class="chip q">ClassPass <span class="n">0.962</span></span>
+          <span class="chip q">Peloton <span class="n">0.957</span></span><span class="chip q">Everlane <span class="n">0.956</span></span>
+          <span class="chip q">Tracksmith <span class="n">0.922</span></span><span class="chip q">Nike Training Club <span class="n">0.912</span></span>
         </div>
         <p class="note">Numbers are Qloo affinity scores returned in that run, London signal, Allbirds as seed.</p>
       </div>
     </div>
-    <p class="decision">Decision: keep the runner audience as the control, and spend the test budget on angles only Qloo surfaced: a clean design message for fans of minimalist running labels, a materials story for Everlane and ClassPass fans, an easy run video for folk and soul fans.</p>
+    <p class="decision">Decision: keep the runner plan as the control, and set aside a small, capped budget for three tests, each changing one thing: the usual creative shown to Tracksmith and Nike Training Club fans; the usual creative shown to Everlane and Outdoor Voices fans; and a nature and conservation story (Down to Earth with Zac Efron, 0.975, was the top TV result) shown to the control's broad audience.</p>
+    <p class="note">Pause rule for each: spend up to $300, and pause if cost per add to cart is 30% above the control once each arm has 20 add to carts, or at the cap. A rule for spending a small budget, not statistical proof.</p>
     <p class="note">Qloo's age and gender index for Allbirds (women +0.33, ages 30 to 34 +0.42) is for the brand's audience, not London residents and not purchases.</p>
   </section>
 
   <section class="panel">
     <h2>A blind check</h2>
-    <p>Both plans from this run were shown to ChatGPT (temporary chat, no memory) and to a fresh Claude instance as "two strategists' plans" for a $3,000, four week Meta test, with numbers and the word Qloo removed. Each saw both orders.</p>
+    <p>Two plans from an earlier live run (20 Oct, same product and cities) were shown to ChatGPT (temporary chat, no memory) and to a fresh Claude instance as "two strategists' plans" for a $3,000, four week Meta test, with numbers and the word Qloo removed. Each saw both orders.</p>
     <div class="scroll"><table>
       <thead><tr><th>Reviewer</th><th>Shown first</th><th>Funds first</th><th>Different from competitors, Qloo plan / plain plan</th><th>Runs a Qloo test first</th></tr></thead>
       <tbody>
@@ -90,14 +91,14 @@ code{font-family:var(--mono);font-size:13px;background:var(--acc-soft);border-ra
         <tr><td>Claude</td><td>Plain</td><td>Plain</td><td class="n">8 / 4</td><td>Yes</td></tr>
       </tbody>
     </table></div>
-    <p>The Qloo plan did not win as a replacement. It won as the source of the angle every reviewer wanted to test, which is how the tool now frames it: every test runs against the obvious ad set as the control. These are AI reviewers, not marketers, and no ads were run.</p>
+    <p>Across four AI review runs, three preferred funding the plain plan first, but all four included at least one Qloo derived test among the first tests they would run. So the tool now frames Qloo as a source of hypotheses to test against the obvious plan, not a replacement for it. This is an exploratory check with two AI models, not a panel of marketers, and no ads were run.</p>
   </section>
 
   <section class="panel">
     <h2>Reproduce it</h2>
     <ol>
       <li>Open the <a href="/">live demo</a> with the judge link from the submission (it carries the access code), or use one of today's free live runs.</li>
-      <li>Click the example <strong>Wool sneakers in London and Hanoi</strong> and press Build the brief. A live run takes about a minute; every Qloo call shows up as it happens.</li>
+      <li>Click the example <strong>Wool sneakers in London and Hanoi</strong> and press Build the brief. A live run usually takes one to two minutes; every Qloo call shows up as it happens.</li>
       <li>Check the green banner says <strong>Live run on real Qloo data</strong>. Sample data is labelled as such.</li>
       <li>Next to each line, the Qloo result it cites, with its affinity score. Anything the code could not match is flagged in orange.</li>
       <li>Read <strong>What to test first</strong>, the plain AI comparison and the city lists. Qloo rankings and the model's wording vary a little between runs.</li>
@@ -108,7 +109,7 @@ code{font-family:var(--mono);font-size:13px;background:var(--acc-soft);border-ra
   <section class="panel">
     <h2>What the checks prove, and what they don't</h2>
     <ul>
-      <li>The code checks that every cited entity came back from a Qloo insights call in the same run, and that names and numbers quoted with it match. It does not prove the marketing idea is right. The test plan is how a marketer finds that out.</li>
+      <li>A taste claim about anything other than the seed brand must cite entities returned by a Qloo insights call in the same run. Claims about the seed brand and its age and gender index have their own checks, quoted names and numbers must match, and a line that reads as purchase behaviour is flagged. This checks where a line comes from, not whether the marketing idea is right. The test plan is how a marketer finds that out.</li>
       <li>Qloo affinity is aggregate taste overlap, not purchase intent and not a forecast.</li>
       <li>For brands, artists and TV the city only nudges Qloo's ranking; a name missing from one city's top 12 may still rank lower there. Places are filtered to each city.</li>
       <li>Interest names still need checking in Meta Ads Manager.</li>

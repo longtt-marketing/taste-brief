@@ -42,7 +42,7 @@ test("search seed can still support a claim about the seed itself", () => {
 
 test("ad test needs all four action fields despite having a valid Qloo citation", () => {
   const reg = registryFrom([seed, insight]);
-  const partial = { hypothesis: "Outdoor Voices audience", ad_set: "Outdoor Voices",
+  const partial = { hypothesis: "Outdoor Voices audience", variable: "targeting", ad_set: "Outdoor Voices", why: "A plain guess targets runners",
     kpi: "", stop_if: "", entity_ids: ["INSIGHT"], evidence: ["Outdoor Voices 0.956"] };
   const result = verifyItem("test_plan", partial, reg);
   assert.equal(result.grounded, false);
@@ -66,7 +66,7 @@ test("agent refuses empty test rules or more than 3 experiments before finalizin
   const full = { audience_traits: [{ trait: "x", ...citation }, { trait: "y", ...citation }],
     meta_interests: [{ interest: "x", ...citation }, { interest: "y", ...citation }],
     creative_angles: [], partnerships: [], caveats: [],
-    test_plan: [{ hypothesis: "Studio fitness shows stronger relevance",
+    test_plan: [{ hypothesis: "Studio fitness shows stronger relevance", variable: "creative", why: "A plain guess targets runners",
       ad_set: "Outdoor Voices inspired creative", kpi: "Link CTR",
       stop_if: "After 3,000 impressions, CTR below control", ...citation }] };
   assert.equal(briefProblem(full), null);
@@ -74,4 +74,31 @@ test("agent refuses empty test rules or more than 3 experiments before finalizin
   assert.match(briefProblem(missingRule), /non-empty stop_if/);
   const four = { ...full, test_plan: Array.from({ length: 4 }, () => ({ ...full.test_plan[0] })) };
   assert.match(briefProblem(four), /1 to 3/);
+});
+
+test("a cited line that reads as purchase behaviour is flagged, taste language passes", () => {
+  const reg = registryFrom([seed, insight]);
+  const buys = verifyItem("audience_traits", { trait: "Outdoor Voices fans will buy wool sneakers", entity_ids: ["INSIGHT"], evidence: ["Outdoor Voices 0.956"] }, reg);
+  assert.equal(buys.grounded, false);
+  assert.match(buys.problems.join(" "), /purchase behaviour/);
+  const taste = verifyItem("audience_traits", { trait: "Shares taste with Outdoor Voices", entity_ids: ["INSIGHT"], evidence: ["Outdoor Voices 0.956"] }, reg);
+  assert.equal(taste.grounded, true, taste.problems.join("; "));
+});
+
+test("an ad test must change one named variable, creative or targeting, and say why a plain guess would miss it", () => {
+  const citation = { entity_ids: ["INSIGHT"], evidence: ["Outdoor Voices 0.956"] };
+  const base = { audience_traits: [{ trait: "x", ...citation }, { trait: "y", ...citation }],
+    meta_interests: [{ interest: "x", ...citation }, { interest: "y", ...citation }], creative_angles: [], partnerships: [], caveats: [] };
+  const t = { hypothesis: "h", variable: "creative", ad_set: "a", why: "w", kpi: "Cost per add to cart", stop_if: "Spend up to $300", ...citation };
+  assert.equal(briefProblem({ ...base, test_plan: [t] }), null);
+  assert.match(briefProblem({ ...base, test_plan: [{ ...t, variable: "both" }] }), /variable must be/);
+  assert.match(briefProblem({ ...base, test_plan: [{ ...t, why: "" }] }), /non-empty why/);
+});
+
+test("signal strength counts strong non-seed insights results and calls fewer than 5 weak", async () => {
+  const { signalFrom } = await import("../src/agent.js");
+  const many = Array.from({ length: 6 }, (_, i) => ({ name: `B${i}`, entity_id: `B${i}`, type: "urn:entity:brand", affinity: 0.95 }));
+  const strong = signalFrom(registryFrom([seed, { ...insight, output: many }]));
+  assert.deepEqual(strong, { results: 6, strong: 6, weak: false });
+  assert.equal(signalFrom(registryFrom([seed, insight])).weak, true);
 });

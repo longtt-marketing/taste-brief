@@ -10,5 +10,7 @@
   "placement": { "region": "aws:us-east-1" },
   // Free live runs per day without the access code (src/worker.js); the count lives in this KV namespace.
   "kv_namespaces": [{ "binding": "QUOTA", "id": "daaccaa3ddf8419799c074617dd23871" }],
+  // the deployed version id goes into each run's record, so a run can be traced to the code that made it
+  "version_metadata": { "binding": "CF_VERSION_METADATA" },
   "vars": { "MOCK": "0", "FREE_DAILY": "25" }
 }

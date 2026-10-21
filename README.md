@@ -3,9 +3,10 @@
 An agent for performance marketers. Give it a product and a market; it asks Qloo's taste graph whose tastes overlap with
 the product, what else that audience loves (brands, artists, shows, podcasts, places) and how it skews by age and gender,
 then writes a campaign brief: audience portrait, Meta Ads interests, creative angles, a landing-page headline,
-partnership ideas and up to three ad tests to run first (hypothesis, ad set, metric, stop rule). Every line must cite the
-Qloo results it rests on, and code checks the cited ids, names and numbers against what Qloo returned; a second market is
-compared on Qloo's own numbers, so the brief can be checked instead of trusted.
+partnership ideas and up to three exploratory ad tests, each changing one thing from an obvious control. Every structured
+recommendation cites its Qloo sources, and code checks the cited ids and quoted values against what Qloo returned; the
+summary stays the model's reading. A second market is compared on Qloo's own numbers, so the brief can be checked instead
+of trusted.
 
 Built for the [Qloo Agentic Hackathon](https://qloo.devpost.com/).
 
@@ -34,13 +35,14 @@ https://taste-brief.thelongmarketing.workers.dev (Cloudflare Worker). A live run
 page allows a limited number of free live runs per day; judges also have an access code in the submission for unlimited
 live runs. When neither applies the page runs on synthetic data and says so in a banner.
 
-![Brief with the verified Qloo results behind every line](docs/screenshots/1-brief.png)
-![Two markets compared on Qloo's own numbers, and the same question without Qloo](docs/screenshots/2-compare.png)
+![What to test first: each test changes one thing from the obvious ad set, with the Qloo results it rests on](docs/screenshots/1-what-to-test.png)
+![The brief, with the Qloo result each item cites](docs/screenshots/2-brief.png)
+![The same question without Qloo, and what the plain guess targets that Qloo never returned](docs/screenshots/3-plain-vs-qloo.png)
 
 ## Run
 Requires Node 20 or newer.
 ```bash
-npm test                          # 27 tests, no network
+npm test                          # the full offline test suite, no network
 node scripts/evidence-gate.mjs    # agent end to end on synthetic data; fails if any claim is unsupported
 npm run dev                       # local Worker on synthetic data (MOCK=1)
 ```

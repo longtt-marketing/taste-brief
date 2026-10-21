@@ -21,7 +21,7 @@ export function anthropicLLM({ apiKey, workspaceId, model = "claude-sonnet-5-5",
       headers: { "x-api-key": apiKey, "anthropic-version": "2023-06-01", "content-type": "application/json",
         ...(workspaceId ? { "anthropic-workspace-id": workspaceId } : {}) },
       body: JSON.stringify({
-        model, max_tokens: 4096, system, tools, messages: toAnthropic(messages),
+        model, max_tokens: 16000, system, tools, messages: toAnthropic(messages),
         ...(toolChoice ? { tool_choice: toolChoice } : {}),
       }),
     });
@@ -29,12 +29,14 @@ export function anthropicLLM({ apiKey, workspaceId, model = "claude-sonnet-5-5",
     if (!res.ok) throw new Error(`Anthropic ${res.status}: ${JSON.stringify(body).slice(0, 300)}`);
     const calls = body.content.filter((b) => b.type === "tool_use").map((b) => ({ id: b.id, name: b.name, input: b.input }));
     usage.calls++;
+    // 4096 was too low once adaptive thinking counts against it: a cut off submit_brief came back as broken markup
+    if (body.stop_reason === "max_tokens") usage.truncated++;
     usage.input_tokens += body.usage?.input_tokens || 0;
     usage.output_tokens += body.usage?.output_tokens || 0;
     return { raw: body.content, calls };
   };
   // token count of every call made through this adapter, to measure the real cost of one brief
-  const usage = { calls: 0, input_tokens: 0, output_tokens: 0 };
+  const usage = { calls: 0, input_tokens: 0, output_tokens: 0, truncated: 0 };
   run.usage = usage;
   return run;
 }
@@ -84,7 +86,7 @@ function briefFrom(seen, product) {
     creative_angles: pods.slice(0, 2).map((p) => ({ angle: `Speak like ${p.name}`, hook: "Placeholder hook from a synthetic run", entity_ids: [p.entity_id], evidence: [p.name] })),
     landing_page: { headline: "[SYNTHETIC] Headline written from taste signals", subheadline: "Replace by a live run", entity_ids: brands.slice(0, 1).map((b) => b.entity_id), evidence: brands.slice(0, 1).map((b) => b.name) },
     partnerships: brands.slice(3, 5).map((b) => ({ partner: b.name, idea: "Co-branded drop (synthetic)", entity_ids: [b.entity_id], evidence: [b.name] })),
-    test_plan: brands.slice(0, 2).map((b) => ({ hypothesis: `[SYNTHETIC] This audience responds to ${b.name} cues`, ad_set: `Interest: ${b.name}, creative in its tone`, kpi: "CTR", stop_if: "CTR under the control ad set after 3,000 impressions", entity_ids: [b.entity_id], evidence: [`${b.name} (affinity ${b.affinity})`] })),
+    test_plan: brands.slice(0, 2).map((b, i) => ({ hypothesis: `[SYNTHETIC] This audience responds to ${b.name} cues`, variable: i ? "targeting" : "creative", ad_set: i ? `Interest: ${b.name}, with the control's usual creative` : `A creative in ${b.name}'s tone, shown to the control's broad audience`, why: "[SYNTHETIC] A plain guess would not name this brand.", kpi: "Cost per add to cart", stop_if: "Spend up to $300. Pause if cost per add to cart is 30% above the control once each arm has 20 add to carts, or at the cap.", entity_ids: [b.entity_id], evidence: [`${b.name} (affinity ${b.affinity})`] })),
     caveats: ["Synthetic run: all Qloo data is made up, not a real recommendation. Live mode uses real Qloo data."],
   };
 }

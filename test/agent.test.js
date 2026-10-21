@@ -116,7 +116,7 @@ test("a malformed submit_brief (markup in a field, one item) is sent back, and t
     audience_traits: [{ trait: "a", entity_ids: ["X"], evidence: "Qloo: X" }, { trait: "b", entity_ids: ["Y"], evidence: "Qloo: Y" }],
     meta_interests: [{ interest: "X", entity_ids: ["X"], evidence: "Qloo: X" }, { interest: "Y", entity_ids: ["Y"], evidence: "Qloo: Y" }],
     creative_angles: [], partnerships: [], caveats: [],
-    test_plan: [{ hypothesis: "h", ad_set: "X", kpi: "CTR", stop_if: "s", entity_ids: ["X"], evidence: "Qloo: X" }],
+    test_plan: [{ hypothesis: "h", variable: "creative", ad_set: "X", why: "w", kpi: "CTR", stop_if: "s", entity_ids: ["X"], evidence: "Qloo: X" }],
   };
   const bad = { audience_traits: [{ trait: '\n<parameter name="trait">Loves minimalist' }] };
   let n = 0;
@@ -288,7 +288,7 @@ test("test plan: each ad test goes through the evidence gate like any other line
   const { registryFrom, checkEvidence } = await import("../src/evidence.js");
   const reg = registryFrom(REG_CALLS);
   const brief = { test_plan: [
-    { hypothesis: "Studio fitness cues beat running cues", ad_set: "Interest: Outdoor Voices", kpi: "CTR", stop_if: "CTR under control after 3,000 impressions", entity_ids: ["OV"], evidence: ["Outdoor Voices (affinity 0.966)"] },
+    { hypothesis: "Studio fitness cues beat running cues", variable: "targeting", ad_set: "Interest: Outdoor Voices", why: "A plain guess targets runners", kpi: "CTR", stop_if: "CTR under control after 3,000 impressions", entity_ids: ["OV"], evidence: ["Outdoor Voices (affinity 0.966)"] },
     { hypothesis: "Runners convert", ad_set: "Interest: Strava", kpi: "CTR", stop_if: "x", entity_ids: [], evidence: ["guess"] },
   ] };
   assert.deepEqual(checkEvidence(brief, reg).rows.map((r) => [r.field, r.grounded]), [["test_plan", true], ["test_plan", false]]);

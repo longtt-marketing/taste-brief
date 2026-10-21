@@ -26,13 +26,17 @@ Method:
    - Affinity describes aggregate taste overlap, not purchases and not any individual: write "over-indexes on",
      "shares taste with", never "buys" or "will".
    - Creative angles and the landing page are your interpretation: cite the results they are built on.
-   - test_plan (required): 1 to 3 ad tests a marketer can run this week. hypothesis = what the Qloo results suggest about this
-     audience; ad_set = the creative angle to test and the interests to try it on (the angle is the variable, so it can also
-     run on a broad audience); kpi = cost per add to cart or cost per purchase, with CTR only as a diagnostic; stop_if = a
-     rule against the control that a small four week test can reach (e.g. "cost per add to cart 30% above the control after
-     150 clicks"). The control is always the obvious ad set: broad targeting in the market, same ages, the brand's usual
-     message. Qloo adds angles to test against it; it does not replace it. Prefer interests big enough to reach in that
-     market. Cite the results each test rests on.
+   - test_plan (required): 1 to 3 exploratory ad tests a marketer can run this week, each against the same control: the
+     obvious ad set (broad targeting in the market, same ages, the brand's usual message). Each test changes ONE thing
+     from the control, so a difference can be traced to it: variable = "creative" (a new angle, shown to the control's
+     broad audience) or "targeting" (Qloo interests, shown the control's usual creative). hypothesis = what the Qloo
+     results suggest; ad_set = exactly what this test changes; why = in one sentence, what a plain guess about this product
+     would miss that these Qloo results show; kpi = cost per add to cart (CTR only as a diagnostic); stop_if = an
+     exploratory pause rule with a spend cap, e.g. "Spend up to $300. Pause if cost per add to cart is 30% above the
+     control once each arm has 20 add to carts, or at the cap." It is a rule for spending a small budget, not proof. Qloo
+     adds hypotheses to test against the control; it does not replace it. Prefer interests big enough to reach in that
+     market. Cite the results each test rests on. If the Qloo results show nothing a plain guess would not, propose one
+     test and say so in caveats.
    - Any item that quotes the age or gender index must also cite the seed entity id those numbers belong to.
    If Qloo returned nothing useful for a section, leave it short and say so in caveats; never invent.
 Keep copy concrete and short, in plain natural English a marketer would write. Never use dashes (— or –) as
@@ -48,6 +52,16 @@ const cited = (fields) => ({
     required: [...Object.keys(fields), "entity_ids", "evidence"],
   },
 });
+
+// strict tool schemas need additionalProperties: false on every object and no array size limits (checked in code)
+const strictSchema = (node) => {
+  if (Array.isArray(node)) return node.map(strictSchema);
+  if (!node || typeof node !== "object") return node;
+  const out = {};
+  for (const [k, v] of Object.entries(node)) if (k !== "minItems" && k !== "maxItems") out[k] = strictSchema(v);
+  if (out.type === "object") out.additionalProperties = false;
+  return out;
+};
 
 export const TOOLS = [
   {
@@ -88,6 +102,9 @@ export const TOOLS = [
   {
     name: "submit_brief",
     description: "Finish. Submit the campaign brief. Every item must cite Qloo evidence.",
+    // strict: the API makes the input match the schema. Without it, 2 of 3 live runs (21/10) sent a list item as a
+    // string with tool markup inside and had to be asked again.
+    strict: true,
     input_schema: {
       type: "object",
       properties: {
@@ -97,13 +114,13 @@ export const TOOLS = [
         creative_angles: cited({ angle: str, hook: str }),
         landing_page: { type: "object", properties: { headline: str, subheadline: str, entity_ids: strArr, evidence: strArr } },
         partnerships: cited({ partner: str, idea: str }),
-        test_plan: { ...cited({ hypothesis: str, ad_set: str, kpi: str, stop_if: str }), minItems: 1, maxItems: 3 },
+        test_plan: { ...cited({ hypothesis: str, variable: { type: "string", enum: ["creative", "targeting"] }, ad_set: str, why: str, kpi: str, stop_if: str }), minItems: 1, maxItems: 3 },
         caveats: strArr,
       },
       required: ["audience_summary", "audience_traits", "meta_interests", "creative_angles", "landing_page", "test_plan"],
     },
   },
-];
+].map((t) => (t.strict ? { ...t, input_schema: strictSchema(t.input_schema) } : t));
 
 /** Run the loop. llm(messages) -> {raw, calls:[{id,name,input}]}.
  *  Returns {brief, trace, sources, registry, seeds, check, demographics}:
@@ -141,12 +158,14 @@ export async function runAgent({ llm, qloo, product, market, references = "", ma
           results.push({ id: call.id, name: call.name, content: JSON.stringify({ error: `Brief rejected: ${problem}. Call submit_brief again with the full brief as plain JSON values.` }) });
           continue;
         }
-        trace.push({ tool: "submit_brief" });
+        // still broken after two resends: return it, but say so, so the page never shows it as a finished brief
+        const incomplete = problem || null;
+        trace.push({ tool: "submit_brief", ...(incomplete ? { error: `kept with a problem: ${incomplete}` } : {}) });
         onStep(trace.at(-1));
         const reg = registryFrom(calls);
         const demo = calls.find((c) => c.tool === "demographics" && c.output?.length);
         return {
-          brief: annotateBrief(brief, reg), trace, sources: sourcesFrom(seen),
+          brief: annotateBrief(brief, reg), trace, sources: sourcesFrom(seen), incomplete, signal: signalFrom(reg),
           registry: [...reg.entities.values()], seeds: [...reg.seeds], check: summary(checkEvidence(brief, reg)),
           // tags have no entity_id, so they are not in the registry; kept so "did Qloo return this?" can see them
           tags: calls.filter((c) => c.tool === "tags").flatMap((c) => c.output || []).filter((t) => t?.name).map((t) => ({ tag_id: t.tag_id, name: t.name })),
@@ -205,6 +224,15 @@ export function baselineProblem(brief) {
   return null;
 }
 
+/** How much Qloo gave this run to work with: non-seed results from insights calls, and how many have affinity >= 0.9. */
+export function signalFrom(reg) {
+  const found = [...reg.entities.values()].filter((e) => e.via === "insights" && !reg.seeds.has(e.entity_id));
+  const strong = found.filter((e) => [e.affinity, ...(e.affinities || [])].some((a) => typeof a === "number" && a >= 0.9)).length;
+  return { results: found.length, strong, weak: strong < 5 };
+}
+
+// every ad test names the one thing it changes from the control, and why a plain guess would miss it
+export const TEST_KEYS = ["hypothesis", "variable", "ad_set", "why", "kpi", "stop_if"];
 const LIST_FIELDS = ["audience_traits", "meta_interests", "creative_angles", "partnerships", "test_plan", "caveats"];
 const OBJ_FIELDS = ["demographics", "landing_page"];
 const ids = (v) => (Array.isArray(v) ? v : v == null || v === "" ? [] : [v]).map(String);
@@ -219,9 +247,10 @@ export function briefProblem(brief) {
   if (brief.meta_interests.length < 2) return "fewer than 2 meta_interests";
   if (brief.test_plan.length < 1 || brief.test_plan.length > 3) return "test_plan must contain 1 to 3 ad tests";
   for (const [n, item] of brief.test_plan.entries()) {
-    for (const key of ["hypothesis", "ad_set", "kpi", "stop_if"]) {
+    for (const key of TEST_KEYS) {
       if (typeof item?.[key] !== "string" || !item[key].trim()) return `test_plan item ${n + 1} must include a non-empty ${key}`;
     }
+    if (!["creative", "targeting"].includes(item.variable)) return `test_plan item ${n + 1}: variable must be "creative" or "targeting"`;
   }
   const items = ["audience_traits", "meta_interests", "creative_angles", "partnerships", "test_plan"].flatMap((k) => brief[k]);
   const uncited = items.filter((i) => !ids(i?.entity_ids).length).length;

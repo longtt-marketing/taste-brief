@@ -89,7 +89,7 @@ export function verifyItem(field, item, reg) {
   if (verified.length && !nonSeed.length && !seedNamed && !demographic) problems.push("only the seed entity is cited, and the claim is not about the seed");
   if (SINGLE.has(field) && /\s\/\s|\s\+\s/.test(label)) problems.push("combines several entities in one line");
   if (field === "test_plan") {
-    for (const key of ["hypothesis", "ad_set", "kpi", "stop_if"]) {
+    for (const key of ["hypothesis", "variable", "ad_set", "why", "kpi", "stop_if"]) {
       if (typeof item?.[key] !== "string" || !item[key].trim()) problems.push(`ad test is missing ${key}`);
     }
   }
@@ -105,6 +105,12 @@ export function verifyItem(field, item, reg) {
     const isAffinity = verified.some((e) => [e.affinity, e.popularity, ...(e.affinities || [])].some((a) => typeof a === "number" && Math.abs(a - v) < 0.0015));
     const isDemo = demographic && demoVals.some((d) => Math.abs(d - v) < 0.006);
     if (!isAffinity && !isDemo) problems.push(`${m[0]} does not match a number Qloo returned for the cited entities`);
+  }
+  // a content check, not only provenance: Qloo affinity is taste overlap, so a line that says the audience buys or will
+  // buy something claims more than the data shows
+  const claim = [label, item?.why, item?.hook].filter(Boolean).join(" ");
+  if (/\b(will (buy|purchase)|likely to (buy|purchase)|(buys|purchases|bought|purchased) (it|them|this|these|our|the)\b|are (buyers|customers) of|customers who (buy|purchase))/i.test(claim)) {
+    problems.push("reads as purchase behaviour; Qloo affinity is taste overlap, not purchases");
   }
   if (!cited.length) problems.push("cites no Qloo entity");
   const grounded = problems.length === 0 && (nonSeed.length > 0 || seedNamed || demographic);

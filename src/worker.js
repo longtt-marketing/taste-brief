@@ -89,6 +89,7 @@ export default {
       // One run: the agent (Qloo + Claude) and the no-data baseline side by side; then, with a second market, the
       // Qloo-only comparison on the agent's own seed entities. A failed baseline or comparison never sinks the brief.
       const run = async (send) => {
+        const t0 = Date.now();
         const [out, baseline] = await Promise.all([
           runAgent({ llm, qloo, product, market, references, onStep: (s) => send({ type: "step", run: market, step: s }) }),
           body.compare === false ? null : runBaseline({ llm: baseLLM, product, market, references })
@@ -107,7 +108,12 @@ export default {
         // what the plain guess would target that Qloo did not return anywhere in this run (entities, tags or city lists)
         const returned = [...out.registry, ...(out.tags || []), ...(markets?.types || []).flatMap((t) => [...(t.only_a || []), ...(t.only_b || []), ...(t.shared || [])])];
         const unbacked = baseline && !baseline.error ? unbackedBy(baseline, returned) : null;
-        return { ...meta, market, ...out, baseline, unbacked, markets };
+        // enough to check a run later without publishing Qloo payloads: which deployed version, how long, how many calls
+        const qlooCalls = out.trace.filter((s) => ["search", "insights", "demographics", "tags"].includes(s.tool)).length
+          + (markets?.types || []).length;
+        const runInfo = { version: env.CF_VERSION_METADATA?.id || "local", seconds: Math.round((Date.now() - t0) / 1000),
+          qloo_calls: qlooCalls, model_calls: (llm.usage?.calls || 0) + (baseLLM.usage?.calls || 0), at: new Date().toISOString() };
+        return { ...meta, market, ...out, baseline, unbacked, markets, run: runInfo };
       };
 
       // stream: true -> NDJSON lines {type:"step"} as the agent works, then {type:"result"} or {type:"error"}: a live run
