@@ -1,6 +1,6 @@
 // Order podcast candidates the way the podcast check found best for a shortlist: Qloo's rank for the brand plus the
-// show's rank by how many advertisers its episode notes already run (the pre-registered H3 combination). In the
-// held-out test this put 1.9 sponsored shows in the top 10, against 1.6 for Qloo alone or ad volume alone
+// show's rank by how many advertisers its episode notes already run (the H3 combination of the pre-registration). In an
+// exploratory top-10 count on the held-out test it found 1.9 sponsored shows, against 1.6 for Qloo alone or ad volume alone
 // (docs/podcast-check/robustness.json). A show with no sponsor data counts as 0 advertisers.
 
 // average ranks, 0 for the lowest value; ties share their mean rank

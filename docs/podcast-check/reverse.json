@@ -1,0 +1,1582 @@
+{
+ "note": "Exploratory, not pre-registered (21 Oct 2026). Strict labels; per-show AUC over brands, mean over shows.",
+ "shows": 173,
+ "brands": 61,
+ "mean_auc": {
+  "qloo": 0.6187,
+  "brand_spend": 0.7411,
+  "genre_rate": 0.7546,
+  "qloo_plus_spend": 0.7468
+ },
+ "qloo_ci95": [
+  0.5963,
+  0.6407
+ ],
+ "qloo_plus_spend_ci95": [
+  0.7293,
+  0.7642
+ ],
+ "qloo_minus_brand_spend_ci95": [
+  -0.1543,
+  -0.0894
+ ],
+ "rows": [
+  {
+   "show": "Myths and Legends",
+   "genre": "Arts",
+   "sponsors": 5,
+   "qloo": 0.4054,
+   "brand_spend": 0.9018,
+   "genre_rate": 0.6482,
+   "qloo_plus_spend": 0.7179
+  },
+  {
+   "show": "Twenty Thousand Hertz",
+   "genre": "Arts",
+   "sponsors": 4,
+   "qloo": 0.7193,
+   "brand_spend": 0.7456,
+   "genre_rate": 0.4912,
+   "qloo_plus_spend": 0.8246
+  },
+  {
+   "show": "Tetragrammaton with Rick Rubin",
+   "genre": "Arts",
+   "sponsors": 3,
+   "qloo": 0.9195,
+   "brand_spend": 0.7385,
+   "genre_rate": 0.5546,
+   "qloo_plus_spend": 0.9167
+  },
+  {
+   "show": "The Allusionist",
+   "genre": "Arts",
+   "sponsors": 4,
+   "qloo": 0.682,
+   "brand_spend": 0.6184,
+   "genre_rate": 0.7566,
+   "qloo_plus_spend": 0.693
+  },
+  {
+   "show": "Every Outfit",
+   "genre": "Arts",
+   "sponsors": 7,
+   "qloo": 0.7156,
+   "brand_spend": 0.6865,
+   "genre_rate": 0.6151,
+   "qloo_plus_spend": 0.7672
+  },
+  {
+   "show": "Bad On Paper",
+   "genre": "Arts",
+   "sponsors": 6,
+   "qloo": 0.6818,
+   "brand_spend": 0.6697,
+   "genre_rate": 0.5924,
+   "qloo_plus_spend": 0.753
+  },
+  {
+   "show": "Fool Coverage with Manny MUA and Laura Lee",
+   "genre": "Arts",
+   "sponsors": 6,
+   "qloo": 0.6333,
+   "brand_spend": 0.7258,
+   "genre_rate": 0.7727,
+   "qloo_plus_spend": 0.7561
+  },
+  {
+   "show": "Dudes Behind the Foods with Tim Chantarangsu and David So",
+   "genre": "Arts",
+   "sponsors": 4,
+   "qloo": 0.7588,
+   "brand_spend": 0.9605,
+   "genre_rate": 0.7895,
+   "qloo_plus_spend": 0.9364
+  },
+  {
+   "show": "Breaking Beauty Podcast",
+   "genre": "Arts",
+   "sponsors": 5,
+   "qloo": 0.6946,
+   "brand_spend": 0.6125,
+   "genre_rate": 0.5911,
+   "qloo_plus_spend": 0.675
+  },
+  {
+   "show": "Money For Couples with Ramit Sethi",
+   "genre": "Business",
+   "sponsors": 8,
+   "qloo": 0.8125,
+   "brand_spend": 0.6828,
+   "genre_rate": 0.7111,
+   "qloo_plus_spend": 0.8726
+  },
+  {
+   "show": "The Tim Ferriss Show",
+   "genre": "Business",
+   "sponsors": 4,
+   "qloo": 0.7982,
+   "brand_spend": 0.6776,
+   "genre_rate": 0.7829,
+   "qloo_plus_spend": 0.8004
+  },
+  {
+   "show": "The Iced Coffee Hour",
+   "genre": "Business",
+   "sponsors": 11,
+   "qloo": 0.7,
+   "brand_spend": 0.71,
+   "genre_rate": 0.6382,
+   "qloo_plus_spend": 0.7945
+  },
+  {
+   "show": "The Personal Finance Podcast",
+   "genre": "Business",
+   "sponsors": 5,
+   "qloo": 0.6357,
+   "brand_spend": 0.7268,
+   "genre_rate": 0.5768,
+   "qloo_plus_spend": 0.7625
+  },
+  {
+   "show": "The Weekly Show with Jon Stewart",
+   "genre": "Comedy",
+   "sponsors": 5,
+   "qloo": 0.5893,
+   "brand_spend": 0.5893,
+   "genre_rate": 0.6875,
+   "qloo_plus_spend": 0.5929
+  },
+  {
+   "show": "Son of a Boy Dad",
+   "genre": "Comedy",
+   "sponsors": 10,
+   "qloo": 0.4696,
+   "brand_spend": 0.9618,
+   "genre_rate": 0.9431,
+   "qloo_plus_spend": 0.798
+  },
+  {
+   "show": "Are You Garbage? Comedy Podcast",
+   "genre": "Comedy",
+   "sponsors": 9,
+   "qloo": 0.6293,
+   "brand_spend": 0.9252,
+   "genre_rate": 0.9081,
+   "qloo_plus_spend": 0.9124
+  },
+  {
+   "show": "The Dollop with Dave Anthony and Gareth Reynolds",
+   "genre": "Comedy",
+   "sponsors": 5,
+   "qloo": 0.5804,
+   "brand_spend": 0.7143,
+   "genre_rate": 0.7179,
+   "qloo_plus_spend": 0.7054
+  },
+  {
+   "show": "We Might Be Drunk",
+   "genre": "Comedy",
+   "sponsors": 3,
+   "qloo": 0.7414,
+   "brand_spend": 0.9023,
+   "genre_rate": 0.9397,
+   "qloo_plus_spend": 0.9023
+  },
+  {
+   "show": "The Broski Report with Brittany Broski",
+   "genre": "Comedy",
+   "sponsors": 7,
+   "qloo": 0.6019,
+   "brand_spend": 0.6481,
+   "genre_rate": 0.7474,
+   "qloo_plus_spend": 0.6653
+  },
+  {
+   "show": "Club Random with Bill Maher",
+   "genre": "Comedy",
+   "sponsors": 3,
+   "qloo": 0.5057,
+   "brand_spend": 0.7471,
+   "genre_rate": 0.773,
+   "qloo_plus_spend": 0.6437
+  },
+  {
+   "show": "The Bald and the Beautiful with Trixie and Katya",
+   "genre": "Comedy",
+   "sponsors": 10,
+   "qloo": 0.7049,
+   "brand_spend": 0.6539,
+   "genre_rate": 0.6765,
+   "qloo_plus_spend": 0.7363
+  },
+  {
+   "show": "Tuesdays with Stories!",
+   "genre": "Comedy",
+   "sponsors": 5,
+   "qloo": 0.6339,
+   "brand_spend": 0.7732,
+   "genre_rate": 0.8214,
+   "qloo_plus_spend": 0.7732
+  },
+  {
+   "show": "Monday Morning Podcast",
+   "genre": "Comedy",
+   "sponsors": 6,
+   "qloo": 0.7606,
+   "brand_spend": 0.7939,
+   "genre_rate": 0.7242,
+   "qloo_plus_spend": 0.8333
+  },
+  {
+   "show": "Girls Gotta Eat",
+   "genre": "Comedy",
+   "sponsors": 9,
+   "qloo": 0.7425,
+   "brand_spend": 0.7585,
+   "genre_rate": 0.7553,
+   "qloo_plus_spend": 0.8558
+  },
+  {
+   "show": "Family Trips with the Meyers Brothers",
+   "genre": "Comedy",
+   "sponsors": 9,
+   "qloo": 0.4765,
+   "brand_spend": 0.7607,
+   "genre_rate": 0.7927,
+   "qloo_plus_spend": 0.6603
+  },
+  {
+   "show": "Ride with Benito Skinner and Mary Beth Barone",
+   "genre": "Comedy",
+   "sponsors": 6,
+   "qloo": 0.5424,
+   "brand_spend": 0.6591,
+   "genre_rate": 0.6242,
+   "qloo_plus_spend": 0.6258
+  },
+  {
+   "show": "You Should Know Podcast",
+   "genre": "Comedy",
+   "sponsors": 12,
+   "qloo": 0.6284,
+   "brand_spend": 0.7236,
+   "genre_rate": 0.7942,
+   "qloo_plus_spend": 0.7185
+  },
+  {
+   "show": "And That's Why We Drink",
+   "genre": "Comedy",
+   "sponsors": 9,
+   "qloo": 0.5534,
+   "brand_spend": 0.7874,
+   "genre_rate": 0.7276,
+   "qloo_plus_spend": 0.7553
+  },
+  {
+   "show": "Unsubscribe Podcast",
+   "genre": "Comedy",
+   "sponsors": 6,
+   "qloo": 0.6091,
+   "brand_spend": 0.75,
+   "genre_rate": 0.8288,
+   "qloo_plus_spend": 0.7652
+  },
+  {
+   "show": "Absolutely Not",
+   "genre": "Comedy",
+   "sponsors": 17,
+   "qloo": 0.6283,
+   "brand_spend": 0.6811,
+   "genre_rate": 0.6511,
+   "qloo_plus_spend": 0.7206
+  },
+  {
+   "show": "Zane and Heath: Unfiltered",
+   "genre": "Comedy",
+   "sponsors": 9,
+   "qloo": 0.5438,
+   "brand_spend": 0.7703,
+   "genre_rate": 0.8504,
+   "qloo_plus_spend": 0.7244
+  },
+  {
+   "show": "Just Trish",
+   "genre": "Comedy",
+   "sponsors": 9,
+   "qloo": 0.562,
+   "brand_spend": 0.7073,
+   "genre_rate": 0.7244,
+   "qloo_plus_spend": 0.687
+  },
+  {
+   "show": "The Viral Podcast",
+   "genre": "Comedy",
+   "sponsors": 4,
+   "qloo": 0.3575,
+   "brand_spend": 0.8268,
+   "genre_rate": 0.818,
+   "qloo_plus_spend": 0.6338
+  },
+  {
+   "show": "Petty Crimes",
+   "genre": "Comedy",
+   "sponsors": 3,
+   "qloo": 0.2787,
+   "brand_spend": 0.9052,
+   "genre_rate": 0.8506,
+   "qloo_plus_spend": 0.6782
+  },
+  {
+   "show": "Smosh Mouth",
+   "genre": "Comedy",
+   "sponsors": 6,
+   "qloo": 0.4,
+   "brand_spend": 0.6606,
+   "genre_rate": 0.6667,
+   "qloo_plus_spend": 0.5409
+  },
+  {
+   "show": "Net Positive with John Crist",
+   "genre": "Comedy",
+   "sponsors": 4,
+   "qloo": 0.4627,
+   "brand_spend": 0.6798,
+   "genre_rate": 0.6798,
+   "qloo_plus_spend": 0.6096
+  },
+  {
+   "show": "Tin Foil Hat With Sam Tripoli",
+   "genre": "Comedy",
+   "sponsors": 3,
+   "qloo": 0.6753,
+   "brand_spend": 0.819,
+   "genre_rate": 0.8477,
+   "qloo_plus_spend": 0.7759
+  },
+  {
+   "show": "Bitch Bible",
+   "genre": "Comedy",
+   "sponsors": 3,
+   "qloo": 0.7845,
+   "brand_spend": 0.7069,
+   "genre_rate": 0.5948,
+   "qloo_plus_spend": 0.8333
+  },
+  {
+   "show": "Your Mom's House with Christina P. and Tom Segura",
+   "genre": "Comedy",
+   "sponsors": 9,
+   "qloo": 0.6346,
+   "brand_spend": 0.7201,
+   "genre_rate": 0.7949,
+   "qloo_plus_spend": 0.7286
+  },
+  {
+   "show": "TigerBelly",
+   "genre": "Comedy",
+   "sponsors": 7,
+   "qloo": 0.7235,
+   "brand_spend": 0.7937,
+   "genre_rate": 0.8095,
+   "qloo_plus_spend": 0.836
+  },
+  {
+   "show": "Sibling Rivalry",
+   "genre": "Comedy",
+   "sponsors": 6,
+   "qloo": 0.6424,
+   "brand_spend": 0.4955,
+   "genre_rate": 0.4121,
+   "qloo_plus_spend": 0.6061
+  },
+  {
+   "show": "Whiskey Ginger with Andrew Santino",
+   "genre": "Comedy",
+   "sponsors": 5,
+   "qloo": 0.4964,
+   "brand_spend": 0.6054,
+   "genre_rate": 0.5589,
+   "qloo_plus_spend": 0.5839
+  },
+  {
+   "show": "Nobody Listens to Paula Poundstone",
+   "genre": "Comedy",
+   "sponsors": 3,
+   "qloo": 0.3678,
+   "brand_spend": 0.8218,
+   "genre_rate": 0.7299,
+   "qloo_plus_spend": 0.6322
+  },
+  {
+   "show": "The Cover to Cover Podcast with Chris Franjola",
+   "genre": "Comedy",
+   "sponsors": 6,
+   "qloo": 0.5364,
+   "brand_spend": 0.647,
+   "genre_rate": 0.7576,
+   "qloo_plus_spend": 0.6273
+  },
+  {
+   "show": "Some More News",
+   "genre": "Comedy",
+   "sponsors": 3,
+   "qloo": 0.5057,
+   "brand_spend": 0.8448,
+   "genre_rate": 0.8621,
+   "qloo_plus_spend": 0.7241
+  },
+  {
+   "show": "Regulation Podcast",
+   "genre": "Comedy",
+   "sponsors": 3,
+   "qloo": 0.3764,
+   "brand_spend": 0.9713,
+   "genre_rate": 0.9741,
+   "qloo_plus_spend": 0.7816
+  },
+  {
+   "show": "Crash Dummies Podcast with Pat and Mike",
+   "genre": "Comedy",
+   "sponsors": 7,
+   "qloo": 0.6548,
+   "brand_spend": 0.7434,
+   "genre_rate": 0.8016,
+   "qloo_plus_spend": 0.7646
+  },
+  {
+   "show": "Ninjas Are Butterflies",
+   "genre": "Comedy",
+   "sponsors": 4,
+   "qloo": 0.3706,
+   "brand_spend": 0.9342,
+   "genre_rate": 0.9123,
+   "qloo_plus_spend": 0.7281
+  },
+  {
+   "show": "Sinisterhood",
+   "genre": "Comedy",
+   "sponsors": 4,
+   "qloo": 0.8004,
+   "brand_spend": 0.886,
+   "genre_rate": 0.886,
+   "qloo_plus_spend": 0.932
+  },
+  {
+   "show": "lemonparty",
+   "genre": "Comedy",
+   "sponsors": 4,
+   "qloo": 0.5702,
+   "brand_spend": 0.8969,
+   "genre_rate": 0.9232,
+   "qloo_plus_spend": 0.7961
+  },
+  {
+   "show": "The Harland Highway",
+   "genre": "Comedy",
+   "sponsors": 4,
+   "qloo": 0.5351,
+   "brand_spend": 0.7215,
+   "genre_rate": 0.7895,
+   "qloo_plus_spend": 0.6469
+  },
+  {
+   "show": "A New Untold Story",
+   "genre": "Comedy",
+   "sponsors": 7,
+   "qloo": 0.537,
+   "brand_spend": 0.8823,
+   "genre_rate": 0.9193,
+   "qloo_plus_spend": 0.7738
+  },
+  {
+   "show": "Robert Kelly's You Know What Dude!",
+   "genre": "Comedy",
+   "sponsors": 5,
+   "qloo": 0.8518,
+   "brand_spend": 0.9089,
+   "genre_rate": 0.9393,
+   "qloo_plus_spend": 0.9482
+  },
+  {
+   "show": "Bertcast",
+   "genre": "Comedy",
+   "sponsors": 9,
+   "qloo": 0.4038,
+   "brand_spend": 0.7105,
+   "genre_rate": 0.7799,
+   "qloo_plus_spend": 0.5929
+  },
+  {
+   "show": "Beach Too Sandy, Water Too Wet",
+   "genre": "Comedy",
+   "sponsors": 3,
+   "qloo": 0.842,
+   "brand_spend": 0.75,
+   "genre_rate": 0.7557,
+   "qloo_plus_spend": 0.9109
+  },
+  {
+   "show": "Take Your Shoes Off w/ Rick Glassman",
+   "genre": "Comedy",
+   "sponsors": 6,
+   "qloo": 0.6348,
+   "brand_spend": 0.9394,
+   "genre_rate": 0.8424,
+   "qloo_plus_spend": 0.8697
+  },
+  {
+   "show": "The Rich Roll Podcast",
+   "genre": "Education",
+   "sponsors": 9,
+   "qloo": 0.7778,
+   "brand_spend": 0.5385,
+   "genre_rate": 0.5652,
+   "qloo_plus_spend": 0.6912
+  },
+  {
+   "show": "The Sabrina Zohar Show",
+   "genre": "Education",
+   "sponsors": 4,
+   "qloo": 0.4386,
+   "brand_spend": 0.7829,
+   "genre_rate": 0.7785,
+   "qloo_plus_spend": 0.6491
+  },
+  {
+   "show": "Trying Not to Care",
+   "genre": "Education",
+   "sponsors": 6,
+   "qloo": 0.597,
+   "brand_spend": 0.8697,
+   "genre_rate": 0.7591,
+   "qloo_plus_spend": 0.8091
+  },
+  {
+   "show": "Dear Gabby",
+   "genre": "Education",
+   "sponsors": 5,
+   "qloo": 0.7446,
+   "brand_spend": 0.8214,
+   "genre_rate": 0.7375,
+   "qloo_plus_spend": 0.9071
+  },
+  {
+   "show": "The Jordan Harbinger Show",
+   "genre": "Education",
+   "sponsors": 9,
+   "qloo": 0.5235,
+   "brand_spend": 0.8622,
+   "genre_rate": 0.703,
+   "qloo_plus_spend": 0.7895
+  },
+  {
+   "show": "Slay Girl Slay",
+   "genre": "Education",
+   "sponsors": 4,
+   "qloo": 0.5439,
+   "brand_spend": 0.9232,
+   "genre_rate": 0.8004,
+   "qloo_plus_spend": 0.7982
+  },
+  {
+   "show": "Habits of A Goddess",
+   "genre": "Education",
+   "sponsors": 4,
+   "qloo": 0.6732,
+   "brand_spend": 0.9518,
+   "genre_rate": 0.9298,
+   "qloo_plus_spend": 0.9035
+  },
+  {
+   "show": "This Naked Mind Podcast",
+   "genre": "Education",
+   "sponsors": 5,
+   "qloo": 0.5929,
+   "brand_spend": 0.7946,
+   "genre_rate": 0.925,
+   "qloo_plus_spend": 0.7393
+  },
+  {
+   "show": "Best Laid Plans",
+   "genre": "Education",
+   "sponsors": 4,
+   "qloo": 0.4518,
+   "brand_spend": 0.7434,
+   "genre_rate": 0.8246,
+   "qloo_plus_spend": 0.6272
+  },
+  {
+   "show": "10% Happier with Dan Harris",
+   "genre": "Health & Fitness",
+   "sponsors": 6,
+   "qloo": 0.6485,
+   "brand_spend": 0.6061,
+   "genre_rate": 0.55,
+   "qloo_plus_spend": 0.6985
+  },
+  {
+   "show": "Mind Pump: Raw Fitness Truth",
+   "genre": "Health & Fitness",
+   "sponsors": 4,
+   "qloo": 0.886,
+   "brand_spend": 0.3772,
+   "genre_rate": 0.7982,
+   "qloo_plus_spend": 0.6491
+  },
+  {
+   "show": "Well with Arielle Lorre",
+   "genre": "Health & Fitness",
+   "sponsors": 7,
+   "qloo": 0.8413,
+   "brand_spend": 0.5344,
+   "genre_rate": 0.5794,
+   "qloo_plus_spend": 0.75
+  },
+  {
+   "show": "Being Well with Forrest Hanson and Dr. Rick Hanson",
+   "genre": "Health & Fitness",
+   "sponsors": 6,
+   "qloo": 0.7576,
+   "brand_spend": 0.6424,
+   "genre_rate": 0.7985,
+   "qloo_plus_spend": 0.7727
+  },
+  {
+   "show": "The Curbsiders Internal Medicine Podcast",
+   "genre": "Health & Fitness",
+   "sponsors": 3,
+   "qloo": 0.6236,
+   "brand_spend": 0.7385,
+   "genre_rate": 0.5891,
+   "qloo_plus_spend": 0.7529
+  },
+  {
+   "show": "The Liz Moody Podcast",
+   "genre": "Health & Fitness",
+   "sponsors": 3,
+   "qloo": 0.431,
+   "brand_spend": 0.6753,
+   "genre_rate": 0.9684,
+   "qloo_plus_spend": 0.5805
+  },
+  {
+   "show": "The Art of Being Well",
+   "genre": "Health & Fitness",
+   "sponsors": 3,
+   "qloo": 0.7759,
+   "brand_spend": 0.8391,
+   "genre_rate": 0.9684,
+   "qloo_plus_spend": 0.9195
+  },
+  {
+   "show": "Sleepy",
+   "genre": "Health & Fitness",
+   "sponsors": 4,
+   "qloo": 0.6206,
+   "brand_spend": 0.8092,
+   "genre_rate": 0.6864,
+   "qloo_plus_spend": 0.7807
+  },
+  {
+   "show": "The Proof with Simon Hill",
+   "genre": "Health & Fitness",
+   "sponsors": 5,
+   "qloo": 0.8768,
+   "brand_spend": 0.3732,
+   "genre_rate": 0.6875,
+   "qloo_plus_spend": 0.6411
+  },
+  {
+   "show": "The Squeeze",
+   "genre": "Health & Fitness",
+   "sponsors": 14,
+   "qloo": 0.6459,
+   "brand_spend": 0.6071,
+   "genre_rate": 0.4871,
+   "qloo_plus_spend": 0.6763
+  },
+  {
+   "show": "The Genius Life",
+   "genre": "Health & Fitness",
+   "sponsors": 3,
+   "qloo": 0.9138,
+   "brand_spend": 0.8046,
+   "genre_rate": 0.9684,
+   "qloo_plus_spend": 0.954
+  },
+  {
+   "show": "EXPANDED Podcast by To Be Magnetic\u2122",
+   "genre": "Health & Fitness",
+   "sponsors": 3,
+   "qloo": 0.8736,
+   "brand_spend": 0.5517,
+   "genre_rate": 0.5891,
+   "qloo_plus_spend": 0.8218
+  },
+  {
+   "show": "The Dr. Tyna Show",
+   "genre": "Health & Fitness",
+   "sponsors": 3,
+   "qloo": 0.7213,
+   "brand_spend": 0.6006,
+   "genre_rate": 0.8534,
+   "qloo_plus_spend": 0.6839
+  },
+  {
+   "show": "Duck Call Room",
+   "genre": "Leisure",
+   "sponsors": 4,
+   "qloo": 0.443,
+   "brand_spend": 0.7939,
+   "genre_rate": 0.8158,
+   "qloo_plus_spend": 0.682
+  },
+  {
+   "show": "The Smoking Tire",
+   "genre": "Leisure",
+   "sponsors": 6,
+   "qloo": 0.7288,
+   "brand_spend": 0.8136,
+   "genre_rate": 0.7152,
+   "qloo_plus_spend": 0.8606
+  },
+  {
+   "show": "The Command Zone",
+   "genre": "Leisure",
+   "sponsors": 3,
+   "qloo": 0.6638,
+   "brand_spend": 0.7989,
+   "genre_rate": 1.0,
+   "qloo_plus_spend": 0.8161
+  },
+  {
+   "show": "Friends Per Second",
+   "genre": "Leisure",
+   "sponsors": 3,
+   "qloo": 0.4684,
+   "brand_spend": 0.6983,
+   "genre_rate": 0.9856,
+   "qloo_plus_spend": 0.6494
+  },
+  {
+   "show": "Sacred Symbols: A PlayStation Podcast",
+   "genre": "Leisure",
+   "sponsors": 4,
+   "qloo": 0.5789,
+   "brand_spend": 1.0,
+   "genre_rate": 0.7829,
+   "qloo_plus_spend": 0.8947
+  },
+  {
+   "show": "Trash Taste Podcast",
+   "genre": "Leisure",
+   "sponsors": 3,
+   "qloo": 0.2672,
+   "brand_spend": 0.8592,
+   "genre_rate": 0.9052,
+   "qloo_plus_spend": 0.5747
+  },
+  {
+   "show": "A Beautiful Mess Podcast",
+   "genre": "Leisure",
+   "sponsors": 4,
+   "qloo": 0.4846,
+   "brand_spend": 0.7741,
+   "genre_rate": 0.5044,
+   "qloo_plus_spend": 0.6491
+  },
+  {
+   "show": "The MinnMax Show",
+   "genre": "Leisure",
+   "sponsors": 6,
+   "qloo": 0.2894,
+   "brand_spend": 0.7061,
+   "genre_rate": 0.75,
+   "qloo_plus_spend": 0.5258
+  },
+  {
+   "show": "Castle Super Beast",
+   "genre": "Leisure",
+   "sponsors": 6,
+   "qloo": 0.4636,
+   "brand_spend": 0.8591,
+   "genre_rate": 0.7727,
+   "qloo_plus_spend": 0.7242
+  },
+  {
+   "show": "The Kit & Krysta Podcast",
+   "genre": "Leisure",
+   "sponsors": 6,
+   "qloo": 0.3939,
+   "brand_spend": 0.7394,
+   "genre_rate": 0.8045,
+   "qloo_plus_spend": 0.5833
+  },
+  {
+   "show": "The Daily Beans",
+   "genre": "News",
+   "sponsors": 3,
+   "qloo": 0.842,
+   "brand_spend": 0.7328,
+   "genre_rate": 0.4052,
+   "qloo_plus_spend": 0.8736
+  },
+  {
+   "show": "The David Pakman Show",
+   "genre": "News",
+   "sponsors": 3,
+   "qloo": 0.4167,
+   "brand_spend": 0.3908,
+   "genre_rate": 0.6034,
+   "qloo_plus_spend": 0.3793
+  },
+  {
+   "show": "The Majority Report with Sam Seder",
+   "genre": "News",
+   "sponsors": 3,
+   "qloo": 0.7471,
+   "brand_spend": 0.8966,
+   "genre_rate": 0.4052,
+   "qloo_plus_spend": 0.908
+  },
+  {
+   "show": "I've Had It",
+   "genre": "Society & Culture",
+   "sponsors": 6,
+   "qloo": 0.847,
+   "brand_spend": 0.7,
+   "genre_rate": 0.7773,
+   "qloo_plus_spend": 0.8636
+  },
+  {
+   "show": "The Viall Files",
+   "genre": "Society & Culture",
+   "sponsors": 9,
+   "qloo": 0.5855,
+   "brand_spend": 0.7361,
+   "genre_rate": 0.7821,
+   "qloo_plus_spend": 0.7415
+  },
+  {
+   "show": "Brooke and Connor Make A Podcast",
+   "genre": "Society & Culture",
+   "sponsors": 9,
+   "qloo": 0.6058,
+   "brand_spend": 0.844,
+   "genre_rate": 0.8226,
+   "qloo_plus_spend": 0.7991
+  },
+  {
+   "show": "The Town with Matthew Belloni",
+   "genre": "Society & Culture",
+   "sponsors": 3,
+   "qloo": 0.9626,
+   "brand_spend": 0.5833,
+   "genre_rate": 0.5546,
+   "qloo_plus_spend": 0.8736
+  },
+  {
+   "show": "Let's Be Honest with Kristin Cavallari",
+   "genre": "Society & Culture",
+   "sponsors": 11,
+   "qloo": 0.5709,
+   "brand_spend": 0.5955,
+   "genre_rate": 0.63,
+   "qloo_plus_spend": 0.6218
+  },
+  {
+   "show": "Danny Jones Podcast",
+   "genre": "Society & Culture",
+   "sponsors": 4,
+   "qloo": 0.8553,
+   "brand_spend": 0.9474,
+   "genre_rate": 0.7917,
+   "qloo_plus_spend": 0.9737
+  },
+  {
+   "show": "The Dating Detectives",
+   "genre": "Society & Culture",
+   "sponsors": 6,
+   "qloo": 0.7273,
+   "brand_spend": 0.7424,
+   "genre_rate": 0.8076,
+   "qloo_plus_spend": 0.8758
+  },
+  {
+   "show": "Karma & Chaos with Kail Lowry & Becky Hayter",
+   "genre": "Society & Culture",
+   "sponsors": 4,
+   "qloo": 0.5154,
+   "brand_spend": 0.8092,
+   "genre_rate": 0.8246,
+   "qloo_plus_spend": 0.7566
+  },
+  {
+   "show": "Locked In with Ian Bick",
+   "genre": "Society & Culture",
+   "sponsors": 5,
+   "qloo": 0.5286,
+   "brand_spend": 0.8964,
+   "genre_rate": 0.7018,
+   "qloo_plus_spend": 0.8393
+  },
+  {
+   "show": "Girls Next Level",
+   "genre": "Society & Culture",
+   "sponsors": 4,
+   "qloo": 0.7039,
+   "brand_spend": 0.6886,
+   "genre_rate": 0.6579,
+   "qloo_plus_spend": 0.7982
+  },
+  {
+   "show": "Philosophize This!",
+   "genre": "Society & Culture",
+   "sponsors": 3,
+   "qloo": 0.7931,
+   "brand_spend": 0.6983,
+   "genre_rate": 0.5632,
+   "qloo_plus_spend": 0.842
+  },
+  {
+   "show": "Monsters Among Us",
+   "genre": "Society & Culture",
+   "sponsors": 6,
+   "qloo": 0.5985,
+   "brand_spend": 0.8379,
+   "genre_rate": 0.8318,
+   "qloo_plus_spend": 0.7909
+  },
+  {
+   "show": "What We Said",
+   "genre": "Society & Culture",
+   "sponsors": 12,
+   "qloo": 0.5544,
+   "brand_spend": 0.6224,
+   "genre_rate": 0.6811,
+   "qloo_plus_spend": 0.6046
+  },
+  {
+   "show": "The Comment Section with Drew Afualo",
+   "genre": "Society & Culture",
+   "sponsors": 4,
+   "qloo": 0.625,
+   "brand_spend": 0.3816,
+   "genre_rate": 0.5833,
+   "qloo_plus_spend": 0.5439
+  },
+  {
+   "show": "Dear Shandy",
+   "genre": "Society & Culture",
+   "sponsors": 6,
+   "qloo": 0.6318,
+   "brand_spend": 0.7909,
+   "genre_rate": 0.8212,
+   "qloo_plus_spend": 0.7909
+  },
+  {
+   "show": "Sounds Like A Cult",
+   "genre": "Society & Culture",
+   "sponsors": 5,
+   "qloo": 0.4214,
+   "brand_spend": 0.7946,
+   "genre_rate": 0.6446,
+   "qloo_plus_spend": 0.6679
+  },
+  {
+   "show": "Pop Apologists",
+   "genre": "Society & Culture",
+   "sponsors": 10,
+   "qloo": 0.5971,
+   "brand_spend": 0.5931,
+   "genre_rate": 0.7412,
+   "qloo_plus_spend": 0.6392
+  },
+  {
+   "show": "Good Guys",
+   "genre": "Society & Culture",
+   "sponsors": 8,
+   "qloo": 0.5142,
+   "brand_spend": 0.6934,
+   "genre_rate": 0.6781,
+   "qloo_plus_spend": 0.6297
+  },
+  {
+   "show": "The Unplanned Podcast with Matt & Abby",
+   "genre": "Society & Culture",
+   "sponsors": 11,
+   "qloo": 0.4518,
+   "brand_spend": 0.8009,
+   "genre_rate": 0.7791,
+   "qloo_plus_spend": 0.6918
+  },
+  {
+   "show": "Coffee Convos with Kail Lowry and Lindsie Chrisley",
+   "genre": "Society & Culture",
+   "sponsors": 8,
+   "qloo": 0.6344,
+   "brand_spend": 0.7229,
+   "genre_rate": 0.691,
+   "qloo_plus_spend": 0.7665
+  },
+  {
+   "show": "Woman Evolve with Sarah Jakes Roberts",
+   "genre": "Society & Culture",
+   "sponsors": 4,
+   "qloo": 0.6864,
+   "brand_spend": 0.8904,
+   "genre_rate": 0.8947,
+   "qloo_plus_spend": 0.8838
+  },
+  {
+   "show": "Why Won't You Date Me? with Nicole Byer",
+   "genre": "Society & Culture",
+   "sponsors": 9,
+   "qloo": 0.7981,
+   "brand_spend": 0.7949,
+   "genre_rate": 0.8184,
+   "qloo_plus_spend": 0.8942
+  },
+  {
+   "show": "New Heights with Jason & Travis Kelce",
+   "genre": "Sports",
+   "sponsors": 3,
+   "qloo": 0.5057,
+   "brand_spend": 0.3736,
+   "genre_rate": 0.2672,
+   "qloo_plus_spend": 0.4339
+  },
+  {
+   "show": "Jim Cornette Experience",
+   "genre": "Sports",
+   "sponsors": 4,
+   "qloo": 0.7412,
+   "brand_spend": 0.7829,
+   "genre_rate": 0.8575,
+   "qloo_plus_spend": 0.864
+  },
+  {
+   "show": "CHGO Chicago Bears Podcast",
+   "genre": "Sports",
+   "sponsors": 3,
+   "qloo": 0.5948,
+   "brand_spend": 0.8937,
+   "genre_rate": 0.9282,
+   "qloo_plus_spend": 0.8592
+  },
+  {
+   "show": "The Ringer NFL Show",
+   "genre": "Sports",
+   "sponsors": 3,
+   "qloo": 0.6178,
+   "brand_spend": 0.5259,
+   "genre_rate": 0.5,
+   "qloo_plus_spend": 0.6264
+  },
+  {
+   "show": "Locked On Bills - Daily Podcast On The Buffalo Bills",
+   "genre": "Sports",
+   "sponsors": 6,
+   "qloo": 0.7303,
+   "brand_spend": 0.7015,
+   "genre_rate": 0.9045,
+   "qloo_plus_spend": 0.8576
+  },
+  {
+   "show": "Locked On Auburn -  Daily Podcast On Auburn Tigers Football & Basketball",
+   "genre": "Sports",
+   "sponsors": 4,
+   "qloo": 0.625,
+   "brand_spend": 0.7105,
+   "genre_rate": 0.9583,
+   "qloo_plus_spend": 0.7588
+  },
+  {
+   "show": "Talkin' Baseball (MLB Podcast)",
+   "genre": "Sports",
+   "sponsors": 7,
+   "qloo": 0.5701,
+   "brand_spend": 0.7659,
+   "genre_rate": 0.7394,
+   "qloo_plus_spend": 0.7738
+  },
+  {
+   "show": "Locked On Fantasy Basketball \u2013 Daily NBA Fantasy Basketball Podcast",
+   "genre": "Sports",
+   "sponsors": 3,
+   "qloo": 0.8707,
+   "brand_spend": 0.6667,
+   "genre_rate": 0.9569,
+   "qloo_plus_spend": 0.8621
+  },
+  {
+   "show": "Locked On Packers - Daily Podcast On The Green Bay Packers",
+   "genre": "Sports",
+   "sponsors": 5,
+   "qloo": 0.7161,
+   "brand_spend": 0.6696,
+   "genre_rate": 0.9536,
+   "qloo_plus_spend": 0.8107
+  },
+  {
+   "show": "Insight with Chris Van Vliet",
+   "genre": "Sports",
+   "sponsors": 5,
+   "qloo": 0.625,
+   "brand_spend": 0.7375,
+   "genre_rate": 0.7732,
+   "qloo_plus_spend": 0.7286
+  },
+  {
+   "show": "Harris Fantasy Football Podcast",
+   "genre": "Sports",
+   "sponsors": 7,
+   "qloo": 0.5516,
+   "brand_spend": 0.6653,
+   "genre_rate": 0.5661,
+   "qloo_plus_spend": 0.6296
+  },
+  {
+   "show": "Jim Cornette\u2019s Drive-Thru",
+   "genre": "Sports",
+   "sponsors": 4,
+   "qloo": 0.7039,
+   "brand_spend": 0.7829,
+   "genre_rate": 0.8575,
+   "qloo_plus_spend": 0.8399
+  },
+  {
+   "show": "Baseball Today",
+   "genre": "Sports",
+   "sponsors": 6,
+   "qloo": 0.5545,
+   "brand_spend": 0.7379,
+   "genre_rate": 0.7758,
+   "qloo_plus_spend": 0.7348
+  },
+  {
+   "show": "The Kevin Sheehan Show",
+   "genre": "Sports",
+   "sponsors": 3,
+   "qloo": 0.5661,
+   "brand_spend": 0.6264,
+   "genre_rate": 0.6293,
+   "qloo_plus_spend": 0.6437
+  },
+  {
+   "show": "Locked On Cougars - Daily Podcast On BYU Cougars Football & Basketball",
+   "genre": "Sports",
+   "sponsors": 4,
+   "qloo": 0.636,
+   "brand_spend": 0.7105,
+   "genre_rate": 0.9583,
+   "qloo_plus_spend": 0.75
+  },
+  {
+   "show": "Locked On 49ers - Daily Podcast On The San Francisco 49ers",
+   "genre": "Sports",
+   "sponsors": 5,
+   "qloo": 0.6143,
+   "brand_spend": 0.6696,
+   "genre_rate": 0.9536,
+   "qloo_plus_spend": 0.7161
+  },
+  {
+   "show": "Locked On Raiders - Daily Podcast On The Las Vegas Raiders",
+   "genre": "Sports",
+   "sponsors": 6,
+   "qloo": 0.4985,
+   "brand_spend": 0.7015,
+   "genre_rate": 0.9045,
+   "qloo_plus_spend": 0.6545
+  },
+  {
+   "show": "Locked On LSU - Daily Podcast On LSU Tigers Football & Basketball",
+   "genre": "Sports",
+   "sponsors": 4,
+   "qloo": 0.6776,
+   "brand_spend": 0.7105,
+   "genre_rate": 0.9583,
+   "qloo_plus_spend": 0.7697
+  },
+  {
+   "show": "The Dane Moore NBA Podcast",
+   "genre": "Sports",
+   "sponsors": 3,
+   "qloo": 0.75,
+   "brand_spend": 0.658,
+   "genre_rate": 0.7155,
+   "qloo_plus_spend": 0.7701
+  },
+  {
+   "show": "Something to Wrestle with Bruce Prichard",
+   "genre": "Sports",
+   "sponsors": 5,
+   "qloo": 0.7286,
+   "brand_spend": 0.8536,
+   "genre_rate": 0.8232,
+   "qloo_plus_spend": 0.9161
+  },
+  {
+   "show": "Pat Mayo Experience",
+   "genre": "Sports",
+   "sponsors": 3,
+   "qloo": 0.819,
+   "brand_spend": 0.8477,
+   "genre_rate": 0.9195,
+   "qloo_plus_spend": 0.9483
+  },
+  {
+   "show": "Lex Fridman Podcast",
+   "genre": "Technology",
+   "sponsors": 4,
+   "qloo": 0.8092,
+   "brand_spend": 0.7917,
+   "genre_rate": 0.9167,
+   "qloo_plus_spend": 0.9101
+  },
+  {
+   "show": "Deep Questions with Cal Newport",
+   "genre": "Technology",
+   "sponsors": 7,
+   "qloo": 0.8135,
+   "brand_spend": 0.7421,
+   "genre_rate": 0.8704,
+   "qloo_plus_spend": 0.8836
+  },
+  {
+   "show": "This Week in Tech (Audio)",
+   "genre": "Technology",
+   "sponsors": 3,
+   "qloo": 0.8362,
+   "brand_spend": 0.7299,
+   "genre_rate": 0.7874,
+   "qloo_plus_spend": 0.9023
+  },
+  {
+   "show": "This Week in Startups",
+   "genre": "Technology",
+   "sponsors": 3,
+   "qloo": 0.7586,
+   "brand_spend": 0.2615,
+   "genre_rate": 0.5431,
+   "qloo_plus_spend": 0.4713
+  },
+  {
+   "show": "Accidental Tech Podcast",
+   "genre": "Technology",
+   "sponsors": 4,
+   "qloo": 0.8443,
+   "brand_spend": 0.7171,
+   "genre_rate": 0.8289,
+   "qloo_plus_spend": 0.886
+  },
+  {
+   "show": "9to5Mac Happy Hour",
+   "genre": "Technology",
+   "sponsors": 5,
+   "qloo": 0.7179,
+   "brand_spend": 0.7464,
+   "genre_rate": 0.7304,
+   "qloo_plus_spend": 0.8054
+  },
+  {
+   "show": "True Crime Obsessed",
+   "genre": "True Crime",
+   "sponsors": 11,
+   "qloo": 0.5264,
+   "brand_spend": 0.77,
+   "genre_rate": 0.6218,
+   "qloo_plus_spend": 0.6982
+  },
+  {
+   "show": "Cold Case Files",
+   "genre": "True Crime",
+   "sponsors": 6,
+   "qloo": 0.3303,
+   "brand_spend": 0.6288,
+   "genre_rate": 0.6227,
+   "qloo_plus_spend": 0.4742
+  },
+  {
+   "show": "National Park After Dark",
+   "genre": "True Crime",
+   "sponsors": 8,
+   "qloo": 0.5708,
+   "brand_spend": 0.8314,
+   "genre_rate": 0.816,
+   "qloo_plus_spend": 0.7877
+  },
+  {
+   "show": "Let's Not Meet: A True Horror Podcast",
+   "genre": "True Crime",
+   "sponsors": 6,
+   "qloo": 0.5712,
+   "brand_spend": 0.7773,
+   "genre_rate": 0.8712,
+   "qloo_plus_spend": 0.7121
+  },
+  {
+   "show": "I Survived",
+   "genre": "True Crime",
+   "sponsors": 3,
+   "qloo": 0.4282,
+   "brand_spend": 0.9828,
+   "genre_rate": 1.0,
+   "qloo_plus_spend": 0.8506
+  },
+  {
+   "show": "Crime Weekly",
+   "genre": "True Crime",
+   "sponsors": 4,
+   "qloo": 0.7237,
+   "brand_spend": 0.8202,
+   "genre_rate": 0.7961,
+   "qloo_plus_spend": 0.8246
+  },
+  {
+   "show": "Lights Out",
+   "genre": "True Crime",
+   "sponsors": 4,
+   "qloo": 0.5285,
+   "brand_spend": 0.864,
+   "genre_rate": 0.8794,
+   "qloo_plus_spend": 0.761
+  },
+  {
+   "show": "Murder, Mystery & Makeup",
+   "genre": "True Crime",
+   "sponsors": 3,
+   "qloo": 0.5575,
+   "brand_spend": 0.8764,
+   "genre_rate": 0.8822,
+   "qloo_plus_spend": 0.8218
+  },
+  {
+   "show": "Mile Higher",
+   "genre": "True Crime",
+   "sponsors": 9,
+   "qloo": 0.3985,
+   "brand_spend": 0.7233,
+   "genre_rate": 0.8237,
+   "qloo_plus_spend": 0.6058
+  },
+  {
+   "show": "Moms and Mysteries: A True Crime Podcast",
+   "genre": "True Crime",
+   "sponsors": 4,
+   "qloo": 0.6886,
+   "brand_spend": 0.8553,
+   "genre_rate": 0.8487,
+   "qloo_plus_spend": 0.8947
+  },
+  {
+   "show": "I Think Not!",
+   "genre": "True Crime",
+   "sponsors": 3,
+   "qloo": 0.7126,
+   "brand_spend": 0.7701,
+   "genre_rate": 0.8247,
+   "qloo_plus_spend": 0.842
+  },
+  {
+   "show": "LOVE MURDER",
+   "genre": "True Crime",
+   "sponsors": 6,
+   "qloo": 0.4727,
+   "brand_spend": 0.85,
+   "genre_rate": 0.7894,
+   "qloo_plus_spend": 0.7333
+  },
+  {
+   "show": "Invisible Choir",
+   "genre": "True Crime",
+   "sponsors": 5,
+   "qloo": 0.7411,
+   "brand_spend": 0.7911,
+   "genre_rate": 0.7161,
+   "qloo_plus_spend": 0.8982
+  },
+  {
+   "show": "Crime Salad",
+   "genre": "True Crime",
+   "sponsors": 3,
+   "qloo": 0.3966,
+   "brand_spend": 0.8017,
+   "genre_rate": 0.7931,
+   "qloo_plus_spend": 0.6638
+  },
+  {
+   "show": "People are the Worst",
+   "genre": "True Crime",
+   "sponsors": 7,
+   "qloo": 0.4974,
+   "brand_spend": 0.8505,
+   "genre_rate": 0.7897,
+   "qloo_plus_spend": 0.7354
+  },
+  {
+   "show": "Crimes of the Centuries",
+   "genre": "True Crime",
+   "sponsors": 5,
+   "qloo": 0.5214,
+   "brand_spend": 0.8732,
+   "genre_rate": 0.8393,
+   "qloo_plus_spend": 0.7661
+  },
+  {
+   "show": "Big Mad True Crime",
+   "genre": "True Crime",
+   "sponsors": 4,
+   "qloo": 0.4561,
+   "brand_spend": 0.6096,
+   "genre_rate": 0.7675,
+   "qloo_plus_spend": 0.5636
+  },
+  {
+   "show": "The Connect- with Johnny Mitchell",
+   "genre": "True Crime",
+   "sponsors": 5,
+   "qloo": 0.7125,
+   "brand_spend": 0.8339,
+   "genre_rate": 0.7357,
+   "qloo_plus_spend": 0.8196
+  },
+  {
+   "show": "A Date With Dateline",
+   "genre": "True Crime",
+   "sponsors": 3,
+   "qloo": 0.7759,
+   "brand_spend": 0.5259,
+   "genre_rate": 0.5977,
+   "qloo_plus_spend": 0.7184
+  },
+  {
+   "show": "Not Skinny But Not Fat",
+   "genre": "TV & Film",
+   "sponsors": 12,
+   "qloo": 0.7568,
+   "brand_spend": 0.5255,
+   "genre_rate": 0.5366,
+   "qloo_plus_spend": 0.6905
+  },
+  {
+   "show": "LadyGang",
+   "genre": "TV & Film",
+   "sponsors": 6,
+   "qloo": 0.5455,
+   "brand_spend": 0.5788,
+   "genre_rate": 0.7,
+   "qloo_plus_spend": 0.5182
+  },
+  {
+   "show": "The Sarah Fraser Show",
+   "genre": "TV & Film",
+   "sponsors": 5,
+   "qloo": 0.5893,
+   "brand_spend": 0.6893,
+   "genre_rate": 0.6232,
+   "qloo_plus_spend": 0.6589
+  },
+  {
+   "show": "Andy's Girls: A Real Housewives Podcast",
+   "genre": "TV & Film",
+   "sponsors": 4,
+   "qloo": 0.6776,
+   "brand_spend": 0.6952,
+   "genre_rate": 0.6952,
+   "qloo_plus_spend": 0.7105
+  },
+  {
+   "show": "Off The Vine with Kaitlyn Bristowe",
+   "genre": "TV & Film",
+   "sponsors": 4,
+   "qloo": 0.7588,
+   "brand_spend": 0.4693,
+   "genre_rate": 0.807,
+   "qloo_plus_spend": 0.6404
+  },
+  {
+   "show": "The Filmcast",
+   "genre": "TV & Film",
+   "sponsors": 3,
+   "qloo": 0.5805,
+   "brand_spend": 0.7586,
+   "genre_rate": 0.5517,
+   "qloo_plus_spend": 0.7385
+  },
+  {
+   "show": "Dead Meat Podcast",
+   "genre": "TV & Film",
+   "sponsors": 3,
+   "qloo": 0.1925,
+   "brand_spend": 0.7126,
+   "genre_rate": 0.5517,
+   "qloo_plus_spend": 0.3736
+  },
+  {
+   "show": "Inside of You with Michael Rosenbaum",
+   "genre": "TV & Film",
+   "sponsors": 7,
+   "qloo": 0.328,
+   "brand_spend": 0.7421,
+   "genre_rate": 0.7593,
+   "qloo_plus_spend": 0.6204
+  },
+  {
+   "show": "The Confused Breakfast",
+   "genre": "TV & Film",
+   "sponsors": 5,
+   "qloo": 0.6232,
+   "brand_spend": 0.7321,
+   "genre_rate": 0.8071,
+   "qloo_plus_spend": 0.7946
+  },
+  {
+   "show": "Talk Ville",
+   "genre": "TV & Film",
+   "sponsors": 4,
+   "qloo": 0.4101,
+   "brand_spend": 0.9561,
+   "genre_rate": 0.8399,
+   "qloo_plus_spend": 0.7961
+  },
+  {
+   "show": "The Bravo Docket",
+   "genre": "TV & Film",
+   "sponsors": 6,
+   "qloo": 0.5,
+   "brand_spend": 0.8136,
+   "genre_rate": 0.6439,
+   "qloo_plus_spend": 0.6985
+  },
+  {
+   "show": "The Popcast With Knox and Jamie",
+   "genre": "TV & Film",
+   "sponsors": 5,
+   "qloo": 0.6054,
+   "brand_spend": 0.6571,
+   "genre_rate": 0.6357,
+   "qloo_plus_spend": 0.7
+  },
+  {
+   "show": "Real Moms of Bravo",
+   "genre": "TV & Film",
+   "sponsors": 3,
+   "qloo": 0.7586,
+   "brand_spend": 0.842,
+   "genre_rate": 0.7816,
+   "qloo_plus_spend": 0.9339
+  },
+  {
+   "show": "Wild Ride! with Steve-O",
+   "genre": "TV & Film",
+   "sponsors": 4,
+   "qloo": 0.568,
+   "brand_spend": 0.9057,
+   "genre_rate": 0.8311,
+   "qloo_plus_spend": 0.8465
+  }
+ ]
+}

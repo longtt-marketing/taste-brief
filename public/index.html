@@ -31,7 +31,7 @@ nav.top .links a{color:var(--mute);text-decoration:none}nav.top .links a:hover{c
 .stat-m{display:none}
 .proof{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:26px;display:flex;flex-direction:column;gap:16px}
 .proof .eyebrow{margin:0;color:var(--faint)}
-.proof .big{margin:0;font-size:21px;font-weight:600;line-height:1.35}
+.proof .big{margin:0;font-size:22px;font-weight:600;line-height:1.35}.proof .big .hi{color:var(--ok)}
 .pts{display:flex;flex-direction:column;gap:10px}
 .pt{display:grid;grid-template-columns:150px minmax(0,1fr) 52px;gap:12px;align-items:center;font-size:14px}
 .pt i{display:block;height:12px;border-radius:6px;background:#1c2a44}
@@ -49,8 +49,8 @@ nav.top .links a{color:var(--mute);text-decoration:none}nav.top .links a:hover{c
   .row button{width:100%}
 }
 .how{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:16px}
-.how div{background:transparent;border:1px solid var(--line);border-radius:18px;padding:22px;display:flex;flex-direction:column;gap:10px}
-.how .k{font-family:var(--mono);font-size:13px;color:var(--acc)}.how .k.lock{color:var(--acc)}
+.how div{background:transparent;border:0;border-top:2px solid var(--neg);padding:18px 2px 0;display:flex;flex-direction:column;gap:8px}
+.how div.on{border-top-color:var(--ok)}.how .k{font-family:var(--mono);font-size:13px;color:var(--faint)}.how div.on .k{color:var(--ok)}
 .how h2{margin:0;font-family:var(--display);font-size:21px;font-weight:700;letter-spacing:-.01em;line-height:1.2}
 .how p{margin:0;font-size:15px;color:var(--mute)}
 .brand{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
@@ -183,7 +183,16 @@ body.result #how{display:none}
 @media (max-width:600px){.verdicts thead{display:none}.verdicts,.verdicts tbody,.verdicts tr,.verdicts td{display:block}.verdicts tr{padding:10px 0;border-bottom:1px solid var(--dark-line)}.verdicts td{border:0;padding:2px 0}.verdicts td[data-label]::before{content:attr(data-label) ": ";color:#9aa0ad;font-size:12px}}
 @media (max-width:600px){.tests-card-inner .loop,.loop{margin-left:-12px;margin-right:-12px;padding:16px}.loop .steps{gap:8px}.runbar .acts{margin-left:0}}
 .pods-note{margin:14px 0 0;font-size:14px;color:var(--mute)}
-.pods .ads{font-family:var(--mono);font-size:12px;color:var(--faint)}
+.step{margin:0 0 6px;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ok)}
+.ptable{overflow-x:auto}.ptable>div{min-width:760px}
+.phead,.prow{display:grid;grid-template-columns:40px minmax(0,2.1fr) minmax(0,1.2fr) minmax(0,1.7fr) 140px;gap:16px;align-items:center}
+.phead{padding:0 0 10px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:12px;color:var(--faint)}
+.prow{padding:13px 0;border-bottom:1px solid #1c2a44}.prow .n{font-family:var(--mono);color:var(--acc)}.prow>b{font-size:16px;font-weight:600}
+.prow .fit{display:flex;align-items:center;gap:10px}.prow .fit i{display:block;flex:1;height:8px;border-radius:4px;background:#1c2a44}.prow .fit i b{display:block;height:8px;border-radius:4px;background:var(--ok)}
+.prow .fit>span{font-family:var(--mono);font-size:13px;color:var(--ok)}
+.prow .ads{display:flex;flex-direction:column;gap:2px;font-size:13px;color:var(--mute)}.prow .cnt{font-family:var(--mono);font-size:12px;color:var(--acc)}.prow .cnt.none{color:var(--faint)}
+.prow .next{font-size:13px;font-weight:600;color:var(--ink)}.prow .next.none{font-weight:500;color:var(--faint)}
+@media (max-width:640px){.ptable>div{min-width:0}.phead{display:none}.prow{grid-template-columns:30px minmax(0,1fr);gap:6px 10px;align-items:start}.prow>.fit,.prow>.ads,.prow>.next{grid-column:2}.prow .fit{max-width:260px}}
 .tests-rule{margin:0 0 14px;font-size:14px;color:var(--mute)}
 .loop button:disabled{opacity:1;background:var(--ok-soft);color:var(--ok);cursor:default}
 .loop input[type=file]::file-selector-button{font:inherit;font-weight:600;color:var(--dark-ink);background:transparent;border:1px solid #3a3f4a;border-radius:10px;padding:8px 12px;margin-right:10px;cursor:pointer}
@@ -200,12 +209,12 @@ body.result #how{display:none}
 <div class="hero-copy">
 <p class="kicker">For brands buying podcast and social ads</p>
 <h1>Pick podcasts by taste, not by chart rank.</h1>
-<p class="lede">An agent reads your audience's taste in Qloo and picks the podcasts to sponsor, the interests to target and the ad to test first. Checked against where brands really sponsor.</p>
+<p class="lede">An agent reads your buyers' taste in Qloo and tells you which podcasts to sponsor first, the interests to target and the ad to test.</p>
 <div class="cta"><button id="replay" type="button" hidden>See a real run now</button><a href="#f">or build your own</a></div>
 </div>
 <div class="proof" id="proof">
 <p class="eyebrow">Real sponsorships · 216 podcasts · 62 brands</p>
-<p class="big">Shown one show a brand sponsors and one it doesn't, Qloo ranked the sponsored one higher 65% of the time. The chart did 52%.</p>
+<p class="big">Shown one show a brand sponsors and one it doesn't, Qloo picked the sponsored one <span class="hi">65%</span> of the time. The chart managed 52%.</p>
 <div class="pts" aria-label="Points above a coin flip">
 <div class="pt"><span>Qloo taste</span><i><b style="width:100%"></b></i><span>+14.7</span></div>
 <div class="pt"><span>Ad volume</span><i><b class="base" style="width:56%"></b></i><span>+8.2</span></div>
@@ -213,7 +222,7 @@ body.result #how{display:none}
 <div class="pt"><span>Chart rank</span><i><b class="base" style="width:15%"></b></i><span>+2.2</span></div>
 <p class="axis">Points above a coin flip (0 = 50%)</p>
 </div>
-<div class="chips"><span>Locked before the data</span><span>Holds within each genre</span><span>Prospective test locked</span></div>
+<div class="chips"><span>Locked before the data</span><span>Holds in every genre</span><span>Forward test locked</span></div>
 <p class="foot">Sponsor reads from the shows' own episode notes, never shown to Qloo. Pre-registered labels give the same: 66% against 53%. <a href="/judge#podcasts">The full test</a></p>
 </div>
 </header>
@@ -241,9 +250,9 @@ body.result #how{display:none}
   </section>
 
   <section class="how" id="how" aria-label="What you get">
-<div><span class="k">Podcasts</span><h2>Shows your buyers love most</h2><p>Ranked by Qloo for your brand, with the advertisers each show already runs.</p></div>
-<div><span class="k">Paid social</span><h2>Interests Meta can target</h2><p>Brands, artists and shows your buyers love, each with the Qloo result behind it.</p></div>
-<div><span class="k lock">Tests</span><h2>Locked before you spend</h2><p>One change per test, a server receipt, and a rule fixed in advance for reading results.</p></div>
+<div class="on"><span class="k">01 · Podcasts</span><h2>Shows your buyers love, that already sell ads</h2><p>Ranked by Qloo taste and proven ad demand.</p></div>
+<div><span class="k">02 · Paid social</span><h2>Interests Meta can target</h2><p>Each with the Qloo result behind it.</p></div>
+<div><span class="k">03 · Tests</span><h2>What to test first, locked</h2><p>One change per test, read back by a fixed rule.</p></div>
 </section>
 <section aria-live="polite">
     <p id="status" role="status"></p>
@@ -331,7 +340,7 @@ function versus(base, b, unbacked, scored, market) {
   if (base.error) return `<p class="err">The plain AI comparison did not work this time: ${esc(base.error)}</p>`;
   const names = (x) => list(x.meta_interests).map((i) => esc(cleanInterest(i.interest))).join(", ");
   const city = esc(String(market || "").split(",")[0]);
-  return `<section class="panel card vs">${scored ? `<h2><span>The same question, with and without Qloo</span><small>every interest scored by Qloo for this brand's audience in ${city}</small></h2>` : ""}<div class="grid">
+  return `<section class="panel card vs"><p class="step">Step 2 · Meta interests</p>${scored ? `<h2><span>The same question, with and without Qloo</span><small>every interest scored by Qloo for this brand's audience in ${city}</small></h2>` : ""}<div class="grid">
     <div class="guess"><h3>Plain AI guess, no data</h3>${scored ? gradedLine(scored.plain) : `<p><strong>Interests:</strong> ${names(base)}</p>`}</div>
     <div class="ours"><h3>Taste Brief, from Qloo</h3>${scored ? gradedLine(scored.taste_brief) : `<p><strong>Interests:</strong> ${names(b)}</p>`}</div>
   </div>${scored ? `<p class="note">Same grader for both: each interest is looked up in Qloo by its exact name, then Qloo scores how much this audience likes it. Generic interests such as "Running" can't be scored. For Taste Brief's picks this is partly circular, since they come from Qloo; it shows how far each pick is from Qloo's view of the audience, not how an ad will do. A score here can differ slightly from the one cited in the brief below, which came from the agent's own call (some narrowed to a product tag).</p>` : ""}${!scored && list(unbacked).length ? `<p class="unbacked"><strong>The plain guess would target these, and Qloo returned none of them in this run:</strong> ${list(unbacked).map((x) => esc(cleanInterest(x.label))).join(", ")}. That does not make them wrong. It means they are a guess, so test them against the Qloo picks or leave them out.</p>` : ""}</section>`;
@@ -499,15 +508,19 @@ function podcastPanel(p) {
   if (!p || p.error || !list(p.shows).length) return "";
   const t = PODCAST_TEST;
   const seeds = [...new Set(list(p.shows).flatMap((s) => list(s.driven_by).map((d) => d.name)))];
-  const li = sponsorReady(list(p.shows)).slice(0, 8).map((s, i) => {
+  const shows = sponsorReady(list(p.shows)).slice(0, 8);
+  const affs = shows.map((s) => Number(s.affinity) || 0), lo = Math.min(...affs) - 0.01, hi = Math.max(...affs);
+  const li = shows.map((s, i) => {
     const ads = list(s.advertisers);
-    const why = list(s.driven_by)[0];
-    return `<li><span class="n">${String(i + 1).padStart(2, "0")}</span><div class="meta"><b>${esc(s.name)}</b>${ads.length ? `<span>Its episode notes already run ads for ${ads.slice(0, 4).map(esc).join(", ")}${ads.length > 4 ? ` and ${ads.length - 4} more` : ""}</span>` : `<span>No sponsor reads in the data we read: ask the host for rates</span>`}${why && seeds.length > 1 ? `<span class="why">Fit driven by ${esc(why.name)} fans</span>` : ""}</div><span class="sc">${s.affinity == null ? "" : Number(s.affinity).toFixed(3)}<br><span class="ads">${ads.length} ads</span></span></li>`;
+    const fit = Math.max(4, Math.round(((Number(s.affinity) - lo) / Math.max(hi - lo, 0.001)) * 100));
+    return `<div class="prow"><span class="n">${String(i + 1).padStart(2, "0")}</span><b>${esc(s.name)}</b>`
+      + `<span class="fit"><i><b style="width:${fit}%"></b></i><span>${s.affinity == null ? "" : Number(s.affinity).toFixed(3)}</span></span>`
+      + `<span class="ads"><span class="cnt${ads.length ? "" : " none"}">${ads.length ? `${ads.length} advertiser${ads.length === 1 ? "" : "s"}` : "None found"}</span>${ads.length ? `<span>${ads.slice(0, 3).map(esc).join(", ")}${ads.length > 3 ? ` +${ads.length - 3}` : ""}</span>` : ""}</span>`
+      + `<span class="next${ads.length ? "" : " none"}">${ads.length ? "Request rates" : "Ask if it sells ads"}</span></div>`;
   });
-  const half = Math.ceil(li.length / 2);
-  return `<section class="panel card"><h2><span>Podcasts to sponsor first</span><small>shows ${seeds.length === 1 ? `${esc(seeds[0])} fans like (Qloo explainability)` : "this audience likes"}, ordered by taste and proven ad demand</small></h2>
-    <div class="pods"><ol>${li.slice(0, half).join("")}</ol><ol start="${half + 1}">${li.slice(half).join("")}</ol></div>
-    <p class="pods-note">Score: how much the brand's fans like the show (Qloo). Ads: advertisers its episode notes already run. In the locked test on ${t.shows} held-out US podcasts and ${t.brands} brands, Qloo's taste rank put a show the brand sponsors above one it doesn't ${Math.round(t.qloo * 100)}% of the time (the chart ${Math.round(t.chart * 100)}%), and this order, taste plus ad demand, found 1.9 sponsored shows in each top 10, against 1.6 for either alone and 0.8 for the chart. Mostly US shows: check reach in your market. <a href="/judge#podcasts">The test</a></p></section>`;
+  return `<section class="panel card pods-card"><p class="step">Step 1 · Podcasts to sponsor first</p><h2><span>Shows ${seeds.length === 1 ? `${esc(seeds[0])} fans love` : "this audience loves"} that already sell ads</span><small>taste fit from Qloo (explainability: ${seeds.length === 1 ? `driven by ${esc(seeds[0])} fans` : "per show"}), ordered by taste and proven ad demand</small></h2>
+    <div class="ptable"><div class="phead"><span>#</span><span>Show</span><span>Taste fit</span><span>Proven ad demand</span><span>Next step</span></div>${li.join("")}</div>
+    <p class="pods-note">Taste fit: how much the brand's fans like the show (Qloo). Proven ad demand: advertisers its episode notes already run. In the locked test on ${t.shows} held-out US podcasts and ${t.brands} brands, Qloo's taste rank put a show the brand sponsors above one it doesn't ${Math.round(t.qloo * 100)}% of the time (the chart ${Math.round(t.chart * 100)}%), and this order, taste plus ad demand, found 1.9 sponsored shows in a top 10 on average in an exploratory count, against 1.6 for either alone and 0.8 for the chart. Mostly US shows: check reach in your market. <a href="/judge#podcasts">The test</a></p></section>`;
 }
 
 // The agent's own decisions in this run, read from its Qloo calls, and what it chose not to use (its caveats).
@@ -537,7 +550,7 @@ function testsCard(b, j) {
   const same = tp.every((x) => x.kpi === tp[0].kpi && x.stop_if === tp[0].stop_if);
   const city = esc(String(j.market).split(",")[0]);
   const lines = tp.map((x) => `<li><strong>${esc(x.hypothesis)}</strong><dl><dt>Changes</dt><dd>${x.variable === "targeting" ? "Targeting only, with your usual creative" : x.variable === "creative" ? "Creative only, on the broad audience" : esc(x.variable)}</dd><dt>Run</dt><dd>${esc(x.ad_set)}</dd>${x.why ? `<dt>Why</dt><dd>${esc(x.why)}</dd>` : ""}${same ? "" : `<dt>Judge on</dt><dd>${esc(x.kpi)}</dd><dt>Pause rule</dt><dd>${esc(x.stop_if)}</dd>`}</dl>${ev(x, true)}</li>`).join("");
-  return card("What to test first", `<p class="tests-rule">Control for every test: broad targeting in ${city}, same ages, your usual message. Each test changes one thing${same ? `, judged on ${esc(lc(tp[0].kpi))}` : ""}. The rule for reading results is locked below.</p><ul class="tests">${lines}</ul>${loopPanel()}`, "each test rests on the Qloo results shown");
+  return card("What to test first", `<p class="step" style="margin-top:-6px">Step 3 · Against the usual ad</p><p class="tests-rule">Control for every test: broad targeting in ${city}, same ages, your usual message. Each test changes one thing${same ? `, judged on ${esc(lc(tp[0].kpi))}` : ""}. The rule for reading results is locked below.</p><ul class="tests">${lines}</ul>${loopPanel()}`, "each test rests on the Qloo results shown");
 }
 
 // Draw one result: from a run that just finished, or the recorded run of the example.
@@ -550,7 +563,7 @@ function showResult(j) {
   const asked = `<b>${esc(j.product)}</b><span>${esc(j.market)}${j.compare_market ? ` vs ${esc(j.compare_market)}` : ""}</span>${j.references ? `<span>${esc(j.references)}</span>` : ""}`;
   const steps = `<span>${j.trace.length} agent steps${j.run?.qloo_calls ? `, ${j.run.qloo_calls} Qloo calls with grading and the city lists` : ""}</span><span class="acts"><button type="button" class="ghost" id="copy-md">Copy the brief</button><button type="button" class="ghost" id="dl-csv">Interests as CSV</button></span>`;
   const banner = j.mode === "replay"
-    ? `<div class="runbar"><span>Real run, recorded ${esc(when)}</span>${asked}${steps}</div>`
+    ? `<div class="runbar"><span class="pill live">Real run · ${esc(when)}</span>${asked}${steps}</div>`
     : j.mode === "live"
     ? `<div class="runbar"><span>Live run on real Qloo data${j.quota ? `, ${j.quota.left} free runs left today` : ""}</span>${asked}${steps}</div>`
     : `<div class="banner synthetic">Sample data. The names and numbers below are made up to show how it works. Add the access code, or come back tomorrow, for real Qloo data.</div><div class="runbar">${asked}${steps}</div>`;

@@ -1,6 +1,6 @@
 """Advertiser index for the app's "Podcasts to sponsor first" panel: for every show we read (development and held-out
 feeds), the dictionary brands its own episode notes advertise in at least 2 episodes, with the strict sponsor-cue rule
-of deviation 1. Writes src/data/podcast-sponsors.json. Evidence only: the app never uses it to rank.
+of deviation 1. Writes src/data/podcast-sponsors.json. Evidence only: the page orders podcasts by Qloo rank plus this ad-demand rank (public/rank.js).
 
 Usage: python scripts/podcast/build-index.py <dev feeds.json> [held-out feeds.json]
 """
