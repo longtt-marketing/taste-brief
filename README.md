@@ -8,16 +8,20 @@ and values against what Qloo returned.
 
 Built for the [Qloo Agentic Hackathon](https://qloo.devpost.com/).
 
-## Does Qloo pick what brands really pay for?
+## Does Qloo pick the podcasts brands really sponsor?
 
-The answer key is money: sponsor reads that podcasts publish in their own episode notes (public RSS), never shown to
-Qloo. Hypotheses were locked and pushed before any held-out show was read
-([docs/podcast-check/PREREGISTRATION.md](docs/podcast-check/PREREGISTRATION.md)). On 259 held-out US podcasts and 76
-brands, shown one show a brand paid for and one it didn't, Qloo ranked the paid one higher 66% of the time (AUC 0.663,
-95% CI 0.630 to 0.697), against Apple chart rank 0.528, Qloo popularity 0.517 and ad volume 0.581; above chance for 65 of
-76 brands, and within the same genre 0.63 against 0.53 (exploratory checks after an independent audit:
-[robustness.json](docs/podcast-check/robustness.json)). With a stricter sponsor label (82/100 precise in a hand check, declared before analysis) it is 0.647 on 216
-shows and 62 brands. Details and scripts: [docs/podcast-check](docs/podcast-check/), [scripts/podcast](scripts/podcast/).
+The answer key is real sponsorships: sponsor reads that podcasts publish in their own episode notes (public RSS), never
+shown to Qloo. Hypotheses were locked and pushed before any held-out show was read
+([docs/podcast-check/PREREGISTRATION.md](docs/podcast-check/PREREGISTRATION.md); check the fingerprints on any OS with
+`python scripts/podcast/verify_lock.py`). With the strict sponsor label declared before analysis (82 of 100 matches are
+sponsor reads, read by Claude), on 216 held-out US podcasts and 62 brands, Qloo ranked a show the brand sponsors above one
+it doesn't 65% of the time (AUC 0.647, 95% CI 0.611 to 0.684), against Apple chart rank 0.522, Qloo popularity 0.526 and
+ad volume 0.582. With the pre-registered label: 0.663 on 259 shows and 76 brands. All pre-registered hypotheses pass on
+both. Exploratory checks after two independent audits ([robustness.json](docs/podcast-check/robustness.json),
+[recency.json](docs/podcast-check/recency.json)): the brand's own Qloo score beats other brands' scores on the same shows
+(0.65 against 0.57), Qloo beats the chart inside every genre (0.62 against 0.55), it holds for deals too new to be in
+Qloo's data (0.62 against 0.45, 43 placements), and resampling shows as well as brands gives 0.60 to 0.70. Details and
+scripts: [docs/podcast-check](docs/podcast-check/), [scripts/podcast](scripts/podcast/).
 
 A second set of benchmarks is graded by Qloo itself on a held-out competitor's audience (61% of Taste Brief's interests
 score 0.9+ against 19% for the same model without data), by Meta's interest list (35% targetable and 0.9+ against 13%)

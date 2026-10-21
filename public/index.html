@@ -3,8 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Taste Brief: campaign briefs you can check against Qloo</title>
-<meta name="description" content="Tell it what you sell and where. Taste Brief asks Qloo what else that audience likes, then writes a campaign brief you can check line by line.">
+<title>Taste Brief: pick podcasts by taste, not by chart rank</title>
+<meta name="description" content="An agent reads your audience's taste in Qloo and picks the podcasts to sponsor, the interests to target and the ad to test first. Checked against 76 brands' real podcast sponsorships.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="Taste Brief: pick podcasts by taste, not by chart rank">
+<meta property="og:description" content="Qloo ranked the shows brands really sponsor above the rest 66% of the time; the chart did 53%. Pre-registered, 259 held-out US podcasts, 76 brands.">
+<meta property="og:image" content="https://taste-brief.thelongmarketing.workers.dev/og.png">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -19,7 +24,8 @@ body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 var(--body)}
 main{max-width:1120px;margin:0 auto;padding:28px 16px 80px;display:flex;flex-direction:column;gap:24px}
 nav.top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
 nav.top .links{display:flex;flex-wrap:wrap;gap:18px;font-size:15px}
-a{color:#9fd8ff}a:hover{color:#fff}
+a{color:var(--ok);text-underline-offset:3px;text-decoration-thickness:1px}a:hover{color:#fff}
+nav.top .links a{color:var(--mute);text-decoration:none}nav.top .links a:hover{color:var(--ink);text-decoration:underline}
 .hero{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(460px,100%),1fr));gap:48px;align-items:center}
 .hero .kicker{margin:0 0 16px;font-family:var(--mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--ok)}
 .stat-m{display:none}
@@ -53,6 +59,7 @@ a{color:#9fd8ff}a:hover{color:#fff}
 .pill.live{background:var(--ok-soft);color:var(--ok)}
 h1{font-family:var(--display);font-weight:700;font-size:clamp(36px,10vw,66px);line-height:1.0;letter-spacing:-.03em;margin:0}
 .lede{color:var(--mute);font-size:18px;margin:18px 0 0;max-width:34ch}
+.cta{display:flex;flex-wrap:wrap;align-items:center;gap:18px;margin-top:26px}.cta a{color:var(--mute);font-size:15px}
 @media (max-width:600px){.lede{font-size:16px}}
 .panel{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px}
 .presets{display:flex;flex-wrap:wrap;align-items:center;gap:8px;color:var(--mute);font-size:14px;margin:0 0 18px}
@@ -83,7 +90,7 @@ ul.items strong{font-weight:600}
 .ev{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;align-items:center}
 .ev .lbl{font-size:12px;color:var(--faint)}
 .src{font-size:12px;background:var(--ok-soft);color:var(--ok);border-radius:999px;padding:3px 9px}
-.src::before{content:"✓ Qloo · ";opacity:.8}
+.src::before{content:"✓ ";opacity:.8}
 .src .num{font-family:var(--mono)}
 .bad{font-size:12px;background:var(--warn-soft);color:var(--warn);border-radius:999px;padding:3px 9px}
 .bad::before{content:"Not checked: "}
@@ -95,12 +102,12 @@ ul.items strong{font-weight:600}
 .tests dd{margin:0}
 .path ol,.path ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:15px}
 .path h3{font-family:var(--display);font-size:21px;font-weight:700;letter-spacing:-.01em;color:var(--ink);margin:0 0 12px}
-.pods{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(min(460px,100%),1fr))}
+.pods{display:grid;gap:0 18px;grid-template-columns:repeat(auto-fit,minmax(min(440px,100%),1fr))}
 .pods ol{list-style:none;margin:0;padding:0;border:1px solid var(--line);border-radius:16px;overflow:hidden}
 .pods li{display:grid;grid-template-columns:34px minmax(0,1fr) 64px;gap:12px;padding:14px 16px;border-top:1px solid var(--line);align-items:start}
 .pods li:first-child{border-top:0}
 .pods .n{font-family:var(--mono);color:var(--acc)}
-.pods .sc{font-family:var(--mono);font-size:17px;text-align:right}
+.pods .sc{font-family:var(--mono);font-size:16px;text-align:right;color:var(--ok)}
 .pods .meta{display:flex;flex-direction:column;gap:5px;font-size:13px;color:var(--mute)}
 .pods .meta b{font-size:16px;color:var(--ink)}
 .pods .why{align-self:flex-start;font-family:var(--mono);font-size:12px;padding:3px 8px;border-radius:8px;background:var(--ok-soft);color:var(--ok)}
@@ -168,6 +175,14 @@ ul.items strong{font-weight:600}
 .actions{display:flex;flex-wrap:wrap;gap:10px}
 details.trace{color:var(--faint);font-size:14px}
 .err{color:var(--warn)}
+body.result #how{display:none}
+.runbar{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;border:1px solid var(--line);border-radius:14px;padding:12px 16px;font-size:14px;color:var(--mute)}
+.runbar b{color:var(--ink);font-weight:600}.runbar .dot{color:var(--faint)}
+.pods-note{margin:14px 0 0;font-size:14px;color:var(--mute)}
+.tests-rule{margin:0 0 14px;font-size:14px;color:var(--mute)}
+.loop button:disabled{opacity:1;background:var(--ok-soft);color:var(--ok);cursor:default}
+.loop input[type=file]::file-selector-button{font:inherit;font-weight:600;color:var(--dark-ink);background:transparent;border:1px solid #3a3f4a;border-radius:10px;padding:8px 12px;margin-right:10px;cursor:pointer}
+@media (min-width:900px){.path .grid{grid-template-columns:minmax(0,1fr) minmax(0,2fr)}.wide2{grid-column:1/-1}}
 </style>
 </head>
 <body>
@@ -180,21 +195,22 @@ details.trace{color:var(--faint);font-size:14px}
 <div class="hero-copy">
 <p class="kicker">For brands buying podcast and social ads</p>
 <h1>Pick podcasts by taste, not by chart rank.</h1>
-<p class="stat-m">Qloo 66% · chart 53% · coin flip 50%</p>
-<p class="lede">An agent reads your audience's taste in Qloo and picks the podcasts to sponsor, the interests to target and the ad to test first. Checked against what brands really paid.</p>
+<p class="stat-m">Qloo 65% · chart 52%</p>
+<p class="lede">An agent reads your audience's taste in Qloo and picks the podcasts to sponsor, the interests to target and the ad to test first. Checked against where brands really sponsor.</p>
+<div class="cta"><button id="replay" type="button" hidden>See a real run now</button><a href="#f">or build your own</a></div>
 </div>
 <div class="proof" id="proof">
-<p class="eyebrow">Checked against real money · 259 podcasts, 76 brands</p>
-<p class="big">Shown one show a brand paid to sponsor and one it didn't, Qloo ranked the paid one higher 66% of the time. The chart did 53%.</p>
+<p class="eyebrow">Checked against real sponsorships · 216 podcasts, 62 brands</p>
+<p class="big">Shown one show a brand sponsors and one it doesn't, Qloo ranked the sponsored one higher 65% of the time. The chart did 52%.</p>
 <div class="pts" aria-label="Points above a coin flip">
-<div class="pt"><span>Taste Brief (Qloo)</span><i><b style="width:100%"></b></i><span>+16.3</span></div>
-<div class="pt"><span>Ad volume</span><i><b class="base" style="width:50%"></b></i><span>+8.1</span></div>
-<div class="pt"><span>Chart rank</span><i><b class="base" style="width:17%"></b></i><span>+2.8</span></div>
-<div class="pt"><span>Qloo popularity</span><i><b class="base" style="width:10%"></b></i><span>+1.7</span></div>
+<div class="pt"><span>Qloo taste</span><i><b style="width:100%"></b></i><span>+14.7</span></div>
+<div class="pt"><span>Ad volume</span><i><b class="base" style="width:56%"></b></i><span>+8.2</span></div>
+<div class="pt"><span>Qloo popularity</span><i><b class="base" style="width:18%"></b></i><span>+2.6</span></div>
+<div class="pt"><span>Chart rank</span><i><b class="base" style="width:15%"></b></i><span>+2.2</span></div>
 <p class="axis">Points above a coin flip (0 = 50%)</p>
 </div>
-<div class="chips"><span>Beat chance for 65 of 76 brands</span><span>Hypotheses locked before data</span><span>Holds within each genre</span></div>
-<p class="foot">Sponsorships read from the shows' own episode notes, never shown to Qloo. <a href="/judge#podcasts">Read the pre-registration and the full test</a></p>
+<div class="chips"><span>Locked before the data</span><span>Holds within each genre</span><span>Holds for new deals</span></div>
+<p class="foot">Sponsor reads from the shows' own episode notes, never shown to Qloo. Pre-registered labels give the same: 66% against 53%. <a href="/judge#podcasts">The full test</a></p>
 </div>
 </header>
 
@@ -209,12 +225,11 @@ details.trace{color:var(--faint);font-size:14px}
         <label>What you sell<input name="product" required minlength="3" maxlength="400" placeholder="Wool running sneakers, $120"></label>
         <label>Market<input name="market" required minlength="2" maxlength="120" placeholder="London, UK"></label>
         <label>Compare with <small>optional</small><input name="compare_market" maxlength="120" placeholder="Hanoi, Vietnam"></label>
-        <label>Your brand or a close competitor <small>optional</small><input name="references" maxlength="300" placeholder="Allbirds"></label>
+        <label>Brand or competitor <small>optional</small><input name="references" maxlength="300" placeholder="Allbirds"></label>
       </div>
       <div class="row">
         <button id="go" type="submit">Build the brief</button>
-        <button id="replay" type="button" class="ghost" hidden>See a recorded live run now</button>
-        <details class="code" id="code-box"><summary>Have an access code?</summary>
+                <details class="code" id="code-box"><summary>Have an access code?</summary>
           <label>Access code <small id="code-help">optional</small><input name="code" type="password" maxlength="100" autocomplete="off"></label>
         </details>
       </div>
@@ -248,7 +263,7 @@ const cleanInterest = (s) => String(s ?? "").replace(/\s*\(check in ads manager\
 
 // The Qloo results the server checked for a line (name, affinity, type), and anything the check could not confirm.
 const ev = (item, builtOn = false) => {
-  const ok = list(item?.verified).map((e) => `<span class="src">${esc(e.name)}${e.affinity != null ? ` <span class="num">${num(e.affinity)}</span>` : ""}${e.type ? ` · ${esc(typeName(e.type))}` : ""}</span>`);
+  const ok = list(item?.verified).map((e) => `<span class="src"${e.type ? ` title="Qloo ${esc(typeName(e.type))}"` : ""}>${esc(e.name)}${e.affinity != null ? ` <span class="num">${num(e.affinity)}</span>` : ""}</span>`);
   const bad = list(item?.problems).map((p) => `<span class="bad">${esc(p)}</span>`);
   if (!ok.length && !bad.length) return "";
   return `<div class="ev">${builtOn && ok.length ? `<span class="lbl">built on</span>` : ""}${ok.join("")}${bad.join("")}</div>`;
@@ -279,7 +294,8 @@ function demographics(d) {
 function markets(m) {
   if (!m) return "";
   if (m.error) return `<p class="err">The city comparison did not work this time: ${esc(m.error)}</p>`;
-  const types = list(m.types).filter((t) => !t.error);
+  const ORDER = ["brand", "TV show", "artist", "place"];
+  const types = list(m.types).filter((t) => !t.error).sort((a, b) => ORDER.indexOf(typeName(a.type)) - ORDER.indexOf(typeName(b.type)));
   if (!types.length) return `<p class="err">The city comparison did not work this time.</p>`;
   const city = (s) => esc(String(s).split(",")[0]);
   const row = (name, val) => `<div class="mk-row"><span>${esc(name)}</span><span>${esc(val)}</span></div>`;
@@ -332,7 +348,9 @@ fetch("/api/replay").then((r) => (r.ok ? r.json() : null)).then((j) => {
   const btn = $("#replay");
   btn.hidden = false;
   btn.addEventListener("click", () => {
-    $("#live").innerHTML = list(j.trace).map((t) => `<li>${stepText(j.market, t)}</li>`).join("");
+    const f = $("#f").elements, inp = j.recorded?.inputs || {};
+    for (const k of ["product", "market", "compare_market", "references"]) if (inp[k]) f[k].value = inp[k];
+    $("#live").innerHTML = "";
     showResult(j);
     $("#out").scrollIntoView({ behavior: "smooth", block: "start" });
   });
@@ -393,11 +411,11 @@ const csvInterests = (j) => {
 function loopPanel() {
   return `<div class="loop" id="loop"><h3>Lock it, run it, read it back</h3>
     <div class="steps">
-      <div class="step"><b>1. Lock the plan</b>A SHA-256 fingerprint of the control, the tests and the rule. The server keeps a receipt with its own time, once, before any money is spent.</div>
-      <div class="step"><b>2. Run it</b>A planning sheet to build the ad sets in Ads Manager by hand (not an import file): the control and each test, named with the plan id, with a spend cap of ${RULE.cap} per arm in your currency.</div>
-      <div class="step"><b>3. Read it back</b>Upload the Ads Manager export. It is checked against the receipt, and the locked rule classifies each test: ahead, pause, no clear difference or inconclusive. Exploratory calls, not proof.</div>
+      <div class="step"><b>1. Lock the plan</b>A SHA-256 fingerprint of the control, the tests and the rule; the server keeps a receipt with its own time before any money is spent.</div>
+      <div class="step"><b>2. Run it</b>A planning sheet for building the ad sets in Ads Manager, named with the plan id, capped at ${RULE.cap} per arm.</div>
+      <div class="step"><b>3. Read it back</b>Upload the Ads Manager export. Checked against the receipt, each test reads ahead, pause, no clear difference or inconclusive.</div>
     </div>
-    <p class="note" style="margin:0">Rule: at least ${RULE.minAddsToCart} adds to cart in the test and the control, then pause a test whose cost per add to cart is more than ${Math.round(RULE.worseBy * 100)}% above the control's. An arm that hits its ${RULE.cap} spend cap first is inconclusive, not a loss.</p>
+    <p class="note" style="margin:0">Locked rule: with at least ${RULE.minAddsToCart} adds to cart in the test and the control, pause a test whose cost per add to cart is more than ${Math.round(RULE.worseBy * 100)}% above the control's; an arm that hits its cap first is inconclusive. Exploratory calls for a small budget, not statistical proof.</p>
     <div class="row"><button type="button" id="lock">Lock this test plan</button><span id="lock-out"></span></div>
     <div id="after-lock" hidden>
       <div class="row"><button type="button" class="ghost" id="dl-sheet">Download the planning sheet (CSV)</button><button type="button" class="ghost" id="dl-plan">Download the locked plan (JSON)</button></div>
@@ -470,27 +488,21 @@ function wireLoop(j) {
 
 // Podcasts ranked by Qloo for this brand, with Qloo's own explanation, and the advertisers each show's episode notes
 // already name. The proof numbers are the pre-registered held-out test in docs/podcast-check.
-const PODCAST_TEST = { shows: 259, brands: 76, qloo: 0.663, chart: 0.528, popularity: 0.517, adVolume: 0.581, above: 65 };
+// strict labels (DEVIATION-1.md), the headline result; the pre-registered labels give 0.663 against 0.528
+const PODCAST_TEST = { shows: 216, brands: 62, qloo: 0.647, chart: 0.522 };
 function podcastPanel(p) {
   if (!p || p.error || !list(p.shows).length) return "";
   const t = PODCAST_TEST;
-  // points above a coin flip, scaled to the best row, so the gap reads at a glance
-  const top = t.qloo - 0.5;
-  const bar = (label, v, base) => `<div class="pbar"><span>${label}</span><i><b class="${base ? "base" : ""}" style="width:${Math.max(0, Math.round(((v - 0.5) / top) * 100))}%"></b></i><span>+${((v - 0.5) * 100).toFixed(1)}</span></div>`;
   const seeds = [...new Set(list(p.shows).flatMap((s) => list(s.driven_by).map((d) => d.name)))];
-  const rows = list(p.shows).slice(0, 8).map((s, i) => {
+  const li = list(p.shows).slice(0, 8).map((s, i) => {
     const ads = list(s.advertisers);
     const why = list(s.driven_by)[0];
-    return `<li><span class="n">${String(i + 1).padStart(2, "0")}</span><div class="meta"><b>${esc(s.name)}</b>${ads.length ? `<span>Its episode notes already run ads for ${ads.slice(0, 4).map(esc).join(", ")}${ads.length > 4 ? ` and ${ads.length - 4} more` : ""}</span>` : `<span>No sponsor reads in the data we read: ask the host for rates</span>`}${why && seeds.length > 1 ? `<span class="why">Fit driven by ${esc(why.name)} fans</span>` : ""}</div><span class="sc">${s.affinity == null ? "" : Number(s.affinity).toFixed(2)}</span></li>`;
-  }).join("");
-  return `<section class="panel card"><h2><span>Podcasts to sponsor first</span><small>ranked by Qloo for this brand's audience${seeds.length === 1 ? `; Qloo's explainability: every pick driven by ${esc(seeds[0])} fans` : ""}</small></h2>
-    <div class="pods"><ol>${rows}</ol>
-    <div class="proof"><p class="eyebrow">Checked against real money</p>
-      <p class="big">Shown one show a brand paid to sponsor and one it didn't, Qloo ranked the paid one higher ${Math.round(t.qloo * 100)}% of the time, the chart ${Math.round(t.chart * 100)}%.</p>
-      ${bar("Qloo for the brand", t.qloo)}${bar("Ad volume", t.adVolume, true)}${bar("Chart rank", t.chart, true)}${bar("Qloo popularity", t.popularity, true)}
-      <p class="axis">Points above a coin flip (0 = 50%)</p>
-      <p class="note" style="margin:0">${t.shows} US podcasts, ${t.brands} brands, held out from the pilot. Sponsorships read from the shows' own episode notes, never shown to Qloo; hypotheses locked and published before collecting. Above chance for ${t.above} of ${t.brands} brands. <a href="/judge#podcasts">The full test</a></p>
-    </div></div></section>`;
+    return `<li><span class="n">${String(i + 1).padStart(2, "0")}</span><div class="meta"><b>${esc(s.name)}</b>${ads.length ? `<span>Its episode notes already run ads for ${ads.slice(0, 4).map(esc).join(", ")}${ads.length > 4 ? ` and ${ads.length - 4} more` : ""}</span>` : `<span>No sponsor reads in the data we read: ask the host for rates</span>`}${why && seeds.length > 1 ? `<span class="why">Fit driven by ${esc(why.name)} fans</span>` : ""}</div><span class="sc">${s.affinity == null ? "" : Number(s.affinity).toFixed(3)}</span></li>`;
+  });
+  const half = Math.ceil(li.length / 2);
+  return `<section class="panel card"><h2><span>Podcasts to sponsor first</span><small>${seeds.length === 1 ? `ranked by how much ${esc(seeds[0])} fans like each show (Qloo explainability)` : "ranked by Qloo for this brand's audience"}</small></h2>
+    <div class="pods"><ol>${li.slice(0, half).join("")}</ol><ol start="${half + 1}">${li.slice(half).join("")}</ol></div>
+    <p class="pods-note">Mostly US shows: check reach in your market. In a pre-registered test on ${t.shows} held-out US podcasts and ${t.brands} brands, this ranking put the shows a brand sponsors above the rest ${Math.round(t.qloo * 100)}% of the time; the chart ${Math.round(t.chart * 100)}%. <a href="/judge#podcasts">The test</a></p></section>`;
 }
 
 // The agent's own decisions in this run, read from its Qloo calls, and what it chose not to use (its caveats).
@@ -513,19 +525,34 @@ function pathPanel(j) {
   </div></section>`;
 }
 
+// One to three tests against the obvious ad. The metric and pause rule are stated once when every test shares them.
+const lc = (t) => String(t ?? "").replace(/^[A-Z](?=[a-z])/, (c) => c.toLowerCase());
+function testsCard(b, j) {
+  const tp = list(b.test_plan);
+  const same = tp.every((x) => x.kpi === tp[0].kpi && x.stop_if === tp[0].stop_if);
+  const city = esc(String(j.market).split(",")[0]);
+  const lines = tp.map((x) => `<li><strong>${esc(x.hypothesis)}</strong><dl><dt>Changes</dt><dd>${x.variable === "targeting" ? "Targeting only, with your usual creative" : x.variable === "creative" ? "Creative only, on the broad audience" : esc(x.variable)}</dd><dt>Run</dt><dd>${esc(x.ad_set)}</dd>${x.why ? `<dt>Why</dt><dd>${esc(x.why)}</dd>` : ""}${same ? "" : `<dt>Judge on</dt><dd>${esc(x.kpi)}</dd><dt>Pause rule</dt><dd>${esc(x.stop_if)}</dd>`}</dl>${ev(x, true)}</li>`).join("");
+  return card("What to test first", `<p class="tests-rule">Control for every test: broad targeting in ${city}, same ages, your usual message. Each test changes one thing.${same ? ` Judge on ${esc(lc(tp[0].kpi))}; pause rule: ${esc(lc(tp[0].stop_if))}` : ""}</p><ul class="tests">${lines}</ul>${loopPanel()}`, "each test rests on the Qloo results shown");
+}
+
 // Draw one result: from a run that just finished, or the recorded run of the example.
 function showResult(j) {
   const b = j.brief, c = j.check || { grounded: 0, total: 0, flagged: [] };
-  $("#status").textContent = j.mode === "replay" ? `Recorded run: the agent made ${j.trace.length} steps.` : `Done. The agent made ${j.trace.length} steps.`;
+  document.body.classList.add("result");
+  $("#status").textContent = "";
+  $("#live").innerHTML = "";
   const when = j.recorded ? new Date(j.recorded.at).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" }) : "";
+  const asked = `<b>${esc(j.product)}</b><span class="dot">·</span>${esc(j.market)}${j.compare_market ? ` vs ${esc(j.compare_market)}` : ""}${j.references ? `<span class="dot">·</span>${esc(j.references)}` : ""}`;
+  const steps = `<span class="dot">·</span>${j.trace.length} agent steps${j.run?.qloo_calls ? `, ${j.run.qloo_calls} Qloo calls in all` : ""}, listed at the bottom`;
   const banner = j.mode === "replay"
-    ? `<div class="banner live">Recorded live run of the example, from ${esc(when)}, version ${esc(String(j.recorded.version).slice(0, 8))}. This is a saved result of a real run, shown instantly; press Build the brief for a fresh one.</div>`
+    ? `<div class="runbar"><span>Real run, recorded ${esc(when)}</span><span class="dot">·</span>${asked}${steps}</div>`
     : j.mode === "live"
-    ? `<div class="banner live">Live run on real Qloo data${j.quota ? `. ${j.quota.left} free runs left today` : ""}.</div>`
+    ? `<div class="runbar"><span>Live run on real Qloo data${j.quota ? `, ${j.quota.left} free runs left today` : ""}</span><span class="dot">·</span>${asked}${steps}</div>`
     : `<div class="banner synthetic">Sample data. The names and numbers below are made up to show how it works. Add the access code, or come back tomorrow, for real Qloo data.</div>`;
   const warn = [j.incomplete ? `The model's brief still had a problem after two resends (${esc(j.incomplete)}). Treat it as a draft.` : "",
     j.mode === "live" && j.signal?.weak ? `Limited high affinity results: Qloo returned ${j.signal.strong} results with affinity 0.9 or more for this seed. That threshold is this tool's rule of thumb, not a confidence score; a closer comparable brand may give more to work with.` : ""].filter(Boolean);
   $("#out").innerHTML = `${banner}${warn.map((w) => `<div class="banner synthetic">${w}</div>`).join("")}
+    ${podcastPanel(j.podcasts)}
     <section class="panel card"><div class="grid">
       <div><p class="eyebrow">Taste signals for this brand · ${esc(String(j.market).split(",")[0])} as location</p><p class="summary">${esc(b.audience_summary)}</p><p class="note" style="margin:-8px 0 12px">Summary written by the model. The lines below each cite the Qloo results they rest on.</p>
         <div class="score${c.grounded === c.total ? "" : " part"}"><b>${c.grounded} of ${c.total}</b> structured items cite Qloo results returned in this run, with matching ids and values</div></div>
@@ -533,15 +560,14 @@ function showResult(j) {
     </div></section>
     ${pathPanel(j)}
     ${versus(j.baseline, b, j.unbacked, j.scored, j.market)}
-    ${podcastPanel(j.podcasts)}
     <div class="grid">
       ${card("Who they are", items(b.audience_traits, (x) => esc(x.trait)))}
       ${card("Meta interests to test", items(b.meta_interests, (x) => `<strong>${esc(cleanInterest(x.interest))}</strong>`), "check each in Ads Manager")}
       ${card("Creative angles", items(b.creative_angles, (x) => `<strong>${esc(x.angle)}</strong><br><span class="hook">${esc(x.hook)}</span>`, true), "our reading of the data")}
-      ${card("Landing page", `<p style="margin:0 0 6px"><strong>${esc(b.landing_page?.headline)}</strong></p><p style="margin:0">${esc(b.landing_page?.subheadline)}</p>${ev(b.landing_page, true)}`, "our reading of the data")}
-      ${card("Partnerships", items(b.partnerships, (x) => `<strong>${esc(x.partner)}</strong>: ${esc(x.idea)}`))}
+      ${card("Landing page", `<p style="margin:0 0 6px"><strong>${esc(b.landing_page?.headline)}</strong></p><p style="margin:0">${esc(b.landing_page?.subheadline)}</p>${ev(b.landing_page, true)}`, "our reading of the data").replace('class="panel card"', `class="panel card${list(b.partnerships).length ? "" : " wide2"}"`)}
+      ${list(b.partnerships).length ? card("Partnerships", items(b.partnerships, (x) => `<strong>${esc(x.partner)}</strong>: ${esc(x.idea)}`)) : ""}
     </div>
-    ${list(b.test_plan).length ? card("What to test first", `<ul class="tests">${list(b.test_plan).map((x) => `<li><strong>${esc(x.hypothesis)}</strong><dl><dt>Changes</dt><dd>${x.variable === "targeting" ? "Targeting only, with your usual creative" : x.variable === "creative" ? "Creative only, on the broad audience" : esc(x.variable)}</dd><dt>Run</dt><dd>${esc(x.ad_set)}</dd>${x.why ? `<dt>Why</dt><dd>${esc(x.why)}</dd>` : ""}<dt>Judge on</dt><dd>${esc(x.kpi)}</dd><dt>Pause rule</dt><dd>${esc(x.stop_if)}</dd></dl>${ev(x, true)}</li>`).join("")}</ul><p class="note" style="margin:12px 0 0">Control for every test: broad targeting in ${esc(String(j.market).split(",")[0])}, same ages, your usual message. Each test changes one thing from it, so a difference can be traced. The pause rule is for spending a small budget, not statistical proof. Check each interest's audience size in Ads Manager first.</p>${loopPanel()}`, "each test rests on the Qloo results shown") : ""}
+    ${list(b.test_plan).length ? testsCard(b, j) : ""}
     ${markets(j.markets)}
     <div class="actions"><button type="button" class="ghost" id="copy-md">Copy the brief</button><button type="button" class="ghost" id="dl-csv">Download interests as CSV</button></div>
     <details class="trace"><summary>Every Qloo call the agent made</summary>${j.run ? `<p class="note">This run: ${esc(j.run.seconds)} s, ${esc(j.run.qloo_calls)} Qloo calls, ${esc(j.run.model_calls)} model calls, version ${esc(String(j.run.version).slice(0, 8))}, ${esc(j.run.at)}.</p>` : ""}<ol>${list(j.trace).map((t) =>

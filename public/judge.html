@@ -4,112 +4,126 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Taste Brief: for judges</title>
-<meta name="description" content="For judges: a 20 brief benchmark with and without Qloo, the run in the video, and how to reproduce it in two minutes.">
+<meta name="description" content="For judges: the pre-registered test against real podcast sponsorships, the benchmark with and without Qloo, the run in the video, and how to reproduce it.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="Taste Brief: for judges">
+<meta property="og:image" content="https://taste-brief.thelongmarketing.workers.dev/og.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{color-scheme:dark;--bg:#0b1424;--card:#111d33;--ink:#eaf0f7;--mute:#c9d4e5;--faint:#a9b8d0;--line:#22314c;--acc:#ff7a59;--acc-ink:#0b1424;--acc-soft:#1a2740;--acc-text:#9fd8ff;--ok:#5eead4;--ok-soft:#12302d;--warn:#fdba74;--warn-soft:#33241a;
+:root{color-scheme:dark;--bg:#0b1424;--card:#111d33;--ink:#eaf0f7;--mute:#c9d4e5;--faint:#a9b8d0;--line:#22314c;--acc:#ff7a59;--acc-ink:#0b1424;--code:#1a2740;--ok:#5eead4;--ok-soft:#12302d;--warn:#fdba74;
   --display:"Instrument Sans",system-ui,sans-serif;--body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 var(--body)}
 main{max-width:1040px;margin:0 auto;padding:28px 16px 80px;display:flex;flex-direction:column;gap:20px}
-a{color:var(--acc-text)}
+a{color:var(--ok);text-underline-offset:3px;text-decoration-thickness:1px}a:hover{color:#fff}
 a:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
-nav{display:flex;flex-wrap:wrap;gap:14px;font-size:14px;color:var(--faint)}
-nav b{font-family:var(--display);font-size:20px;color:var(--ink);letter-spacing:-.01em}
-.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin:0}
-h1{font-family:var(--display);font-weight:700;font-size:clamp(36px,5vw,56px);line-height:1.02;letter-spacing:-.025em;margin:4px 0 0}
-h2{font-family:var(--display);font-size:24px;letter-spacing:-.015em;line-height:1.2;margin:0 0 12px}
-h3{font-family:var(--display);font-size:18px;font-weight:700;margin:18px 0 8px;color:var(--ink)}
-.lede{color:var(--mute);font-size:18px;margin:0;max-width:720px}
+nav.top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+nav.top .brand{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none}
+nav.top .brand b{font-family:var(--display);font-size:20px;letter-spacing:-.01em}
+nav.top .links{display:flex;flex-wrap:wrap;gap:18px;font-size:15px}
+nav.top .links a{color:var(--mute);text-decoration:none}nav.top .links a:hover{color:var(--ink);text-decoration:underline}
+header{margin:20px 0 4px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ok);margin:0}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(34px,5vw,54px);line-height:1.04;letter-spacing:-.025em;margin:10px 0 0;text-wrap:balance;max-width:20ch}
+h2{font-family:var(--display);font-size:24px;letter-spacing:-.015em;line-height:1.2;margin:0 0 12px;text-wrap:balance}
+h3{font-family:var(--display);font-size:18px;font-weight:700;margin:20px 0 8px;color:var(--ink)}
+.lede{color:var(--mute);font-size:18px;margin:20px 0 0;max-width:720px}
 .panel{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px}
 .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr))}
-.guess{color:var(--mute)}
-.guess h3{color:var(--warn)}
-.ours h3{color:var(--ok)}
+.guess h3{color:var(--warn)}.ours h3{color:var(--ok)}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 0}
-.chip{font-size:14px;border-radius:10px;padding:5px 10px;background:transparent;border:1px dashed #8a6a4a;color:var(--mute)}
+.chip{font-size:14px;border-radius:10px;padding:5px 10px;border:1px dashed #8a6a4a;color:var(--mute)}
 .chip.q{background:var(--ok-soft);border:0;color:var(--ink)}
 .chip .n{font-family:var(--mono)}
-.decision{background:var(--acc-soft);color:var(--ink);border-radius:14px;padding:14px 16px;font-weight:600;margin:16px 0 0}
-table{width:100%;border-collapse:collapse;font-size:14px}
+table{width:100%;border-collapse:collapse;font-size:14px;margin:12px 0 0}
 th,td{text-align:left;vertical-align:top;padding:9px 8px;border-bottom:1px solid var(--line)}
 th{font-family:var(--mono);font-size:12px;font-weight:500;color:var(--faint)}
 td.n{font-family:var(--mono);white-space:nowrap}
-.scroll{overflow-x:auto}
+@media (max-width:640px){
+  table,tbody,tr,td{display:block}thead{display:none}
+  tr{border:1px solid var(--line);border-radius:12px;padding:8px 12px;margin:0 0 10px}
+  td{border:0;padding:4px 0;white-space:normal}
+  td.n{display:flex;justify-content:space-between;gap:12px}
+  td.n::before{content:attr(data-label);font-family:var(--body);font-size:13px;color:var(--faint)}
+}
 ol,ul{padding-left:20px;margin:8px 0 0}
 li{margin:6px 0}
+ul ul{margin:4px 0 0}
 .note{font-size:13px;color:var(--faint);margin:12px 0 0}
 .btn{display:inline-block;font-weight:700;border-radius:14px;padding:13px 22px;background:var(--acc);color:var(--acc-ink);text-decoration:none;margin-top:12px}
-code{font-family:var(--mono);font-size:13px;background:var(--acc-soft);border-radius:6px;padding:1px 5px;overflow-wrap:anywhere}
+.btn:hover{color:var(--acc-ink)}
+code{font-family:var(--mono);font-size:13px;background:var(--code);border-radius:6px;padding:1px 5px;overflow-wrap:anywhere}
+.decision{background:var(--code);border-radius:14px;padding:14px 16px;font-weight:600;margin:16px 0 0}
 </style>
 </head>
 <body>
 <main>
-  <nav><b>Taste Brief</b><a href="/">Live demo</a><a href="https://github.com/longtt-marketing/taste-brief">Source code</a><a href="https://github.com/longtt-marketing/taste-brief/tree/main/docs/benchmark">Benchmark files</a></nav>
+  <nav class="top">
+    <a class="brand" href="/"><svg width="30" height="30" viewBox="0 0 30 30" fill="none" aria-hidden="true"><circle cx="15" cy="15" r="13" stroke="currentColor" stroke-width="2"/><path d="M9 18c2-5 4-8 6-8s4 3 6 8" stroke="#5EEAD4" stroke-width="2" stroke-linecap="round"/><circle cx="15" cy="10" r="2" fill="#FF7A59"/></svg><b>Taste Brief</b></a>
+    <div class="links"><a href="/">Live demo</a><a href="https://github.com/longtt-marketing/taste-brief">Code</a><a href="https://github.com/longtt-marketing/taste-brief/tree/main/docs/podcast-check">Test files</a></div>
+  </nav>
 
   <header>
-    <p class="eyebrow">For judges · two minute read</p>
-    <h1>Qloo picks the podcasts brands really pay for</h1>
-    <p class="lede">Taste Brief tells a brand which podcasts to sponsor, which interests to target and which ad to test first, each pick with the Qloo result behind it. The headline test below is graded by money brands really spent, not by Qloo.</p>
+    <p class="eyebrow">For judges · five minute read</p>
+    <h1>Qloo picks the podcasts brands really sponsor</h1>
+    <p class="lede">Taste Brief tells a brand which podcasts to sponsor, which interests to target and which ad to test first, each pick with the Qloo result behind it. The headline test is graded by where brands really sponsor, not by Qloo.</p>
   </header>
 
   <section class="panel" id="podcasts">
-    <h2>The test graded by money: which podcasts did brands really pay for?</h2>
-    <p>Sponsor reads published in the shows' own episode notes (public RSS) are the answer key. Qloo never sees them: for each brand, Qloo ranks the shows by how much the brand's audience likes them, and we check how often a show the brand paid for ranks above one it did not (AUC; 0.50 is a coin flip).</p>
-    <p>Locked before collecting: the hypotheses, measures, baselines and pass rules were written, fingerprinted with SHA-256 and pushed to the public repo (<code>docs/podcast-check/PREREGISTRATION.md</code>) before any held-out show was read. The pilot shows (Apple's US top 200) are not in the test; the test uses Apple's US top charts in 12 genres instead.</p>
-    <div class="scroll"><table>
-      <thead><tr><th>Ranking the shows by</th><th>Pre-registered labels: 259 shows, 76 brands</th><th>Strict labels: 216 shows, 62 brands</th></tr></thead>
+    <h2>The test: which podcasts do brands really sponsor?</h2>
+    <p>Sponsor reads in the shows' own episode notes (public RSS) are the answer key; Qloo never sees them. For each brand, Qloo ranks the shows by how much the brand's audience likes them, and we check how often a show the brand sponsors ranks above one it doesn't (AUC; 0.50 is a coin flip). A show counts as sponsored when it reads the brand in at least 2 episodes of the past year.</p>
+    <p>Locked first: hypotheses, measures, baselines and pass rules were fingerprinted with SHA-256 and pushed to the public repo before any held-out show was read (<code>PREREGISTRATION.md</code>, commit c4d6732), and the analysis code before any score was fetched. The pilot shows (Apple's US top 200) are not in the test, which uses Apple's US charts in 12 genres. Check the fingerprints on any OS with <code>python scripts/podcast/verify_lock.py</code>.</p>
+    <table>
+      <thead><tr><th>Ranking the shows by</th><th>Strict labels: 216 shows, 62 brands</th><th>Pre-registered: 259 shows, 76 brands</th></tr></thead>
       <tbody>
-        <tr><td><strong>Qloo affinity for the brand</strong> (Taste Brief)</td><td class="n"><strong>0.663</strong> (95% CI 0.630 to 0.697)</td><td class="n"><strong>0.647</strong> (0.611 to 0.684)</td></tr>
-        <tr><td>How many other brands the show already carries (ad volume)</td><td class="n">0.581</td><td class="n">0.582</td></tr>
-        <tr><td>Apple chart rank in its genre</td><td class="n">0.528</td><td class="n">0.522</td></tr>
-        <tr><td>Qloo popularity of the show (not specific to the brand)</td><td class="n">0.517</td><td class="n">0.526</td></tr>
+        <tr><td><strong>Qloo affinity for the brand</strong> (what Taste Brief uses)</td><td class="n" data-label="Strict"><span><strong>0.647</strong> (0.611 to 0.684)</span></td><td class="n" data-label="Pre-registered"><span><strong>0.663</strong> (0.630 to 0.697)</span></td></tr>
+        <tr><td>Ad volume: how many other brands the show carries</td><td class="n" data-label="Strict"><span>0.582 (fair*: 0.615)</span></td><td class="n" data-label="Pre-registered"><span>0.581 (fair*: 0.627)</span></td></tr>
+        <tr><td>Qloo popularity of the show</td><td class="n" data-label="Strict"><span>0.526</span></td><td class="n" data-label="Pre-registered"><span>0.517</span></td></tr>
+        <tr><td>Apple chart rank in its genre</td><td class="n" data-label="Strict"><span>0.522</span></td><td class="n" data-label="Pre-registered"><span>0.528</span></td></tr>
       </tbody>
-    </table></div>
+    </table>
+    <p class="note">95% intervals by resampling brands, as pre-registered. *Only shows carrying 3 or more other brands, so both sides face the same entry rule; Qloo there: 0.651 and 0.664.</p>
+    <h3>Pre-registered hypotheses: all pass on both labels</h3>
     <ul>
-      <li><strong>H1, Qloo beats chance:</strong> passed. Above 0.5 for 65 of 76 brands (51 of 62 strict).</li>
-      <li><strong>H2, Qloo beats the chart and popularity:</strong> passed. +10 to +17 points over the chart, +10 to +19 over popularity (95% intervals).</li>
-      <li><strong>H3, Qloo adds to ad volume:</strong> passed. The two ranks combined beat ad volume alone by +5 to +11 points.</li>
-      <li><strong>Category signal:</strong> in betting, a direct competitor's Qloo audience predicts nearly as well (DraftKings' shows from FanDuel: 0.700 against 0.722); other pairs are mixed, so this is descriptive.</li>
-      <li><strong>Where it works:</strong> brands bought on audience fit (strict labels: Drink LMNT 0.89, MasterClass 0.82, FanDuel 0.81, Skims 0.79). Where it does not: meal kits and mass-reach buyers (Factor 0.42, Zocdoc 0.45, Casper 0.37). Car brands score high under the pre-registered label only because car review shows mention them; the strict label drops them.</li>
-      <li><strong>Robustness (exploratory, after an independent audit):</strong> within the same genre Qloo still wins (0.63 against 0.53 for the chart); against a genre-based prior +4 to +15 points; with ad volume measured fairly Qloo 0.66 against 0.63; for the 38 biggest advertisers 0.63 against 0.61 for the genre prior, close. Of Qloo's top 10 shows for a brand, 1.6 are real sponsorships on average, against 0.7 for the chart and 0.6 at random. <code>docs/podcast-check/robustness.json</code></li>
+      <li><strong>H1, Qloo beats chance:</strong> above 0.5 for 51 of 62 brands (65 of 76).</li>
+      <li><strong>H2, Qloo beats the chart and popularity:</strong> +9 to +16 points over the chart, +8 to +16 over popularity (95% intervals; +10 to +17 and +10 to +19 pre-registered).</li>
+      <li><strong>H3, Qloo adds to ad volume:</strong> the two ranks combined beat ad volume alone by +4 to +10 points (+5 to +11).</li>
+      <li><strong>H4, exploratory:</strong> brands whose Qloo scores spread more across shows do better: 0.66 against 0.64 (0.70 against 0.62).</li>
     </ul>
-    <p class="note">Labels: a hand check of 100 random matches found 43 real sponsor reads with the pre-registered dictionary, so a stricter label (whole word plus a sponsor cue nearby) was declared in <code>DEVIATION-1.md</code> before any analysis: 82 of 100 real. Both results are reported. Sponsor reads in notes miss dynamically inserted ads; US shows only. Scripts: <code>scripts/podcast/</code>; results: <code>docs/podcast-check/results.json</code>, <code>results-strict.json</code>.</p>
+    <h3>Exploratory checks, after two independent audits</h3>
+    <ul>
+      <li><strong>Specific to the brand:</strong> ranked by other brands' Qloo scores, the same shows score 0.57; by the brand's own, 0.65. Ahead for 47 of 61 brands, +4 to +13 points. Qloo is not just picking shows every advertiser likes.</li>
+      <li><strong>Within genre:</strong> only shows in the same genre compared: Qloo 0.62, chart 0.55. Ahead of the chart in all 12 genres; weakest in leisure (below chance) and sports.</li>
+      <li><strong>New deals:</strong> 43 sponsorships that appear only in a show's 10 newest episodes, too recent to have shaped Qloo's data: Qloo 0.62 (0.51 to 0.72), chart 0.45. Established deals: 0.65.</li>
+      <li><strong>Uncertainty:</strong> the same shows serve every brand, so resampling shows as well as brands gives a wider interval: 0.60 to 0.70.</li>
+      <li><strong>Where it adds least:</strong> for the 36 brands with 10 or more sponsored shows, a genre-based prior does almost as well (0.61 against 0.63). In each ranking's top 10, Qloo finds 1.6 sponsored shows on average, the chart 0.8, ad volume 1.6, random 0.8; the app shows Qloo's ranking next to each show's advertisers.</li>
+      <li><strong>By brand:</strong> it works for brands bought on audience fit, such as Ritual 0.82, Skims 0.79, Honeylove 0.77, each above its genre prior and other brands' scores; it fails for meal kits and mass-reach buyers (Factor 0.42, Zocdoc 0.45, Casper 0.37).</li>
+      <li><strong>Competitor pairs</strong> fixed in advance: 4 of the 6 could run (ExpressVPN and Helix Sleep are not in Qloo). In betting a competitor's audience predicts almost as well (DraftKings from FanDuel 0.70 against 0.72), but sports genre alone does too; the other pairs are mixed. Descriptive only.</li>
+    </ul>
+    <p class="note">Labels: 43 of 100 random matches of the pre-registered dictionary were sponsor reads, so a stricter label (whole word plus a sponsor cue nearby) was declared in <code>DEVIATION-1.md</code> before any analysis: 82 of 100. Both samples were read by Claude, not by a person. Sponsor reads in notes miss dynamically inserted ads; US shows and brands that Qloo knows by exact name only. The test checks Qloo's brand-to-podcast affinity (the same call the app makes) on chart shows, not the app's picks from Qloo's whole catalogue. Files: <code>results-strict.json</code>, <code>results.json</code>, <code>robustness.json</code>, <code>recency.json</code>; scripts in <code>scripts/podcast/</code>.</p>
   </section>
 
   <section class="panel">
     <h2>Benchmark: 20 briefs, graded on a competitor the agent never saw</h2>
-    <p>Same model (Claude Sonnet 5.5), 20 products and cities, each brief written from one reference brand. Every suggested Meta interest is graded by the same rule: find the entity in Qloo by its exact name, then ask Qloo how much the audience of a held-out competitor in that city likes it (Allbirds briefs graded on Veja, Lululemon on Alo Yoga, and so on).</p>
-    <div class="scroll"><table>
-      <thead><tr><th>Who wrote the interests</th><th>Found and scored on Qloo</th><th>Affinity 0.9 or more</th></tr></thead>
+    <p>Same model (Claude Sonnet 5.5), 20 products and cities, each brief written from one reference brand with and without Qloo. Every suggested Meta interest is looked up in Qloo by its exact name and scored on a held-out competitor's audience in that city (Allbirds briefs on Veja, Lululemon on Alo Yoga), and looked up in Meta's own interest search (Marketing API).</p>
+    <table>
+      <thead><tr><th>Who wrote the interests</th><th>0.9+ on the held-out competitor</th><th>Targetable in Meta</th><th>Both</th></tr></thead>
       <tbody>
-        <tr><td><strong>Taste Brief</strong> (with Qloo)</td><td class="n">115 / 140 · 82%</td><td class="n"><strong>86 / 140 · 61%</strong></td></tr>
-        <tr><td>Same model, no data, told to name specific brands, artists and shows</td><td class="n">45 / 133 · 34%</td><td class="n">25 / 133 · 19%</td></tr>
-        <tr><td>Same model, no data, as the app asks it</td><td class="n">6 / 115 · 5%</td><td class="n">1 / 115 · 1%</td></tr>
+        <tr><td><strong>Taste Brief</strong> (with Qloo)</td><td class="n" data-label="0.9+ on competitor"><span><strong>86 / 140 · 61%</strong></span></td><td class="n" data-label="In Meta"><span>74 / 140 · 53%</span></td><td class="n" data-label="Both"><span><strong>49 / 140 · 35%</strong></span></td></tr>
+        <tr><td>Same model, no data, told to name specific brands, artists and shows</td><td class="n" data-label="0.9+ on competitor"><span>25 / 133 · 19%</span></td><td class="n" data-label="In Meta"><span>65 / 136 · 48%</span></td><td class="n" data-label="Both"><span>18 / 136 · 13%</span></td></tr>
+        <tr><td>Same model, no data, as the app asks it</td><td class="n" data-label="0.9+ on competitor"><span>1 / 115 · 1%</span></td><td class="n" data-label="In Meta"><span>36 / 115 · 31%</span></td><td class="n" data-label="Both"><span>0 / 115 · 0%</span></td></tr>
       </tbody>
-    </table></div>
-    <p>Against the stronger baseline Taste Brief is ahead in 19 of 20 briefs (one tie): +42 points, 95% bootstrap interval +32 to +53. On the reference brand's own audience the gap is wider: 73% against 18%.</p>
-    <h3>A second judge that isn't Qloo: can Meta target it?</h3>
-    <p>Every pick looked up in Meta's own interest search (Marketing API). It counts only if Meta has an interest with that name.</p>
-    <div class="scroll"><table>
-      <thead><tr><th>Who wrote the interests</th><th>Targetable in Meta</th><th>Targetable and 0.9+ on Qloo (held-out competitor)</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Taste Brief</strong> (with Qloo)</td><td class="n">74 / 140 · 53%</td><td class="n"><strong>49 / 140 · 35%</strong></td></tr>
-        <tr><td>Same model, no data, told to name specific entities</td><td class="n">65 / 136 · 48%</td><td class="n">18 / 136 · 13%</td></tr>
-        <tr><td>Same model, no data, as the app asks it</td><td class="n">36 / 115 · 31%</td><td class="n">0 / 115 · 0%</td></tr>
-      </tbody>
-    </table></div>
-    <p>On Meta alone the named baseline is close: Meta no longer lists many niche brands and shows. On both together Taste Brief is ahead by 22 points (95% interval +10 to +34), in 12 of 20 briefs with 5 ties.</p>
-    <h3>A negative control: the right audience, or any audience?</h3>
-    <p>The same picks graded on an unrelated brand in the same city (paired before the run: Allbirds briefs on Babbel, coffee on Stüssy). Taste Brief's picks reach 0.9+ for 62% on the same-category competitor and 27% on the unrelated brand: +36 points, 95% interval +20 to +51. The named baseline goes from 20% to 7%. Most of the fit is specific to the category; part of it is picks many audiences like.</p>
-    <p class="note">Qloo and Meta measure fit and whether an interest exists, not ad results. Scripts: <code>scripts/benchmark.mjs</code>, <code>scripts/benchmark-strong.mjs</code>, <code>scripts/benchmark-heldout.mjs</code>, <code>scripts/benchmark-meta.mjs</code>, <code>scripts/benchmark-combined.mjs</code>, <code>scripts/benchmark-negative.mjs</code>.</p>
+    </table>
+    <p>On Qloo, +42 points against the stronger baseline (95% interval +32 to +53, ahead in 19 of 20 briefs). On Meta alone it is close: Meta has dropped many niche brands and shows. On both, +22 points (+10 to +34). <strong>Negative control:</strong> graded on an unrelated brand in the same city (paired before the run: Allbirds briefs on Babbel), Taste Brief's picks fall from 62% to 27% at 0.9+; the named baseline from 20% to 7%. Most of the fit is specific to the category.</p>
+    <p class="note">Qloo and Meta measure fit and whether an interest exists, not ad results. Meta counts are from <code>docs/benchmark/combined.json</code>, on the same picks as the Qloo column (<code>meta-targeting.json</code> counts every pick). Scripts: <code>scripts/benchmark*.mjs</code>.</p>
   </section>
 
   <section class="panel">
     <h2>The run in the video: wool running sneakers, $120, London</h2>
-    <p>Closest brand: Allbirds (Qloo knows the brand, not this shoe). Second city: Hanoi. Live run on 21 Oct 2026.</p>
+    <p>Closest brand: Allbirds (Qloo knows the brand, not this shoe). Second city: Hanoi. Live run on 21 Oct 2026; it is the recorded run on the demo.</p>
+    <p><strong>Podcasts to sponsor first</strong>, ranked for Allbirds' audience: Absolutely Not (0.954; its notes already run Quince, Nutrafol, Squarespace), Armchair Expert with Dax Shepard (0.926; Allstate), Be There in Five (0.915), Young House Love Has A Podcast (0.912).</p>
     <div class="grid">
       <div class="guess"><h3>Plain AI, no data · 0 of 6 scored</h3>
         <div class="chips"><span class="chip">Running · no score</span><span class="chip">Sustainable fashion · not in Qloo</span><span class="chip">Parkrun · not in Qloo</span><span class="chip">Veja · no score</span><span class="chip">Cycling to work · not in Qloo</span><span class="chip">Minimalism · not in Qloo</span></div>
@@ -123,34 +137,31 @@ code{font-family:var(--mono);font-size:13px;background:var(--acc-soft);border-ra
         </div>
       </div>
     </div>
-    <p><strong>Podcasts to sponsor first</strong>, ranked by Qloo for Allbirds' audience: Absolutely Not (0.954; its notes already run Quince, Nutrafol, Squarespace), Armchair Expert with Dax Shepard (0.926), A Beautiful Mess Podcast (0.911; Drink LMNT, Shopify, Wayfair), The Liz Moody Podcast (0.904; Drink LMNT, Athletic Greens).</p>
-    <p>All 23 items in that brief cite results Qloo returned in the run, with matching ids and values. Then the plan is locked with a SHA-256 fingerprint before any spend (the server stores a receipt with its own time; real results get verdicts only when it matches), run from a planning sheet, and read back from the Ads Manager export by the rule fixed in advance (ahead, pause, no clear difference, inconclusive; exploratory, not proof). Press <strong>Try with sample numbers</strong> after locking to see it work; sample numbers are labelled as such and no ads were run.</p>
-    <p class="decision">Decision: keep the runner plan as the control and test what Qloo surfaced, one change at a time: the usual creative shown to fans of Tracksmith, Outdoor Voices and Everlane; then two new creatives on the broad audience, "A running shoe that looks this good with jeans" and an open breakdown of wool sourcing and footprint.</p>
-    <p class="note">Pause rule in that run: up to £300 per arm (the model wrote London's currency); pause as worse if cost per add to cart is more than 30% above the control once each arm has 20 adds to cart. An arm that hits the cap first is inconclusive, not a loss. A rule for spending a small budget, not statistical proof. Qloo's age and gender index for Allbirds (women +0.33, ages 30 to 34 +0.42) is for the brand's audience, not London residents.</p>
+    <p class="note">Scored on Allbirds' own audience, so this shows fit, not proof; the benchmark above is the held-out version.</p>
+    <p>All 23 items in that brief cite results Qloo returned in the run, with matching ids and values. The test plan is locked with a SHA-256 fingerprint and a server receipt before any spend (real results get verdicts only when the receipt matches), run from a planning sheet, and read back from the Ads Manager export by the rule fixed in advance. Press <strong>Try with sample numbers</strong> after locking to see it work; sample numbers are labelled and no ads were run.</p>
+    <p class="decision">Decision: keep the runner plan as the control and test what Qloo surfaced, one change at a time: the usual creative shown to fans of Tracksmith, Outdoor Voices and Everlane; then two new creatives on the broad audience, "A running shoe that looks this good with jeans" and an open breakdown of wool sourcing.</p>
   </section>
 
   <section class="panel">
     <h2>Reproduce it</h2>
     <ol>
-      <li><strong>Fastest:</strong> open the <a href="/">demo</a> and press <strong>See a recorded live run now</strong>. It shows the last real run of the example instantly, with the time it was recorded and the deployed version.</li>
+      <li><strong>Fastest:</strong> open the <a href="/">demo</a> and press <strong>See a real run now</strong>. It shows the last real run of the example instantly, with when it was recorded.</li>
       <li>For a fresh run, use the judge link from the submission (it carries the access code), or one of today's free live runs.</li>
-      <li>Click the example <strong>Wool sneakers in London and Hanoi</strong> and press Build the brief. A live run usually takes one to two minutes; every Qloo call shows up as it happens.</li>
-      <li>Check the green banner says <strong>Live run on real Qloo data</strong>. Sample data is labelled as such.</li>
-      <li>Read <strong>The same question, with and without Qloo</strong>: both lists scored by Qloo for this audience. Then the brief, with the Qloo result next to each item, and <strong>What to test first</strong>.</li>
+      <li>Click the example <strong>Wool sneakers in London and Hanoi</strong> and press <strong>Build the brief</strong>. A live run takes one to two minutes; every step shows up as it happens.</li>
+      <li>The strip above the result says <strong>Live run on real Qloo data</strong>. Sample data is labelled as such.</li>
       <li>Qloo rankings and the model's wording vary a little between runs.</li>
     </ol>
-    <a class="btn" href="/">Run the live demo</a>
+    <a class="btn" href="/">Open the demo</a>
   </section>
 
   <section class="panel">
     <h2>What the checks prove, and what they don't</h2>
     <ul>
-      <li>Taste citations for anything other than the seed brand are checked against Qloo insights results from the same run; quoted names and numbers must match; a simple pattern flags lines that say the audience buys. The code does not verify the full meaning of each claim.</li>
-      <li>Qloo affinity is aggregate taste overlap, not purchase intent. No ads have been run yet; the tests are how a marketer finds out.</li>
-      <li>An exploratory blind check with two AI models (<a href="https://github.com/longtt-marketing/taste-brief/tree/main/docs/blind-check">files</a>) found they still wanted the obvious plan funded first, and all picked a Qloo test to run early, which is why Qloo is framed as tests against the obvious plan.</li>
+      <li>Sponsorships show where brands spend, not that the spend paid off. No ads have been run by us; the tests in the app are how a marketer finds out.</li>
+      <li>Citations for anything other than the seed brand are checked against Qloo results from the same run, with matching names and numbers. The code does not verify the full meaning of each claim.</li>
       <li>For brands, artists and TV the city only nudges Qloo's ranking; places are filtered to each city. Interest names still need checking in Meta Ads Manager.</li>
     </ul>
-    <p class="note">Code: <a href="https://github.com/longtt-marketing/taste-brief/blob/main/src/agent.js">agent</a>, <a href="https://github.com/longtt-marketing/taste-brief/blob/main/src/evidence.js">evidence checks</a>, <a href="https://github.com/longtt-marketing/taste-brief/blob/main/src/grade.js">grader</a>, <a href="https://github.com/longtt-marketing/taste-brief/blob/main/src/markets.js">city comparison</a>, <a href="https://github.com/longtt-marketing/taste-brief/blob/main/src/qloo.js">Qloo client</a>.</p>
+    <p class="note">Code: <a href="https://github.com/longtt-marketing/taste-brief/blob/main/src/agent.js">agent</a>, <a href="https://github.com/longtt-marketing/taste-brief/blob/main/src/podcasts.js">podcasts</a>, <a href="https://github.com/longtt-marketing/taste-brief/blob/main/src/evidence.js">evidence checks</a>, <a href="https://github.com/longtt-marketing/taste-brief/blob/main/src/grade.js">grader</a>, <a href="https://github.com/longtt-marketing/taste-brief/blob/main/src/qloo.js">Qloo client</a>.</p>
   </section>
 </main>
 </body>
