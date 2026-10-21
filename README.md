@@ -1,26 +1,27 @@
 # Taste Brief
 
-An agent for performance marketers. Give it a product and a market; it asks Qloo's taste graph whose tastes overlap with
-the product, what else that audience loves (brands, artists, shows, podcasts, places) and how it skews by age and gender,
-then writes a campaign brief: audience portrait, Meta Ads interests, creative angles, a landing-page headline,
-partnership ideas and up to three exploratory ad tests, each changing one thing from an obvious control. Every structured
-recommendation cites its Qloo sources, and code checks the cited ids and quoted values against what Qloo returned; the
-summary stays the model's reading. A second market is compared on Qloo's own numbers, so the brief can be checked instead
-of trusted.
+An agent for brands buying podcast and social ads. Give it a product, a market and your brand or a close competitor; it
+reads the audience's taste in Qloo (brands, artists, shows, podcasts, places, age and gender) and returns the podcasts to
+sponsor first, Meta interests, creative angles, partners and up to three ad tests, each changing one thing from an obvious
+control and locked before spending. Every structured recommendation cites its Qloo sources, and code checks the cited ids
+and values against what Qloo returned.
 
 Built for the [Qloo Agentic Hackathon](https://qloo.devpost.com/).
 
-## Does Qloo make a difference?
+## Does Qloo pick what brands really pay for?
 
-On 20 briefs, each graded on the audience of a competitor the agent never saw (written from Allbirds, graded on Veja),
-61% of the Meta interests Taste Brief suggests score an affinity of 0.9 or more on Qloo. The same model with no data
-reaches 19% when told to name specific brands and shows, and 1% as the app asks it. Taste Brief is ahead in 19 of 20 briefs
-(+42 points, 95% bootstrap interval +32 to +53); on the reference brand's own audience it is 73% against 18%. Graded by
-Qloo, so it measures fit with the category's audience, not ad results. A second check that isn't Qloo: looked up in
-Meta's own interest list, 35% of Taste Brief's picks are both targetable and 0.9+, against 13% and 0% (+22 points,
-interval +10 to +34); on targetability alone the named baseline is close (53% against 48%). Details in
+The answer key is money: sponsor reads that podcasts publish in their own episode notes (public RSS), never shown to
+Qloo. Hypotheses were locked and pushed before any held-out show was read
+([docs/podcast-check/PREREGISTRATION.md](docs/podcast-check/PREREGISTRATION.md)). On 259 held-out US podcasts and 76
+brands, shown one show a brand paid for and one it didn't, Qloo ranked the paid one higher 66% of the time (AUC 0.663,
+95% CI 0.630 to 0.697), against Apple chart rank 0.528, Qloo popularity 0.517 and ad volume 0.581; above chance for 65 of
+76 brands. With a stricter sponsor label (82/100 precise in a hand check, declared before analysis) it is 0.647 on 216
+shows and 62 brands. Details and scripts: [docs/podcast-check](docs/podcast-check/), [scripts/podcast](scripts/podcast/).
+
+A second set of benchmarks is graded by Qloo itself on a held-out competitor's audience (61% of Taste Brief's interests
+score 0.9+ against 19% for the same model without data), by Meta's interest list (35% targetable and 0.9+ against 13%)
+and by a negative control (62% on the right competitor against 27% on an unrelated brand). Details in
 [docs/benchmark](docs/benchmark/README.md).
-The page shows the same scoring for every run.
 
 ## How it works
 - `src/agent.js`: tool-using agent loop on Claude. Tools: `search`, `insights`, `demographics`, `tags`, and
@@ -38,6 +39,8 @@ The page shows the same scoring for every run.
   get verdicts only when the receipt matches.
 - `public/verdict.js`: lock the test plan (SHA-256 of the control, tests and rule, with a timestamp), write the planning
   sheet named with the plan id, and read an Ads Manager export back with the locked rule. Pure functions, no model.
+- `src/podcasts.js`: podcasts ranked by Qloo for the brand with `feature.explainability`, plus the advertisers each
+  show's episode notes already run (`src/data/podcast-sponsors.json`, 662 shows; evidence only, never used to rank).
 - `src/grade.js`: one grader for any list of picks: exact name lookup in Qloo, then the affinity Qloo gives that
   entity for the brand's audience in the market (`filter.results.entities`). Used by the page and the benchmark.
 - `src/markets.js`: the second market, without a model in between. Places use `filter.location.query`, so each list is

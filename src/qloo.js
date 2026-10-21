@@ -17,6 +17,8 @@ export function slimEntity(e) {
     popularity: e.popularity ?? null,
     tags: (e.tags || []).slice(0, 6).map((t) => t.name || t.tag_id || t.id),
     description: (e.properties?.description || "").slice(0, 160),
+    // feature.explainability: Qloo's own account of which input drove this result, and how much (0 to 1)
+    ...(e.query?.explainability ? { explain: (e.query.explainability["signal.interests.entities"] || []).map((x) => ({ entity_id: x.entity_id, score: x.score })) } : {}),
   };
 }
 
@@ -61,7 +63,7 @@ export function makeQloo({ apiKey, fetchImpl = fetch, base = QLOO_BASE, concurre
     },
     // location nudges the ranking toward a city (signal); filter_location keeps only entities located there (places)
     // result_ids restricts the results to given entities: used to score a named pick against the same audience
-    async insights({ filter_type, entity_ids, tag_ids, location, filter_location, result_ids, take = 10 }) {
+    async insights({ filter_type, entity_ids, tag_ids, location, filter_location, result_ids, explain, take = 10 }) {
       if (!INSIGHT_TYPES.includes(filter_type)) throw new Error(`unsupported filter.type ${filter_type}`);
       const r = await get("/v2/insights", {
         "filter.type": filter_type,
@@ -70,6 +72,7 @@ export function makeQloo({ apiKey, fetchImpl = fetch, base = QLOO_BASE, concurre
         "signal.location.query": location,
         "filter.location.query": filter_location,
         "filter.results.entities": result_ids,
+        "feature.explainability": explain ? "true" : undefined,
         take,
       });
       return (r.results?.entities || []).map(slimEntity);

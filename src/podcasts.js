@@ -1,0 +1,32 @@
+// Podcast partners: shows the brand's audience over-indexes on, ranked by Qloo, with Qloo's own explanation of which
+// input drove each pick. Next to each show, the advertisers its own episode notes already name (public RSS, read for the
+// podcast check in docs/podcast-check); that list is evidence a show sells ads, it never feeds the ranking.
+import SPONSORS from "./data/podcast-sponsors.json" with { type: "json" };
+
+const norm = (s) => String(s || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+const INDEX = new Map(Object.entries(SPONSORS.shows || {}).map(([name, brands]) => [norm(name), { name, brands }]));
+
+/** Advertisers a show's own episode notes name (at least 2 episodes each), or null when the show is not in the data. */
+export function advertisersFor(showName) {
+  return INDEX.get(norm(showName))?.brands ?? null;
+}
+
+/**
+ * @param qloo   client from makeQloo
+ * @param seeds  [{ entity_id, name }] the brand (and comps) the brief was built on
+ * @param take   how many shows to return
+ */
+export async function podcastPartners({ qloo, seeds, take = 10 }) {
+  const ids = (seeds || []).map((s) => s.entity_id).filter(Boolean);
+  if (!ids.length) return { error: "no seed brand to read" };
+  const names = new Map((seeds || []).map((s) => [s.entity_id, s.name]));
+  const shows = await qloo.insights({ filter_type: "urn:entity:podcast", entity_ids: ids, explain: true, take });
+  return {
+    shows: shows.map((s) => ({
+      name: s.name, entity_id: s.entity_id, affinity: s.affinity, popularity: s.popularity,
+      driven_by: (s.explain || []).filter((x) => x.score > 0).sort((a, b) => b.score - a.score).map((x) => ({ name: names.get(x.entity_id) || x.entity_id, score: x.score })),
+      advertisers: advertisersFor(s.name),
+    })),
+    data: { shows_with_sponsor_data: INDEX.size, source: SPONSORS.source, collected: SPONSORS.collected },
+  };
+}

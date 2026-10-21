@@ -1,0 +1,602 @@
+[
+ {
+  "i": 0,
+  "brand": "Aura Frames",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 1,
+  "brand": "Shopify",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 2,
+  "brand": "Factor",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 3,
+  "brand": "Mint Mobile",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 4,
+  "brand": "Airbnb",
+  "sponsor": true,
+  "why": "listed in sponsor list beside other offers"
+ },
+ {
+  "i": 5,
+  "brand": "NordVPN",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 6,
+  "brand": "Thrive Market",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 7,
+  "brand": "DraftKings",
+  "sponsor": true,
+  "why": "sponsor list with gambling disclaimer"
+ },
+ {
+  "i": 8,
+  "brand": "DoorDash",
+  "sponsor": false,
+  "why": "timestamp topic 'renee doordash story', content"
+ },
+ {
+  "i": 9,
+  "brand": "ThirdLove",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 10,
+  "brand": "Athletic Greens",
+  "sponsor": true,
+  "why": "AG1 sponsor link drinkag1.com/lex"
+ },
+ {
+  "i": 11,
+  "brand": "Cash App",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 12,
+  "brand": "Gusto",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 13,
+  "brand": "Quince",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 14,
+  "brand": "Bombas",
+  "sponsor": true,
+  "why": "Bombas ad read after other sponsor code"
+ },
+ {
+  "i": 15,
+  "brand": "DraftKings",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 16,
+  "brand": "FanDuel",
+  "sponsor": true,
+  "why": "bonus bets offer read in ad block"
+ },
+ {
+  "i": 17,
+  "brand": "Olipop",
+  "sponsor": true,
+  "why": "Olipop offer read with redemption link"
+ },
+ {
+  "i": 18,
+  "brand": "BetterHelp",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 19,
+  "brand": "Factor",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 20,
+  "brand": "Quince",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 21,
+  "brand": "Warby Parker",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 22,
+  "brand": "Factor",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 23,
+  "brand": "Helix Sleep",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 24,
+  "brand": "Home Depot",
+  "sponsor": false,
+  "why": "Home Depot gift card is a game prize"
+ },
+ {
+  "i": 25,
+  "brand": "Magic Spoon",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 26,
+  "brand": "Shopify",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 27,
+  "brand": "Rosetta Stone",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 28,
+  "brand": "Quince",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 29,
+  "brand": "Bombas",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 30,
+  "brand": "Starbucks",
+  "sponsor": false,
+  "why": "news segment about Starbucks and Chipotle"
+ },
+ {
+  "i": 31,
+  "brand": "Etsy",
+  "sponsor": false,
+  "why": "gossip content about Etsy psychic"
+ },
+ {
+  "i": 32,
+  "brand": "Peacock",
+  "sponsor": false,
+  "why": "own show available on Peacock, content link"
+ },
+ {
+  "i": 33,
+  "brand": "Cash App",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 34,
+  "brand": "Factor",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 35,
+  "brand": "Netflix",
+  "sponsor": false,
+  "why": "joke links to Netflix and Prime, not ad"
+ },
+ {
+  "i": 36,
+  "brand": "Athletic Greens",
+  "sponsor": true,
+  "why": "AG1 vanity link drinkag1.com/thefocusgroup"
+ },
+ {
+  "i": 37,
+  "brand": "Skims",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 38,
+  "brand": "Fabletics",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 39,
+  "brand": "Ridge",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 40,
+  "brand": "Dyson",
+  "sponsor": false,
+  "why": "'dyson spheres' false word match"
+ },
+ {
+  "i": 41,
+  "brand": "Smalls",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 42,
+  "brand": "Fabletics",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 43,
+  "brand": "Ritual",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 44,
+  "brand": "Quince",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 45,
+  "brand": "Ramp",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 46,
+  "brand": "Huel",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 47,
+  "brand": "DraftKings",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 48,
+  "brand": "Huel",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 49,
+  "brand": "Cash App",
+  "sponsor": true,
+  "why": "sponsor list with Cash App disclaimer"
+ },
+ {
+  "i": 50,
+  "brand": "BetterHelp",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 51,
+  "brand": "Drink LMNT",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 52,
+  "brand": "Netflix",
+  "sponsor": false,
+  "why": "referenced film 'Her' on Netflix"
+ },
+ {
+  "i": 53,
+  "brand": "ExpressVPN",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 54,
+  "brand": "Ka'Chava",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 55,
+  "brand": "Honeylove",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 56,
+  "brand": "McDonald's",
+  "sponsor": false,
+  "why": "episode story about McDonald's Monopoly scam"
+ },
+ {
+  "i": 57,
+  "brand": "MasterClass",
+  "sponsor": false,
+  "why": "'today's masterclass' false word match"
+ },
+ {
+  "i": 58,
+  "brand": "Netflix",
+  "sponsor": false,
+  "why": "news topic: Netflix open to streamers"
+ },
+ {
+  "i": 59,
+  "brand": "American Express",
+  "sponsor": true,
+  "why": "vanity ad link go.amex/morningbrew"
+ },
+ {
+  "i": 60,
+  "brand": "ButcherBox",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 61,
+  "brand": "Cozy Earth",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 62,
+  "brand": "Cash App",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 63,
+  "brand": "Cozy Earth",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 64,
+  "brand": "Smalls",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 65,
+  "brand": "Raycon",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 66,
+  "brand": "Netflix",
+  "sponsor": false,
+  "why": "content: Gilmore Girls leaving Netflix"
+ },
+ {
+  "i": 67,
+  "brand": "Honeylove",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 68,
+  "brand": "Peacock",
+  "sponsor": false,
+  "why": "promo for SNL on NBC/Peacock, unclear paid sponsor"
+ },
+ {
+  "i": 69,
+  "brand": "Warby Parker",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 70,
+  "brand": "The Farmer's Dog",
+  "sponsor": true,
+  "why": "[spon:] tag with tracking link"
+ },
+ {
+  "i": 71,
+  "brand": "Shopify",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 72,
+  "brand": "Vuori",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 73,
+  "brand": "Booking.com",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 74,
+  "brand": "Fabletics",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 75,
+  "brand": "Old Navy",
+  "sponsor": false,
+  "why": "Old Navy mentioned in episode content"
+ },
+ {
+  "i": 76,
+  "brand": "Shopify",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 77,
+  "brand": "Rocket Money",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 78,
+  "brand": "Zocdoc",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 79,
+  "brand": "Liquid I.V.",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 80,
+  "brand": "Drink LMNT",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 81,
+  "brand": "NordVPN",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 82,
+  "brand": "Quince",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 83,
+  "brand": "ZipRecruiter",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 84,
+  "brand": "Quince",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 85,
+  "brand": "McDonald's",
+  "sponsor": false,
+  "why": "segment topic McDonald's Monopoly stickers"
+ },
+ {
+  "i": 86,
+  "brand": "Warby Parker",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 87,
+  "brand": "Factor",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 88,
+  "brand": "Magic Spoon",
+  "sponsor": false,
+  "why": "cereal show content, Magic Spoon discussed"
+ },
+ {
+  "i": 89,
+  "brand": "Knix",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 90,
+  "brand": "Ridge",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 91,
+  "brand": "Expedia",
+  "sponsor": false,
+  "why": "Expedia spinout cited as reference"
+ },
+ {
+  "i": 92,
+  "brand": "Honeylove",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 93,
+  "brand": "Gusto",
+  "sponsor": false,
+  "why": "jobs.gusto.com job board link, not ad"
+ },
+ {
+  "i": 94,
+  "brand": "Wayfair",
+  "sponsor": true,
+  "why": "thank you for sponsoring this episode"
+ },
+ {
+  "i": 95,
+  "brand": "Nutrafol",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 96,
+  "brand": "NetSuite",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 97,
+  "brand": "Factor",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 98,
+  "brand": "Cash App",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ },
+ {
+  "i": 99,
+  "brand": "Cash App",
+  "sponsor": true,
+  "why": "sponsor read with promo code or vanity link"
+ }
+]

@@ -1,0 +1,859 @@
+{
+ "shows": 259,
+ "brands": 76,
+ "mean_auc": {
+  "qloo": 0.6633,
+  "chart": 0.5284,
+  "popularity": 0.5172,
+  "ad_volume": 0.5806,
+  "qloo_plus_volume": 0.6601
+ },
+ "H1": {
+  "qloo_above_half": 65,
+  "of": 76,
+  "sign_test_p": 0.0,
+  "ci95_mean_qloo": [
+   0.6298,
+   0.6966
+  ]
+ },
+ "H2": {
+  "qloo_minus_chart_ci95": [
+   0.1032,
+   0.167
+  ],
+  "qloo_minus_popularity_ci95": [
+   0.1015,
+   0.1925
+  ]
+ },
+ "H3": {
+  "combined_minus_volume_ci95": [
+   0.0523,
+   0.1075
+  ]
+ },
+ "H4_exploratory": {
+  "median_iqr": 0.0769,
+  "mean_auc_high_spread": 0.7028,
+  "mean_auc_low_spread": 0.6237
+ },
+ "rows": [
+  {
+   "brand": "WHOOP",
+   "positives": 4,
+   "qloo": 0.9651960784313726,
+   "chart": 0.6794117647058824,
+   "popularity": 0.5524509803921569,
+   "ad_volume": 0.5524509803921569,
+   "qloo_plus_volume": 0.8887254901960784,
+   "qloo_iqr": 0.06533805134974069
+  },
+  {
+   "brand": "Eight Sleep",
+   "positives": 5,
+   "qloo": 0.9570866141732284,
+   "chart": 0.5846456692913385,
+   "popularity": 0.6622047244094488,
+   "ad_volume": 0.4515748031496063,
+   "qloo_plus_volume": 0.8,
+   "qloo_iqr": 0.07699894496259407
+  },
+  {
+   "brand": "Lexus",
+   "positives": 4,
+   "qloo": 0.9504901960784313,
+   "chart": 0.7166666666666667,
+   "popularity": 0.37254901960784315,
+   "ad_volume": 0.5446078431372549,
+   "qloo_plus_volume": 0.8524509803921568,
+   "qloo_iqr": 0.09109420140022995
+  },
+  {
+   "brand": "Knix",
+   "positives": 4,
+   "qloo": 0.9401960784313725,
+   "chart": 0.7764705882352941,
+   "popularity": 0.7887254901960784,
+   "ad_volume": 0.6848039215686275,
+   "qloo_plus_volume": 0.8509803921568627,
+   "qloo_iqr": 0.1061089349499571
+  },
+  {
+   "brand": "Hyundai",
+   "positives": 7,
+   "qloo": 0.9345238095238095,
+   "chart": 0.518140589569161,
+   "popularity": 0.2825963718820862,
+   "ad_volume": 0.3330498866213152,
+   "qloo_plus_volume": 0.6848072562358276,
+   "qloo_iqr": 0.08442112785628142
+  },
+  {
+   "brand": "Volvo",
+   "positives": 3,
+   "qloo": 0.93359375,
+   "chart": 0.4322916666666667,
+   "popularity": 0.2890625,
+   "ad_volume": 0.4798177083333333,
+   "qloo_plus_volume": 0.76953125,
+   "qloo_iqr": 0.0869994654856262
+  },
+  {
+   "brand": "Toyota",
+   "positives": 8,
+   "qloo": 0.9270418326693227,
+   "chart": 0.5251494023904383,
+   "popularity": 0.27315737051792827,
+   "ad_volume": 0.29008964143426297,
+   "qloo_plus_volume": 0.6379482071713147,
+   "qloo_iqr": 0.08881625203736776
+  },
+  {
+   "brand": "Sonos",
+   "positives": 4,
+   "qloo": 0.8892156862745098,
+   "chart": 0.6774509803921569,
+   "popularity": 0.49950980392156863,
+   "ad_volume": 0.6132352941176471,
+   "qloo_plus_volume": 0.8779411764705882,
+   "qloo_iqr": 0.08311997534603477
+  },
+  {
+   "brand": "Drink LMNT",
+   "positives": 14,
+   "qloo": 0.8892128279883382,
+   "chart": 0.6212827988338192,
+   "popularity": 0.5059766763848397,
+   "ad_volume": 0.40524781341107874,
+   "qloo_plus_volume": 0.7240524781341108,
+   "qloo_iqr": 0.06295303685786147
+  },
+  {
+   "brand": "Vuori",
+   "positives": 3,
+   "qloo": 0.8665364583333334,
+   "chart": 0.6653645833333334,
+   "popularity": 0.8684895833333334,
+   "ad_volume": 0.634765625,
+   "qloo_plus_volume": 0.8645833333333334,
+   "qloo_iqr": 0.06005272290624564
+  },
+  {
+   "brand": "Subaru",
+   "positives": 5,
+   "qloo": 0.8637795275590551,
+   "chart": 0.4956692913385827,
+   "popularity": 0.26653543307086613,
+   "ad_volume": 0.3015748031496063,
+   "qloo_plus_volume": 0.6062992125984252,
+   "qloo_iqr": 0.08229578079467459
+  },
+  {
+   "brand": "Caraway",
+   "positives": 7,
+   "qloo": 0.8404195011337868,
+   "chart": 0.46003401360544216,
+   "popularity": 0.6388888888888888,
+   "ad_volume": 0.8160430839002267,
+   "qloo_plus_volume": 0.9115646258503401,
+   "qloo_iqr": 0.08553497293497603
+  },
+  {
+   "brand": "Lululemon",
+   "positives": 6,
+   "qloo": 0.8395915678524374,
+   "chart": 0.5447957839262187,
+   "popularity": 0.4914361001317523,
+   "ad_volume": 0.8188405797101449,
+   "qloo_plus_volume": 0.8353096179183136,
+   "qloo_iqr": 0.07870394312476636
+  },
+  {
+   "brand": "Ritual",
+   "positives": 12,
+   "qloo": 0.838225371120108,
+   "chart": 0.6474358974358975,
+   "popularity": 0.6214574898785425,
+   "ad_volume": 0.7435897435897436,
+   "qloo_plus_volume": 0.8556005398110661,
+   "qloo_iqr": 0.08888603628190916
+  },
+  {
+   "brand": "Skims",
+   "positives": 22,
+   "qloo": 0.8188530878404296,
+   "chart": 0.4978902953586498,
+   "popularity": 0.6117184503260452,
+   "ad_volume": 0.6148830072880705,
+   "qloo_plus_volume": 0.7743574990410433,
+   "qloo_iqr": 0.10154025695489566
+  },
+  {
+   "brand": "FanDuel",
+   "positives": 15,
+   "qloo": 0.8075136612021858,
+   "chart": 0.5159836065573771,
+   "popularity": 0.38278688524590165,
+   "ad_volume": 0.31311475409836065,
+   "qloo_plus_volume": 0.5863387978142076,
+   "qloo_iqr": 0.0767376892988928
+  },
+  {
+   "brand": "Sephora",
+   "positives": 9,
+   "qloo": 0.788,
+   "chart": 0.5437777777777778,
+   "popularity": 0.40066666666666667,
+   "ad_volume": 0.6342222222222222,
+   "qloo_plus_volume": 0.7395555555555555,
+   "qloo_iqr": 0.10950480825926434
+  },
+  {
+   "brand": "Honeylove",
+   "positives": 17,
+   "qloo": 0.7777102576567817,
+   "chart": 0.34832280019445794,
+   "popularity": 0.5155566358774915,
+   "ad_volume": 0.5352455031599417,
+   "qloo_plus_volume": 0.7006562955760817,
+   "qloo_iqr": 0.08210106869577294
+  },
+  {
+   "brand": "MasterClass",
+   "positives": 22,
+   "qloo": 0.7764672036823935,
+   "chart": 0.5238780207134638,
+   "popularity": 0.4254890678941312,
+   "ad_volume": 0.32930571538166475,
+   "qloo_plus_volume": 0.5842922899884925,
+   "qloo_iqr": 0.0624291982479126
+  },
+  {
+   "brand": "Airbnb",
+   "positives": 9,
+   "qloo": 0.7675555555555555,
+   "chart": 0.6571111111111111,
+   "popularity": 0.5744444444444444,
+   "ad_volume": 0.4222222222222222,
+   "qloo_plus_volume": 0.6055555555555555,
+   "qloo_iqr": 0.06924849614803197
+  },
+  {
+   "brand": "Rosetta Stone",
+   "positives": 5,
+   "qloo": 0.7460629921259843,
+   "chart": 0.7488188976377953,
+   "popularity": 0.6551181102362205,
+   "ad_volume": 0.4562992125984252,
+   "qloo_plus_volume": 0.6681102362204724,
+   "qloo_iqr": 0.06939905755806297
+  },
+  {
+   "brand": "Bombas",
+   "positives": 3,
+   "qloo": 0.7454427083333334,
+   "chart": 0.4869791666666667,
+   "popularity": 0.5625,
+   "ad_volume": 0.7838541666666666,
+   "qloo_plus_volume": 0.8411458333333334,
+   "qloo_iqr": 0.10371778212147165
+  },
+  {
+   "brand": "Nissan",
+   "positives": 7,
+   "qloo": 0.7273242630385488,
+   "chart": 0.6519274376417233,
+   "popularity": 0.3134920634920635,
+   "ad_volume": 0.3112244897959184,
+   "qloo_plus_volume": 0.5337301587301587,
+   "qloo_iqr": 0.08849044833043251
+  },
+  {
+   "brand": "Nutrafol",
+   "positives": 33,
+   "qloo": 0.725998927326361,
+   "chart": 0.5821265754894074,
+   "popularity": 0.6698846875838026,
+   "ad_volume": 0.6898632341110217,
+   "qloo_plus_volume": 0.7701126307320998,
+   "qloo_iqr": 0.09973927477788957
+  },
+  {
+   "brand": "DraftKings",
+   "positives": 25,
+   "qloo": 0.7217948717948718,
+   "chart": 0.4958974358974359,
+   "popularity": 0.6605982905982906,
+   "ad_volume": 0.6399145299145299,
+   "qloo_plus_volume": 0.7412820512820513,
+   "qloo_iqr": 0.07334479106169989
+  },
+  {
+   "brand": "Uber Eats",
+   "positives": 3,
+   "qloo": 0.71875,
+   "chart": 0.6158854166666666,
+   "popularity": 0.4876302083333333,
+   "ad_volume": 0.3776041666666667,
+   "qloo_plus_volume": 0.51171875,
+   "qloo_iqr": 0.0700639960958871
+  },
+  {
+   "brand": "Notion",
+   "positives": 7,
+   "qloo": 0.7182539682539683,
+   "chart": 0.6941609977324263,
+   "popularity": 0.42148526077097503,
+   "ad_volume": 0.5606575963718821,
+   "qloo_plus_volume": 0.6842403628117913,
+   "qloo_iqr": 0.07416878097354329
+  },
+  {
+   "brand": "Green Chef",
+   "positives": 8,
+   "qloo": 0.7161354581673307,
+   "chart": 0.39965139442231074,
+   "popularity": 0.3812250996015936,
+   "ad_volume": 0.43376494023904383,
+   "qloo_plus_volume": 0.5886454183266933,
+   "qloo_iqr": 0.08672219023703664
+  },
+  {
+   "brand": "SeatGeek",
+   "positives": 10,
+   "qloo": 0.7100401606425703,
+   "chart": 0.5423694779116466,
+   "popularity": 0.4279116465863454,
+   "ad_volume": 0.7829317269076306,
+   "qloo_plus_volume": 0.8357429718875502,
+   "qloo_iqr": 0.0708253013887945
+  },
+  {
+   "brand": "Audible",
+   "positives": 11,
+   "qloo": 0.7074780058651027,
+   "chart": 0.5207111436950147,
+   "popularity": 0.5410557184750733,
+   "ad_volume": 0.5870601173020528,
+   "qloo_plus_volume": 0.688233137829912,
+   "qloo_iqr": 0.07717916613848075
+  },
+  {
+   "brand": "Gusto",
+   "positives": 23,
+   "qloo": 0.7005342667649226,
+   "chart": 0.5880619012527635,
+   "popularity": 0.5922991893883567,
+   "ad_volume": 0.6585298452468681,
+   "qloo_plus_volume": 0.7545136330140014,
+   "qloo_iqr": 0.0643284307536357
+  },
+  {
+   "brand": "hims",
+   "positives": 31,
+   "qloo": 0.6922043010752689,
+   "chart": 0.37719298245614036,
+   "popularity": 0.46908602150537637,
+   "ad_volume": 0.5183220147142049,
+   "qloo_plus_volume": 0.6409168081494058,
+   "qloo_iqr": 0.07447582075603998
+  },
+  {
+   "brand": "Squarespace",
+   "positives": 23,
+   "qloo": 0.6733603537214443,
+   "chart": 0.5714812085482682,
+   "popularity": 0.6298820928518791,
+   "ad_volume": 0.5348194546794399,
+   "qloo_plus_volume": 0.649686809137804,
+   "qloo_iqr": 0.06655519542831811
+  },
+  {
+   "brand": "Chime",
+   "positives": 17,
+   "qloo": 0.6724598930481284,
+   "chart": 0.44871171609139526,
+   "popularity": 0.732620320855615,
+   "ad_volume": 0.6948225571220223,
+   "qloo_plus_volume": 0.7479338842975206,
+   "qloo_iqr": 0.055824776788506836
+  },
+  {
+   "brand": "Wayfair",
+   "positives": 42,
+   "qloo": 0.6675444371296906,
+   "chart": 0.46483432082510423,
+   "popularity": 0.5843756857581742,
+   "ad_volume": 0.6990344524906736,
+   "qloo_plus_volume": 0.7238863287250384,
+   "qloo_iqr": 0.10350108315844297
+  },
+  {
+   "brand": "Hungryroot",
+   "positives": 22,
+   "qloo": 0.6448983505945531,
+   "chart": 0.4754507096279248,
+   "popularity": 0.6653241273494438,
+   "ad_volume": 0.6023206751054853,
+   "qloo_plus_volume": 0.6669543536632144,
+   "qloo_iqr": 0.10747647333088428
+  },
+  {
+   "brand": "Hulu",
+   "positives": 23,
+   "qloo": 0.6438835666912307,
+   "chart": 0.6039056742815033,
+   "popularity": 0.6594509948415622,
+   "ad_volume": 0.46683861459100956,
+   "qloo_plus_volume": 0.5783898305084746,
+   "qloo_iqr": 0.05509903170070485
+  },
+  {
+   "brand": "Athletic Greens",
+   "positives": 39,
+   "qloo": 0.6434149184149184,
+   "chart": 0.48362470862470863,
+   "popularity": 0.4871212121212121,
+   "ad_volume": 0.5075174825174825,
+   "qloo_plus_volume": 0.6040792540792541,
+   "qloo_iqr": 0.06286779956290078
+  },
+  {
+   "brand": "Netflix",
+   "positives": 64,
+   "qloo": 0.6407451923076923,
+   "chart": 0.5507211538461538,
+   "popularity": 0.5258814102564102,
+   "ad_volume": 0.5169471153846154,
+   "qloo_plus_volume": 0.6052083333333333,
+   "qloo_iqr": 0.06232345198746525
+  },
+  {
+   "brand": "Canva",
+   "positives": 3,
+   "qloo": 0.6380208333333334,
+   "chart": 0.6217447916666666,
+   "popularity": 0.384765625,
+   "ad_volume": 0.5234375,
+   "qloo_plus_volume": 0.5481770833333334,
+   "qloo_iqr": 0.05943250671760725
+  },
+  {
+   "brand": "Warby Parker",
+   "positives": 24,
+   "qloo": 0.625886524822695,
+   "chart": 0.4874113475177305,
+   "popularity": 0.461790780141844,
+   "ad_volume": 0.6811170212765958,
+   "qloo_plus_volume": 0.6961879432624114,
+   "qloo_iqr": 0.09406481198627326
+  },
+  {
+   "brand": "Cash App",
+   "positives": 56,
+   "qloo": 0.6155436312456017,
+   "chart": 0.4595355383532723,
+   "popularity": 0.4477040816326531,
+   "ad_volume": 0.6166871921182266,
+   "qloo_plus_volume": 0.6643209007741028,
+   "qloo_iqr": 0.04746101662061364
+  },
+  {
+   "brand": "Chewy",
+   "positives": 4,
+   "qloo": 0.611764705882353,
+   "chart": 0.8132352941176471,
+   "popularity": 0.7107843137254902,
+   "ad_volume": 0.6872549019607843,
+   "qloo_plus_volume": 0.6975490196078431,
+   "qloo_iqr": 0.103731065197599
+  },
+  {
+   "brand": "Olipop",
+   "positives": 7,
+   "qloo": 0.6094104308390023,
+   "chart": 0.5413832199546486,
+   "popularity": 0.4200680272108844,
+   "ad_volume": 0.9294217687074829,
+   "qloo_plus_volume": 0.8594104308390023,
+   "qloo_iqr": 0.06949172256662894
+  },
+  {
+   "brand": "Manscaped",
+   "positives": 3,
+   "qloo": 0.603515625,
+   "chart": 0.4544270833333333,
+   "popularity": 0.34765625,
+   "ad_volume": 0.802734375,
+   "qloo_plus_volume": 0.75,
+   "qloo_iqr": 0.07700957478919257
+  },
+  {
+   "brand": "Booking.com",
+   "positives": 8,
+   "qloo": 0.5946215139442231,
+   "chart": 0.36030876494023906,
+   "popularity": 0.4379980079681275,
+   "ad_volume": 0.6322211155378487,
+   "qloo_plus_volume": 0.651394422310757,
+   "qloo_iqr": 0.0834634970599345
+  },
+  {
+   "brand": "Starbucks",
+   "positives": 5,
+   "qloo": 0.5877952755905512,
+   "chart": 0.6204724409448819,
+   "popularity": 0.3909448818897638,
+   "ad_volume": 0.6933070866141732,
+   "qloo_plus_volume": 0.6334645669291339,
+   "qloo_iqr": 0.0735241475605859
+  },
+  {
+   "brand": "Paramount+",
+   "positives": 4,
+   "qloo": 0.5862745098039216,
+   "chart": 0.4088235294117647,
+   "popularity": 0.5936274509803922,
+   "ad_volume": 0.35980392156862745,
+   "qloo_plus_volume": 0.47843137254901963,
+   "qloo_iqr": 0.0643376621150421
+  },
+  {
+   "brand": "Lowe's",
+   "positives": 29,
+   "qloo": 0.5860569715142429,
+   "chart": 0.48523238380809597,
+   "popularity": 0.5575712143928035,
+   "ad_volume": 0.4158920539730135,
+   "qloo_plus_volume": 0.51071964017991,
+   "qloo_iqr": 0.08637199742528345
+  },
+  {
+   "brand": "BetterHelp",
+   "positives": 63,
+   "qloo": 0.5853174603174603,
+   "chart": 0.4923469387755102,
+   "popularity": 0.6050372529964366,
+   "ad_volume": 0.6230968577907353,
+   "qloo_plus_volume": 0.6432620667314545,
+   "qloo_iqr": 0.08446925505554426
+  },
+  {
+   "brand": "Liquid I.V.",
+   "positives": 10,
+   "qloo": 0.5843373493975904,
+   "chart": 0.5487951807228916,
+   "popularity": 0.48413654618473895,
+   "ad_volume": 0.7433734939759036,
+   "qloo_plus_volume": 0.7100401606425703,
+   "qloo_iqr": 0.1044260216654661
+  },
+  {
+   "brand": "Hinge",
+   "positives": 6,
+   "qloo": 0.5813570487483531,
+   "chart": 0.48155467720685113,
+   "popularity": 0.46080368906455865,
+   "ad_volume": 0.5144927536231884,
+   "qloo_plus_volume": 0.5362318840579711,
+   "qloo_iqr": 0.09004599041968175
+  },
+  {
+   "brand": "Indeed",
+   "positives": 11,
+   "qloo": 0.5744134897360704,
+   "chart": 0.4272360703812317,
+   "popularity": 0.42265395894428154,
+   "ad_volume": 0.4241202346041056,
+   "qloo_plus_volume": 0.5201612903225806,
+   "qloo_iqr": 0.07834433704081734
+  },
+  {
+   "brand": "Etsy",
+   "positives": 4,
+   "qloo": 0.567156862745098,
+   "chart": 0.4230392156862745,
+   "popularity": 0.3931372549019608,
+   "ad_volume": 0.5892156862745098,
+   "qloo_plus_volume": 0.6137254901960785,
+   "qloo_iqr": 0.08239635626294528
+  },
+  {
+   "brand": "Talkspace",
+   "positives": 5,
+   "qloo": 0.5543307086614173,
+   "chart": 0.4464566929133858,
+   "popularity": 0.38858267716535433,
+   "ad_volume": 0.6661417322834645,
+   "qloo_plus_volume": 0.6614173228346457,
+   "qloo_iqr": 0.1061523467204013
+  },
+  {
+   "brand": "Walmart",
+   "positives": 22,
+   "qloo": 0.5520713463751439,
+   "chart": 0.5019179133103183,
+   "popularity": 0.42702339854238586,
+   "ad_volume": 0.7792481779823552,
+   "qloo_plus_volume": 0.7126965861143076,
+   "qloo_iqr": 0.06999379238545711
+  },
+  {
+   "brand": "Shopify",
+   "positives": 81,
+   "qloo": 0.5514287695935636,
+   "chart": 0.4760715771951727,
+   "popularity": 0.45602718823692606,
+   "ad_volume": 0.5426550145651269,
+   "qloo_plus_volume": 0.5776113191843529,
+   "qloo_iqr": 0.06247214352941788
+  },
+  {
+   "brand": "Thrive Market",
+   "positives": 7,
+   "qloo": 0.5481859410430839,
+   "chart": 0.44869614512471656,
+   "popularity": 0.699546485260771,
+   "ad_volume": 0.6539115646258503,
+   "qloo_plus_volume": 0.628968253968254,
+   "qloo_iqr": 0.0684768762563489
+  },
+  {
+   "brand": "Fabletics",
+   "positives": 26,
+   "qloo": 0.5389567514031033,
+   "chart": 0.5496863651370089,
+   "popularity": 0.4600528227137669,
+   "ad_volume": 0.6514526246285903,
+   "qloo_plus_volume": 0.6223175965665236,
+   "qloo_iqr": 0.10206838073849289
+  },
+  {
+   "brand": "Blueland",
+   "positives": 7,
+   "qloo": 0.5337301587301587,
+   "chart": 0.48441043083900226,
+   "popularity": 0.46825396825396826,
+   "ad_volume": 0.6811224489795918,
+   "qloo_plus_volume": 0.6530612244897959,
+   "qloo_iqr": 0.09849621394545838
+  },
+  {
+   "brand": "HelloFresh",
+   "positives": 22,
+   "qloo": 0.5268507863444573,
+   "chart": 0.4707518220176448,
+   "popularity": 0.4328730341388569,
+   "ad_volume": 0.6810510164940544,
+   "qloo_plus_volume": 0.6405830456463368,
+   "qloo_iqr": 0.10785945477834935
+  },
+  {
+   "brand": "McDonald's",
+   "positives": 10,
+   "qloo": 0.5186746987951807,
+   "chart": 0.4857429718875502,
+   "popularity": 0.48694779116465864,
+   "ad_volume": 0.5060240963855421,
+   "qloo_plus_volume": 0.5040160642570282,
+   "qloo_iqr": 0.05618308807541039
+  },
+  {
+   "brand": "ZipRecruiter",
+   "positives": 10,
+   "qloo": 0.5120481927710844,
+   "chart": 0.6911646586345381,
+   "popularity": 0.6506024096385542,
+   "ad_volume": 0.5359437751004016,
+   "qloo_plus_volume": 0.5359437751004016,
+   "qloo_iqr": 0.0669427702173423
+  },
+  {
+   "brand": "Macy's",
+   "positives": 8,
+   "qloo": 0.5089641434262948,
+   "chart": 0.4922808764940239,
+   "popularity": 0.3976593625498008,
+   "ad_volume": 0.4641434262948207,
+   "qloo_plus_volume": 0.5104581673306773,
+   "qloo_iqr": 0.06439139866040056
+  },
+  {
+   "brand": "Huel",
+   "positives": 11,
+   "qloo": 0.5058651026392962,
+   "chart": 0.45179618768328444,
+   "popularity": 0.40487536656891493,
+   "ad_volume": 0.5687316715542522,
+   "qloo_plus_volume": 0.5452712609970675,
+   "qloo_iqr": 0.055814509597230444
+  },
+  {
+   "brand": "Quince",
+   "positives": 110,
+   "qloo": 0.5,
+   "chart": 0.46113483831604635,
+   "popularity": 0.6316961561928005,
+   "ad_volume": 0.5674191580231849,
+   "qloo_plus_volume": 0.5674191580231849,
+   "qloo_iqr": 0
+  },
+  {
+   "brand": "ButcherBox",
+   "positives": 37,
+   "qloo": 0.49214755295836377,
+   "chart": 0.5447406866325786,
+   "popularity": 0.5942293644996348,
+   "ad_volume": 0.6113951789627465,
+   "qloo_plus_volume": 0.5743851960068176,
+   "qloo_iqr": 0.06371329286400906
+  },
+  {
+   "brand": "Mint Mobile",
+   "positives": 42,
+   "qloo": 0.4809084924292298,
+   "chart": 0.4910577134079438,
+   "popularity": 0.6575597981127935,
+   "ad_volume": 0.6360544217687075,
+   "qloo_plus_volume": 0.5639675224928681,
+   "qloo_iqr": 0.05053905409623227
+  },
+  {
+   "brand": "Stitch Fix",
+   "positives": 4,
+   "qloo": 0.4803921568627451,
+   "chart": 0.478921568627451,
+   "popularity": 0.6220588235294118,
+   "ad_volume": 0.8019607843137255,
+   "qloo_plus_volume": 0.6598039215686274,
+   "qloo_iqr": 0.10587360997364459
+  },
+  {
+   "brand": "NordVPN",
+   "positives": 9,
+   "qloo": 0.47,
+   "chart": 0.37866666666666665,
+   "popularity": 0.5417777777777778,
+   "ad_volume": 0.48288888888888887,
+   "qloo_plus_volume": 0.44044444444444447,
+   "qloo_iqr": 0.08073600999189956
+  },
+  {
+   "brand": "Raycon",
+   "positives": 14,
+   "qloo": 0.4696793002915452,
+   "chart": 0.6075801749271137,
+   "popularity": 0.48440233236151603,
+   "ad_volume": 0.4887755102040816,
+   "qloo_plus_volume": 0.46807580174927116,
+   "qloo_iqr": 0.05741105717553041
+  },
+  {
+   "brand": "Home Chef",
+   "positives": 18,
+   "qloo": 0.4558552328261872,
+   "chart": 0.44893960350391887,
+   "popularity": 0.6758875057630245,
+   "ad_volume": 0.5616643614568926,
+   "qloo_plus_volume": 0.4900875979714154,
+   "qloo_iqr": 0.09864103229105514
+  },
+  {
+   "brand": "Zocdoc",
+   "positives": 29,
+   "qloo": 0.44932533733133434,
+   "chart": 0.4954272863568216,
+   "popularity": 0.5340329835082459,
+   "ad_volume": 0.6089205397301349,
+   "qloo_plus_volume": 0.5484257871064467,
+   "qloo_iqr": 0.07439961403642958
+  },
+  {
+   "brand": "Magic Spoon",
+   "positives": 4,
+   "qloo": 0.44901960784313727,
+   "chart": 0.4372549019607843,
+   "popularity": 0.640686274509804,
+   "ad_volume": 0.8068627450980392,
+   "qloo_plus_volume": 0.7225490196078431,
+   "qloo_iqr": 0.05888543213924169
+  },
+  {
+   "brand": "Factor",
+   "positives": 52,
+   "qloo": 0.4015235971757711,
+   "chart": 0.5269881085098477,
+   "popularity": 0.4707822370865849,
+   "ad_volume": 0.6088350055741361,
+   "qloo_plus_volume": 0.5179301374953549,
+   "qloo_iqr": 0.054670001188057316
+  },
+  {
+   "brand": "Casper",
+   "positives": 8,
+   "qloo": 0.3715139442231076,
+   "chart": 0.4275398406374502,
+   "popularity": 0.5727091633466136,
+   "ad_volume": 0.6394422310756972,
+   "qloo_plus_volume": 0.523406374501992,
+   "qloo_iqr": 0.06720845416313748
+  }
+ ],
+ "passed": {
+  "H1": true,
+  "H2": true,
+  "H3": true
+ },
+ "leakage_check": [
+  {
+   "brand": "DraftKings",
+   "predicted_from": "FanDuel",
+   "positives": 25,
+   "own_auc": 0.7217948717948718,
+   "competitor_auc": 0.7004273504273504
+  },
+  {
+   "brand": "FanDuel",
+   "predicted_from": "DraftKings",
+   "positives": 15,
+   "own_auc": 0.8075136612021858,
+   "competitor_auc": 0.7760928961748634
+  },
+  {
+   "brand": "BetterHelp",
+   "predicted_from": "Talkspace",
+   "positives": 63,
+   "own_auc": 0.5853174603174603,
+   "competitor_auc": 0.5563249109167476
+  },
+  {
+   "brand": "Talkspace",
+   "predicted_from": "BetterHelp",
+   "positives": 5,
+   "own_auc": 0.5543307086614173,
+   "competitor_auc": 0.5755905511811024
+  },
+  {
+   "brand": "HelloFresh",
+   "predicted_from": "Factor",
+   "positives": 22,
+   "own_auc": 0.5268507863444573,
+   "competitor_auc": 0.36929420790180284
+  },
+  {
+   "brand": "Factor",
+   "predicted_from": "HelloFresh",
+   "positives": 52,
+   "own_auc": 0.4015235971757711,
+   "competitor_auc": 0.43501486436269043
+  },
+  {
+   "brand": "Mint Mobile",
+   "predicted_from": "Visible",
+   "positives": 42,
+   "own_auc": 0.4809084924292298,
+   "competitor_auc": 0.49056396752249287
+  }
+ ]
+}

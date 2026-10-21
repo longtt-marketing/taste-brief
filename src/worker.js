@@ -13,6 +13,7 @@ import { gradePicks, summarize } from "./grade.js";
 const list = (v) => (Array.isArray(v) ? v : []);
 import { compareMarkets } from "./markets.js";
 import { makeReceipts } from "./receipt.js";
+import { podcastPartners } from "./podcasts.js";
 import { makeQloo } from "./qloo.js";
 import { mockQloo } from "./mock-qloo.js";
 import { anthropicLLM, mockLLM, mockBaselineLLM } from "./llm.js";
@@ -139,12 +140,14 @@ export default {
           send({ type: "step", run: market, step: { tool: "graded", n: tb.length + plain.length } });
           return { taste_brief: { graded: tb, ...summarize(tb) }, plain: { graded: plain, ...summarize(plain) } };
         };
-        const [markets, scored] = await Promise.all([
+        const seedEntities = out.seeds.map((id) => ({ entity_id: id, name: out.registry.find((e) => e.entity_id === id)?.name || id }));
+        const [markets, scored, podcasts] = await Promise.all([
           marketB.length >= 2
             ? compareMarkets({ qloo, seedIds: out.seeds.slice(0, 3), marketA: market, marketB,
               onStep: (s) => send({ type: "step", run: `${market} vs ${marketB}`, step: s }) }).catch((e) => ({ error: String(e.message || e) }))
             : null,
           gradeBoth().catch(() => null),
+          seedEntities.length ? podcastPartners({ qloo, seeds: seedEntities }).catch((e) => ({ error: String(e.message || e) })) : null,
         ]);
         // what the plain guess would target that Qloo did not return anywhere in this run (entities, tags or city lists)
         const returned = [...out.registry, ...(out.tags || []), ...(markets?.types || []).flatMap((t) => [...(t.only_a || []), ...(t.only_b || []), ...(t.shared || [])])];
@@ -153,11 +156,11 @@ export default {
         // the city comparison makes one insights call per city for each list type
         const graded = [...(scored?.taste_brief?.graded || []), ...(scored?.plain?.graded || [])];
         const qlooCalls = out.trace.filter((s) => ["search", "insights", "demographics", "tags"].includes(s.tool)).length
-          + 2 * (markets?.types || []).length + graded.length + graded.filter((g) => g.match).length;
+          + 2 * (markets?.types || []).length + graded.length + graded.filter((g) => g.match).length + (podcasts?.shows ? 1 : 0);
         const runInfo = { version: env.CF_VERSION_METADATA?.id || "local", seconds: Math.round((Date.now() - t0) / 1000),
           qloo_calls: qlooCalls, model_calls: (llm.usage?.calls || 0) + (baseLLM.usage?.calls || 0), at: new Date().toISOString() };
         // the inputs go back to the same visitor only, so the page can lock the test plan with them
-        const result = { ...meta, product, references, compare_market: marketB, market, ...out, baseline, unbacked, scored, markets, run: runInfo };
+        const result = { ...meta, product, references, compare_market: marketB, market, ...out, baseline, unbacked, scored, markets, podcasts, run: runInfo };
         if (live && isExample(body) && env.QUOTA && !result.incomplete) {
           const { quota, access, ...keep } = result;
           await env.QUOTA.put(REPLAY_KEY, JSON.stringify({ ...keep, mode: "replay", recorded: { at: runInfo.at, version: runInfo.version, inputs: EXAMPLE } })).catch(() => {});

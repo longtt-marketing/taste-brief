@@ -1,0 +1,602 @@
+[
+ {
+  "i": 0,
+  "brand": "Progressive",
+  "sponsor": true,
+  "why": "sponsor list with progressive.com offer"
+ },
+ {
+  "i": 1,
+  "brand": "Aura Frames",
+  "sponsor": true,
+  "why": "promo code and vanity URL"
+ },
+ {
+  "i": 2,
+  "brand": "Chewy",
+  "sponsor": false,
+  "why": "false match: 'mentos chewy mints'"
+ },
+ {
+  "i": 3,
+  "brand": "NordVPN",
+  "sponsor": true,
+  "why": "'support our sponsors' with vanity URL"
+ },
+ {
+  "i": 4,
+  "brand": "Vanta",
+  "sponsor": false,
+  "why": "false match: 'advantage'"
+ },
+ {
+  "i": 5,
+  "brand": "Lululemon",
+  "sponsor": false,
+  "why": "market news about Lululemon stock"
+ },
+ {
+  "i": 6,
+  "brand": "Stitch Fix",
+  "sponsor": true,
+  "why": "'episode sponsors' with vanity URL"
+ },
+ {
+  "i": 7,
+  "brand": "MasterClass",
+  "sponsor": false,
+  "why": "'a masterclass in' as phrase"
+ },
+ {
+  "i": 8,
+  "brand": "Quince",
+  "sponsor": true,
+  "why": "sponsor list with quince offer"
+ },
+ {
+  "i": 9,
+  "brand": "American Express",
+  "sponsor": false,
+  "why": "news story about Amex bill"
+ },
+ {
+  "i": 10,
+  "brand": "Etsy",
+  "sponsor": false,
+  "why": "content: Etsy marketplace mention"
+ },
+ {
+  "i": 11,
+  "brand": "Vanta",
+  "sponsor": false,
+  "why": "false match: 'advantage'"
+ },
+ {
+  "i": 12,
+  "brand": "Ridge",
+  "sponsor": true,
+  "why": "vanity URL ridge.com/warz sale"
+ },
+ {
+  "i": 13,
+  "brand": "MasterClass",
+  "sponsor": false,
+  "why": "'a masterclass in' as phrase"
+ },
+ {
+  "i": 14,
+  "brand": "Airbnb",
+  "sponsor": true,
+  "why": "sponsor list airbnb.com/host"
+ },
+ {
+  "i": 15,
+  "brand": "Audible",
+  "sponsor": false,
+  "why": "show named 'The Audible', not Audible"
+ },
+ {
+  "i": 16,
+  "brand": "FanDuel",
+  "sponsor": true,
+  "why": "sponsor read in ad list"
+ },
+ {
+  "i": 17,
+  "brand": "Vanta",
+  "sponsor": false,
+  "why": "false match: 'advantage'"
+ },
+ {
+  "i": 18,
+  "brand": "Vanta",
+  "sponsor": false,
+  "why": "false match: 'advantage'"
+ },
+ {
+  "i": 19,
+  "brand": "Vanta",
+  "sponsor": false,
+  "why": "false match: 'advantage'"
+ },
+ {
+  "i": 20,
+  "brand": "McDonald's",
+  "sponsor": false,
+  "why": "false match: 'trevor mcdonald'"
+ },
+ {
+  "i": 21,
+  "brand": "SeatGeek",
+  "sponsor": true,
+  "why": "'sponsored by seatgeek' with code"
+ },
+ {
+  "i": 22,
+  "brand": "Canva",
+  "sponsor": false,
+  "why": "tools list, not sponsorship"
+ },
+ {
+  "i": 23,
+  "brand": "Hulu",
+  "sponsor": false,
+  "why": "guest credits mention Hulu"
+ },
+ {
+  "i": 24,
+  "brand": "Thorne",
+  "sponsor": false,
+  "why": "false match: guest Bella Thorne"
+ },
+ {
+  "i": 25,
+  "brand": "McDonald's",
+  "sponsor": false,
+  "why": "content: ordering McDonald's"
+ },
+ {
+  "i": 26,
+  "brand": "Cozy Earth",
+  "sponsor": true,
+  "why": "discount code thatwasus"
+ },
+ {
+  "i": 27,
+  "brand": "Quince",
+  "sponsor": true,
+  "why": "vanity URL quince.com/happysad"
+ },
+ {
+  "i": 28,
+  "brand": "Drink LMNT",
+  "sponsor": true,
+  "why": "sponsor list with LMNT offer"
+ },
+ {
+  "i": 29,
+  "brand": "Lululemon",
+  "sponsor": false,
+  "why": "stock ticker discussion"
+ },
+ {
+  "i": 30,
+  "brand": "Babbel",
+  "sponsor": true,
+  "why": "vanity URL and #ad"
+ },
+ {
+  "i": 31,
+  "brand": "Ridge",
+  "sponsor": true,
+  "why": "promo code triggernometry"
+ },
+ {
+  "i": 32,
+  "brand": "Nutrafol",
+  "sponsor": true,
+  "why": "sponsor read with offer"
+ },
+ {
+  "i": 33,
+  "brand": "Lululemon",
+  "sponsor": false,
+  "why": "news on Lululemon quarter"
+ },
+ {
+  "i": 34,
+  "brand": "Factor",
+  "sponsor": true,
+  "why": "vanity URL and code"
+ },
+ {
+  "i": 35,
+  "brand": "Shopify",
+  "sponsor": false,
+  "why": "content: Shopify data"
+ },
+ {
+  "i": 36,
+  "brand": "Shopify",
+  "sponsor": true,
+  "why": "sponsor list shopify.com/worst"
+ },
+ {
+  "i": 37,
+  "brand": "Netflix",
+  "sponsor": false,
+  "why": "guest's show on Netflix, not ad"
+ },
+ {
+  "i": 38,
+  "brand": "Lowe's",
+  "sponsor": false,
+  "why": "false match: 'followers'/lowe pattern"
+ },
+ {
+  "i": 39,
+  "brand": "Policygenius",
+  "sponsor": true,
+  "why": "labeled 'sponsor' with vanity URL"
+ },
+ {
+  "i": 40,
+  "brand": "Walmart",
+  "sponsor": false,
+  "why": "content: worked at Walmart"
+ },
+ {
+  "i": 41,
+  "brand": "Cash App",
+  "sponsor": true,
+  "why": "Cash App sponsor link"
+ },
+ {
+  "i": 42,
+  "brand": "Chewy",
+  "sponsor": false,
+  "why": "guest co-founded Chewy"
+ },
+ {
+  "i": 43,
+  "brand": "Quince",
+  "sponsor": true,
+  "why": "vanity URL quince.com/pdb"
+ },
+ {
+  "i": 44,
+  "brand": "Lowe's",
+  "sponsor": false,
+  "why": "false match: 'lowest'"
+ },
+ {
+  "i": 45,
+  "brand": "MasterClass",
+  "sponsor": false,
+  "why": "'a masterclass in' as phrase"
+ },
+ {
+  "i": 46,
+  "brand": "HelloFresh",
+  "sponsor": true,
+  "why": "vanity URL hellofresh offer"
+ },
+ {
+  "i": 47,
+  "brand": "hims",
+  "sponsor": true,
+  "why": "promo code and hims.com/tafs"
+ },
+ {
+  "i": 48,
+  "brand": "DoorDash",
+  "sponsor": false,
+  "why": "content: guest drove DoorDash"
+ },
+ {
+  "i": 49,
+  "brand": "Netflix",
+  "sponsor": false,
+  "why": "news: Netflix layoffs"
+ },
+ {
+  "i": 50,
+  "brand": "Mack Weldon",
+  "sponsor": true,
+  "why": "promo code michael"
+ },
+ {
+  "i": 51,
+  "brand": "Vanta",
+  "sponsor": false,
+  "why": "false match: 'advantages'"
+ },
+ {
+  "i": 52,
+  "brand": "Netflix",
+  "sponsor": false,
+  "why": "guest described as Netflix star"
+ },
+ {
+  "i": 53,
+  "brand": "Netflix",
+  "sponsor": false,
+  "why": "content: Netflix show reference"
+ },
+ {
+  "i": 54,
+  "brand": "Lowe's",
+  "sponsor": false,
+  "why": "false match: 'lowers'"
+ },
+ {
+  "i": 55,
+  "brand": "Quince",
+  "sponsor": true,
+  "why": "vanity URL quince.com/lovemurder"
+ },
+ {
+  "i": 56,
+  "brand": "Lowe's",
+  "sponsor": false,
+  "why": "content: Lowe's company discussion"
+ },
+ {
+  "i": 57,
+  "brand": "Peacock",
+  "sponsor": false,
+  "why": "content: Peacock documentary"
+ },
+ {
+  "i": 58,
+  "brand": "Vanta",
+  "sponsor": false,
+  "why": "false match: 'advantage'"
+ },
+ {
+  "i": 59,
+  "brand": "BetterHelp",
+  "sponsor": true,
+  "why": "'thank you to our sponsors'"
+ },
+ {
+  "i": 60,
+  "brand": "Nutrafol",
+  "sponsor": true,
+  "why": "sponsor read with offer"
+ },
+ {
+  "i": 61,
+  "brand": "MasterClass",
+  "sponsor": true,
+  "why": "sponsor list with offer"
+ },
+ {
+  "i": 62,
+  "brand": "Lowe's",
+  "sponsor": false,
+  "why": "false match, no Lowe's"
+ },
+ {
+  "i": 63,
+  "brand": "Netflix",
+  "sponsor": false,
+  "why": "content: Netflix documentary"
+ },
+ {
+  "i": 64,
+  "brand": "Home Chef",
+  "sponsor": true,
+  "why": "'supporting our sponsors' Home Chef"
+ },
+ {
+  "i": 65,
+  "brand": "T-Mobile",
+  "sponsor": false,
+  "why": "guest former T-Mobile executive"
+ },
+ {
+  "i": 66,
+  "brand": "Dyson",
+  "sponsor": false,
+  "why": "news: Dyson toothbrush"
+ },
+ {
+  "i": 67,
+  "brand": "Quince",
+  "sponsor": true,
+  "why": "'brought to you by' quince"
+ },
+ {
+  "i": 68,
+  "brand": "Mint Mobile",
+  "sponsor": true,
+  "why": "vanity URL mintmobile.com/slac"
+ },
+ {
+  "i": 69,
+  "brand": "ButcherBox",
+  "sponsor": true,
+  "why": "vanity URL butcherbox.com/twp"
+ },
+ {
+  "i": 70,
+  "brand": "Starbucks",
+  "sponsor": false,
+  "why": "lesson content about Starbucks"
+ },
+ {
+  "i": 71,
+  "brand": "Lowe's",
+  "sponsor": false,
+  "why": "false match: '1800flowers'"
+ },
+ {
+  "i": 72,
+  "brand": "Vanta",
+  "sponsor": false,
+  "why": "false match: game 'Vantage'"
+ },
+ {
+  "i": 73,
+  "brand": "Audible",
+  "sponsor": false,
+  "why": "book available on Audible"
+ },
+ {
+  "i": 74,
+  "brand": "Netflix",
+  "sponsor": false,
+  "why": "chapter title mentions Netflix"
+ },
+ {
+  "i": 75,
+  "brand": "Helix Sleep",
+  "sponsor": true,
+  "why": "'thank you, helix' vanity URL"
+ },
+ {
+  "i": 76,
+  "brand": "Lowe's",
+  "sponsor": false,
+  "why": "false match: 'lowest'"
+ },
+ {
+  "i": 77,
+  "brand": "Hulu",
+  "sponsor": false,
+  "why": "distribution note, not ad read"
+ },
+ {
+  "i": 78,
+  "brand": "Canva",
+  "sponsor": false,
+  "why": "content: AI drives Canva"
+ },
+ {
+  "i": 79,
+  "brand": "McDonald's",
+  "sponsor": false,
+  "why": "content: McDonald's parking lot"
+ },
+ {
+  "i": 80,
+  "brand": "BetterHelp",
+  "sponsor": true,
+  "why": "'brought to you by betterhelp'"
+ },
+ {
+  "i": 81,
+  "brand": "Aura Frames",
+  "sponsor": true,
+  "why": "sponsor read with offer"
+ },
+ {
+  "i": 82,
+  "brand": "Cash App",
+  "sponsor": true,
+  "why": "'thank you to our sponsors'"
+ },
+ {
+  "i": 83,
+  "brand": "Ancestry",
+  "sponsor": false,
+  "why": "guest founded Ancestry"
+ },
+ {
+  "i": 84,
+  "brand": "Lululemon",
+  "sponsor": false,
+  "why": "chapter: Lululemon trade"
+ },
+ {
+  "i": 85,
+  "brand": "Shopify",
+  "sponsor": false,
+  "why": "chapter: Shopify discussion"
+ },
+ {
+  "i": 86,
+  "brand": "Wayfair",
+  "sponsor": true,
+  "why": "in sponsor list; ad-copy placeholder text"
+ },
+ {
+  "i": 87,
+  "brand": "Fabletics",
+  "sponsor": true,
+  "why": "'we love our sponsors' Fabletics"
+ },
+ {
+  "i": 88,
+  "brand": "Lowe's",
+  "sponsor": false,
+  "why": "false match: 'flowers'"
+ },
+ {
+  "i": 89,
+  "brand": "Notion",
+  "sponsor": true,
+  "why": "vanity URL notion.com/macrumors"
+ },
+ {
+  "i": 90,
+  "brand": "Factor",
+  "sponsor": true,
+  "why": "vanity URL and code"
+ },
+ {
+  "i": 91,
+  "brand": "Hulu",
+  "sponsor": false,
+  "why": "guest's Hulu series"
+ },
+ {
+  "i": 92,
+  "brand": "Nissan",
+  "sponsor": false,
+  "why": "chapter: Nissan Rogue news"
+ },
+ {
+  "i": 93,
+  "brand": "1Password",
+  "sponsor": false,
+  "why": "resources mentioned list"
+ },
+ {
+  "i": 94,
+  "brand": "Hungryroot",
+  "sponsor": true,
+  "why": "vanity URL and code"
+ },
+ {
+  "i": 95,
+  "brand": "Smalls",
+  "sponsor": true,
+  "why": "vanity URL smalls.com/parnas"
+ },
+ {
+  "i": 96,
+  "brand": "Oura",
+  "sponsor": false,
+  "why": "content: Oura ring mention"
+ },
+ {
+  "i": 97,
+  "brand": "Progressive",
+  "sponsor": true,
+  "why": "sponsor list with progressive"
+ },
+ {
+  "i": 98,
+  "brand": "Delta",
+  "sponsor": false,
+  "why": "news: Delta incident"
+ },
+ {
+  "i": 99,
+  "brand": "Aura Frames",
+  "sponsor": true,
+  "why": "promo code and vanity URL"
+ }
+]

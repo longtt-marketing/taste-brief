@@ -7,11 +7,10 @@
 <meta name="description" content="For judges: a 20 brief benchmark with and without Qloo, the run in the video, and how to reproduce it in two minutes.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f4f5f7;--card:#fff;--ink:#101114;--mute:#3a3f4a;--faint:#5b616e;--line:#e2e4e9;--acc:#4338ca;--acc-ink:#fff;--acc-soft:#eef0ff;--acc-text:#3730a3;--ok:#0f766e;--ok-soft:#e6f4f1;--warn:#b45309;--warn-soft:#fbefe3;
-  --display:"Bricolage Grotesque",system-ui,sans-serif;--body:Geist,system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"Geist Mono",ui-monospace,monospace}
-@media (prefers-color-scheme:dark){:root{--bg:#0d0e11;--card:#16181d;--ink:#eef0f3;--mute:#c4c8d0;--faint:#9aa0ad;--line:#2a2e37;--acc:#a5a8ff;--acc-ink:#0d0e11;--acc-soft:#22234a;--acc-text:#c7caff;--ok:#5eead4;--ok-soft:#10302c;--warn:#fdba74;--warn-soft:#3a2510}}
+:root{color-scheme:dark;--bg:#0b1424;--card:#111d33;--ink:#eaf0f7;--mute:#c9d4e5;--faint:#a9b8d0;--line:#22314c;--acc:#ff7a59;--acc-ink:#0b1424;--acc-soft:#1a2740;--acc-text:#9fd8ff;--ok:#5eead4;--ok-soft:#12302d;--warn:#fdba74;--warn-soft:#33241a;
+  --display:"Instrument Sans",system-ui,sans-serif;--body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 var(--body)}
 main{max-width:1040px;margin:0 auto;padding:28px 16px 80px;display:flex;flex-direction:column;gap:20px}
@@ -30,7 +29,7 @@ h3{font-family:var(--display);font-size:18px;font-weight:700;margin:18px 0 8px;c
 .guess h3{color:var(--warn)}
 .ours h3{color:var(--ok)}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 0}
-.chip{font-size:14px;border-radius:10px;padding:5px 10px;background:transparent;border:1px dashed #d9a877;color:var(--mute)}
+.chip{font-size:14px;border-radius:10px;padding:5px 10px;background:transparent;border:1px dashed #8a6a4a;color:var(--mute)}
 .chip.q{background:var(--ok-soft);border:0;color:var(--ink)}
 .chip .n{font-family:var(--mono)}
 .decision{background:var(--acc-soft);color:var(--ink);border-radius:14px;padding:14px 16px;font-weight:600;margin:16px 0 0}
@@ -42,7 +41,7 @@ td.n{font-family:var(--mono);white-space:nowrap}
 ol,ul{padding-left:20px;margin:8px 0 0}
 li{margin:6px 0}
 .note{font-size:13px;color:var(--faint);margin:12px 0 0}
-.btn{display:inline-block;font-weight:600;border-radius:14px;padding:13px 22px;background:var(--ink);color:var(--bg);text-decoration:none;margin-top:12px}
+.btn{display:inline-block;font-weight:700;border-radius:14px;padding:13px 22px;background:var(--acc);color:var(--acc-ink);text-decoration:none;margin-top:12px}
 code{font-family:var(--mono);font-size:13px;background:var(--acc-soft);border-radius:6px;padding:1px 5px;overflow-wrap:anywhere}
 </style>
 </head>
@@ -52,9 +51,32 @@ code{font-family:var(--mono);font-size:13px;background:var(--acc-soft);border-ra
 
   <header>
     <p class="eyebrow">For judges · two minute read</p>
-    <h1>With Qloo, the picks fit the audience</h1>
-    <p class="lede">Taste Brief helps a performance marketer find ad ideas worth testing before spending real money. Each recommendation shows the Qloo result it cites; what it means for your ads is still a guess to test.</p>
+    <h1>Qloo picks the podcasts brands really pay for</h1>
+    <p class="lede">Taste Brief tells a brand which podcasts to sponsor, which interests to target and which ad to test first, each pick with the Qloo result behind it. The headline test below is graded by money brands really spent, not by Qloo.</p>
   </header>
+
+  <section class="panel" id="podcasts">
+    <h2>The test graded by money: which podcasts did brands really pay for?</h2>
+    <p>Sponsor reads published in the shows' own episode notes (public RSS) are the answer key. Qloo never sees them: for each brand, Qloo ranks the shows by how much the brand's audience likes them, and we check how often a show the brand paid for ranks above one it did not (AUC; 0.50 is a coin flip).</p>
+    <p>Locked before collecting: the hypotheses, measures, baselines and pass rules were written, fingerprinted with SHA-256 and pushed to the public repo (<code>docs/podcast-check/PREREGISTRATION.md</code>) before any held-out show was read. The pilot shows (Apple's US top 200) are not in the test; the test uses Apple's US top charts in 12 genres instead.</p>
+    <div class="scroll"><table>
+      <thead><tr><th>Ranking the shows by</th><th>Pre-registered labels: 259 shows, 76 brands</th><th>Strict labels: 216 shows, 62 brands</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Qloo affinity for the brand</strong> (Taste Brief)</td><td class="n"><strong>0.663</strong> (95% CI 0.630 to 0.697)</td><td class="n"><strong>0.647</strong> (0.611 to 0.684)</td></tr>
+        <tr><td>How many other brands the show already carries (ad volume)</td><td class="n">0.581</td><td class="n">0.582</td></tr>
+        <tr><td>Apple chart rank in its genre</td><td class="n">0.528</td><td class="n">0.522</td></tr>
+        <tr><td>Qloo popularity of the show (not specific to the brand)</td><td class="n">0.517</td><td class="n">0.526</td></tr>
+      </tbody>
+    </table></div>
+    <ul>
+      <li><strong>H1, Qloo beats chance:</strong> passed. Above 0.5 for 65 of 76 brands (51 of 62 strict).</li>
+      <li><strong>H2, Qloo beats the chart and popularity:</strong> passed. +10 to +17 points over the chart, +10 to +19 over popularity (95% intervals).</li>
+      <li><strong>H3, Qloo adds to ad volume:</strong> passed. The two ranks combined beat ad volume alone by +5 to +11 points.</li>
+      <li><strong>Leak check:</strong> a direct competitor's Qloo audience predicts nearly as well (DraftKings' shows from FanDuel: 0.700 against 0.722), so the result is not Qloo remembering one brand's sponsorships.</li>
+      <li><strong>Where it works:</strong> brands bought on audience fit (WHOOP 0.97, Eight Sleep 0.96, Toyota 0.93, Drink LMNT 0.89). Where it does not: mass-reach and meal-kit advertisers (Factor 0.40, Zocdoc 0.45).</li>
+    </ul>
+    <p class="note">Labels: a hand check of 100 random matches found 43 real sponsor reads with the pre-registered dictionary, so a stricter label (whole word plus a sponsor cue nearby) was declared in <code>DEVIATION-1.md</code> before any analysis: 82 of 100 real. Both results are reported. Sponsor reads in notes miss dynamically inserted ads; US shows only. Scripts: <code>scripts/podcast/</code>; results: <code>docs/podcast-check/results.json</code>, <code>results-strict.json</code>.</p>
+  </section>
 
   <section class="panel">
     <h2>Benchmark: 20 briefs, graded on a competitor the agent never saw</h2>
@@ -88,21 +110,21 @@ code{font-family:var(--mono);font-size:13px;background:var(--acc-soft);border-ra
     <h2>The run in the video: wool running sneakers, $120, London</h2>
     <p>Closest brand: Allbirds (Qloo knows the brand, not this shoe). Second city: Hanoi. Live run on 21 Oct 2026.</p>
     <div class="grid">
-      <div class="guess"><h3>Plain AI, no data · 0 of 5 at 0.9+</h3>
-        <div class="chips"><span class="chip">Running · no score</span><span class="chip">Sustainable living · not in Qloo</span><span class="chip">Parkrun · not in Qloo</span><span class="chip">Minimalism and Scandinavian design · not in Qloo</span><span class="chip">Cycling to work · not in Qloo</span></div>
+      <div class="guess"><h3>Plain AI, no data · 0 of 6 scored</h3>
+        <div class="chips"><span class="chip">Running · no score</span><span class="chip">Sustainable fashion · not in Qloo</span><span class="chip">Parkrun · not in Qloo</span><span class="chip">Veja · no score</span><span class="chip">Cycling to work · not in Qloo</span><span class="chip">Minimalism · not in Qloo</span></div>
       </div>
-      <div class="ours"><h3>Taste Brief · 9 of 10 at 0.9+</h3>
+      <div class="ours"><h3>Taste Brief · 7 of 8 at 0.9+</h3>
         <div class="chips">
-          <span class="chip q">Leon Bridges <span class="n">0.976</span></span><span class="chip q">Down to Earth with Zac Efron <span class="n">0.975</span></span>
-          <span class="chip q">Outdoor Voices <span class="n">0.966</span></span><span class="chip q">ClassPass <span class="n">0.962</span></span>
-          <span class="chip q">Nick Mulvey <span class="n">0.960</span></span><span class="chip q">Warby Parker <span class="n">0.959</span></span>
+          <span class="chip q">Down to Earth with Zac Efron <span class="n">0.975</span></span><span class="chip q">Outdoor Voices <span class="n">0.966</span></span>
+          <span class="chip q">ClassPass <span class="n">0.962</span></span><span class="chip q">Warby Parker <span class="n">0.959</span></span>
           <span class="chip q">Peloton <span class="n">0.957</span></span><span class="chip q">Everlane <span class="n">0.956</span></span>
           <span class="chip q">Tracksmith <span class="n">0.914</span></span><span class="chip">Nike Training Club <span class="n">0.883</span></span>
         </div>
       </div>
     </div>
-    <p>All 28 items in that brief cite results Qloo returned in the run, with matching ids and values. Then the plan is locked with a SHA-256 fingerprint before any spend (the server stores a receipt with its own time; real results get verdicts only when it matches), run from a planning sheet, and read back from the Ads Manager export, checked against the receipt, by the rule fixed in advance (ahead, pause, no clear difference, inconclusive; exploratory, not proof). Press <strong>Try with sample numbers</strong> after locking to see it work; sample numbers are labelled as such and no ads were run.</p>
-    <p class="decision">Decision: keep the runner plan as the control and test what Qloo surfaced, one change at a time: the usual creative shown to fans of Tracksmith, Outdoor Voices, Nike Training Club and ClassPass; then two new creatives on the broad audience, a materials and footprint story ("Wool from the sheep to your feet") and a style first "run and brunch" angle.</p>
+    <p><strong>Podcasts to sponsor first</strong>, ranked by Qloo for Allbirds' audience: Absolutely Not (0.954; its notes already run Quince, Nutrafol, Squarespace), Armchair Expert with Dax Shepard (0.926), A Beautiful Mess Podcast (0.911; Drink LMNT, Shopify, Wayfair), The Liz Moody Podcast (0.904; Drink LMNT, Athletic Greens).</p>
+    <p>All 23 items in that brief cite results Qloo returned in the run, with matching ids and values. Then the plan is locked with a SHA-256 fingerprint before any spend (the server stores a receipt with its own time; real results get verdicts only when it matches), run from a planning sheet, and read back from the Ads Manager export by the rule fixed in advance (ahead, pause, no clear difference, inconclusive; exploratory, not proof). Press <strong>Try with sample numbers</strong> after locking to see it work; sample numbers are labelled as such and no ads were run.</p>
+    <p class="decision">Decision: keep the runner plan as the control and test what Qloo surfaced, one change at a time: the usual creative shown to fans of Tracksmith, Outdoor Voices and Everlane; then two new creatives on the broad audience, "A running shoe that looks this good with jeans" and an open breakdown of wool sourcing and footprint.</p>
     <p class="note">Pause rule in that run: up to £300 per arm (the model wrote London's currency); pause as worse if cost per add to cart is more than 30% above the control once each arm has 20 adds to cart. An arm that hits the cap first is inconclusive, not a loss. A rule for spending a small budget, not statistical proof. Qloo's age and gender index for Allbirds (women +0.33, ages 30 to 34 +0.42) is for the brand's audience, not London residents.</p>
   </section>
 

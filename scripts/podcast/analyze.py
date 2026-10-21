@@ -10,8 +10,14 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(HERE))
 D = os.path.join(ROOT, ".results", "podcast")
 S = json.load(open(os.path.join(D, "heldout-scores.json"), encoding="utf-8"))
-M = json.load(open(os.path.join(D, "heldout-mentions.json"), encoding="utf-8"))
+import sys
+STRICT = "--strict" in sys.argv   # deviation 1: strict sponsor labels
+M = json.load(open(os.path.join(D, "heldout-mentions-strict.json" if STRICT else "heldout-mentions.json"), encoding="utf-8"))
+if STRICT:  # a show enters only if it lists >= 3 brands under the strict label too
+    S["shows"] = [s for s in S["shows"] if sum(n >= 2 for n in M.get(s["name"], {}).values()) >= 3]
 shows, brands, batches, scores = S["shows"], S["brands"], S["batches"], S["scores"]
+shown = {s["id"] for s in shows}
+batches = [[i for i in b if i in shown] for b in batches]
 batch_of = {sid: bi for bi, b in enumerate(batches) for sid in b}
 carries = lambda show, b: M.get(show, {}).get(b, 0) >= 2
 
@@ -103,5 +109,5 @@ for x, y in PAIRS:
         own, other = qloo_pct(tgt), qloo_pct(src)
         leak.append({"brand": tgt, "predicted_from": src, "positives": sum(lab), "own_auc": auc([own[s["id"]] for s in shows], lab), "competitor_auc": auc([other[s["id"]] for s in shows], lab)})
 res["leakage_check"] = leak
-json.dump(res, open(os.path.join(ROOT, "docs", "podcast-check", "results.json"), "w", encoding="utf-8"), indent=1)
+json.dump(res, open(os.path.join(ROOT, "docs", "podcast-check", "results-strict.json" if STRICT else "results.json"), "w", encoding="utf-8"), indent=1)
 print(json.dumps({k: v for k, v in res.items() if k != "rows"}, indent=1))
