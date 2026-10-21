@@ -7,77 +7,107 @@
 <meta name="description" content="Tell it what you sell and where. Taste Brief asks Qloo what else that audience likes, then writes a campaign brief you can check line by line.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f6f4ee;--card:#fff;--ink:#15161a;--mute:#55565f;--faint:#6a6b73;--line:#e3e0d6;--acc:#3a2fd1;--acc-ink:#fff;--acc-soft:#ebe9ff;--ok:#0d6b41;--ok-soft:#e4f1e9;--warn:#8a4a07;--warn-soft:#fbeedd;--neg:#c7c3b8;--axis:#d8d4c8;
-  --display:"Bricolage Grotesque",system-ui,sans-serif;--body:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace}
-@media (prefers-color-scheme:dark){:root{--bg:#121216;--card:#1b1b21;--ink:#f1f0ec;--mute:#b0b0ba;--faint:#9a9aa5;--line:#2c2c35;--acc:#a49dff;--acc-ink:#121216;--acc-soft:#25234a;--ok:#4fd39a;--ok-soft:#14301f;--warn:#f0b75a;--warn-soft:#3a2a10;--neg:#4a4a55;--axis:#3a3a44}}
+:root{--bg:#f4f5f7;--card:#fff;--ink:#101114;--mute:#3a3f4a;--faint:#5b616e;--line:#e2e4e9;--field:#fbfbfc;--acc:#4338ca;--acc-ink:#fff;--acc-soft:#eef0ff;--acc-text:#3730a3;
+  --ok:#0f766e;--ok-soft:#e6f4f1;--ok-line:#bfe3dc;--ok-bg:#f5fbfa;--warn:#b45309;--warn-soft:#fbefe3;--warn-line:#f1d9c2;--warn-bg:#fffbf6;--neg:#c9ccd4;--axis:#d5d8de;
+  --dark:#101114;--dark-ink:#f4f5f7;--dark-mute:#c9ccd4;--dark-line:#2a2e3a;
+  --display:"Bricolage Grotesque",system-ui,sans-serif;--body:Geist,system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"Geist Mono",ui-monospace,monospace}
+@media (prefers-color-scheme:dark){:root{--bg:#0d0e11;--card:#16181d;--ink:#eef0f3;--mute:#c4c8d0;--faint:#9aa0ad;--line:#2a2e37;--field:#111318;--acc:#a5a8ff;--acc-ink:#0d0e11;--acc-soft:#22234a;--acc-text:#c7caff;
+  --ok:#5eead4;--ok-soft:#10302c;--ok-line:#1f4d47;--ok-bg:#0f1f1d;--warn:#fdba74;--warn-soft:#3a2510;--warn-line:#5a3a1a;--warn-bg:#1d150c;--neg:#3a3e48;--axis:#3a3e48;
+  --dark:#1d2027;--dark-ink:#eef0f3;--dark-mute:#c4c8d0;--dark-line:#343844}}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 var(--body)}
-main{max-width:1040px;margin:0 auto;padding:40px 16px 72px;display:flex;flex-direction:column;gap:24px}
+main{max-width:1120px;margin:0 auto;padding:28px 16px 80px;display:flex;flex-direction:column;gap:24px}
+nav.top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+nav.top .links{display:flex;flex-wrap:wrap;gap:18px;font-size:15px}
+a{color:var(--acc-text)}a:hover{color:var(--ink)}
+.hero{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(420px,100%),1fr));gap:32px;align-items:end}
+.hero .kicker{margin:0 0 14px;font-family:var(--mono);font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
+.proof{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:14px}
+.proof .eyebrow{margin:0}
+.proof .nums{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.proof .big{display:block;font-family:var(--display);font-weight:700;font-size:48px;line-height:1;margin-bottom:4px}
+.proof .big.ok{color:var(--ok)}.proof .big.warn{color:var(--warn)}
+.proof .nums span:not(.big){font-size:14px;color:var(--mute)}
+.proof hr{border:0;border-top:1px solid var(--line);margin:0}
+.proof p{margin:0;font-size:14px;color:var(--mute)}
+.how{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:16px}
+.how div{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:8px}
+.how .k{font-family:var(--mono);font-size:13px;color:var(--ok)}.how .k.lock{color:var(--acc)}
+.how h2{margin:0;font-family:var(--display);font-size:21px;font-weight:700;letter-spacing:-.01em;line-height:1.2}
+.how p{margin:0;font-size:15px;color:var(--mute)}
 .brand{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
-.brand b{font-family:var(--display);font-size:18px;letter-spacing:-.01em}
-.pill{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:999px;background:var(--acc-soft);color:var(--acc)}
+.brand b{font-family:var(--display);font-size:20px;letter-spacing:-.01em}
+.pill{font-family:var(--mono);font-size:12px;padding:3px 9px;border-radius:999px;background:var(--acc-soft);color:var(--acc-text)}
 .pill.live{background:var(--ok-soft);color:var(--ok)}
-h1{font-family:var(--display);font-weight:700;font-size:clamp(34px,5.5vw,52px);line-height:1.02;letter-spacing:-.03em;margin:4px 0 0;max-width:820px}
-.lede{color:var(--mute);font-size:18px;margin:0;max-width:700px}
-.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(36px,5vw,60px);line-height:1.02;letter-spacing:-.025em;margin:0}
+.lede{color:var(--mute);font-size:19px;margin:18px 0 0;max-width:580px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px}
 .presets{display:flex;flex-wrap:wrap;align-items:center;gap:8px;color:var(--mute);font-size:14px;margin:0 0 18px}
 form .fields{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr))}
-label{display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:14px}
+label{display:flex;flex-wrap:wrap;align-items:baseline;align-content:flex-end;gap:6px;font-weight:600;font-size:14px}
+label>input{flex:1 0 100%;min-width:0}
 label small{font-weight:400;color:var(--faint)}
-input{font:inherit;font-weight:400;font-size:15px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:11px 12px;min-height:44px}
+input{font:inherit;font-weight:400;font-size:16px;color:var(--ink);background:var(--field);border:1px solid var(--neg);border-radius:12px;padding:12px 14px;min-height:48px}
 .row{display:flex;flex-wrap:wrap;align-items:center;gap:16px;margin-top:18px}
-button{font:inherit;font-weight:600;border:0;border-radius:12px;padding:12px 20px;min-height:44px;cursor:pointer;background:var(--acc);color:var(--acc-ink)}
+button{font:inherit;font-weight:600;border:0;border-radius:14px;padding:12px 22px;min-height:48px;cursor:pointer;background:var(--ink);color:var(--bg)}
 button:disabled{opacity:.6;cursor:progress}
 button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
-button.chip{font-size:14px;border-radius:999px;padding:8px 14px;background:var(--acc-soft);color:var(--acc)}
-button.ghost{font-size:14px;background:var(--card);color:var(--acc);border:1px solid var(--line)}
+button.chip{font-size:14px;font-weight:500;border-radius:999px;padding:8px 16px;min-height:44px;background:var(--card);color:var(--ink);border:1px solid var(--neg)}
+button.chip:hover{border-color:var(--ink)}
+button.ghost{font-size:15px;background:var(--card);color:var(--ink);border:1px solid var(--ink)}
 details.code summary{cursor:pointer;color:var(--faint);font-size:14px}
 details.code label{margin-top:10px;max-width:360px}
-.eyebrow{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin:0 0 10px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin:0 0 10px}
 #status{margin:0;color:var(--mute);min-height:1.5em}
 #live{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:6px 20px;font-size:14px;color:var(--mute)}
 #live li::before{content:"✓ ";color:var(--ok)}
 #live .n{font-family:var(--mono);font-size:12px;color:var(--faint)}
 .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))}
-.card h2{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin:0 0 14px}
-.card h2 small{text-transform:none;letter-spacing:0;font-weight:400;font-size:12px}
+.card h2{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px;font-family:var(--display);font-size:21px;font-weight:700;letter-spacing:-.01em;color:var(--ink);margin:0 0 14px}
+.card h2 small{font-family:var(--body);font-weight:400;font-size:13px;color:var(--faint)}
 ul.items{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px}
 ul.items strong{font-weight:600}
 .ev{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;align-items:center}
 .ev .lbl{font-size:12px;color:var(--faint)}
-.src{font-size:12px;background:var(--acc-soft);color:var(--acc);border-radius:999px;padding:3px 9px}
+.src{font-size:12px;background:var(--ok-soft);color:var(--ok);border-radius:999px;padding:3px 9px}
 .src::before{content:"✓ Qloo · ";opacity:.8}
 .src .num{font-family:var(--mono)}
 .bad{font-size:12px;background:var(--warn-soft);color:var(--warn);border-radius:999px;padding:3px 9px}
 .bad::before{content:"Not checked: "}
 .hook{color:var(--mute);font-style:italic}
 .tests{list-style:none;margin:0;padding:0;display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr))}
-.tests li{border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.tests li{border:1px solid var(--line);border-radius:16px;padding:16px 18px}
 .tests dl{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;margin:8px 0 0;font-size:14px}
 .tests dt{color:var(--faint);font-size:12px;text-transform:uppercase;letter-spacing:.06em;padding-top:2px}
 .tests dd{margin:0}
 .path ol,.path ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:15px}
-.path h3{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin:0 0 10px}
-.loop{border-top:1px solid var(--line);margin-top:16px;padding-top:16px;display:flex;flex-direction:column;gap:12px}
-.loop h3{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--acc);margin:0}
+.path h3{font-family:var(--display);font-size:21px;font-weight:700;letter-spacing:-.01em;color:var(--ink);margin:0 0 12px}
+.loop{background:var(--dark);color:var(--dark-ink);border-radius:18px;margin-top:20px;padding:22px;display:flex;flex-direction:column;gap:14px}
+.loop h3{font-family:var(--display);font-size:22px;font-weight:700;color:var(--dark-ink);margin:0}
+.loop .note,.loop p{color:var(--dark-mute)}
+.loop button{background:#c7caff;color:#101114}
+.loop button.ghost{background:transparent;color:var(--dark-ink);border:1px solid #3a3f4a}
+.loop label{color:var(--dark-ink)}
 .loop .steps{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr))}
-.loop .step{border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:14px;color:var(--mute)}
-.loop .step b{display:block;color:var(--ink);font-size:14px;margin-bottom:4px}
-.loop .lockid{font-family:var(--mono);font-size:13px;background:var(--ok-soft);color:var(--ok);border-radius:10px;padding:8px 12px}
+.loop .step{border:1px solid var(--dark-line);border-radius:12px;padding:12px 14px;font-size:14px;color:var(--dark-mute)}
+.loop .step b{display:block;color:var(--dark-ink);font-size:14px;margin-bottom:4px}
+.loop .lockid{font-family:var(--mono);font-size:13px;background:#1f2230;color:#c7caff;border-radius:10px;padding:8px 12px}
 .loop .row{margin-top:0}
-.loop input[type=file]{font-size:13px;min-height:auto;padding:6px;background:var(--card)}
+.loop input[type=file]{font-size:13px;min-height:auto;padding:6px;background:transparent;color:var(--dark-ink);border-color:#3a3f4a}
 .verdicts{width:100%;border-collapse:collapse;font-size:14px}
-.verdicts th,.verdicts td{text-align:left;padding:8px;border-bottom:1px solid var(--line);vertical-align:top}
-.verdicts th{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
-.v-ahead{color:var(--ok);font-weight:600}.v-pause{color:var(--warn);font-weight:600}.v-other{color:var(--mute);font-weight:600}
+.verdicts th,.verdicts td{text-align:left;padding:10px 6px;border-bottom:1px solid var(--dark-line);vertical-align:top}
+.verdicts th{font-family:var(--mono);font-size:12px;font-weight:500;color:#9aa0ad}
+.verdicts td{font-variant-numeric:tabular-nums}
+.v-ahead{color:#5eead4;font-weight:600}.v-pause{color:#fdba74;font-weight:600}.v-other{color:var(--dark-mute);font-weight:600}
+.loop .banner.synthetic{background:#2a2410;color:#fcd34d}
 .gline{font-size:14px;margin:12px 0 8px}
 .gchips{display:flex;flex-wrap:wrap;gap:6px}
-.gchip{font-size:13px;border-radius:999px;padding:3px 10px;background:var(--line);color:var(--ink)}
-.gchip.hi{background:var(--acc-soft);color:var(--acc)}
-.gchip.none{background:transparent;border:1px dashed var(--line);color:var(--faint)}
+.gchip{font-size:14px;border-radius:10px;padding:6px 10px;background:var(--line);color:var(--ink)}
+.gchip.hi{background:var(--ok-soft);color:var(--ink)}
+.gchip.none{background:transparent;border:1px dashed #d9a877;color:var(--mute)}
 .gchip .num{font-family:var(--mono)}
 .gchip .why{font-size:12px}
 .unbacked{margin:14px 0 0;padding-top:12px;border-top:1px solid var(--line);font-size:14px;color:var(--mute)}
@@ -88,12 +118,12 @@ ul.items strong{font-weight:600}
 .bars{display:grid;grid-template-columns:max-content minmax(0,1fr) 52px;gap:6px 10px;align-items:center;font-size:13px}
 .track{position:relative;height:12px}
 .track::after{content:"";position:absolute;left:50%;top:-2px;bottom:-2px;border-left:1px solid var(--axis)}
-.fill{position:absolute;top:1px;bottom:1px;border-radius:3px;background:var(--acc)}
-.fill.neg{background:var(--neg)}
+.fill{position:absolute;top:1px;bottom:1px;border-radius:4px;background:var(--ok)}
+.fill.neg{background:var(--warn)}
 .v{font-family:var(--mono);color:var(--mute)}
 .note{font-size:13px;color:var(--faint);margin:10px 0 0}
 .banner{border-radius:14px;padding:12px 16px;font-size:15px}
-.banner.live{background:var(--ok-soft);color:var(--ok)}
+.banner.live{background:var(--acc-soft);color:var(--acc-text)}
 .banner.synthetic{background:var(--warn-soft);color:var(--warn);font-weight:600}
 .markets h2{font-family:var(--display);font-size:26px;letter-spacing:-.02em;text-transform:none;color:var(--ink);font-weight:700}
 .tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
@@ -102,10 +132,12 @@ ul.items strong{font-weight:600}
 .mk h3{font-size:15px;margin:0 0 6px}
 .mk-row{display:flex;justify-content:space-between;gap:8px;font-size:14px;padding:4px 0;border-bottom:1px dashed var(--line)}
 .mk-row span:last-child{font-family:var(--mono);font-size:13px;color:var(--faint);white-space:nowrap}
-.vs h3{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin:0 0 8px}
-.vs .guess{color:var(--mute)}
-.vs .guess h3{color:var(--faint)}
-.vs .ours h3{color:var(--acc)}
+.vs h3{font-size:16px;font-weight:600;margin:0 0 8px}
+.vs .guess,.vs .ours{border-radius:16px;padding:18px}
+.vs .guess{border:1px solid var(--warn-line);background:var(--warn-bg);color:var(--mute)}
+.vs .guess h3{color:var(--warn)}
+.vs .ours{border:1px solid var(--ok-line);background:var(--ok-bg)}
+.vs .ours h3{color:var(--ok)}
 .actions{display:flex;flex-wrap:wrap;gap:10px}
 details.trace{color:var(--faint);font-size:14px}
 .err{color:var(--warn)}
@@ -113,12 +145,23 @@ details.trace{color:var(--faint);font-size:14px}
 </head>
 <body>
 <main>
-  <header>
-    <div class="brand"><b>Taste Brief</b><span class="pill" id="mode">checking</span></div>
-    <h1>Find the audiences worth testing before you spend on ads.</h1>
-    <p class="lede">Tell it what you sell and where. Taste Brief asks Qloo what else that audience likes, then writes a campaign brief you can check line by line against Qloo's own results.</p>
-    <p class="note" style="margin:6px 0 0"><a href="/judge">For judges: a 20 brief benchmark with and without Qloo, and how to reproduce it</a></p>
-  </header>
+  <nav class="top">
+<div class="brand"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true"><rect x="1" y="1" width="26" height="26" rx="8" stroke="currentColor" stroke-width="2"/><path d="M8 10h12M8 14h8M8 18h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="20" cy="18" r="2.5" fill="#0F766E"/></svg><b>Taste Brief</b><span class="pill" id="mode">checking</span></div>
+<div class="links"><a href="#how">How it works</a><a href="/judge">For judges: benchmark</a><a href="https://github.com/longtt-marketing/taste-brief">Code</a></div>
+</nav>
+<header class="hero">
+<div>
+<p class="kicker">For performance marketers</p>
+<h1>Find the audiences worth testing before you spend on ads.</h1>
+<p class="lede">Tell it what you sell and where. An agent asks Qloo what else that audience likes, writes a brief where every recommendation cites a Qloo result, and turns it into ad tests you lock before spending.</p>
+</div>
+<div class="proof">
+<p class="eyebrow">20 briefs, graded on a competitor the agent never saw</p>
+<div class="nums"><div><span class="big ok">61%</span><span>of Taste Brief's interests score 0.9+ on Qloo</span></div><div><span class="big warn">19%</span><span>for the same model with no data, told to name specific brands</span></div></div>
+<hr>
+<p>On Meta's own interest list too: <strong>35%</strong> are both targetable in Meta and score 0.9+ on Qloo, against <strong>13%</strong>. <a href="/judge">How it was measured</a></p>
+</div>
+</header>
 
   <section class="panel">
     <p class="presets" aria-label="Examples">Start from an example:
@@ -143,7 +186,12 @@ details.trace{color:var(--faint);font-size:14px}
     </form>
   </section>
 
-  <section aria-live="polite">
+  <section class="how" id="how" aria-label="How it works">
+<div><span class="k">01 · Read</span><h2>The agent picks its own Qloo calls</h2><p>Brands, artists, TV, podcasts and places for your city, plus the age and gender index. Every call shows as it runs.</p></div>
+<div><span class="k">02 · Cite</span><h2>Every recommendation shows its Qloo source</h2><p>Interests, angles, landing page and partners each cite the result and score behind them. Code checks the ids and numbers.</p></div>
+<div><span class="k lock">03 · Lock</span><h2>Tests locked before you spend</h2><p>One to three tests against the obvious ad. Lock the plan, run it, upload the results: the locked rule says which test won.</p></div>
+</section>
+<section aria-live="polite">
     <p id="status" role="status"></p>
     <ol id="live" aria-label="What the agent did"></ol>
   </section>
@@ -230,7 +278,7 @@ function versus(base, b, unbacked, scored, market) {
   return `<section class="panel card vs">${scored ? `<h2><span>The same question, with and without Qloo</span><small>every interest scored by Qloo for this brand's audience in ${city}</small></h2>` : ""}<div class="grid">
     <div class="guess"><h3>Plain AI guess, no data</h3><p>${esc(base.audience_summary)}</p>${scored ? gradedLine(scored.plain) : `<p><strong>Interests:</strong> ${names(base)}</p>`}</div>
     <div class="ours"><h3>Taste Brief, from Qloo</h3><p>${esc(b.audience_summary)}</p>${scored ? gradedLine(scored.taste_brief) : `<p><strong>Interests:</strong> ${names(b)}</p>`}</div>
-  </div>${scored ? `<p class="note">Same grader for both: each interest is looked up in Qloo by its exact name, then Qloo scores how much this audience likes it. Generic interests such as "Running" can't be scored. For Taste Brief's picks this is partly circular, since they come from Qloo; it shows how far each pick is from Qloo's view of the audience, not how an ad will do.</p>` : ""}${!scored && list(unbacked).length ? `<p class="unbacked"><strong>The plain guess would target these, and Qloo returned none of them in this run:</strong> ${list(unbacked).map((x) => esc(cleanInterest(x.label))).join(", ")}. That does not make them wrong. It means they are a guess, so test them against the Qloo picks or leave them out.</p>` : ""}</section>`;
+  </div>${scored ? `<p class="note">Same grader for both: each interest is looked up in Qloo by its exact name, then Qloo scores how much this audience likes it. Generic interests such as "Running" can't be scored. For Taste Brief's picks this is partly circular, since they come from Qloo; it shows how far each pick is from Qloo's view of the audience, not how an ad will do. A score here can differ slightly from the one cited in the brief below, which came from the agent's own call (some narrowed to a product tag).</p>` : ""}${!scored && list(unbacked).length ? `<p class="unbacked"><strong>The plain guess would target these, and Qloo returned none of them in this run:</strong> ${list(unbacked).map((x) => esc(cleanInterest(x.label))).join(", ")}. That does not make them wrong. It means they are a guess, so test them against the Qloo picks or leave them out.</p>` : ""}</section>`;
 }
 
 fetch("/api/health").then((r) => r.json()).then((h) => {
@@ -311,10 +359,10 @@ function loopPanel() {
   return `<div class="loop" id="loop"><h3>Lock it, run it, read it back</h3>
     <div class="steps">
       <div class="step"><b>1. Lock the plan</b>A SHA-256 fingerprint of the control, the tests and the rule, with the time, before any money is spent.</div>
-      <div class="step"><b>2. Run it</b>An ad set sheet for Ads Manager: the control and each test, named with the plan id, ${RULE.cap} cap per arm.</div>
+      <div class="step"><b>2. Run it</b>An ad set sheet for Ads Manager: the control and each test, named with the plan id, with a spend cap of ${RULE.cap} per arm in your currency.</div>
       <div class="step"><b>3. Read it back</b>Upload the Ads Manager export. The locked rule judges each test: ahead, pause, no clear difference or inconclusive.</div>
     </div>
-    <p class="note" style="margin:0">Rule: at least ${RULE.minAddsToCart} adds to cart in the test and the control, then pause a test whose cost per add to cart is more than ${Math.round(RULE.worseBy * 100)}% above the control's. An arm that hits the ${RULE.cap} cap first is inconclusive, not a loss.</p>
+    <p class="note" style="margin:0">Rule: at least ${RULE.minAddsToCart} adds to cart in the test and the control, then pause a test whose cost per add to cart is more than ${Math.round(RULE.worseBy * 100)}% above the control's. An arm that hits its ${RULE.cap} spend cap first is inconclusive, not a loss.</p>
     <div class="row"><button type="button" id="lock">Lock this test plan</button><span id="lock-out"></span></div>
     <div id="after-lock" hidden>
       <div class="row"><button type="button" class="ghost" id="dl-sheet">Download the ad set sheet (CSV)</button><button type="button" class="ghost" id="dl-plan">Download the locked plan (JSON)</button></div>

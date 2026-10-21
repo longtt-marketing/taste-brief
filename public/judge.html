@@ -7,41 +7,42 @@
 <meta name="description" content="For judges: a 20 brief benchmark with and without Qloo, the run in the video, and how to reproduce it in two minutes.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f6f4ee;--card:#fff;--ink:#15161a;--mute:#55565f;--faint:#6a6b73;--line:#e3e0d6;--acc:#3a2fd1;--acc-ink:#fff;--acc-soft:#ebe9ff;--ok:#0d6b41;--ok-soft:#e4f1e9;--warn:#8a4a07;--warn-soft:#fbeedd;
-  --display:"Bricolage Grotesque",system-ui,sans-serif;--body:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace}
-@media (prefers-color-scheme:dark){:root{--bg:#121216;--card:#1b1b21;--ink:#f1f0ec;--mute:#b0b0ba;--faint:#9a9aa5;--line:#2c2c35;--acc:#a49dff;--acc-ink:#121216;--acc-soft:#25234a;--ok:#4fd39a;--ok-soft:#14301f;--warn:#f0b75a;--warn-soft:#3a2a10}}
+:root{--bg:#f4f5f7;--card:#fff;--ink:#101114;--mute:#3a3f4a;--faint:#5b616e;--line:#e2e4e9;--acc:#4338ca;--acc-ink:#fff;--acc-soft:#eef0ff;--acc-text:#3730a3;--ok:#0f766e;--ok-soft:#e6f4f1;--warn:#b45309;--warn-soft:#fbefe3;
+  --display:"Bricolage Grotesque",system-ui,sans-serif;--body:Geist,system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"Geist Mono",ui-monospace,monospace}
+@media (prefers-color-scheme:dark){:root{--bg:#0d0e11;--card:#16181d;--ink:#eef0f3;--mute:#c4c8d0;--faint:#9aa0ad;--line:#2a2e37;--acc:#a5a8ff;--acc-ink:#0d0e11;--acc-soft:#22234a;--acc-text:#c7caff;--ok:#5eead4;--ok-soft:#10302c;--warn:#fdba74;--warn-soft:#3a2510}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 var(--body)}
-main{max-width:960px;margin:0 auto;padding:40px 16px 72px;display:flex;flex-direction:column;gap:20px}
-a{color:var(--acc)}
+main{max-width:1040px;margin:0 auto;padding:28px 16px 80px;display:flex;flex-direction:column;gap:20px}
+a{color:var(--acc-text)}
 a:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
 nav{display:flex;flex-wrap:wrap;gap:14px;font-size:14px;color:var(--faint)}
-nav b{font-family:var(--display);font-size:18px;color:var(--ink);letter-spacing:-.01em}
-.eyebrow{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin:0}
-h1{font-family:var(--display);font-weight:700;font-size:clamp(34px,5.5vw,52px);line-height:1.02;letter-spacing:-.03em;margin:4px 0 0}
-h2{font-family:var(--display);font-size:24px;letter-spacing:-.02em;margin:0 0 12px}
-h3{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin:0 0 8px;color:var(--faint)}
+nav b{font-family:var(--display);font-size:20px;color:var(--ink);letter-spacing:-.01em}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin:0}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(36px,5vw,56px);line-height:1.02;letter-spacing:-.025em;margin:4px 0 0}
+h2{font-family:var(--display);font-size:24px;letter-spacing:-.015em;line-height:1.2;margin:0 0 12px}
+h3{font-family:var(--display);font-size:18px;font-weight:700;margin:18px 0 8px;color:var(--ink)}
 .lede{color:var(--mute);font-size:18px;margin:0;max-width:720px}
-.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px}
 .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr))}
 .guess{color:var(--mute)}
-.ours h3{color:var(--acc)}
+.guess h3{color:var(--warn)}
+.ours h3{color:var(--ok)}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 0}
-.chip{font-size:13px;border-radius:999px;padding:3px 10px;background:var(--line);color:var(--ink)}
-.chip.q{background:var(--acc-soft);color:var(--acc)}
+.chip{font-size:14px;border-radius:10px;padding:5px 10px;background:transparent;border:1px dashed #d9a877;color:var(--mute)}
+.chip.q{background:var(--ok-soft);border:0;color:var(--ink)}
 .chip .n{font-family:var(--mono)}
-.decision{border-left:4px solid var(--acc);padding:4px 0 4px 14px;font-weight:600;margin:16px 0 0}
+.decision{background:var(--acc-soft);color:var(--ink);border-radius:14px;padding:14px 16px;font-weight:600;margin:16px 0 0}
 table{width:100%;border-collapse:collapse;font-size:14px}
 th,td{text-align:left;vertical-align:top;padding:9px 8px;border-bottom:1px solid var(--line)}
-th{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
+th{font-family:var(--mono);font-size:12px;font-weight:500;color:var(--faint)}
 td.n{font-family:var(--mono);white-space:nowrap}
 .scroll{overflow-x:auto}
 ol,ul{padding-left:20px;margin:8px 0 0}
 li{margin:6px 0}
 .note{font-size:13px;color:var(--faint);margin:12px 0 0}
-.btn{display:inline-block;font-weight:600;border-radius:12px;padding:12px 20px;background:var(--acc);color:var(--acc-ink);text-decoration:none;margin-top:12px}
+.btn{display:inline-block;font-weight:600;border-radius:14px;padding:13px 22px;background:var(--ink);color:var(--bg);text-decoration:none;margin-top:12px}
 code{font-family:var(--mono);font-size:13px;background:var(--acc-soft);border-radius:6px;padding:1px 5px;overflow-wrap:anywhere}
 </style>
 </head>
@@ -52,7 +53,7 @@ code{font-family:var(--mono);font-size:13px;background:var(--acc-soft);border-ra
   <header>
     <p class="eyebrow">For judges · two minute read</p>
     <h1>With Qloo, the picks fit the audience</h1>
-    <p class="lede">Taste Brief helps a performance marketer find ad hypotheses worth testing before committing real spend. Structured recommendations show the Qloo results they cite; the interpretations stay hypotheses.</p>
+    <p class="lede">Taste Brief helps a performance marketer find ad ideas worth testing before spending real money. Each recommendation shows the Qloo result it cites; what it means for your ads is still a guess to test.</p>
   </header>
 
   <section class="panel">
@@ -62,7 +63,7 @@ code{font-family:var(--mono);font-size:13px;background:var(--acc-soft);border-ra
       <thead><tr><th>Who wrote the interests</th><th>Found and scored on Qloo</th><th>Affinity 0.9 or more</th></tr></thead>
       <tbody>
         <tr><td><strong>Taste Brief</strong> (with Qloo)</td><td class="n">115 / 140 · 82%</td><td class="n"><strong>86 / 140 · 61%</strong></td></tr>
-        <tr><td>Same model, no data, told to name specific brands and shows</td><td class="n">45 / 133 · 34%</td><td class="n">25 / 133 · 19%</td></tr>
+        <tr><td>Same model, no data, told to name specific brands, artists and shows</td><td class="n">45 / 133 · 34%</td><td class="n">25 / 133 · 19%</td></tr>
         <tr><td>Same model, no data, as the app asks it</td><td class="n">6 / 115 · 5%</td><td class="n">1 / 115 · 1%</td></tr>
       </tbody>
     </table></div>
@@ -70,7 +71,7 @@ code{font-family:var(--mono);font-size:13px;background:var(--acc-soft);border-ra
     <h3>A second judge that isn't Qloo: can Meta target it?</h3>
     <p>Every pick looked up in Meta's own interest search (Marketing API). It counts only if Meta has an interest with that name.</p>
     <div class="scroll"><table>
-      <thead><tr><th>Who wrote the interests</th><th>Targetable in Meta</th><th>Targetable and 0.9+ on Qloo</th></tr></thead>
+      <thead><tr><th>Who wrote the interests</th><th>Targetable in Meta</th><th>Targetable and 0.9+ on Qloo (held-out competitor)</th></tr></thead>
       <tbody>
         <tr><td><strong>Taste Brief</strong> (with Qloo)</td><td class="n">74 / 140 · 53%</td><td class="n"><strong>49 / 140 · 35%</strong></td></tr>
         <tr><td>Same model, no data, told to name specific entities</td><td class="n">65 / 136 · 48%</td><td class="n">18 / 136 · 13%</td></tr>
@@ -86,19 +87,21 @@ code{font-family:var(--mono);font-size:13px;background:var(--acc-soft);border-ra
     <p>Closest brand: Allbirds (Qloo knows the brand, not this shoe). Second city: Hanoi. Live run on 21 Oct 2026.</p>
     <div class="grid">
       <div class="guess"><h3>Plain AI, no data · 0 of 5 at 0.9+</h3>
-        <div class="chips"><span class="chip">Running · no score</span><span class="chip">Sustainable living · not in Qloo</span><span class="chip">Parkrun · not in Qloo</span><span class="chip">Minimalism · not in Qloo</span><span class="chip">Strava <span class="n">0.850</span></span></div>
+        <div class="chips"><span class="chip">Running · no score</span><span class="chip">Sustainable living · not in Qloo</span><span class="chip">Parkrun · not in Qloo</span><span class="chip">Minimalism and Scandinavian design · not in Qloo</span><span class="chip">Cycling to work · not in Qloo</span></div>
       </div>
-      <div class="ours"><h3>Taste Brief · 6 of 7 at 0.9+</h3>
+      <div class="ours"><h3>Taste Brief · 9 of 10 at 0.9+</h3>
         <div class="chips">
-          <span class="chip q">Down to Earth with Zac Efron <span class="n">0.975</span></span><span class="chip q">Outdoor Voices <span class="n">0.966</span></span>
-          <span class="chip q">ClassPass <span class="n">0.962</span></span><span class="chip q">Peloton <span class="n">0.957</span></span>
-          <span class="chip q">Everlane <span class="n">0.956</span></span><span class="chip q">Tracksmith <span class="n">0.914</span></span><span class="chip">Nike Training Club <span class="n">0.883</span></span>
+          <span class="chip q">Leon Bridges <span class="n">0.976</span></span><span class="chip q">Down to Earth with Zac Efron <span class="n">0.975</span></span>
+          <span class="chip q">Outdoor Voices <span class="n">0.966</span></span><span class="chip q">ClassPass <span class="n">0.962</span></span>
+          <span class="chip q">Nick Mulvey <span class="n">0.960</span></span><span class="chip q">Warby Parker <span class="n">0.959</span></span>
+          <span class="chip q">Peloton <span class="n">0.957</span></span><span class="chip q">Everlane <span class="n">0.956</span></span>
+          <span class="chip q">Tracksmith <span class="n">0.914</span></span><span class="chip">Nike Training Club <span class="n">0.883</span></span>
         </div>
       </div>
     </div>
-    <p>Then the plan is locked with a SHA-256 fingerprint before any spend, run from an ad set sheet, and read back from the Ads Manager export by the locked rule (ahead, pause, no clear difference, inconclusive). Press <strong>Try with sample numbers</strong> after locking to see it work; sample numbers are labelled as such.</p>
-    <p class="decision">Decision: keep the runner plan as the control, and test what Qloo surfaced, one change at a time: the usual creative shown to fans of Tracksmith, Outdoor Voices, Everlane and ClassPass; then two new creatives on the broad audience, a materials and price story and an everyday movement and style story.</p>
-    <p class="note">Pause rule in that run: up to £300 per arm (the model wrote London's currency); pause as worse if cost per add to cart is 30% above the control once each arm has 20 add to carts. An arm that hits the cap first is inconclusive, not a loss. A rule for spending a small budget, not statistical proof. Qloo's age and gender index for Allbirds (women +0.33, ages 30 to 34 +0.42) is for the brand's audience, not London residents.</p>
+    <p>All 28 items in that brief cite results Qloo returned in the run, with matching ids and values. Then the plan is locked with a SHA-256 fingerprint before any spend, run from an ad set sheet, and read back from the Ads Manager export by the locked rule (ahead, pause, no clear difference, inconclusive). Press <strong>Try with sample numbers</strong> after locking to see it work; sample numbers are labelled as such and no ads were run.</p>
+    <p class="decision">Decision: keep the runner plan as the control and test what Qloo surfaced, one change at a time: the usual creative shown to fans of Tracksmith, Outdoor Voices, Nike Training Club and ClassPass; then two new creatives on the broad audience, a materials and footprint story ("Wool from the sheep to your feet") and a style first "run and brunch" angle.</p>
+    <p class="note">Pause rule in that run: up to £300 per arm (the model wrote London's currency); pause as worse if cost per add to cart is more than 30% above the control once each arm has 20 adds to cart. An arm that hits the cap first is inconclusive, not a loss. A rule for spending a small budget, not statistical proof. Qloo's age and gender index for Allbirds (women +0.33, ages 30 to 34 +0.42) is for the brand's audience, not London residents.</p>
   </section>
 
   <section class="panel">
