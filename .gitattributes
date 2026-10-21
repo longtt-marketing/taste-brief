@@ -1,0 +1,2 @@
+# Keep the locked files byte-exact on every OS so LOCK.sha256 verifies
+docs/podcast-check/* -text

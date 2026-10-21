@@ -104,7 +104,7 @@ ul.items strong{font-weight:600}
 .pods .meta{display:flex;flex-direction:column;gap:5px;font-size:13px;color:var(--mute)}
 .pods .meta b{font-size:16px;color:var(--ink)}
 .pods .why{align-self:flex-start;font-family:var(--mono);font-size:12px;padding:3px 8px;border-radius:8px;background:var(--ok-soft);color:var(--ok)}
-.pods .proof{border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.pods .proof{align-self:start;border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:12px}
 .pods .proof p{margin:0}
 .pods .big{font-family:var(--display);font-weight:700;font-size:20px;line-height:1.3}
 .pbar{display:grid;grid-template-columns:150px minmax(0,1fr) 48px;gap:10px;align-items:center;font-size:14px}
@@ -193,7 +193,7 @@ details.trace{color:var(--faint);font-size:14px}
 <div class="pt"><span>Qloo popularity</span><i><b class="base" style="width:10%"></b></i><span>+1.7</span></div>
 <p class="axis">Points above a coin flip (0 = 50%)</p>
 </div>
-<div class="chips"><span>Beat chance for 65 of 76 brands</span><span>Hypotheses locked before data</span><span>Leak check passed</span></div>
+<div class="chips"><span>Beat chance for 65 of 76 brands</span><span>Hypotheses locked before data</span><span>Holds within each genre</span></div>
 <p class="foot">Sponsorships read from the shows' own episode notes, never shown to Qloo. <a href="/judge#podcasts">Read the pre-registration and the full test</a></p>
 </div>
 </header>
@@ -474,17 +474,21 @@ const PODCAST_TEST = { shows: 259, brands: 76, qloo: 0.663, chart: 0.528, popula
 function podcastPanel(p) {
   if (!p || p.error || !list(p.shows).length) return "";
   const t = PODCAST_TEST;
-  const bar = (label, v, base) => `<div class="pbar"><span>${label}</span><i><b class="${base ? "base" : ""}" style="width:${Math.round(v * 100)}%"></b></i><span>${v.toFixed(2)}</span></div>`;
+  // points above a coin flip, scaled to the best row, so the gap reads at a glance
+  const top = t.qloo - 0.5;
+  const bar = (label, v, base) => `<div class="pbar"><span>${label}</span><i><b class="${base ? "base" : ""}" style="width:${Math.max(0, Math.round(((v - 0.5) / top) * 100))}%"></b></i><span>+${((v - 0.5) * 100).toFixed(1)}</span></div>`;
+  const seeds = [...new Set(list(p.shows).flatMap((s) => list(s.driven_by).map((d) => d.name)))];
   const rows = list(p.shows).slice(0, 8).map((s, i) => {
     const ads = list(s.advertisers);
     const why = list(s.driven_by)[0];
-    return `<li><span class="n">${String(i + 1).padStart(2, "0")}</span><div class="meta"><b>${esc(s.name)}</b>${ads.length ? `<span>Its episode notes already run ads for ${ads.slice(0, 4).map(esc).join(", ")}${ads.length > 4 ? ` and ${ads.length - 4} more` : ""}</span>` : `<span>No sponsor reads in the data we read: ask the host for rates</span>`}${why ? `<span class="why">Fit driven by ${esc(why.name)} fans</span>` : ""}</div><span class="sc">${s.affinity == null ? "" : Number(s.affinity).toFixed(2)}</span></li>`;
+    return `<li><span class="n">${String(i + 1).padStart(2, "0")}</span><div class="meta"><b>${esc(s.name)}</b>${ads.length ? `<span>Its episode notes already run ads for ${ads.slice(0, 4).map(esc).join(", ")}${ads.length > 4 ? ` and ${ads.length - 4} more` : ""}</span>` : `<span>No sponsor reads in the data we read: ask the host for rates</span>`}${why && seeds.length > 1 ? `<span class="why">Fit driven by ${esc(why.name)} fans</span>` : ""}</div><span class="sc">${s.affinity == null ? "" : Number(s.affinity).toFixed(2)}</span></li>`;
   }).join("");
-  return `<section class="panel card"><h2><span>Podcasts to sponsor first</span><small>ranked by Qloo for this brand's audience</small></h2>
+  return `<section class="panel card"><h2><span>Podcasts to sponsor first</span><small>ranked by Qloo for this brand's audience${seeds.length === 1 ? `; Qloo's explainability: every pick driven by ${esc(seeds[0])} fans` : ""}</small></h2>
     <div class="pods"><ol>${rows}</ol>
     <div class="proof"><p class="eyebrow">Checked against real money</p>
       <p class="big">Shown one show a brand paid to sponsor and one it didn't, Qloo ranked the paid one higher ${Math.round(t.qloo * 100)}% of the time, the chart ${Math.round(t.chart * 100)}%.</p>
       ${bar("Qloo for the brand", t.qloo)}${bar("Ad volume", t.adVolume, true)}${bar("Chart rank", t.chart, true)}${bar("Qloo popularity", t.popularity, true)}
+      <p class="axis">Points above a coin flip (0 = 50%)</p>
       <p class="note" style="margin:0">${t.shows} US podcasts, ${t.brands} brands, held out from the pilot. Sponsorships read from the shows' own episode notes, never shown to Qloo; hypotheses locked and published before collecting. Above chance for ${t.above} of ${t.brands} brands. <a href="/judge#podcasts">The full test</a></p>
     </div></div></section>`;
 }
