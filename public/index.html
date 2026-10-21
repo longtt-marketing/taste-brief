@@ -59,6 +59,8 @@ ul.items strong{font-weight:600}
 .tests dl{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;margin:8px 0 0;font-size:14px}
 .tests dt{color:var(--faint);font-size:12px;text-transform:uppercase;letter-spacing:.06em;padding-top:2px}
 .tests dd{margin:0}
+.path ol,.path ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:15px}
+.path h3{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin:0 0 10px}
 .loop{border-top:1px solid var(--line);margin-top:16px;padding-top:16px;display:flex;flex-direction:column;gap:12px}
 .loop h3{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--acc);margin:0}
 .loop .steps{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr))}
@@ -149,6 +151,7 @@ details.trace{color:var(--faint);font-size:14px}
 </main>
 <script type="module">
 import { RULE, canonicalPlan, planHash, adSetRows, toCsv, parseCsv, readResults, verdicts } from "/verdict.js";
+import { agentPath } from "/path.js";
 const $ = (s) => document.querySelector(s);
 // a spaced dash used as punctuation in model text reads as a comma; hyphens inside words stay
 const esc = (s) => String(s ?? "").replace(/\s+[—–]\s+/g, ", ").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -363,6 +366,26 @@ function wireLoop(j) {
   });
 }
 
+// The agent's own decisions in this run, read from its Qloo calls, and what it chose not to use (its caveats).
+function pathPanel(j) {
+  const p = agentPath(j.trace);
+  if (!p.qlooCalls) return "";
+  const city = String(j.market).split(",")[0];
+  const reads = p.reads.map((r) => `${esc(r.what)}${r.narrowed.length ? ` narrowed to ${esc(r.narrowed.join(", "))}` : ""}${r.inCity ? ` in ${esc(r.where)}` : ""}`);
+  const steps = [
+    p.searched.length ? `Looked up <strong>${p.searched.map(esc).join(", ")}</strong> in Qloo` : "",
+    p.tags.length ? `Searched Qloo tags for the product: ${p.tags.map(esc).join(", ")}` : "",
+    reads.length ? `Read ${reads.length} taste lists for ${esc(city)}: ${reads.join("; ")}` : "",
+    p.demographics ? "Checked the age and gender index" : "",
+  ].filter(Boolean);
+  const caveats = list(j.brief?.caveats);
+  return `<section class="panel path"><div class="grid">
+    <div><h3>How the agent worked this out</h3><ol>${steps.map((x) => `<li>${x}</li>`).join("")}</ol>
+      <p class="note">${p.qlooCalls} Qloo calls, chosen by the agent for this product and city, not a fixed script. Every call is listed at the bottom.</p></div>
+    ${caveats.length ? `<div><h3>What it chose not to use</h3><ul>${caveats.map((x) => `<li>${esc(x)}</li>`).join("")}</ul></div>` : ""}
+  </div></section>`;
+}
+
 // Draw one result: from a run that just finished, or the recorded run of the example.
 function showResult(j) {
   const b = j.brief, c = j.check || { grounded: 0, total: 0, flagged: [] };
@@ -381,6 +404,7 @@ function showResult(j) {
         <div class="score${c.grounded === c.total ? "" : " part"}"><b>${c.grounded} of ${c.total}</b> structured items cite Qloo results returned in this run, with matching ids and values</div></div>
       <div>${demographics(j.demographics)}</div>
     </div></section>
+    ${pathPanel(j)}
     ${versus(j.baseline, b, j.unbacked, j.scored, j.market)}
     <div class="grid">
       ${card("Who they are", items(b.audience_traits, (x) => esc(x.trait)))}
@@ -391,7 +415,6 @@ function showResult(j) {
     </div>
     ${list(b.test_plan).length ? card("What to test first", `<ul class="tests">${list(b.test_plan).map((x) => `<li><strong>${esc(x.hypothesis)}</strong><dl><dt>Changes</dt><dd>${x.variable === "targeting" ? "Targeting only, with your usual creative" : x.variable === "creative" ? "Creative only, on the broad audience" : esc(x.variable)}</dd><dt>Run</dt><dd>${esc(x.ad_set)}</dd>${x.why ? `<dt>Why</dt><dd>${esc(x.why)}</dd>` : ""}<dt>Judge on</dt><dd>${esc(x.kpi)}</dd><dt>Pause rule</dt><dd>${esc(x.stop_if)}</dd></dl>${ev(x, true)}</li>`).join("")}</ul><p class="note" style="margin:12px 0 0">Control for every test: broad targeting in ${esc(String(j.market).split(",")[0])}, same ages, your usual message. Each test changes one thing from it, so a difference can be traced. The pause rule is for spending a small budget, not statistical proof. Check each interest's audience size in Ads Manager first.</p>${loopPanel()}`, "each test rests on the Qloo results shown") : ""}
     ${markets(j.markets)}
-    ${list(b.caveats).length ? `<p class="note">${list(b.caveats).map(esc).join("<br>")}</p>` : ""}
     <div class="actions"><button type="button" class="ghost" id="copy-md">Copy the brief</button><button type="button" class="ghost" id="dl-csv">Download interests as CSV</button></div>
     <details class="trace"><summary>Every Qloo call the agent made</summary>${j.run ? `<p class="note">This run: ${esc(j.run.seconds)} s, ${esc(j.run.qloo_calls)} Qloo calls, ${esc(j.run.model_calls)} model calls, version ${esc(String(j.run.version).slice(0, 8))}, ${esc(j.run.at)}.</p>` : ""}<ol>${list(j.trace).map((t) =>
       `<li>${esc(t.tool)} ${t.input ? esc(JSON.stringify(t.input)) : ""}${t.n !== undefined ? `: ${t.n} results` : ""}${t.error ? ` <span class="err">${esc(t.error)}</span>` : ""}</li>`).join("")}</ol></details>`;
