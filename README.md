@@ -56,6 +56,7 @@ live runs. When neither applies the page runs on synthetic data and says so in a
 ![The same question with and without Qloo, both lists scored by Qloo for the audience](docs/screenshots/0-with-and-without.png)
 ![What to test first: each test changes one thing from the obvious ad set, with the Qloo results it rests on](docs/screenshots/1-what-to-test.png)
 ![The brief, with the Qloo result each item cites](docs/screenshots/2-brief.png)
+![Lock it, run it, read it back: the plan is locked with a SHA-256 fingerprint, then the Ads Manager export is judged by the locked rule (sample numbers, labelled)](docs/screenshots/3-lock-run-read-back.png)
 
 ## Run
 Requires Node 20 or newer.
