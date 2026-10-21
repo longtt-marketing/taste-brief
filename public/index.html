@@ -405,13 +405,17 @@ function wireLoop(j) {
   const show = async (csvText, sample) => {
     const v = verdicts(readResults(parseCsv(csvText), locked.id));
     // read the receipt back from the server and check it is the plan on this page
-    let check = `<p class="note">No server receipt for this plan, so its lock time is the browser's word only.</p>`;
+    // real results get verdicts only when the server receipt matches the plan; sample numbers are an illustration either way
+    let verified = false, check = `<p class="err">No server receipt for this plan, so there are no verdicts for real results.</p>`;
     try {
       const r = await fetch(`/api/lock/${locked.hash}`);
       const got = r.ok ? (await r.json()).receipt : null;
-      if (got && got.canonical === locked.canonical) check = `<p class="note">Checked against the server receipt: this plan, unchanged, was received at ${esc(new Date(got.received_at).toLocaleString())}. Results are read with the rule in that receipt.</p>`;
-      else if (got) check = `<p class="err">The server receipt does not match this plan. Do not trust these verdicts.</p>`;
+      if (got && got.canonical === locked.canonical) {
+        verified = true;
+        check = `<p class="note">Checked against the server receipt: this plan, unchanged, was received at ${esc(new Date(got.received_at).toLocaleString())}. Results are read with the rule in that receipt.</p>`;
+      } else if (got) check = `<p class="err">The server receipt does not match this plan, so there are no verdicts.</p>`;
     } catch {}
+    if (!verified && !sample) { $("#verdict-out").innerHTML = check; return; }
     const cls = (x) => (x === "ahead" ? "v-ahead" : x === "pause" ? "v-pause" : "v-other");
     const money = (x) => (x == null ? "n/a" : x.toFixed(2));
     $("#verdict-out").innerHTML = (sample ? `<div class="banner synthetic">Sample numbers, made up to show how the rule reads results. No ads were run.</div>` : "") + check
