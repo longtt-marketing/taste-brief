@@ -77,3 +77,18 @@ test("public quota exhaustion emits an explicitly synthetic result, and static a
   assert.equal(page.status, 200);
   assert.match(await page.text(), /Static/);
 });
+
+test("replay: a live run of the page's example is kept in KV and served at /api/replay; other inputs never are", async () => {
+  const { isExample, EXAMPLE } = await import("../src/worker.js");
+  assert.equal(isExample({ ...EXAMPLE, code: "x" }), true);
+  assert.equal(isExample({ ...EXAMPLE, product: "My secret product" }), false);
+  const store = new Map();
+  const env = { MOCK: "1", ASSETS: publicAssets, QUOTA: { get: async (k) => store.get(k) ?? null, put: async (k, v) => { store.set(k, v); } } };
+  assert.equal((await worker.fetch(new Request(url + "/api/replay"), env)).status, 404);
+  await worker.fetch(post(EXAMPLE), env); // synthetic run: not live, so nothing is kept
+  assert.equal(store.size, 0);
+  store.set("replay:example", JSON.stringify({ mode: "replay", market: "London, UK" }));
+  const r = await worker.fetch(new Request(url + "/api/replay"), env);
+  assert.equal(r.status, 200);
+  assert.equal((await r.json()).mode, "replay");
+});

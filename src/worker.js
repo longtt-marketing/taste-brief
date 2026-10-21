@@ -61,9 +61,21 @@ function withTimeout(promise, ms) {
   return Promise.race([promise, timeout]).finally(() => clearTimeout(timer));
 }
 
+// The example on the page. Its last live run is kept so a judge can see a real result at once, without a code or a
+// two minute wait. Only this exact example is kept, never what a visitor typed, and only in KV, not in git.
+export const EXAMPLE = { product: "Wool running sneakers, $120, sustainable", market: "London, UK", compare_market: "Hanoi, Vietnam", references: "Allbirds" };
+const sameText = (a, b) => String(a || "").trim().toLowerCase() === String(b || "").trim().toLowerCase();
+export const isExample = (b) => Object.keys(EXAMPLE).every((k) => sameText(b?.[k], EXAMPLE[k]));
+const REPLAY_KEY = "replay:example";
+
 export default {
   async fetch(req, env) {
     const url = new URL(req.url);
+    if (url.pathname === "/api/replay") {
+      const saved = env.QUOTA ? await env.QUOTA.get(REPLAY_KEY).catch(() => null) : null;
+      return saved ? new Response(saved, { headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" } })
+        : json({ error: "no recorded run yet" }, 404);
+    }
     if (url.pathname === "/api/health") {
       const keys = env.MOCK !== "1" && !!env.QLOO_API_KEY && !!env.ANTHROPIC_API_KEY;
       return json({ ok: true, live_qloo: keys, live_llm: keys, code_required: !!env.DEMO_CODE, free_today: env.DEMO_CODE ? await quota(env) : null });
@@ -131,7 +143,12 @@ export default {
           + 2 * (markets?.types || []).length + graded.length + graded.filter((g) => g.match).length;
         const runInfo = { version: env.CF_VERSION_METADATA?.id || "local", seconds: Math.round((Date.now() - t0) / 1000),
           qloo_calls: qlooCalls, model_calls: (llm.usage?.calls || 0) + (baseLLM.usage?.calls || 0), at: new Date().toISOString() };
-        return { ...meta, market, ...out, baseline, unbacked, scored, markets, run: runInfo };
+        const result = { ...meta, market, ...out, baseline, unbacked, scored, markets, run: runInfo };
+        if (live && isExample(body) && env.QUOTA && !result.incomplete) {
+          const { quota, access, ...keep } = result;
+          await env.QUOTA.put(REPLAY_KEY, JSON.stringify({ ...keep, mode: "replay", recorded: { at: runInfo.at, version: runInfo.version, inputs: EXAMPLE } })).catch(() => {});
+        }
+        return result;
       };
 
       // stream: true -> NDJSON lines {type:"step"} as the agent works, then {type:"result"} or {type:"error"}: a live run

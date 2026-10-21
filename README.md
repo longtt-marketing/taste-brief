@@ -42,7 +42,8 @@ The page shows the same scoring for every run.
   (same question, no Qloo) run side by side; every step is streamed to the page as NDJSON while it happens.
 
 ## Live demo
-https://taste-brief.thelongmarketing.workers.dev (Cloudflare Worker). A live run calls Qloo and Claude, so the public
+https://taste-brief.thelongmarketing.workers.dev (Cloudflare Worker). **See a recorded live run now** shows the last real run
+of the page's example instantly (kept in KV, only for that exact example, never for what a visitor types). A live run calls Qloo and Claude, so the public
 page allows a limited number of free live runs per day; judges also have an access code in the submission for unlimited
 live runs. When neither applies the page runs on synthetic data and says so in a banner.
 

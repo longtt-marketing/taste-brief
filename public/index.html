@@ -121,6 +121,7 @@ details.trace{color:var(--faint);font-size:14px}
       </div>
       <div class="row">
         <button id="go" type="submit">Build the brief</button>
+        <button id="replay" type="button" class="ghost" hidden>See a recorded live run now</button>
         <details class="code" id="code-box"><summary>Have an access code?</summary>
           <label>Access code <small id="code-help">optional</small><input name="code" type="password" maxlength="100" autocomplete="off"></label>
         </details>
@@ -226,6 +227,18 @@ fetch("/api/health").then((r) => r.json()).then((h) => {
   if (pre) { $("#f").elements.code.value = pre; $("#code-box").open = true; history.replaceState(null, "", location.pathname); }
 }).catch(() => { $("#mode").textContent = "Offline"; });
 
+// A recorded live run of the example, so a visitor sees a real result without a code or a wait.
+fetch("/api/replay").then((r) => (r.ok ? r.json() : null)).then((j) => {
+  if (!j?.brief) return;
+  const btn = $("#replay");
+  btn.hidden = false;
+  btn.addEventListener("click", () => {
+    $("#live").innerHTML = list(j.trace).map((t) => `<li>${stepText(j.market, t)}</li>`).join("");
+    showResult(j);
+    $("#out").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+}).catch(() => {});
+
 document.querySelectorAll("button.chip").forEach((b) => b.addEventListener("click", () => {
   const [product, market, compare_market, references] = b.dataset.p.split("|");
   const f = $("#f").elements;
@@ -277,6 +290,53 @@ const csvInterests = (j) => {
       q(x.grounded ? "check in Meta Ads Manager" : "not confirmed by Qloo")].join(","))].join("\n");
 };
 
+// Draw one result: from a run that just finished, or the recorded run of the example.
+function showResult(j) {
+  const b = j.brief, c = j.check || { grounded: 0, total: 0, flagged: [] };
+  $("#status").textContent = j.mode === "replay" ? `Recorded run: the agent made ${j.trace.length} steps.` : `Done. The agent made ${j.trace.length} steps.`;
+  const when = j.recorded ? new Date(j.recorded.at).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" }) : "";
+  const banner = j.mode === "replay"
+    ? `<div class="banner live">Recorded live run of the example, from ${esc(when)}, version ${esc(String(j.recorded.version).slice(0, 8))}. This is a saved result of a real run, shown instantly; press Build the brief for a fresh one.</div>`
+    : j.mode === "live"
+    ? `<div class="banner live">Live run on real Qloo data${j.quota ? `. ${j.quota.left} free runs left today` : ""}.</div>`
+    : `<div class="banner synthetic">Sample data. The names and numbers below are made up to show how it works. Add the access code, or come back tomorrow, for real Qloo data.</div>`;
+  const warn = [j.incomplete ? `The model's brief still had a problem after two resends (${esc(j.incomplete)}). Treat it as a draft.` : "",
+    j.mode === "live" && j.signal?.weak ? `Limited high affinity results: Qloo returned ${j.signal.strong} results with affinity 0.9 or more for this seed. That threshold is this tool's rule of thumb, not a confidence score; a closer comparable brand may give more to work with.` : ""].filter(Boolean);
+  $("#out").innerHTML = `${banner}${warn.map((w) => `<div class="banner synthetic">${w}</div>`).join("")}
+    <section class="panel card"><div class="grid">
+      <div><p class="eyebrow">Taste signals for this brand · ${esc(String(j.market).split(",")[0])} as location</p><p class="summary">${esc(b.audience_summary)}</p><p class="note" style="margin:-8px 0 12px">Summary written by the model. The lines below each cite the Qloo results they rest on.</p>
+        <div class="score${c.grounded === c.total ? "" : " part"}"><b>${c.grounded} of ${c.total}</b> structured items cite Qloo results returned in this run, with matching ids and values</div></div>
+      <div>${demographics(j.demographics)}</div>
+    </div></section>
+    ${versus(j.baseline, b, j.unbacked, j.scored, j.market)}
+    <div class="grid">
+      ${card("Who they are", items(b.audience_traits, (x) => esc(x.trait)))}
+      ${card("Meta interests to test", items(b.meta_interests, (x) => `<strong>${esc(cleanInterest(x.interest))}</strong>`), "check each in Ads Manager")}
+      ${card("Creative angles", items(b.creative_angles, (x) => `<strong>${esc(x.angle)}</strong><br><span class="hook">${esc(x.hook)}</span>`, true), "our reading of the data")}
+      ${card("Landing page", `<p style="margin:0 0 6px"><strong>${esc(b.landing_page?.headline)}</strong></p><p style="margin:0">${esc(b.landing_page?.subheadline)}</p>${ev(b.landing_page, true)}`, "our reading of the data")}
+      ${card("Partnerships", items(b.partnerships, (x) => `<strong>${esc(x.partner)}</strong>: ${esc(x.idea)}`))}
+    </div>
+    ${list(b.test_plan).length ? card("What to test first", `<ul class="tests">${list(b.test_plan).map((x) => `<li><strong>${esc(x.hypothesis)}</strong><dl><dt>Changes</dt><dd>${x.variable === "targeting" ? "Targeting only, with your usual creative" : x.variable === "creative" ? "Creative only, on the broad audience" : esc(x.variable)}</dd><dt>Run</dt><dd>${esc(x.ad_set)}</dd>${x.why ? `<dt>Why</dt><dd>${esc(x.why)}</dd>` : ""}<dt>Judge on</dt><dd>${esc(x.kpi)}</dd><dt>Pause rule</dt><dd>${esc(x.stop_if)}</dd></dl>${ev(x, true)}</li>`).join("")}</ul><p class="note" style="margin:12px 0 0">Control for every test: broad targeting in ${esc(String(j.market).split(",")[0])}, same ages, your usual message. Each test changes one thing from it, so a difference can be traced. The pause rule is for spending a small budget, not statistical proof. Check each interest's audience size in Ads Manager first.</p>`, "each test rests on the Qloo results shown") : ""}
+    ${markets(j.markets)}
+    ${list(b.caveats).length ? `<p class="note">${list(b.caveats).map(esc).join("<br>")}</p>` : ""}
+    <div class="actions"><button type="button" class="ghost" id="copy-md">Copy the brief</button><button type="button" class="ghost" id="dl-csv">Download interests as CSV</button></div>
+    <details class="trace"><summary>Every Qloo call the agent made</summary>${j.run ? `<p class="note">This run: ${esc(j.run.seconds)} s, ${esc(j.run.qloo_calls)} Qloo calls, ${esc(j.run.model_calls)} model calls, version ${esc(String(j.run.version).slice(0, 8))}, ${esc(j.run.at)}.</p>` : ""}<ol>${list(j.trace).map((t) =>
+      `<li>${esc(t.tool)} ${t.input ? esc(JSON.stringify(t.input)) : ""}${t.n !== undefined ? `: ${t.n} results` : ""}${t.error ? ` <span class="err">${esc(t.error)}</span>` : ""}</li>`).join("")}</ol></details>`;
+  document.querySelectorAll(".tabs button").forEach((btn) => btn.addEventListener("click", () => {
+    document.querySelectorAll(".tabs button").forEach((x) => x.setAttribute("aria-pressed", String(x === btn)));
+    document.querySelectorAll("[data-pane]").forEach((p) => { p.hidden = p.dataset.pane !== btn.dataset.tab; });
+  }));
+  $("#copy-md").addEventListener("click", async (ev2) => {
+    try { await navigator.clipboard.writeText(mdBrief(j)); ev2.target.textContent = "Copied"; } catch { ev2.target.textContent = "Could not copy"; }
+  });
+  $("#dl-csv").addEventListener("click", () => {
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([csvInterests(j)], { type: "text/csv" }));
+    a.download = `taste-brief-interests-${String(j.market).replace(/[^a-z0-9]+/gi, "-").toLowerCase()}.csv`;
+    a.click(); URL.revokeObjectURL(a.href);
+  });
+}
+
 $("#f").addEventListener("submit", async (e) => {
   e.preventDefault();
   const data = { ...Object.fromEntries(new FormData(e.target)), stream: true };
@@ -305,46 +365,7 @@ $("#f").addEventListener("submit", async (e) => {
       }
     }
     if (!j) throw new Error("the run stopped before the brief was ready. Please try again.");
-    const b = j.brief, c = j.check || { grounded: 0, total: 0, flagged: [] };
-    $("#status").textContent = `Done. The agent made ${j.trace.length} steps.`;
-    const banner = j.mode === "live"
-      ? `<div class="banner live">Live run on real Qloo data${j.quota ? `. ${j.quota.left} free runs left today` : ""}.</div>`
-      : `<div class="banner synthetic">Sample data. The names and numbers below are made up to show how it works. Add the access code, or come back tomorrow, for real Qloo data.</div>`;
-    const warn = [j.incomplete ? `The model's brief still had a problem after two resends (${esc(j.incomplete)}). Treat it as a draft.` : "",
-      j.mode === "live" && j.signal?.weak ? `Limited high affinity results: Qloo returned ${j.signal.strong} results with affinity 0.9 or more for this seed. That threshold is this tool's rule of thumb, not a confidence score; a closer comparable brand may give more to work with.` : ""].filter(Boolean);
-    $("#out").innerHTML = `${banner}${warn.map((w) => `<div class="banner synthetic">${w}</div>`).join("")}
-      <section class="panel card"><div class="grid">
-        <div><p class="eyebrow">Taste signals for this brand · ${esc(String(j.market).split(",")[0])} as location</p><p class="summary">${esc(b.audience_summary)}</p><p class="note" style="margin:-8px 0 12px">Summary written by the model. The lines below each cite the Qloo results they rest on.</p>
-          <div class="score${c.grounded === c.total ? "" : " part"}"><b>${c.grounded} of ${c.total}</b> structured items cite Qloo results returned in this run, with matching ids and values</div></div>
-        <div>${demographics(j.demographics)}</div>
-      </div></section>
-      ${versus(j.baseline, b, j.unbacked, j.scored, j.market)}
-      <div class="grid">
-        ${card("Who they are", items(b.audience_traits, (x) => esc(x.trait)))}
-        ${card("Meta interests to test", items(b.meta_interests, (x) => `<strong>${esc(cleanInterest(x.interest))}</strong>`), "check each in Ads Manager")}
-        ${card("Creative angles", items(b.creative_angles, (x) => `<strong>${esc(x.angle)}</strong><br><span class="hook">${esc(x.hook)}</span>`, true), "our reading of the data")}
-        ${card("Landing page", `<p style="margin:0 0 6px"><strong>${esc(b.landing_page?.headline)}</strong></p><p style="margin:0">${esc(b.landing_page?.subheadline)}</p>${ev(b.landing_page, true)}`, "our reading of the data")}
-        ${card("Partnerships", items(b.partnerships, (x) => `<strong>${esc(x.partner)}</strong>: ${esc(x.idea)}`))}
-      </div>
-      ${list(b.test_plan).length ? card("What to test first", `<ul class="tests">${list(b.test_plan).map((x) => `<li><strong>${esc(x.hypothesis)}</strong><dl><dt>Changes</dt><dd>${x.variable === "targeting" ? "Targeting only, with your usual creative" : x.variable === "creative" ? "Creative only, on the broad audience" : esc(x.variable)}</dd><dt>Run</dt><dd>${esc(x.ad_set)}</dd>${x.why ? `<dt>Why</dt><dd>${esc(x.why)}</dd>` : ""}<dt>Judge on</dt><dd>${esc(x.kpi)}</dd><dt>Pause rule</dt><dd>${esc(x.stop_if)}</dd></dl>${ev(x, true)}</li>`).join("")}</ul><p class="note" style="margin:12px 0 0">Control for every test: broad targeting in ${esc(String(j.market).split(",")[0])}, same ages, your usual message. Each test changes one thing from it, so a difference can be traced. The pause rule is for spending a small budget, not statistical proof. Check each interest's audience size in Ads Manager first.</p>`, "each test rests on the Qloo results shown") : ""}
-      ${markets(j.markets)}
-      ${list(b.caveats).length ? `<p class="note">${list(b.caveats).map(esc).join("<br>")}</p>` : ""}
-      <div class="actions"><button type="button" class="ghost" id="copy-md">Copy the brief</button><button type="button" class="ghost" id="dl-csv">Download interests as CSV</button></div>
-      <details class="trace"><summary>Every Qloo call the agent made</summary>${j.run ? `<p class="note">This run: ${esc(j.run.seconds)} s, ${esc(j.run.qloo_calls)} Qloo calls, ${esc(j.run.model_calls)} model calls, version ${esc(String(j.run.version).slice(0, 8))}, ${esc(j.run.at)}.</p>` : ""}<ol>${list(j.trace).map((t) =>
-        `<li>${esc(t.tool)} ${t.input ? esc(JSON.stringify(t.input)) : ""}${t.n !== undefined ? `: ${t.n} results` : ""}${t.error ? ` <span class="err">${esc(t.error)}</span>` : ""}</li>`).join("")}</ol></details>`;
-    document.querySelectorAll(".tabs button").forEach((btn) => btn.addEventListener("click", () => {
-      document.querySelectorAll(".tabs button").forEach((x) => x.setAttribute("aria-pressed", String(x === btn)));
-      document.querySelectorAll("[data-pane]").forEach((p) => { p.hidden = p.dataset.pane !== btn.dataset.tab; });
-    }));
-    $("#copy-md").addEventListener("click", async (ev2) => {
-      try { await navigator.clipboard.writeText(mdBrief(j)); ev2.target.textContent = "Copied"; } catch { ev2.target.textContent = "Could not copy"; }
-    });
-    $("#dl-csv").addEventListener("click", () => {
-      const a = document.createElement("a");
-      a.href = URL.createObjectURL(new Blob([csvInterests(j)], { type: "text/csv" }));
-      a.download = `taste-brief-interests-${String(j.market).replace(/[^a-z0-9]+/gi, "-").toLowerCase()}.csv`;
-      a.click(); URL.revokeObjectURL(a.href);
-    });
+    showResult(j);
   } catch (err) {
     const msg = err.name === "AbortError" ? "the run took too long. Please try again." : err.message;
     $("#status").innerHTML = `<span class="err">Something went wrong: ${esc(msg)}</span>`;
