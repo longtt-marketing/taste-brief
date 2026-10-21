@@ -12,11 +12,12 @@ Built for the [Qloo Agentic Hackathon](https://qloo.devpost.com/).
 
 ## Does Qloo make a difference?
 
-Across 20 briefs, 73% of the Meta interests Taste Brief suggests score an affinity of 0.9 or more on Qloo for the brand's
-audience in that city. The same model with no data reaches 18% when told to name specific brands and shows, and 3% as the
-app asks it. Taste Brief is ahead in 19 of 20 briefs (+55 points, 95% bootstrap interval +43 to +67). Graded by Qloo, so
-partly circular for Taste Brief's own picks; details and limits in [docs/benchmark](docs/benchmark/README.md). The page
-shows the same scoring for every run.
+On 20 briefs, each graded on the audience of a competitor the agent never saw (written from Allbirds, graded on Veja),
+61% of the Meta interests Taste Brief suggests score an affinity of 0.9 or more on Qloo. The same model with no data
+reaches 19% when told to name specific brands and shows, and 1% as the app asks it. Taste Brief is ahead in 19 of 20 briefs
+(+42 points, 95% bootstrap interval +32 to +53); on the reference brand's own audience it is 73% against 18%. Graded by
+Qloo, so it measures fit with the category's audience, not ad results; details in [docs/benchmark](docs/benchmark/README.md).
+The page shows the same scoring for every run.
 
 ## How it works
 - `src/agent.js`: tool-using agent loop on Claude. Tools: `search`, `insights`, `demographics`, `tags`, and

@@ -1,0 +1,518 @@
+{
+  "run_at": "2026-10-21T10:50:19.396Z",
+  "cases": 20,
+  "picks_from": "benchmark-2026-10-21-10-25.json",
+  "grader": "Qloo affinity for a held-out competitor's audience in the same city (the agent never saw that brand)",
+  "taste_brief": {
+    "picks": 140,
+    "checkable": 115,
+    "high": 86,
+    "share_high": 0.6142857142857143,
+    "share_checkable": 0.8214285714285714
+  },
+  "named_entity_baseline": {
+    "picks": 133,
+    "checkable": 45,
+    "high": 25,
+    "share_high": 0.18796992481203006,
+    "share_checkable": 0.3383458646616541
+  },
+  "app_baseline": {
+    "picks": 115,
+    "checkable": 6,
+    "high": 1,
+    "share_high": 0.008695652173913044,
+    "share_checkable": 0.05217391304347826
+  },
+  "vs_named_baseline": {
+    "mean_difference": 0.4234126984126984,
+    "ci95": [
+      0.31587301587301586,
+      0.5258928571428572
+    ],
+    "taste_brief_ahead": 19,
+    "ties": 1
+  },
+  "per_case": [
+    {
+      "product": "Wool running sneakers, $120, sustainable",
+      "market": "London, UK",
+      "reference": "Allbirds",
+      "held_out": "Veja",
+      "taste_brief": {
+        "picks": 7,
+        "checkable": 7,
+        "mean_affinity": 0.8474751585814463,
+        "high": 1
+      },
+      "named_baseline": {
+        "picks": 6,
+        "checkable": 2,
+        "mean_affinity": 0.84383472845063,
+        "high": 0
+      },
+      "app_baseline": {
+        "picks": 6,
+        "checkable": 1,
+        "mean_affinity": 0.8429166854287485,
+        "high": 0
+      }
+    },
+    {
+      "product": "Wool running sneakers, $120, sustainable",
+      "market": "New York, USA",
+      "reference": "Allbirds",
+      "held_out": "Veja",
+      "taste_brief": {
+        "picks": 9,
+        "checkable": 7,
+        "mean_affinity": 0.8310755234496696,
+        "high": 1
+      },
+      "named_baseline": {
+        "picks": 7,
+        "checkable": 3,
+        "mean_affinity": 0.8112340820773261,
+        "high": 0
+      },
+      "app_baseline": {
+        "picks": 6,
+        "checkable": 1,
+        "mean_affinity": 0.8422931639539257,
+        "high": 0
+      }
+    },
+    {
+      "product": "Specialty coffee subscription, $25 a month",
+      "market": "Seoul, South Korea",
+      "reference": "Blue Bottle Coffee",
+      "held_out": "Intelligentsia Coffee",
+      "taste_brief": {
+        "picks": 7,
+        "checkable": 5,
+        "mean_affinity": 0.9451859754903467,
+        "high": 5
+      },
+      "named_baseline": {
+        "picks": 7,
+        "checkable": 2,
+        "mean_affinity": 0.9227032147173732,
+        "high": 2
+      },
+      "app_baseline": {
+        "picks": 4,
+        "checkable": 0,
+        "mean_affinity": null,
+        "high": 0
+      }
+    },
+    {
+      "product": "Turntable for first time vinyl buyers, $199",
+      "market": "Berlin, Germany",
+      "reference": "Audio-Technica",
+      "held_out": "Sonos",
+      "taste_brief": {
+        "picks": 7,
+        "checkable": 6,
+        "mean_affinity": 0.9295022262064175,
+        "high": 6
+      },
+      "named_baseline": {
+        "picks": 6,
+        "checkable": 4,
+        "mean_affinity": 0.9114275331014018,
+        "high": 3
+      },
+      "app_baseline": {
+        "picks": 5,
+        "checkable": 0,
+        "mean_affinity": null,
+        "high": 0
+      }
+    },
+    {
+      "product": "Plant based protein bars",
+      "market": "Los Angeles, USA",
+      "reference": "RXBAR",
+      "held_out": "Kind Snacks",
+      "taste_brief": {
+        "picks": 8,
+        "checkable": 8,
+        "mean_affinity": 0.9469167153503625,
+        "high": 8
+      },
+      "named_baseline": {
+        "picks": 6,
+        "checkable": 3,
+        "mean_affinity": 0.9272272373891592,
+        "high": 3
+      },
+      "app_baseline": {
+        "picks": 5,
+        "checkable": 1,
+        "mean_affinity": 0.9645629873147886,
+        "high": 1
+      }
+    },
+    {
+      "product": "Flavored sparkling water",
+      "market": "Chicago, USA",
+      "reference": "LaCroix",
+      "held_out": "Perrier",
+      "taste_brief": {
+        "picks": 6,
+        "checkable": 4,
+        "mean_affinity": 0.8760930885779941,
+        "high": 2
+      },
+      "named_baseline": {
+        "picks": 7,
+        "checkable": 3,
+        "mean_affinity": 0.8497471783042488,
+        "high": 0
+      },
+      "app_baseline": {
+        "picks": 7,
+        "checkable": 1,
+        "mean_affinity": 0.8735797961033823,
+        "high": 0
+      }
+    },
+    {
+      "product": "Affordable skincare serum, $15",
+      "market": "Paris, France",
+      "reference": "The Ordinary",
+      "held_out": "CeraVe",
+      "taste_brief": {
+        "picks": 6,
+        "checkable": 3,
+        "mean_affinity": 0.9466200712878651,
+        "high": 3
+      },
+      "named_baseline": {
+        "picks": 6,
+        "checkable": 3,
+        "mean_affinity": 0.9180972184465817,
+        "high": 2
+      },
+      "app_baseline": {
+        "picks": 6,
+        "checkable": 0,
+        "mean_affinity": null,
+        "high": 0
+      }
+    },
+    {
+      "product": "Yoga leggings",
+      "market": "Sydney, Australia",
+      "reference": "Lululemon",
+      "held_out": "Alo Yoga",
+      "taste_brief": {
+        "picks": 8,
+        "checkable": 7,
+        "mean_affinity": 0.9568948599748193,
+        "high": 7
+      },
+      "named_baseline": {
+        "picks": 6,
+        "checkable": 2,
+        "mean_affinity": 0.9238371589148908,
+        "high": 2
+      },
+      "app_baseline": {
+        "picks": 6,
+        "checkable": 0,
+        "mean_affinity": null,
+        "high": 0
+      }
+    },
+    {
+      "product": "Hard seltzer",
+      "market": "Austin, USA",
+      "reference": "White Claw",
+      "held_out": "Truly Hard Seltzer",
+      "taste_brief": {
+        "picks": 8,
+        "checkable": 7,
+        "mean_affinity": 0.9236535820389581,
+        "high": 5
+      },
+      "named_baseline": {
+        "picks": 7,
+        "checkable": 0,
+        "mean_affinity": null,
+        "high": 0
+      },
+      "app_baseline": {
+        "picks": 5,
+        "checkable": 0,
+        "mean_affinity": null,
+        "high": 0
+      }
+    },
+    {
+      "product": "Hazy IPA craft beer",
+      "market": "Portland, USA",
+      "reference": "Sierra Nevada",
+      "held_out": "Lagunitas Brewing Company",
+      "taste_brief": {
+        "picks": 6,
+        "checkable": 5,
+        "mean_affinity": 0.9577761424021659,
+        "high": 5
+      },
+      "named_baseline": {
+        "picks": 7,
+        "checkable": 4,
+        "mean_affinity": 0.9075535333221416,
+        "high": 2
+      },
+      "app_baseline": {
+        "picks": 6,
+        "checkable": 0,
+        "mean_affinity": null,
+        "high": 0
+      }
+    },
+    {
+      "product": "Language learning app subscription",
+      "market": "Mexico City, Mexico",
+      "reference": "Duolingo",
+      "held_out": "Babbel",
+      "taste_brief": {
+        "picks": 6,
+        "checkable": 6,
+        "mean_affinity": 0.878395973000886,
+        "high": 1
+      },
+      "named_baseline": {
+        "picks": 6,
+        "checkable": 1,
+        "mean_affinity": 0.9087424350770227,
+        "high": 1
+      },
+      "app_baseline": {
+        "picks": 6,
+        "checkable": 1,
+        "mean_affinity": 0.8645249174533045,
+        "high": 0
+      }
+    },
+    {
+      "product": "Meal kit delivery",
+      "market": "Toronto, Canada",
+      "reference": "HelloFresh",
+      "held_out": "Blue Apron",
+      "taste_brief": {
+        "picks": 7,
+        "checkable": 6,
+        "mean_affinity": 0.9341349498751638,
+        "high": 6
+      },
+      "named_baseline": {
+        "picks": 7,
+        "checkable": 3,
+        "mean_affinity": 0.8837443454167451,
+        "high": 2
+      },
+      "app_baseline": {
+        "picks": 6,
+        "checkable": 0,
+        "mean_affinity": null,
+        "high": 0
+      }
+    },
+    {
+      "product": "Streetwear hoodies, limited drops",
+      "market": "Tokyo, Japan",
+      "reference": "Supreme",
+      "held_out": "Stüssy",
+      "taste_brief": {
+        "picks": 6,
+        "checkable": 5,
+        "mean_affinity": 0.9711768254431637,
+        "high": 5
+      },
+      "named_baseline": {
+        "picks": 7,
+        "checkable": 1,
+        "mean_affinity": 0.9769474363051326,
+        "high": 1
+      },
+      "app_baseline": {
+        "picks": 8,
+        "checkable": 0,
+        "mean_affinity": null,
+        "high": 0
+      }
+    },
+    {
+      "product": "Party card game for adults",
+      "market": "London, UK",
+      "reference": "Exploding Kittens",
+      "held_out": "Hasbro",
+      "taste_brief": {
+        "picks": 7,
+        "checkable": 5,
+        "mean_affinity": 0.8888861093873872,
+        "high": 2
+      },
+      "named_baseline": {
+        "picks": 7,
+        "checkable": 1,
+        "mean_affinity": 0.9314145262965056,
+        "high": 1
+      },
+      "app_baseline": {
+        "picks": 5,
+        "checkable": 0,
+        "mean_affinity": null,
+        "high": 0
+      }
+    },
+    {
+      "product": "Natural deodorant",
+      "market": "Melbourne, Australia",
+      "reference": "Native",
+      "held_out": "Schmidt's Naturals",
+      "taste_brief": {
+        "picks": 7,
+        "checkable": 7,
+        "mean_affinity": 0.9394161867929791,
+        "high": 7
+      },
+      "named_baseline": {
+        "picks": 7,
+        "checkable": 2,
+        "mean_affinity": 0.9050788531155742,
+        "high": 1
+      },
+      "app_baseline": {
+        "picks": 6,
+        "checkable": 0,
+        "mean_affinity": null,
+        "high": 0
+      }
+    },
+    {
+      "product": "Recycled outdoor jacket",
+      "market": "Denver, USA",
+      "reference": "Patagonia",
+      "held_out": "The North Face",
+      "taste_brief": {
+        "picks": 8,
+        "checkable": 4,
+        "mean_affinity": 0.9539672009805268,
+        "high": 4
+      },
+      "named_baseline": {
+        "picks": 6,
+        "checkable": 2,
+        "mean_affinity": 0.9677835660822909,
+        "high": 2
+      },
+      "app_baseline": {
+        "picks": 6,
+        "checkable": 0,
+        "mean_affinity": null,
+        "high": 0
+      }
+    },
+    {
+      "product": "Noise cancelling headphones",
+      "market": "Singapore",
+      "reference": "Sony",
+      "held_out": "Bose Corporation",
+      "taste_brief": {
+        "picks": 6,
+        "checkable": 6,
+        "mean_affinity": 0.9460518871805487,
+        "high": 6
+      },
+      "named_baseline": {
+        "picks": 7,
+        "checkable": 3,
+        "mean_affinity": 0.8430133923742805,
+        "high": 1
+      },
+      "app_baseline": {
+        "picks": 6,
+        "checkable": 0,
+        "mean_affinity": null,
+        "high": 0
+      }
+    },
+    {
+      "product": "Matcha latte powder",
+      "market": "Los Angeles, USA",
+      "reference": "Starbucks",
+      "held_out": "Dunkin' Donuts",
+      "taste_brief": {
+        "picks": 7,
+        "checkable": 7,
+        "mean_affinity": 0.8721888825782477,
+        "high": 3
+      },
+      "named_baseline": {
+        "picks": 7,
+        "checkable": 3,
+        "mean_affinity": 0.8595293030364347,
+        "high": 1
+      },
+      "app_baseline": {
+        "picks": 5,
+        "checkable": 1,
+        "mean_affinity": 0.7927091536093973,
+        "high": 0
+      }
+    },
+    {
+      "product": "Minimalist leather wallet",
+      "market": "Amsterdam, Netherlands",
+      "reference": "Bellroy",
+      "held_out": "Herschel Supply Co",
+      "taste_brief": {
+        "picks": 7,
+        "checkable": 6,
+        "mean_affinity": 0.9345341936921033,
+        "high": 6
+      },
+      "named_baseline": {
+        "picks": 7,
+        "checkable": 3,
+        "mean_affinity": 0.8948579259832078,
+        "high": 1
+      },
+      "app_baseline": {
+        "picks": 5,
+        "checkable": 0,
+        "mean_affinity": null,
+        "high": 0
+      }
+    },
+    {
+      "product": "Indie horror video game",
+      "market": "Seattle, USA",
+      "reference": "Steam",
+      "held_out": "Epic Games",
+      "taste_brief": {
+        "picks": 7,
+        "checkable": 4,
+        "mean_affinity": 0.9122971038912377,
+        "high": 3
+      },
+      "named_baseline": {
+        "picks": 7,
+        "checkable": 0,
+        "mean_affinity": null,
+        "high": 0
+      },
+      "app_baseline": {
+        "picks": 6,
+        "checkable": 0,
+        "mean_affinity": null,
+        "high": 0
+      }
+    }
+  ]
+}

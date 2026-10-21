@@ -2,6 +2,24 @@
 
 Run 21 Oct 2026. Same model (Claude Sonnet 5.5) for every arm, 20 products and cities (`CASES` in `scripts/benchmark.mjs`).
 
+## Graded on a held-out competitor (`scripts/benchmark-heldout.mjs`, `heldout.json`)
+
+Each brief was written from one reference brand; its picks are graded on the audience of a competitor the agent never saw,
+in the same city (Allbirds to Veja, Blue Bottle Coffee to Intelligentsia Coffee, Lululemon to Alo Yoga, White Claw to
+Truly Hard Seltzer, the full map is `HELD_OUT` in the script). This removes the main circularity: Taste Brief's picks came
+from the reference brand's Qloo results, not the held-out brand's.
+
+| Who wrote the Meta interests | Found and scored on Qloo | Affinity 0.9 or more |
+|---|---|---|
+| Taste Brief | 115 of 140 (82%) | 86 of 140 (61%) |
+| Same model, no data, told to name specific entities | 45 of 133 (34%) | 25 of 133 (19%) |
+| Same model, no data, as the app asks it | 6 of 115 (5%) | 1 of 115 (1%) |
+
+Ahead of the named-entity baseline in 19 of 20 briefs (one tie): +42 points, 95% bootstrap interval +32 to +53. The
+named-entity baseline was asked again for this run, so its lists differ slightly from the run below.
+
+## Graded on the reference brand's own audience (`summary.json`)
+
 | Who wrote the Meta interests | Found and scored on Qloo | Affinity 0.9 or more |
 |---|---|---|
 | Taste Brief (agent with Qloo tools) | 118 of 143 (83%) | 105 of 143 (73%) |

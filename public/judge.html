@@ -56,18 +56,18 @@ code{font-family:var(--mono);font-size:13px;background:var(--acc-soft);border-ra
   </header>
 
   <section class="panel">
-    <h2>Benchmark: 20 briefs, with and without Qloo</h2>
-    <p>Same model (Claude Sonnet 5.5), 20 products and cities. Every suggested Meta interest is graded by the same rule: find the entity in Qloo by its exact name, then ask Qloo how much the reference brand's audience in that city likes it.</p>
+    <h2>Benchmark: 20 briefs, graded on a competitor the agent never saw</h2>
+    <p>Same model (Claude Sonnet 5.5), 20 products and cities, each brief written from one reference brand. Every suggested Meta interest is graded by the same rule: find the entity in Qloo by its exact name, then ask Qloo how much the audience of a held-out competitor in that city likes it (Allbirds briefs graded on Veja, Lululemon on Alo Yoga, and so on).</p>
     <div class="scroll"><table>
       <thead><tr><th>Who wrote the interests</th><th>Found and scored on Qloo</th><th>Affinity 0.9 or more</th></tr></thead>
       <tbody>
-        <tr><td><strong>Taste Brief</strong> (with Qloo)</td><td class="n">118 / 143 · 83%</td><td class="n"><strong>105 / 143 · 73%</strong></td></tr>
-        <tr><td>Same model, no data, told to name specific brands and shows</td><td class="n">54 / 140 · 39%</td><td class="n">25 / 140 · 18%</td></tr>
-        <tr><td>Same model, no data, as the app asks it</td><td class="n">6 / 117 · 5%</td><td class="n">3 / 117 · 3%</td></tr>
+        <tr><td><strong>Taste Brief</strong> (with Qloo)</td><td class="n">115 / 140 · 82%</td><td class="n"><strong>86 / 140 · 61%</strong></td></tr>
+        <tr><td>Same model, no data, told to name specific brands and shows</td><td class="n">45 / 133 · 34%</td><td class="n">25 / 133 · 19%</td></tr>
+        <tr><td>Same model, no data, as the app asks it</td><td class="n">6 / 115 · 5%</td><td class="n">1 / 115 · 1%</td></tr>
       </tbody>
     </table></div>
-    <p>Against the stronger baseline Taste Brief is ahead in 19 of 20 briefs (one tie): +55 points, 95% bootstrap interval +43 to +67.</p>
-    <p class="note">The grader is Qloo, so for Taste Brief's picks it is partly circular: it measures distance from Qloo's view of the audience, not ad results. Scripts: <code>scripts/benchmark.mjs</code>, <code>scripts/benchmark-strong.mjs</code>.</p>
+    <p>Against the stronger baseline Taste Brief is ahead in 19 of 20 briefs (one tie): +42 points, 95% bootstrap interval +32 to +53. On the reference brand's own audience the gap is wider: 73% against 18%.</p>
+    <p class="note">The grader is still Qloo: it measures fit with Qloo's view of the category's audience, not ad results. Scripts: <code>scripts/benchmark.mjs</code>, <code>scripts/benchmark-strong.mjs</code>, <code>scripts/benchmark-heldout.mjs</code>.</p>
   </section>
 
   <section class="panel">
