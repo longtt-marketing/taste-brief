@@ -97,7 +97,7 @@ export const TOOLS = [
         creative_angles: cited({ angle: str, hook: str }),
         landing_page: { type: "object", properties: { headline: str, subheadline: str, entity_ids: strArr, evidence: strArr } },
         partnerships: cited({ partner: str, idea: str }),
-        test_plan: cited({ hypothesis: str, ad_set: str, kpi: str, stop_if: str }),
+        test_plan: { ...cited({ hypothesis: str, ad_set: str, kpi: str, stop_if: str }), minItems: 1, maxItems: 3 },
         caveats: strArr,
       },
       required: ["audience_summary", "audience_traits", "meta_interests", "creative_angles", "landing_page", "test_plan"],
@@ -217,7 +217,12 @@ export function briefProblem(brief) {
   if (/<\/?(parameter|invoke|function_calls)\b/.test(text)) return "a field contains tool-call markup";
   if (brief.audience_traits.length < 2) return "fewer than 2 audience_traits";
   if (brief.meta_interests.length < 2) return "fewer than 2 meta_interests";
-  if (brief.test_plan.length < 1) return "no test_plan: add 1 to 3 ad tests";
+  if (brief.test_plan.length < 1 || brief.test_plan.length > 3) return "test_plan must contain 1 to 3 ad tests";
+  for (const [n, item] of brief.test_plan.entries()) {
+    for (const key of ["hypothesis", "ad_set", "kpi", "stop_if"]) {
+      if (typeof item?.[key] !== "string" || !item[key].trim()) return `test_plan item ${n + 1} must include a non-empty ${key}`;
+    }
+  }
   const items = ["audience_traits", "meta_interests", "creative_angles", "partnerships", "test_plan"].flatMap((k) => brief[k]);
   const uncited = items.filter((i) => !ids(i?.entity_ids).length).length;
   if (items.length && uncited > items.length / 2) return `${uncited} of ${items.length} items cite no Qloo entity_ids`;

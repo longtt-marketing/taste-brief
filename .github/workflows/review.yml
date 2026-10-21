@@ -1,0 +1,36 @@
+name: Taste Brief review
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+      - name: Use Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Run full offline Node test suite
+        run: npm test
+      - name: Check evidence gate on synthetic fixtures
+        run: node scripts/evidence-gate.mjs
+      - name: Confirm existing public demo still works (read-only)
+        run: node scripts/check-public-demo.mjs
+      - name: Preserve evidence-gate metadata
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidence-gate-report
+          path: evidence-report.json
+          if-no-files-found: ignore

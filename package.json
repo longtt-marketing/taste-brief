@@ -5,7 +5,7 @@
   "license": "MIT",
   "engines": { "node": ">=20" },
   "scripts": {
-    "test": "node --test test/agent.test.js",
+    "test": "node --test",
     "dev": "npx --yes wrangler dev --var MOCK:1",
     "deploy": "npx --yes wrangler deploy",
     "live": "node run-live.mjs"

@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Taste Brief: a decision Qloo changed</title>
+<meta name="description" content="For judges: one real run of Taste Brief, the decision Qloo changed, a blind check of the two plans, and how to reproduce it in two minutes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f4ee;--card:#fff;--ink:#15161a;--mute:#55565f;--faint:#6a6b73;--line:#e3e0d6;--acc:#3a2fd1;--acc-ink:#fff;--acc-soft:#ebe9ff;--ok:#0d6b41;--ok-soft:#e4f1e9;--warn:#8a4a07;--warn-soft:#fbeedd;
+  --display:"Bricolage Grotesque",system-ui,sans-serif;--body:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace}
+@media (prefers-color-scheme:dark){:root{--bg:#121216;--card:#1b1b21;--ink:#f1f0ec;--mute:#b0b0ba;--faint:#9a9aa5;--line:#2c2c35;--acc:#a49dff;--acc-ink:#121216;--acc-soft:#25234a;--ok:#4fd39a;--ok-soft:#14301f;--warn:#f0b75a;--warn-soft:#3a2a10}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 var(--body)}
+main{max-width:960px;margin:0 auto;padding:40px 16px 72px;display:flex;flex-direction:column;gap:20px}
+a{color:var(--acc)}
+a:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+nav{display:flex;flex-wrap:wrap;gap:14px;font-size:14px;color:var(--faint)}
+nav b{font-family:var(--display);font-size:18px;color:var(--ink);letter-spacing:-.01em}
+.eyebrow{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin:0}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(34px,5.5vw,52px);line-height:1.02;letter-spacing:-.03em;margin:4px 0 0}
+h2{font-family:var(--display);font-size:24px;letter-spacing:-.02em;margin:0 0 12px}
+h3{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin:0 0 8px;color:var(--faint)}
+.lede{color:var(--mute);font-size:18px;margin:0;max-width:720px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr))}
+.guess{color:var(--mute)}
+.ours h3{color:var(--acc)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 0}
+.chip{font-size:13px;border-radius:999px;padding:3px 10px;background:var(--line);color:var(--ink)}
+.chip.q{background:var(--acc-soft);color:var(--acc)}
+.chip .n{font-family:var(--mono)}
+.decision{border-left:4px solid var(--acc);padding:4px 0 4px 14px;font-weight:600;margin:16px 0 0}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;vertical-align:top;padding:9px 8px;border-bottom:1px solid var(--line)}
+th{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
+td.n{font-family:var(--mono);white-space:nowrap}
+.scroll{overflow-x:auto}
+ol,ul{padding-left:20px;margin:8px 0 0}
+li{margin:6px 0}
+.note{font-size:13px;color:var(--faint);margin:12px 0 0}
+.btn{display:inline-block;font-weight:600;border-radius:12px;padding:12px 20px;background:var(--acc);color:var(--acc-ink);text-decoration:none;margin-top:12px}
+code{font-family:var(--mono);font-size:13px;background:var(--acc-soft);border-radius:6px;padding:1px 5px;overflow-wrap:anywhere}
+</style>
+</head>
+<body>
+<main>
+  <nav><b>Taste Brief</b><a href="/">Live demo</a><a href="https://github.com/longtt-marketing/taste-brief">Source code</a><a href="https://github.com/longtt-marketing/taste-brief/tree/main/docs/blind-check">Blind check files</a></nav>
+
+  <header>
+    <p class="eyebrow">For judges · two minute read</p>
+    <h1>A decision Qloo changed</h1>
+    <p class="lede">Taste Brief does not predict who will buy. It helps a performance marketer pick which ad tests are worth paying for, and shows the Qloo result behind every suggestion so the marketer can check it.</p>
+  </header>
+
+  <section class="panel">
+    <h2>The case: wool running sneakers, $120, London</h2>
+    <p>Closest brand: Allbirds (Qloo knows the brand, not this shoe). Second city: Hanoi. One live run on 20 Oct 2026.</p>
+    <div class="grid">
+      <div class="guess"><h3>Plain AI, no data</h3>
+        <p>Targets runners and eco shoppers.</p>
+        <div class="chips"><span class="chip">Parkrun</span><span class="chip">Strava</span><span class="chip">London Marathon</span><span class="chip">Local run clubs</span><span class="chip">Veja</span></div>
+        <p class="note">Qloo returned none of these anywhere in the run.</p>
+      </div>
+      <div class="ours"><h3>Taste Brief, from Qloo</h3>
+        <p>Points to studio fitness, design minded brands and folk and soul fans.</p>
+        <div class="chips">
+          <span class="chip q">Tracksmith <span class="n">0.922</span></span><span class="chip q">Outdoor Voices <span class="n">0.966</span></span>
+          <span class="chip q">ClassPass <span class="n">0.962</span></span><span class="chip q">Everlane <span class="n">0.956</span></span>
+          <span class="chip q">Peloton <span class="n">0.957</span></span><span class="chip q">Maggie Rogers <span class="n">0.969</span></span>
+        </div>
+        <p class="note">Numbers are Qloo affinity scores returned in that run, London signal, Allbirds as seed.</p>
+      </div>
+    </div>
+    <p class="decision">Decision: keep the runner audience as the control, and spend the test budget on angles only Qloo surfaced: a clean design message for fans of minimalist running labels, a materials story for Everlane and ClassPass fans, an easy run video for folk and soul fans.</p>
+    <p class="note">Qloo's age and gender index for Allbirds (women +0.33, ages 30 to 34 +0.42) is for the brand's audience, not London residents and not purchases.</p>
+  </section>
+
+  <section class="panel">
+    <h2>A blind check</h2>
+    <p>Both plans from this run were shown to ChatGPT (temporary chat, no memory) and to a fresh Claude instance as "two strategists' plans" for a $3,000, four week Meta test, with numbers and the word Qloo removed. Each saw both orders.</p>
+    <div class="scroll"><table>
+      <thead><tr><th>Reviewer</th><th>Shown first</th><th>Funds first</th><th>Different from competitors, Qloo plan / plain plan</th><th>Runs a Qloo test first</th></tr></thead>
+      <tbody>
+        <tr><td>ChatGPT</td><td>Plain</td><td>Plain</td><td class="n">6 / 3</td><td>Yes</td></tr>
+        <tr><td>ChatGPT</td><td>Qloo</td><td>Plain</td><td class="n">8 / 4</td><td>Yes</td></tr>
+        <tr><td>Claude</td><td>Qloo</td><td>Qloo</td><td class="n">9 / 3</td><td>Yes</td></tr>
+        <tr><td>Claude</td><td>Plain</td><td>Plain</td><td class="n">8 / 4</td><td>Yes</td></tr>
+      </tbody>
+    </table></div>
+    <p>The Qloo plan did not win as a replacement. It won as the source of the angle every reviewer wanted to test, which is how the tool now frames it: every test runs against the obvious ad set as the control. These are AI reviewers, not marketers, and no ads were run.</p>
+  </section>
+
+  <section class="panel">
+    <h2>Reproduce it</h2>
+    <ol>
+      <li>Open the <a href="/">live demo</a> with the judge link from the submission (it carries the access code), or use one of today's free live runs.</li>
+      <li>Click the example <strong>Wool sneakers in London and Hanoi</strong> and press Build the brief. A live run takes about a minute; every Qloo call shows up as it happens.</li>
+      <li>Check the green banner says <strong>Live run on real Qloo data</strong>. Sample data is labelled as such.</li>
+      <li>Next to each line, the Qloo result it cites, with its affinity score. Anything the code could not match is flagged in orange.</li>
+      <li>Read <strong>What to test first</strong>, the plain AI comparison and the city lists. Qloo rankings and the model's wording vary a little between runs.</li>
+    </ol>
+    <a class="btn" href="/">Run the live demo</a>
+  </section>
+
+  <section class="panel">
+    <h2>What the checks prove, and what they don't</h2>
+    <ul>
+      <li>The code checks that every cited entity came back from a Qloo insights call in the same run, and that names and numbers quoted with it match. It does not prove the marketing idea is right. The test plan is how a marketer finds that out.</li>
+      <li>Qloo affinity is aggregate taste overlap, not purchase intent and not a forecast.</li>
+      <li>For brands, artists and TV the city only nudges Qloo's ranking; a name missing from one city's top 12 may still rank lower there. Places are filtered to each city.</li>
+      <li>Interest names still need checking in Meta Ads Manager.</li>
+    </ul>
+    <p class="note">Code: <a href="https://github.com/longtt-marketing/taste-brief/blob/main/src/agent.js">agent</a>, <a href="https://github.com/longtt-marketing/taste-brief/blob/main/src/evidence.js">evidence checks</a>, <a href="https://github.com/longtt-marketing/taste-brief/blob/main/src/markets.js">city comparison</a>, <a href="https://github.com/longtt-marketing/taste-brief/blob/main/src/qloo.js">Qloo client</a>.</p>
+  </section>
+</main>
+</body>
+</html>

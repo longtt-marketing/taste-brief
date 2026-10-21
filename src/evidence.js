@@ -74,7 +74,11 @@ export function verifyItem(field, item, reg) {
   }
   const labelN = norm(label);
   const text = [...(Array.isArray(item?.evidence) ? item.evidence : [item?.evidence ?? ""])].join(" ");
-  const nonSeed = verified.filter((e) => !reg.seeds.has(e.entity_id));
+  // Search finds candidate entities; it does not establish any audience affinity.
+  // Only an entity returned by an insights call can support a non-seed taste claim.
+  const nonSeed = verified.filter((e) => !reg.seeds.has(e.entity_id) && e.via === "insights");
+  const searchOnly = verified.filter((e) => !reg.seeds.has(e.entity_id) && e.via !== "insights");
+  for (const e of searchOnly) problems.push(`"${e.name}" was found by search, not supported by an insights affinity result`);
   const seedNamed = verified.some((e) => reg.seeds.has(e.entity_id) && labelN.includes(norm(e.name)) && norm(e.name).length >= 3);
   // an age / gender claim may rest on the seed: its numbers are then checked against Qloo's demographics for that seed
   const demoVals = verified.filter((e) => reg.seeds.has(e.entity_id)).flatMap((e) => {
@@ -84,6 +88,11 @@ export function verifyItem(field, item, reg) {
   const demographic = demoVals.length > 0 && /\b(age|aged|female|male|women|men|gender|younger|older|skew\w*|over-?index\w*|\d{2}\s*(?:-|–|to)\s*\d{2})\b/i.test(`${label} ${text}`);
   if (verified.length && !nonSeed.length && !seedNamed && !demographic) problems.push("only the seed entity is cited, and the claim is not about the seed");
   if (SINGLE.has(field) && /\s\/\s|\s\+\s/.test(label)) problems.push("combines several entities in one line");
+  if (field === "test_plan") {
+    for (const key of ["hypothesis", "ad_set", "kpi", "stop_if"]) {
+      if (typeof item?.[key] !== "string" || !item[key].trim()) problems.push(`ad test is missing ${key}`);
+    }
+  }
   // a Meta interest or partner names one Qloo result: its label must be that result's name (or contain it, or vice versa)
   if (SINGLE.has(field) && verified.length && labelN.length >= 2
     && !verified.some((e) => { const n = norm(e.name); return n.length >= 2 && (labelN.includes(n) || n.includes(labelN)); })) {
