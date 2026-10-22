@@ -14,7 +14,7 @@ export function missingInMeta(test, metaCheck) {
   return list(metaCheck?.taste_brief).filter((m) => m?.status === "not_found" && named(test.ad_set, m.name)).map((m) => m.name);
 }
 
-/** The tests that can be launched as written. The gate is code, not the model: both judges of 22 Oct asked that a test
+/** The tests that can be launched as written. The gate is code, not the model: two AI reviews we ran on 22 Oct asked that a test
  *  naming a missing interest never be presented, or locked, as ready. */
 export function readyTests(tests, metaCheck) {
   return list(tests).filter((t) => !missingInMeta(t, metaCheck).length);

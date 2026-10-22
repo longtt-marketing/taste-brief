@@ -33,3 +33,18 @@ test("promoCodes: a readable word per show, never twice", () => {
   assert.deepEqual(promoCodes(["Absolutely Not", "Armchair Expert with Dax Shepard", "A Beautiful Mess Podcast", "Absolutely Fine"]), ["ABSOLUTELY", "ARMCHAIR", "BEAUTIFUL", "ABSOLUTELY2"]);
   assert.deepEqual(promoCodes(["How I Built This with Guy Raz", "10% Happier with Dan Harris"]), ["BUILT", "HAPPIER"]); // function words are skipped
 });
+
+test("rank: the buyer's skip policy rules out shows a category brand already uses, in the rule and for the agent", async () => {
+  const { askFirst, policyBlocks, rivalPolicy } = await import("../public/rank.js");
+  const shows = [
+    { name: "A", affinity: 0.95, advertisers: ["Lululemon", "Quince"], rivals: ["Lululemon"] },
+    { name: "B", affinity: 0.92, advertisers: ["Allstate"], rivals: [] },
+    { name: "C", affinity: 0.90, advertisers: ["Shopify"], rivals: [] },
+    { name: "D", affinity: 0.89, advertisers: null, rivals: null },
+  ];
+  assert.deepEqual(askFirst(shows, 3, { skipRivals: true }).shows.map((s) => s.name), ["B", "C"]);
+  assert.ok(askFirst(shows, 3).shows.some((s) => s.name === "A"), "allowed by default");
+  assert.deepEqual(policyBlocks([shows[0], shows[1]], "skip").map((s) => s.name), ["A"]);
+  assert.deepEqual(policyBlocks([shows[0]], "allow"), []);
+  assert.equal(rivalPolicy("anything"), "allow");
+});

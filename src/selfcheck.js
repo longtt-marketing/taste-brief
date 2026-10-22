@@ -3,7 +3,7 @@
 // is weak. Picks below the bar go back to the agent once, to replace or drop. The same rule as the benchmark's strong fit
 // (docs/benchmark: 0.9+ for a held-out competitor), with a middle band so one soft score does not throw a pick away.
 // With a Meta token, the same names are also looked up in Meta's interest search: an interest Meta does not have cannot
-// be targeted, so it goes back to the agent too (both judges of 22 Oct: a test must never target a missing interest).
+// be targeted, so it goes back to the agent too (two AI reviews we ran on 22 Oct: a test must never target a missing interest).
 import { gradePicks, norm } from "./grade.js";
 
 export const STRONG = 0.9, FAIR = 0.8;

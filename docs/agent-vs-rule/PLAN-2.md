@@ -31,3 +31,7 @@ X" only if the interval is above zero; below zero is reported as X doing better;
 - Past sponsorships, not results. Brands often buy where their rivals already are, and the agent and the rule are told
   to weigh category exclusivity, so this outcome can favour taste and popularity by design. Reported, not tuned away.
 - One model call path per brand, no repeats.
+
+## Note added after the run (22 Oct)
+
+"A judge" above means an AI judge we ran to review the entry, not a hackathon judge. Nothing else in this plan was changed.

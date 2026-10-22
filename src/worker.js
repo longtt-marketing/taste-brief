@@ -20,7 +20,7 @@ import { makeQloo } from "./qloo.js";
 import { mockQloo } from "./mock-qloo.js";
 import { anthropicLLM, mockLLM, mockBaselineLLM } from "./llm.js";
 import { draftOutreach, mockOutreachLLM, lintDraft, OUTREACH_SYSTEM, OUTREACH_TOOL } from "./outreach.js";
-import { askFirst, promoCodes } from "../public/rank.js";
+import { askFirst, promoCodes, rivalPolicy, policyBlocks } from "../public/rank.js";
 
 /** Constant-time compare for the demo access code. */
 function same(a, b) {
@@ -145,6 +145,7 @@ export default {
       const market = String(body.market || "").slice(0, 120).trim();
       const references = String(body.references || "").slice(0, 300).trim();
       const marketB = String(body.compare_market || "").slice(0, 120).trim();
+      const rivals = rivalPolicy(body.rivals); // the buyer's choice for shows where a category brand already advertises
       if (product.length < 3 || market.length < 2) return json({ error: "product and market are required" }, 400);
 
       const acc = await access(env, body.code);
@@ -181,7 +182,7 @@ export default {
             if (p.error) return { error: p.error };
             bought.pods = p; bought.seeds = seeds;
             // the facts only: the page's fixed rule (askFirst) is not passed, so the choice is the agent's own
-            return { n: p.shows.length, for_model: { category: p.category, shows: p.shows.map((x) => ({ name: x.name, about: String(x.about || "").slice(0, 160), tags: list(x.tags), taste_fit: Math.round(x.affinity * 1000) / 1000,
+            return { n: p.shows.length, for_model: { category: p.category, buyer_policy: rivals === "skip" ? "The buyer skips shows where a brand of the category already advertises: do not choose them." : "The buyer allows shows where a brand of the category already advertises; weigh exclusivity.", shows: p.shows.map((x) => ({ name: x.name, about: String(x.about || "").slice(0, 160), tags: list(x.tags), taste_fit: Math.round(x.affinity * 1000) / 1000,
               popularity: Math.round((Number(x.popularity) || 0) * 1000) / 1000, advertisers_found: Array.isArray(x.advertisers) ? x.advertisers.length : "not in our data", sample_advertisers: list(x.advertisers).slice(0, 6),
               category_brands_found: x.rivals ?? "unknown" })) } };
           },
@@ -190,6 +191,9 @@ export default {
             if (!p) return { error: "call podcasts first" };
             const chosen = list(shows).slice(0, 3).map((n) => p.shows.find((x) => norm(x.name) === norm(n))).filter(Boolean);
             if (!chosen.length) return { error: "use exact show names from the podcasts result" };
+            // the buyer's "skip" is enforced here, whatever the model chose
+            const blocked = policyBlocks(chosen, rivals);
+            if (blocked.length) return { error: `The buyer chose to skip shows where a ${p.category || "category"} brand already advertises: ${blocked.map((x) => x.name).join(", ")}. Choose other shows.` };
             const codes = promoCodes(chosen.map((x) => x.name));
             const o = await draftOutreach({ llm: outLLM, product, market, shows: chosen, codes, category: p.category, alsoLike: alsoLikeFrom(registry, bought.seeds.map((x) => x.entity_id)),
               reference: bought.seeds.map((x) => x.name).join(", "), timeoutMs: Math.min(60000, RUN_TIMEOUT_MS - (Date.now() - t0) - 30000) });
@@ -231,7 +235,7 @@ export default {
           // the agent's own podcast step when it took it; otherwise the same steps run here as a fallback
           bought.pods ? Promise.resolve({ ...bought.pods, outreach: bought.outreach || undefined }).then(async (p) => {
             if (p.outreach) return p;
-            const first = askFirst(p.shows).shows;
+            const first = askFirst(p.shows, 3, { skipRivals: rivals === "skip" }).shows;
             if (!first.length) return p;
             p.outreach = await draftOutreach({ llm: outLLM, product, market, shows: first, codes: promoCodes(first.map((x) => x.name)), category: p.category,
               alsoLike: alsoLikeFrom(out.registry, out.seeds), reference: seedEntities.map((e) => e.name).join(", "), timeoutMs: Math.min(60000, RUN_TIMEOUT_MS - (Date.now() - t0) - 15000) })
@@ -241,7 +245,7 @@ export default {
           }) : seedEntities.length ? podcastPartners({ qloo, seeds: seedEntities, take: 20, category: categoryFor(references, out.brief?.category) })
             // the agent's outreach drafts for the shows to ask first, as soon as the shows are known
             .then(async (p) => {
-              const first = askFirst(p?.shows).shows;
+              const first = askFirst(p?.shows, 3, { skipRivals: rivals === "skip" }).shows;
               if (!first.length) return p;
               const codes = promoCodes(first.map((s) => s.name));
               const seedSet = new Set(out.seeds);
@@ -269,7 +273,7 @@ export default {
         const runInfo = { version: env.CF_VERSION_METADATA?.id || "local", seconds: Math.round((Date.now() - t0) / 1000),
           qloo_calls: qlooCalls, model_calls: (llm.usage?.calls || 0) + (baseLLM.usage?.calls || 0) + (outLLM.usage?.calls || 0), at: new Date().toISOString() };
         // the inputs go back to the same visitor only, so the page can lock the test plan with them
-        const result = { ...meta, product, references, compare_market: marketB, market, ...out, baseline, unbacked, scored, markets, podcasts, meta_check, run: runInfo };
+        const result = { ...meta, product, references, compare_market: marketB, market, rival_policy: rivals, ...out, baseline, unbacked, scored, markets, podcasts, meta_check, run: runInfo };
         // only the owner's runs (access code) replace the recorded example: a visitor's free run of the same inputs must
         // not change the run the story and the judge page quote
         if (keepsReplay(acc, body, result) && env.QUOTA) {

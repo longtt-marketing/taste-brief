@@ -28,7 +28,7 @@ Method:
 6. draft_outreach: choose up to three shows to ask for rates first and call it with their exact names and one sentence of
    reason. Weigh five things and name the ones that decided it: does the show sell ads (advertisers found; one is thin
    evidence, many is strong); is a brand of the category already there (it may hold exclusivity, or it may show the
-   category works on that show); does the show's subject and tone suit this product and price; taste fit; and
+   category works on that show; if the result carries a buyer_policy that skips such shows, never choose them); does the show's subject and tone suit this product and price; taste fit; and
    popularity (Qloo's 0 to 1 measure of how widely the show is liked, the nearest thing to reach you have). Skip a
    show whose subject plainly clashes with the product (a children's show for alcohol). It writes a rate request and a
    host-read script for each and tells you whether each draft passed its checks.

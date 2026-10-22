@@ -87,7 +87,7 @@ export function checkOutreach(out, shows, codes) {
  *  ask for the five things a buyer needs, carry the code, and invent no numbers; how many brackets are left. */
 export function lintDraft(d, { product = "", fit = null } = {}) {
   // asked in the body itself: a subject line "Sponsorship rates" is not a question, and "availability" may mean slots
-  // (judge, 22 Oct)
+  // (AI review, 22 Oct)
   const email = String(d.email_body || "").toLowerCase();
   const asks = { rate: /\brates?\b/.test(email), downloads: /download/.test(email), host_read: /host[- ]read/.test(email),
     dates: /\bdates?\b/.test(email), exclusive: /exclusiv/.test(email) };

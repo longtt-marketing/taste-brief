@@ -67,9 +67,9 @@ h1{font-family:var(--display);font-weight:700;font-size:clamp(36px,10vw,66px);li
 .presets{display:flex;flex-wrap:wrap;align-items:center;gap:8px;color:var(--mute);font-size:14px;margin:0 0 18px}
 form .fields{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr))}
 label{display:flex;flex-wrap:wrap;align-items:baseline;align-content:flex-end;gap:6px;font-weight:600;font-size:14px}
-label>input{flex:1 0 100%;min-width:0}
+label>input,label>select{flex:1 0 100%;min-width:0}
 label small{font-weight:400;color:var(--faint)}
-input{font:inherit;font-weight:400;font-size:16px;color:var(--ink);background:var(--field);border:1px solid var(--neg);border-radius:12px;padding:12px 14px;min-height:48px}
+input,select{font:inherit;font-weight:400;font-size:16px;color:var(--ink);background:var(--field);border:1px solid var(--neg);border-radius:12px;padding:12px 14px;min-height:48px}
 .row{display:flex;flex-wrap:wrap;align-items:center;gap:16px;margin-top:18px}
 button{font:inherit;font-weight:700;border:0;border-radius:14px;padding:12px 22px;min-height:52px;cursor:pointer;background:var(--acc);color:var(--acc-ink)}
 button:disabled{opacity:.6;cursor:progress}
@@ -291,6 +291,7 @@ details.more>.in{padding:0 16px 16px;display:flex;flex-direction:column;gap:16px
         <label>Market<input name="market" required minlength="2" maxlength="120" placeholder="New York, NY"></label>
         <label>Compare with <small>optional</small><input name="compare_market" maxlength="120" placeholder="London, UK"></label>
         <label>Brand or competitor <small>optional</small><input name="references" maxlength="300" placeholder="Allbirds"></label>
+        <label>Shows a rival already sponsors<select name="rivals"><option value="allow">Allow them</option><option value="skip">Skip them</option></select></label>
       </div>
       <div class="row">
         <button id="go" type="submit">Build the brief</button>
@@ -499,7 +500,7 @@ function podcastPlan(j) {
   // in taste order, so the cards read #1, #2, #5 like the worksheet below them
   const chosen = p.outreach?.chosen_by === "agent" ? list(p.outreach.shows).map((d) => shows.find((s) => s.name === d.show)).filter(Boolean)
     .sort((a, b) => (Number(b.affinity) || 0) - (Number(a.affinity) || 0)) : [];
-  const auto = askFirst(shows);
+  const auto = askFirst(shows, 3, { skipRivals: j.rival_policy === "skip" });
   const first = chosen.length ? chosen : auto.shows, selling = chosen.length ? chosen.some((s) => list(s.advertisers).length) : auto.selling;
   const ordered = [...groups.flatMap((g) => g.rows), ...unknown.slice(5)];
   const codeOrder = [...first, ...ordered.filter((s) => !first.includes(s))];
@@ -512,7 +513,7 @@ function podcastPlan(j) {
   const drafts = new Map(list(p.outreach?.shows).map((d) => [d.show, d]));
   // where the agent's choice differs from the fixed rule, say so: the rule is what the page would pick on its own
   const ruleOnly = chosen.length ? auto.shows.filter((s) => !chosen.some((c) => c.name === s.name)).map((s) => s.name) : [];
-  return { cat, groups, first, selling, all: ordered, drafts, outreachError: p.outreach?.error || null, reason: p.outreach?.chosen_by === "agent" ? p.outreach.reason : "", byRule: p.outreach?.chosen_by === "rule" && list(p.outreach?.shows).length > 0,
+  return { cat, groups, first, selling, all: ordered, drafts, outreachError: p.outreach?.error || null, reason: p.outreach?.chosen_by === "agent" ? p.outreach.reason : "", byRule: p.outreach?.chosen_by === "rule" && list(p.outreach?.shows).length > 0, skip: j.rival_policy === "skip",
     ruleOnly, sameAsRule: chosen.length > 0 && !ruleOnly.length };
 }
 const contactUrl = (s) => `https://www.google.com/search?q=${encodeURIComponent(`${s.name} podcast advertising`)}`;
@@ -712,7 +713,7 @@ function planPanel(j) {
     : plan.cat && plan.first.every((s) => !list(s.rivals).length) ? `They sell ads, and no ${esc(plan.cat)} brand was found in their episode notes. Rates, reach and open dates are not verified: the email asks for them.`
     : "They already sell ads, and your buyers like them. Rates, reach and open dates are not verified: the email asks for them.";
   return `<section class="plan" id="plan" tabindex="-1"><div><p class="stepk">Your podcast plan</p><h2>${hasDrafts ? "Three shows to ask first, with the email ready" : `Three shows ${fans} love to ask first`}</h2><p class="lede2">${lede}</p></div>
-    ${plan.reason ? `<p class="agentwhy"><span class="pill live">Chosen by the agent</span> ${esc(plan.reason)} <span class="rulecmp">${plan.sameAsRule ? "The fixed rule (sells ads, no category brand found, then taste fit) picks the same three." : `The fixed rule would have asked ${esc(plan.ruleOnly.join(", "))} instead.`}</span></p>` : ""}${plan.byRule ? `<p class="agentwhy"><span class="pill">Chosen by the fixed rule</span> The agent did not choose shows this time, so the page used its fixed rule: shows that sell ads with no ${esc(plan.cat || "category")} brand found, then taste fit.</p>` : ""}
+    ${plan.reason ? `<p class="agentwhy"><span class="pill live">Chosen by the agent</span> ${esc(plan.reason)} <span class="rulecmp">${plan.sameAsRule ? "The fixed rule (sells ads, no category brand found, then taste fit) picks the same three." : `The fixed rule would have asked ${esc(plan.ruleOnly.join(", "))} instead.`}</span></p>` : ""}${plan.skip ? `<p class="agentwhy"><span class="pill">Your choice</span> Skip shows where a ${esc(plan.cat || "category")} brand already advertises. The app holds the agent to it.</p>` : ""}${plan.byRule ? `<p class="agentwhy"><span class="pill">Chosen by the fixed rule</span> The agent did not choose shows this time, so the page used its fixed rule: shows that sell ads with no ${esc(plan.cat || "category")} brand found, then taste fit.</p>` : ""}
     <div class="asks">${plan.first.map(firstCard).join("")}</div>
     ${hasDrafts ? `<p class="note" style="margin:0">Drafts written by the agent from this run's Qloo results and the product facts you gave; anything it was not told is in [brackets]. Nothing is sent: you copy, edit and send. A proposed code works once the show agrees to read it: it shows which orders came from each show, and the tagged link counts clicks. Neither counts how often the ad played.</p>` : plan.outreachError ? `<p class="note err" style="margin:0">The agent could not write the drafts this time: ${esc(plan.outreachError)}</p>` : ""}
     ${tests ? `<p class="note" style="margin:0">Next to the podcasts: ${tests} Meta test${tests === 1 ? "" : "s"} against your usual ad, locked before you spend. <a href="#tests">Open the tests</a></p>` : ""}

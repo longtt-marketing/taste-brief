@@ -41,7 +41,7 @@ const CLAIMS = /\b(comfortable|comfort|durable|lightweight|breathable|soft|cozy|
 const PREVIOUS = existsSync("docs/outreach-eval.json") ? (({ run_at, pass, drafts, first_run, known_issue, earlier }) => ({ run_at, pass, drafts, first_run, known_issue, earlier }))(JSON.parse(readFileSync("docs/outreach-eval.json", "utf8"))) : null;
 const rows = [], full = [];
 // how alike one product's drafts are once the show's name and code are taken out: mean word overlap (Jaccard) over pairs.
-// 1 would be one template with the name swapped; a judge (22 Oct) read the earlier drafts as one template.
+// 1 would be one template with the name swapped; an AI review we ran (22 Oct) read the earlier drafts as one template.
 const words = (t, d) => new Set(String(t || "").toLowerCase().split(d.show.toLowerCase()).join(" ").split(String(d.code || "").toLowerCase()).join(" ")
   .replace(/\[[^\]]*\]/g, " ").replace(/[^a-z0-9$]+/g, " ").split(" ").filter((w) => w.length > 2));
 const jac = (a, b) => { const i = [...a].filter((x) => b.has(x)).length; return a.size + b.size - i ? i / (a.size + b.size - i) : 1; };
@@ -60,7 +60,7 @@ for (const [product, market, reference] of CASES) {
     row.seed_matched_exactly = !!hit && key(hit.name) === key(reference);
     if (!hit) throw new Error("reference brand not in Qloo");
     const seed = { entity_id: hit.entity_id, name: hit.name };
-    row.seed = hit.name; // reported: a near-miss match (a judge found Monarch Money matched another brand) reads the wrong audience
+    row.seed = hit.name; // reported: a near-miss match (an AI review found Monarch Money matched another brand) reads the wrong audience
     const category = categoryFor(reference, null);
     const pods = await podcastPartners({ qloo, seeds: [seed], take: 20, category });
     const { shows } = askFirst(pods.shows);

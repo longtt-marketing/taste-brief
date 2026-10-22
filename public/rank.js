@@ -30,8 +30,8 @@ export function sponsorReady(shows) {
 /** The shows to ask first: ones that sell ads with no brand of the category found in their notes (best taste fit
  *  first), then ones a rival already uses (in the order above); with no ad data at all, the best taste fits. Used by the
  *  page and by the worker, so the plan and the agent's drafts name the same shows. */
-export function askFirst(shows, n = 3) {
-  const list = Array.isArray(shows) ? shows : [];
+export function askFirst(shows, n = 3, { skipRivals = false } = {}) {
+  const list = (Array.isArray(shows) ? shows : []).filter((s) => !skipRivals || !(Array.isArray(s.rivals) && s.rivals.length));
   const byAff = (a, b) => (Number(b.affinity) || 0) - (Number(a.affinity) || 0);
   const ads = (s) => (Array.isArray(s.advertisers) ? s.advertisers : null);
   const rivals = (s) => (Array.isArray(s.rivals) ? s.rivals : []);
@@ -39,6 +39,15 @@ export function askFirst(shows, n = 3) {
   const taken = sponsorReady(list.filter((s) => rivals(s).length));
   const selling = [...open, ...taken].slice(0, n);
   return { shows: selling.length ? selling : [...list].sort(byAff).slice(0, n), selling: selling.length > 0 };
+}
+
+/** The buyer's choice for shows where a brand of the category already advertises: "allow" (the default: it shows the
+ *  category works there, and the agent weighs exclusivity) or "skip" (never ask them). Anything else reads as "allow". */
+export const rivalPolicy = (v) => (v === "skip" ? "skip" : "allow");
+
+/** The chosen shows the buyer's policy rules out, in plain code so the agent cannot quietly override it. */
+export function policyBlocks(shows, policy) {
+  return rivalPolicy(policy) === "skip" ? (Array.isArray(shows) ? shows : []).filter((s) => Array.isArray(s?.rivals) && s.rivals.length) : [];
 }
 
 const STOP = new Set(["the", "a", "an", "with", "and", "of", "podcast", "show", "has", "not", "but", "in", "on", "for", "to", "my", "your", "our", "is", "it", "me", "its", "this", "that", "you",

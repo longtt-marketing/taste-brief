@@ -26,3 +26,7 @@ the judge asked about, without reading it as significant.
 
 As in `PLAN-2`. One run per brand. The prompt change was made before this run and is the app's current prompt; it was
 not tuned on these brands.
+
+## Note added after the run (22 Oct)
+
+"A judge" above means an AI judge we ran to review the entry, not a hackathon judge. Nothing else in this plan was changed.
