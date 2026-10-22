@@ -337,3 +337,17 @@ test("evidence gate: a popularity score Qloo returned for the cited entity may b
   ] }, reg);
   assert.deepEqual(r.rows.map((x) => x.grounded), [true, false]);
 });
+
+test("agent: it ranks podcasts and chooses the shows that get drafts, through its own tools", async () => {
+  const got = [];
+  const actions = {
+    podcasts: async (input, ctx) => { got.push(["podcasts", input, ctx.registry.length > 0]); return { n: 2, for_model: { shows: [{ name: "Show A" }, { name: "Show B" }] } }; },
+    draft_outreach: async (input) => { got.push(["draft_outreach", input]); return { n: 2, for_model: { drafts: 2, checks: [] } }; },
+  };
+  const out = await runAgent({ llm: mockLLM(), qloo: mockQloo(), product: "wool sneakers", market: "London", references: "Allbirds", actions });
+  assert.equal(got[0][0], "podcasts"); assert.ok(got[0][2], "the handler sees the run's Qloo results");
+  assert.deepEqual(got[1], ["draft_outreach", { shows: ["Show A", "Show B"], reason: "[SYNTHETIC] highest taste fit" }]);
+  assert.ok(out.trace.some((s) => s.tool === "draft_outreach" && s.n === 2));
+  const plain = await runAgent({ llm: mockLLM(), qloo: mockQloo(), product: "wool sneakers", market: "London" });
+  assert.ok(plain.trace.some((s) => s.tool === "podcasts" && s.error === "not available in this run"), "without handlers the tools say so and the run goes on");
+});

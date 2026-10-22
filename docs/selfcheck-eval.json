@@ -1,0 +1,972 @@
+{
+ "run_at": "2026-10-22T04:49:07.314Z",
+ "note": "First brief (before the self-check) and final brief (after any rewrite) graded by Qloo on the benchmark's held-out competitor in the same city: share of picks at affinity 0.9 or more. A brief that was not rewritten scores the same both times by construction. Exploratory, 10 cases.",
+ "runs": 10,
+ "revised": 5,
+ "rival_is_held_out": 3,
+ "share_09": {
+  "first": 0.74,
+  "final": 0.801,
+  "cases": 7
+ },
+ "revised_cases": [
+  {
+   "product": "Specialty coffee subscription, $25 a month",
+   "dropped": [
+    "Illy"
+   ],
+   "added": [],
+   "first": 0.875,
+   "final": 1,
+   "rival_is_held_out": true
+  },
+  {
+   "product": "Flavored sparkling water",
+   "dropped": [
+    "RXBAR",
+    "Bubly"
+   ],
+   "added": [
+    "Care/of"
+   ],
+   "first": 0.25,
+   "final": 0.286,
+   "rival_is_held_out": false
+  },
+  {
+   "product": "Affordable skincare serum, $15",
+   "dropped": [
+    "Avène",
+    "Clarins",
+    "L'Oréal Paris"
+   ],
+   "added": [
+    "Clinique"
+   ],
+   "first": 0.5,
+   "final": 0.75,
+   "rival_is_held_out": false
+  },
+  {
+   "product": "Hard seltzer",
+   "dropped": [
+    "Tito's Handmade Vodka"
+   ],
+   "added": [
+    "Casamigos"
+   ],
+   "first": 0.857,
+   "final": 1,
+   "rival_is_held_out": false
+  },
+  {
+   "product": "Meal kit delivery",
+   "dropped": [
+    "Deliciously Ella"
+   ],
+   "added": [],
+   "first": 0.857,
+   "final": 1,
+   "rival_is_held_out": true
+  }
+ ],
+ "rows": [
+  {
+   "product": "Specialty coffee subscription, $25 a month",
+   "market": "Seoul, South Korea",
+   "reference": "Blue Bottle Coffee",
+   "held_out": "Intelligentsia Coffee",
+   "rival": "Intelligentsia Coffee",
+   "rival_is_held_out": true,
+   "revised": true,
+   "first_weak": [
+    "Illy"
+   ],
+   "dropped": [
+    "Illy"
+   ],
+   "added": [],
+   "first_share_09": 0.875,
+   "final_share_09": 1,
+   "first": [
+    {
+     "name": "Stumptown Coffee Roasters",
+     "affinity": 0.976,
+     "status": "scored"
+    },
+    {
+     "name": "Verve Coffee Roasters",
+     "affinity": 0.972,
+     "status": "scored"
+    },
+    {
+     "name": "La Colombe Coffee Roasters",
+     "affinity": 0.952,
+     "status": "scored"
+    },
+    {
+     "name": "Illy",
+     "affinity": null,
+     "status": "no_score"
+    },
+    {
+     "name": "Cafe Onion",
+     "affinity": 0.907,
+     "status": "scored"
+    },
+    {
+     "name": "Eater",
+     "affinity": 0.929,
+     "status": "scored"
+    },
+    {
+     "name": "Tartine Bakery",
+     "affinity": 0.933,
+     "status": "scored"
+    },
+    {
+     "name": "Hospital Playlist",
+     "affinity": 0.961,
+     "status": "scored"
+    }
+   ],
+   "final": [
+    {
+     "name": "Stumptown Coffee Roasters",
+     "affinity": 0.976,
+     "status": "scored"
+    },
+    {
+     "name": "Verve Coffee Roasters",
+     "affinity": 0.972,
+     "status": "scored"
+    },
+    {
+     "name": "La Colombe Coffee Roasters",
+     "affinity": 0.952,
+     "status": "scored"
+    },
+    {
+     "name": "Cafe Onion",
+     "affinity": 0.907,
+     "status": "scored"
+    },
+    {
+     "name": "Eater",
+     "affinity": 0.929,
+     "status": "scored"
+    },
+    {
+     "name": "Tartine Bakery",
+     "affinity": 0.933,
+     "status": "scored"
+    },
+    {
+     "name": "Hospital Playlist",
+     "affinity": 0.961,
+     "status": "scored"
+    }
+   ]
+  },
+  {
+   "product": "Turntable for first time vinyl buyers, $199",
+   "market": "Berlin, Germany",
+   "reference": "Audio-Technica",
+   "held_out": "Sonos",
+   "rival": "Anker",
+   "rival_is_held_out": false,
+   "revised": false,
+   "first_weak": [],
+   "dropped": [],
+   "added": [],
+   "first_share_09": 0.857,
+   "final_share_09": 0.857,
+   "first": [
+    {
+     "name": "Discogs",
+     "affinity": 0.94,
+     "status": "scored"
+    },
+    {
+     "name": "Bandcamp",
+     "affinity": 0.913,
+     "status": "scored"
+    },
+    {
+     "name": "Stones Throw Records",
+     "affinity": 0.921,
+     "status": "scored"
+    },
+    {
+     "name": "Ableton",
+     "affinity": 0.939,
+     "status": "scored"
+    },
+    {
+     "name": "Native Instruments",
+     "affinity": 0.922,
+     "status": "scored"
+    },
+    {
+     "name": "Sennheiser",
+     "affinity": 0.94,
+     "status": "scored"
+    },
+    {
+     "name": "Last.fm",
+     "affinity": 0.893,
+     "status": "scored"
+    }
+   ],
+   "final": [
+    {
+     "name": "Discogs",
+     "affinity": 0.94,
+     "status": "scored"
+    },
+    {
+     "name": "Bandcamp",
+     "affinity": 0.913,
+     "status": "scored"
+    },
+    {
+     "name": "Stones Throw Records",
+     "affinity": 0.921,
+     "status": "scored"
+    },
+    {
+     "name": "Ableton",
+     "affinity": 0.939,
+     "status": "scored"
+    },
+    {
+     "name": "Native Instruments",
+     "affinity": 0.922,
+     "status": "scored"
+    },
+    {
+     "name": "Sennheiser",
+     "affinity": 0.94,
+     "status": "scored"
+    },
+    {
+     "name": "Last.fm",
+     "affinity": 0.893,
+     "status": "scored"
+    }
+   ]
+  },
+  {
+   "product": "Plant based protein bars",
+   "market": "Los Angeles, USA",
+   "reference": "RXBAR",
+   "held_out": "Kind Snacks",
+   "rival": "Clif Bar",
+   "rival_is_held_out": false,
+   "revised": false,
+   "first_weak": [],
+   "dropped": [],
+   "added": [],
+   "first_share_09": 1,
+   "final_share_09": 1,
+   "first": [
+    {
+     "name": "Primal Kitchen",
+     "affinity": 0.937,
+     "status": "scored"
+    },
+    {
+     "name": "Health-Ade Kombucha",
+     "affinity": 0.95,
+     "status": "scored"
+    },
+    {
+     "name": "Thrive Market",
+     "affinity": 0.944,
+     "status": "scored"
+    },
+    {
+     "name": "Vital Proteins",
+     "affinity": 0.945,
+     "status": "scored"
+    },
+    {
+     "name": "Perfect Bar",
+     "affinity": 0.941,
+     "status": "scored"
+    },
+    {
+     "name": "Banza",
+     "affinity": 0.953,
+     "status": "scored"
+    },
+    {
+     "name": "Cafe Gratitude",
+     "affinity": 0.931,
+     "status": "scored"
+    },
+    {
+     "name": "The Chef Show",
+     "affinity": 0.977,
+     "status": "scored"
+    }
+   ],
+   "final": [
+    {
+     "name": "Primal Kitchen",
+     "affinity": 0.937,
+     "status": "scored"
+    },
+    {
+     "name": "Health-Ade Kombucha",
+     "affinity": 0.95,
+     "status": "scored"
+    },
+    {
+     "name": "Thrive Market",
+     "affinity": 0.944,
+     "status": "scored"
+    },
+    {
+     "name": "Vital Proteins",
+     "affinity": 0.945,
+     "status": "scored"
+    },
+    {
+     "name": "Perfect Bar",
+     "affinity": 0.941,
+     "status": "scored"
+    },
+    {
+     "name": "Banza",
+     "affinity": 0.953,
+     "status": "scored"
+    },
+    {
+     "name": "Cafe Gratitude",
+     "affinity": 0.931,
+     "status": "scored"
+    },
+    {
+     "name": "The Chef Show",
+     "affinity": 0.977,
+     "status": "scored"
+    }
+   ]
+  },
+  {
+   "product": "Flavored sparkling water",
+   "market": "Chicago, USA",
+   "reference": "LaCroix",
+   "held_out": "Perrier",
+   "rival": "Waterloo Sparkling Water",
+   "rival_is_held_out": false,
+   "revised": true,
+   "first_weak": [
+    "RXBAR",
+    "Bubly"
+   ],
+   "dropped": [
+    "RXBAR",
+    "Bubly"
+   ],
+   "added": [
+    "Care/of"
+   ],
+   "first_share_09": 0.25,
+   "final_share_09": 0.286,
+   "first": [
+    {
+     "name": "Trader Joe's",
+     "affinity": 0.831,
+     "status": "scored"
+    },
+    {
+     "name": "RXBAR",
+     "affinity": null,
+     "status": "no_score"
+    },
+    {
+     "name": "Kind Snacks",
+     "affinity": 0.869,
+     "status": "scored"
+    },
+    {
+     "name": "Orangetheory Fitness",
+     "affinity": 0.845,
+     "status": "scored"
+    },
+    {
+     "name": "Sylvan Esso",
+     "affinity": 0.9,
+     "status": "scored"
+    },
+    {
+     "name": "Bleachers (band)",
+     "affinity": 0.869,
+     "status": "scored"
+    },
+    {
+     "name": "Grace and Frankie",
+     "affinity": 0.927,
+     "status": "scored"
+    },
+    {
+     "name": "Bubly",
+     "affinity": null,
+     "status": "no_match"
+    }
+   ],
+   "final": [
+    {
+     "name": "Trader Joe's",
+     "affinity": 0.831,
+     "status": "scored"
+    },
+    {
+     "name": "Kind Snacks",
+     "affinity": 0.869,
+     "status": "scored"
+    },
+    {
+     "name": "Orangetheory Fitness",
+     "affinity": 0.845,
+     "status": "scored"
+    },
+    {
+     "name": "Sylvan Esso",
+     "affinity": 0.9,
+     "status": "scored"
+    },
+    {
+     "name": "Bleachers (band)",
+     "affinity": 0.869,
+     "status": "scored"
+    },
+    {
+     "name": "Grace and Frankie",
+     "affinity": 0.927,
+     "status": "scored"
+    },
+    {
+     "name": "Care/of",
+     "affinity": 0.821,
+     "status": "scored"
+    }
+   ]
+  },
+  {
+   "product": "Affordable skincare serum, $15",
+   "market": "Paris, France",
+   "reference": "The Ordinary",
+   "held_out": "CeraVe",
+   "rival": "Typology Skincare",
+   "rival_is_held_out": false,
+   "revised": true,
+   "first_weak": [
+    "Avène",
+    "Clarins",
+    "L'Oréal Paris"
+   ],
+   "dropped": [
+    "Avène",
+    "Clarins",
+    "L'Oréal Paris"
+   ],
+   "added": [
+    "Clinique"
+   ],
+   "first_share_09": 0.5,
+   "final_share_09": 0.75,
+   "first": [
+    {
+     "name": "Vichy",
+     "affinity": 0.909,
+     "status": "scored"
+    },
+    {
+     "name": "Avène",
+     "affinity": null,
+     "status": "no_score"
+    },
+    {
+     "name": "Clarins",
+     "affinity": null,
+     "status": "no_score"
+    },
+    {
+     "name": "Kiehl's",
+     "affinity": 0.936,
+     "status": "scored"
+    },
+    {
+     "name": "L'Oréal Paris",
+     "affinity": null,
+     "status": "no_score"
+    },
+    {
+     "name": "Emily in Paris",
+     "affinity": 0.97,
+     "status": "scored"
+    }
+   ],
+   "final": [
+    {
+     "name": "Vichy",
+     "affinity": 0.909,
+     "status": "scored"
+    },
+    {
+     "name": "Kiehl's",
+     "affinity": 0.936,
+     "status": "scored"
+    },
+    {
+     "name": "Emily in Paris",
+     "affinity": 0.97,
+     "status": "scored"
+    },
+    {
+     "name": "Clinique",
+     "affinity": null,
+     "status": "no_match"
+    }
+   ]
+  },
+  {
+   "product": "Yoga leggings",
+   "market": "Sydney, Australia",
+   "reference": "Lululemon",
+   "held_out": "Alo Yoga",
+   "rival": "Lorna Jane",
+   "rival_is_held_out": false,
+   "revised": false,
+   "first_weak": [],
+   "dropped": [],
+   "added": [],
+   "first_share_09": 0.857,
+   "final_share_09": 0.857,
+   "first": [
+    {
+     "name": "ClassPass",
+     "affinity": 0.952,
+     "status": "scored"
+    },
+    {
+     "name": "Alo Yoga",
+     "affinity": null,
+     "status": "no_score"
+    },
+    {
+     "name": "Aritzia",
+     "affinity": 0.95,
+     "status": "scored"
+    },
+    {
+     "name": "Orangetheory Fitness",
+     "affinity": 0.931,
+     "status": "scored"
+    },
+    {
+     "name": "Vance Joy",
+     "affinity": 0.977,
+     "status": "scored"
+    },
+    {
+     "name": "The Paper Kites",
+     "affinity": 0.964,
+     "status": "scored"
+    },
+    {
+     "name": "The Bold Type",
+     "affinity": 0.958,
+     "status": "scored"
+    }
+   ],
+   "final": [
+    {
+     "name": "ClassPass",
+     "affinity": 0.952,
+     "status": "scored"
+    },
+    {
+     "name": "Alo Yoga",
+     "affinity": null,
+     "status": "no_score"
+    },
+    {
+     "name": "Aritzia",
+     "affinity": 0.95,
+     "status": "scored"
+    },
+    {
+     "name": "Orangetheory Fitness",
+     "affinity": 0.931,
+     "status": "scored"
+    },
+    {
+     "name": "Vance Joy",
+     "affinity": 0.977,
+     "status": "scored"
+    },
+    {
+     "name": "The Paper Kites",
+     "affinity": 0.964,
+     "status": "scored"
+    },
+    {
+     "name": "The Bold Type",
+     "affinity": 0.958,
+     "status": "scored"
+    }
+   ]
+  },
+  {
+   "product": "Hard seltzer",
+   "market": "Austin, USA",
+   "reference": "White Claw",
+   "held_out": "Truly Hard Seltzer",
+   "rival": "High Noon Sun Sips",
+   "rival_is_held_out": false,
+   "revised": true,
+   "first_weak": [
+    "Tito's Handmade Vodka"
+   ],
+   "dropped": [
+    "Tito's Handmade Vodka"
+   ],
+   "added": [
+    "Casamigos"
+   ],
+   "first_share_09": 0.857,
+   "final_share_09": 1,
+   "first": [
+    {
+     "name": "Tito's Handmade Vodka",
+     "affinity": null,
+     "status": "no_match"
+    },
+    {
+     "name": "Barstool Sports",
+     "affinity": 0.924,
+     "status": "scored"
+    },
+    {
+     "name": "Parker McCollum",
+     "affinity": 0.965,
+     "status": "scored"
+    },
+    {
+     "name": "Koe Wetzel",
+     "affinity": 0.956,
+     "status": "scored"
+    },
+    {
+     "name": "Chris Stapleton",
+     "affinity": 0.961,
+     "status": "scored"
+    },
+    {
+     "name": "LaCroix Sparkling Water",
+     "affinity": 0.959,
+     "status": "scored"
+    },
+    {
+     "name": "Cody Johnson",
+     "affinity": 0.964,
+     "status": "scored"
+    }
+   ],
+   "final": [
+    {
+     "name": "Casamigos",
+     "affinity": 0.928,
+     "status": "scored"
+    },
+    {
+     "name": "Barstool Sports",
+     "affinity": 0.924,
+     "status": "scored"
+    },
+    {
+     "name": "Parker McCollum",
+     "affinity": 0.965,
+     "status": "scored"
+    },
+    {
+     "name": "Koe Wetzel",
+     "affinity": 0.956,
+     "status": "scored"
+    },
+    {
+     "name": "Chris Stapleton",
+     "affinity": 0.961,
+     "status": "scored"
+    },
+    {
+     "name": "LaCroix Sparkling Water",
+     "affinity": 0.959,
+     "status": "scored"
+    },
+    {
+     "name": "Cody Johnson",
+     "affinity": 0.964,
+     "status": "scored"
+    }
+   ]
+  },
+  {
+   "product": "Hazy IPA craft beer",
+   "market": "Portland, USA",
+   "reference": "Sierra Nevada",
+   "held_out": "Lagunitas Brewing Company",
+   "rival": "Goose Island",
+   "rival_is_held_out": false,
+   "revised": false,
+   "first_weak": [],
+   "dropped": [],
+   "added": [],
+   "first_share_09": 0.857,
+   "final_share_09": 0.857,
+   "first": [
+    {
+     "name": "Deschutes Brewery",
+     "affinity": 0.988,
+     "status": "scored"
+    },
+    {
+     "name": "Rogue Ales & Spirits",
+     "affinity": 0.983,
+     "status": "scored"
+    },
+    {
+     "name": "Lagunitas Brewing Company",
+     "affinity": null,
+     "status": "no_score"
+    },
+    {
+     "name": "Portlandia",
+     "affinity": 0.977,
+     "status": "scored"
+    },
+    {
+     "name": "Primus",
+     "affinity": 0.95,
+     "status": "scored"
+    },
+    {
+     "name": "Tool (band)",
+     "affinity": 0.941,
+     "status": "scored"
+    },
+    {
+     "name": "Great Notion Brewing",
+     "affinity": 0.978,
+     "status": "scored"
+    }
+   ],
+   "final": [
+    {
+     "name": "Deschutes Brewery",
+     "affinity": 0.988,
+     "status": "scored"
+    },
+    {
+     "name": "Rogue Ales & Spirits",
+     "affinity": 0.983,
+     "status": "scored"
+    },
+    {
+     "name": "Lagunitas Brewing Company",
+     "affinity": null,
+     "status": "no_score"
+    },
+    {
+     "name": "Portlandia",
+     "affinity": 0.977,
+     "status": "scored"
+    },
+    {
+     "name": "Primus",
+     "affinity": 0.95,
+     "status": "scored"
+    },
+    {
+     "name": "Tool (band)",
+     "affinity": 0.941,
+     "status": "scored"
+    },
+    {
+     "name": "Great Notion Brewing",
+     "affinity": 0.978,
+     "status": "scored"
+    }
+   ]
+  },
+  {
+   "product": "Language learning app subscription",
+   "market": "Mexico City, Mexico",
+   "reference": "Duolingo",
+   "held_out": "Babbel",
+   "rival": "Babbel",
+   "rival_is_held_out": true,
+   "revised": false,
+   "first_weak": [],
+   "dropped": [],
+   "added": [],
+   "first_share_09": 0.167,
+   "final_share_09": 0.167,
+   "first": [
+    {
+     "name": "edX",
+     "affinity": 0.854,
+     "status": "scored"
+    },
+    {
+     "name": "Kindle",
+     "affinity": 0.821,
+     "status": "scored"
+    },
+    {
+     "name": "The Economist",
+     "affinity": 0.895,
+     "status": "scored"
+    },
+    {
+     "name": "Waze",
+     "affinity": 0.846,
+     "status": "scored"
+    },
+    {
+     "name": "Emily in Paris",
+     "affinity": 0.975,
+     "status": "scored"
+    },
+    {
+     "name": "Pink Floyd",
+     "affinity": 0.894,
+     "status": "scored"
+    }
+   ],
+   "final": [
+    {
+     "name": "edX",
+     "affinity": 0.854,
+     "status": "scored"
+    },
+    {
+     "name": "Kindle",
+     "affinity": 0.821,
+     "status": "scored"
+    },
+    {
+     "name": "The Economist",
+     "affinity": 0.895,
+     "status": "scored"
+    },
+    {
+     "name": "Waze",
+     "affinity": 0.846,
+     "status": "scored"
+    },
+    {
+     "name": "Emily in Paris",
+     "affinity": 0.975,
+     "status": "scored"
+    },
+    {
+     "name": "Pink Floyd",
+     "affinity": 0.894,
+     "status": "scored"
+    }
+   ]
+  },
+  {
+   "product": "Meal kit delivery",
+   "market": "Toronto, Canada",
+   "reference": "HelloFresh",
+   "held_out": "Blue Apron",
+   "rival": "Blue Apron",
+   "rival_is_held_out": true,
+   "revised": true,
+   "first_weak": [
+    "Deliciously Ella"
+   ],
+   "dropped": [
+    "Deliciously Ella"
+   ],
+   "added": [],
+   "first_share_09": 0.857,
+   "final_share_09": 1,
+   "first": [
+    {
+     "name": "MyFitnessPal",
+     "affinity": 0.919,
+     "status": "scored"
+    },
+    {
+     "name": "Sweat",
+     "affinity": 0.904,
+     "status": "scored"
+    },
+    {
+     "name": "Fitbit",
+     "affinity": 0.926,
+     "status": "scored"
+    },
+    {
+     "name": "Headspace",
+     "affinity": 0.914,
+     "status": "scored"
+    },
+    {
+     "name": "Deliciously Ella",
+     "affinity": null,
+     "status": "no_score"
+    },
+    {
+     "name": "IKEA",
+     "affinity": 0.905,
+     "status": "scored"
+    },
+    {
+     "name": "Anthony Bourdain: Parts Unknown",
+     "affinity": 0.967,
+     "status": "scored"
+    }
+   ],
+   "final": [
+    {
+     "name": "MyFitnessPal",
+     "affinity": 0.919,
+     "status": "scored"
+    },
+    {
+     "name": "Sweat",
+     "affinity": 0.904,
+     "status": "scored"
+    },
+    {
+     "name": "Fitbit",
+     "affinity": 0.926,
+     "status": "scored"
+    },
+    {
+     "name": "Headspace",
+     "affinity": 0.914,
+     "status": "scored"
+    },
+    {
+     "name": "IKEA",
+     "affinity": 0.905,
+     "status": "scored"
+    },
+    {
+     "name": "Anthony Bourdain: Parts Unknown",
+     "affinity": 0.967,
+     "status": "scored"
+    }
+   ]
+  }
+ ]
+}

@@ -226,6 +226,7 @@ body.result #how{display:none}
 .ask-b{display:flex;flex-wrap:wrap;gap:8px}.ask-b button{font-size:13px;padding:8px 14px;min-height:44px;border-radius:10px}
 .ask details.draft{border-top:1px solid var(--line);padding-top:4px}.ask details.draft summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-size:13px;color:var(--faint)}
 .ask details.draft p{margin:6px 0;font-size:13px;line-height:1.5;color:var(--mute)}.ask .mono-s{font-family:var(--mono);font-size:12px;color:var(--faint)}
+.agentwhy{margin:0;font-size:14px;color:var(--mute);display:flex;flex-wrap:wrap;align-items:center;gap:8px}
 .plan h3.wsh{margin:8px 0 0;font-family:var(--display);font-size:18px}
 .selfcheck{border:1px solid var(--line);border-radius:18px;padding:16px 20px;display:flex;flex-direction:column;gap:10px}
 .selfcheck .top{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;font-size:15px}
@@ -445,6 +446,8 @@ function stepText(run, s) {
   if (s.tool === "submit_brief") return s.error ? "Sent the first draft back to the model to fix its format" : s.revised ? "Rewrote the brief without the weak picks" : "Wrote a first brief and checked what each line cites against Qloo's results";
   if (s.tool === "self_check") return s.error ? `Self-check could not run <span class="err">(${esc(s.error)})</span>` : `Self-check: scored ${esc(s.n)} interests on the audience of ${esc(s.rival)} <span class="n">${esc(s.weak)} weak</span>`;
   if (s.tool === "baseline_done") return "Wrote a plain AI guess to compare against";
+  if (s.tool === "podcasts") return s.error ? `Podcast ranking failed <span class="err">(${esc(s.error)})</span>` : `Ranked podcasts this audience likes, with the ads in their notes <span class="n">${esc(s.n)} shows</span>`;
+  if (s.tool === "draft_outreach") return s.error ? `Drafts could not be written <span class="err">(${esc(s.error)})</span>` : `Chose ${esc(list(s.input?.shows).join(", "))} to ask first and wrote the drafts`;
   if (s.tool === "outreach") return `Wrote a rate request and a host-read script for the shows to ask first <span class="n">${s.n} shows</span>`;
   if (s.tool === "graded") return `Scored both lists of interests with Qloo for this audience <span class="n">${s.n} picks</span>`;
   return `${esc(s.tool)}${n(s.n)}${err}`;
@@ -472,7 +475,10 @@ function podcastPlan(j) {
     { key: "noads", title: "No ads found in their notes", note: "Ask whether they sell ads at all", rows: noads },
     { key: "unknown", title: "Not in our ad data", note: "Your buyers like them; we have not read their episode notes", rows: unknown.slice(0, 5), more: Math.max(0, unknown.length - 5) },
   ].filter((g) => g.rows.length);
-  const { shows: first, selling } = askFirst(shows);
+  // the shows the agent itself chose to ask first (draft_outreach), else the same rule the page would apply
+  const chosen = p.outreach?.chosen_by === "agent" ? list(p.outreach.shows).map((d) => shows.find((s) => s.name === d.show)).filter(Boolean) : [];
+  const auto = askFirst(shows);
+  const first = chosen.length ? chosen : auto.shows, selling = chosen.length ? chosen.some((s) => list(s.advertisers).length) : auto.selling;
   const ordered = [...groups.flatMap((g) => g.rows), ...unknown.slice(5)];
   const codeOrder = [...first, ...ordered.filter((s) => !first.includes(s))];
   const codes = new Map(codeOrder.map((s, i) => [s, promoCodes(codeOrder.map((x) => x.name))[i]]));
@@ -482,7 +488,7 @@ function podcastPlan(j) {
   for (const s of unknown.slice(5)) { s._n = ++n; s._group = "unknown"; }
   for (const s of ordered) { s._code = codes.get(s); s._link = link(s); }
   const drafts = new Map(list(p.outreach?.shows).map((d) => [d.show, d]));
-  return { cat, groups, first, selling, all: ordered, drafts, outreachError: p.outreach?.error || null };
+  return { cat, groups, first, selling, all: ordered, drafts, outreachError: p.outreach?.error || null, reason: p.outreach?.chosen_by === "agent" ? p.outreach.reason : "" };
 }
 const contactUrl = (s) => `https://www.google.com/search?q=${encodeURIComponent(`${s.name} podcast advertising`)}`;
 
@@ -671,13 +677,14 @@ function planPanel(j) {
     return `<div class="prow"><span class="n">${String(s._n).padStart(2, "0")}</span><b>${esc(s.name)}</b>`
       + `<span class="fit"><i><b style="width:${Math.min(100, fit)}%"></b></i><span>${Number(s.affinity).toFixed(2)}</span></span>`
       + `<span class="ads"${ads?.length ? ` title="${ads.map(esc).join(", ")}"` : ""}>${adsCell}</span>${rv}`
-      + `<span class="go"><a class="next${ads?.length ? "" : " none"}" href="${contactUrl(s)}" target="_blank" rel="noopener">${ads?.length ? "Search for ad contact ↗" : "Search: does it sell ads? ↗"}</a><span class="code">code ${esc(s._code)}</span></span></div>`;
+      + `<span class="go"><a class="next${ads?.length ? "" : " none"}" href="${contactUrl(s)}" target="_blank" rel="noopener">${ads?.length ? "Search for ad contact ↗" : "Does it sell ads? ↗"}</a><span class="code">code ${esc(s._code)}</span></span></div>`;
   };
   const body = plan.groups.map((g) => `<div class="grp ${g.key}"><h3>${esc(g.title)}</h3><span>${esc(g.note)}</span></div>${g.rows.map(row).join("")}${g.more ? `<p class="more-n">${g.more} more in the podcasts CSV.</p>` : ""}`).join("");
   const lede = !plan.selling ? "We have no ad data for these shows, so the first question is whether they sell ads."
     : plan.cat && plan.first.every((s) => !list(s.rivals).length) ? `They sell ads, and no ${esc(plan.cat)} brand was found in their episode notes. Rates, reach and open dates are not verified: the email asks for them.`
     : "They already sell ads, and your buyers like them. Rates, reach and open dates are not verified: the email asks for them.";
   return `<section class="plan" id="plan" tabindex="-1"><div><p class="stepk">Your podcast plan</p><h2>${hasDrafts ? "Three shows to ask first, with the email ready" : `Three shows ${fans} love to ask first`}</h2><p class="lede2">${lede}</p></div>
+    ${plan.reason ? `<p class="agentwhy"><span class="pill live">Chosen by the agent</span> ${esc(plan.reason)}</p>` : ""}
     <div class="asks">${plan.first.map(firstCard).join("")}</div>
     ${hasDrafts ? `<p class="note" style="margin:0">Drafts written by the agent from this run's Qloo results and the product facts you gave; anything it was not told is in [brackets]. Nothing is sent: you copy, edit and send. A proposed code works once the show agrees to read it: it shows which orders came from each show, and the tagged link counts clicks. Neither counts how often the ad played.</p>` : plan.outreachError ? `<p class="note err" style="margin:0">The agent could not write the drafts this time: ${esc(plan.outreachError)}</p>` : ""}
     ${tests ? `<p class="note" style="margin:0">Next to the podcasts: ${tests} Meta test${tests === 1 ? "" : "s"} against your usual ad, locked before you spend. <a href="#tests">Open the tests</a></p>` : ""}
@@ -715,11 +722,12 @@ function pathPanel(j) {
     p.tags.length ? `Searched Qloo tags for the product: ${p.tags.map(esc).join(", ")}` : "",
     reads.length ? `Read ${reads.length} taste lists for ${esc(city)}: ${reads.join("; ")}` : "",
     p.demographics ? "Checked the age and gender index" : "",
+    p.podcasts ? `Ranked podcasts for this audience${p.drafted.length ? ` and chose ${p.drafted.map(esc).join(", ")} to ask first` : ""}` : "",
   ].filter(Boolean);
   const caveats = list(j.brief?.caveats);
   return `<section class="panel path"><div class="grid">
     <div><h3>How the agent worked this out</h3><ol>${steps.map((x) => `<li>${x}</li>`).join("")}</ol>
-      <p class="note">The agent chose these ${p.qlooCalls} Qloo calls for this product and city. The app then runs fixed steps: the podcast ranking, the self-check, grading both interest lists and the second city. Every call is listed below.</p></div>
+      <p class="note">The agent chose these ${p.qlooCalls} Qloo calls for this product and city${p.drafted.length ? ", and which shows get drafts" : ""}. The app then runs fixed steps: the self-check, grading both interest lists and the second city. Every call is listed below.</p></div>
     ${caveats.length ? `<div><h3>Its notes and what it left out</h3><ul>${caveats.map((x) => `<li>${esc(x)}</li>`).join("")}</ul></div>` : ""}
   </div></section>`;
 }
@@ -772,11 +780,13 @@ function showResult(j) {
   $("#out").innerHTML = `${banner}${warn.map((w) => `<div class="banner synthetic">${w}</div>`).join("")}
     ${planPanel(j)}
     ${selfCheckPanel(j)}
+    <details class="more" id="more-all"><summary><span class="t"><b>More from this run</b><span>Meta interests, ad tests, creative, how the agent decided${j.markets && !j.markets.error ? ", the second city" : ""}</span></span></summary><div class="in">
     ${more("meta", "Meta interests", `${nInt} picks, each with its Qloo score, and the same model guessing without Qloo`, meta)}
     ${nTests ? more("tests", "Ad tests and the locked plan", `${nTests} test${nTests === 1 ? "" : "s"} against your usual ad, read back from your Ads Manager export`, testsCard(b, j)) : ""}
     ${more("creative", "Creative, landing page and partnerships", "the model's reading of the data, each line built on Qloo results", creative)}
     ${more("agent", "How the agent decided", `${agentPath(j.trace).qlooCalls} Qloo calls it chose, and what it left out`, pathPanel(j) + trace)}
-    ${j.markets && !j.markets.error ? more("cities", `${esc(String(j.markets.market_a).split(",")[0])} and ${esc(String(j.markets.market_b).split(",")[0])}, side by side`, "the same Qloo lists for each city, no AI in this step", markets(j.markets)) : ""}`;
+    ${j.markets && !j.markets.error ? more("cities", `${esc(String(j.markets.market_a).split(",")[0])} and ${esc(String(j.markets.market_b).split(",")[0])}, side by side`, "the same Qloo lists for each city, no AI in this step", markets(j.markets)) : ""}
+    </div></details>`;
   wireLoop(j);
   document.querySelectorAll(".tabs button").forEach((btn) => btn.addEventListener("click", () => {
     document.querySelectorAll(".tabs button").forEach((x) => x.setAttribute("aria-pressed", String(x === btn)));
@@ -786,7 +796,10 @@ function showResult(j) {
   $("#out").querySelectorAll('a[href^="#"]').forEach((a) => a.addEventListener("click", (e) => {
     const t = document.getElementById(a.getAttribute("href").slice(1));
     const d = t?.closest("details") || (t?.tagName === "DETAILS" ? t : null);
-    if (d) { d.open = true; e.preventDefault(); t.scrollIntoView({ behavior: "smooth", block: "start" }); (d === t ? d.querySelector("summary") : t).focus?.({ preventScroll: true }); }
+    if (d) {
+      for (let x = t; x; x = x.parentElement?.closest("details")) if (x.tagName === "DETAILS") x.open = true;
+      e.preventDefault(); t.scrollIntoView({ behavior: "smooth", block: "start" }); (d === t ? d.querySelector("summary") : t).focus?.({ preventScroll: true });
+    }
   }));
   const slug = String(j.market).replace(/[^a-z0-9]+/gi, "-").toLowerCase();
   $("#copy-md").addEventListener("click", async (ev2) => {

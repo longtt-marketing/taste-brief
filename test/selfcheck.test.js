@@ -60,6 +60,8 @@ test("self-check: the agent's rival names are tried in order until Qloo knows on
   const r = await pickRival(qloo, { holdout_rival: "Victrola, Rega" }, [], []);
   assert.equal(r.name, "Rega Research", "a hit that starts with the name counts");
   assert.equal(r.source, "named by the agent");
+  const q2 = { search: async ({ query }) => (query === "Rega" ? [{ name: "Regal Cinemas", entity_id: "C", type: "urn:entity:brand" }] : []) };
+  assert.equal(await pickRival(q2, { holdout_rival: "Rega" }, [], []), null, "Rega is not Regal Cinemas");
 });
 
 test("grader: a brand comes before a town of the same name", async () => {

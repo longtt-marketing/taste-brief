@@ -22,7 +22,13 @@ Method:
    tv_show / movie / podcast. Pass the market as location. For places, also pass filter_location = the city, so the
    places are really in that city.
 4. demographics: get the age and gender skew of the seed entities (Qloo's demographics are not location-specific).
-5. submit_brief. Rules for every item:
+5. podcasts: call it once with the seed entity ids and the product's category. It returns the podcasts this audience
+   likes, with the advertisers found in each show's episode notes and the brands of the category found there.
+6. draft_outreach: choose up to three shows to ask for rates first and call it with their exact names and one sentence of
+   reason. Prefer shows with advertisers found and no category brand found, then taste fit. Skip a show whose topic
+   plainly clashes with the product (for example a children's show for alcohol) and say so in the reason. It writes a
+   rate request and a host-read script for each and tells you whether each draft passed its checks.
+7. submit_brief. Rules for every item:
    - entity_ids: the Qloo entity_id(s) of the results the item rests on, copied exactly from the tool output. Cite the
      non-seed results that support the item. A seed may be cited only for an item about the seed itself.
    - evidence: short notes in the form "Name (affinity 0.956)", using the exact numbers Qloo returned.
@@ -51,7 +57,7 @@ Method:
      to replace or drop.
    - category: the product's category from the list, so the app can tell which podcasts its rivals already sponsor.
    If Qloo returned nothing useful for a section, leave it short and say so in caveats; never invent.
-Avoid "X, not Y" contrasts and lists of three in copy. Creative copy uses only product facts given in the input (no invented ingredients, materials or claims); where a hook needs a fact you were not given, write [confirm]. The app ranks podcasts to sponsor separately, so do not judge podcast results in caveats. Keep copy concrete and short, in plain natural English a marketer would write. Never use dashes (— or –) as
+Avoid "X, not Y" contrasts and lists of three in copy. Creative copy uses only product facts given in the input (no invented ingredients, materials or claims); where a hook needs a fact you were not given, write [confirm]. Podcast choices go through podcasts and draft_outreach; do not discuss them in caveats. Keep copy concrete and short, in plain natural English a marketer would write. Never use dashes (— or –) as
 punctuation: use commas or full stops. No buzzwords. Meta interests must be names that plausibly exist as Meta Ads interests.`;
 
 const str = { type: "string" };
@@ -112,6 +118,16 @@ export const TOOLS = [
     input_schema: { type: "object", properties: { query: str, take: { type: "integer" } }, required: ["query"] },
   },
   {
+    name: "podcasts",
+    description: "Podcasts this audience likes (Qloo, ranked by taste fit), each with the advertisers found in its episode notes and the brands of the product's category found there. Call once.",
+    input_schema: { type: "object", properties: { entity_ids: strArr, category: { type: "string", enum: [...CATEGORIES, "other"] } }, required: ["entity_ids", "category"] },
+  },
+  {
+    name: "draft_outreach",
+    description: "Write a rate request email and a 30 second host-read script for up to three shows you choose from the podcasts result, by exact name. Returns which drafts passed their checks. Nothing is sent.",
+    input_schema: { type: "object", properties: { shows: strArr, reason: str }, required: ["shows", "reason"] },
+  },
+  {
     name: "submit_brief",
     description: "Finish. Submit the campaign brief. Every item must cite Qloo evidence.",
     // strict: the API makes the input match the schema. Without it, 2 of 3 live runs (21/10) sent a list item as a
@@ -143,7 +159,9 @@ export const TOOLS = [
 /** onStep (optional) is called with each trace entry as it happens, so a page can show the agent working live. */
 /** check (optional): async (brief, {registry, seeds}) -> {rival, picks, weak}. Run on the first usable brief; when picks
  *  are weak the agent gets the report once and submits again, and the second report is the one shown. */
-export async function runAgent({ llm, qloo, product, market, references = "", maxSteps = 10, onStep = () => {}, check = null }) {
+/** actions (optional): {podcasts, draft_outreach} handlers, (input, {registry}) -> result for the model; without them
+ *  those tools answer that they are not available in this run. */
+export async function runAgent({ llm, qloo, product, market, references = "", maxSteps = 12, onStep = () => {}, check = null, actions = null }) {
   const messages = [{
     role: "user",
     content: `Product: ${product}\nMarket: ${market}\nReference brands or competitors (optional): ${references || "none"}`,
@@ -212,6 +230,16 @@ export async function runAgent({ llm, qloo, product, market, references = "", ma
         return finish(brief, incomplete, selfCheck);
       }
       let out;
+      if (call.name === "podcasts" || call.name === "draft_outreach") {
+        // the agent's own buying steps: handled by the app, not by Qloo directly; their results are not citations
+        out = actions?.[call.name]
+          ? await actions[call.name](call.input || {}, { registry: [...registryFrom(calls).entities.values()] }).catch((e) => ({ error: String(e.message || e) }))
+          : { error: "not available in this run" };
+        trace.push({ tool: call.name, input: call.input, n: out?.n, error: out?.error });
+        onStep(trace.at(-1));
+        results.push({ id: call.id, name: call.name, content: JSON.stringify(out?.for_model ?? out).slice(0, 6000) });
+        continue;
+      }
       try {
         out = await qloo[call.name](call.input);
       } catch (e) {

@@ -72,6 +72,8 @@ export function mockLLM() {
         { name: "insights", input: { filter_type: "urn:entity:podcast", entity_ids: ids(), location: market, take: 4 } },
         { name: "demographics", input: { entity_ids: ids() } },
       ],
+      () => [{ name: "podcasts", input: { entity_ids: ids(), category: "footwear" } }],
+      () => [{ name: "draft_outreach", input: { shows: (Object.entries(seen).find(([k]) => k.startsWith("podcasts:"))?.[1]?.shows || []).slice(0, 2).map((s) => s.name), reason: "[SYNTHETIC] highest taste fit" } }],
       () => [{ name: "submit_brief", input: briefFrom(seen, product, weak) }],
     ];
     const calls = (plan[step] || plan[plan.length - 1])().map((c, i) => ({ ...c, id: `mock_${step}_${i}` }));

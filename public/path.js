@@ -8,9 +8,11 @@ const typeName = (urn) => TYPE[String(urn || "").split(":").pop()] || String(urn
 /** {searched, tags, reads:[{what, where, narrowed}], demographics, qlooCalls} from a run's trace. */
 export function agentPath(trace) {
   const t = Array.isArray(trace) ? trace : [];
-  const out = { searched: [], tags: [], reads: [], demographics: false, qlooCalls: 0 };
+  const out = { searched: [], tags: [], reads: [], demographics: false, qlooCalls: 0, podcasts: false, drafted: [] };
   for (const s of t) {
-    if (!["search", "tags", "insights", "demographics"].includes(s.tool)) continue; // the brief and the self-check are not Qloo calls the agent chose
+    if (s.tool === "draft_outreach" && !s.error) { out.drafted = (s.input?.shows || []).map(String); continue; }
+    if (!["search", "tags", "insights", "demographics", "podcasts"].includes(s.tool)) continue; // the brief and the self-check are not Qloo calls the agent chose
+    if (s.tool === "podcasts") { if (!s.error) out.podcasts = true; out.qlooCalls++; continue; }
     out.qlooCalls++;
     const i = s.input || {};
     if (s.tool === "search" && i.query) out.searched.push(String(i.query));

@@ -25,7 +25,10 @@ export async function pickRival(qloo, brief, registry, seeds) {
   for (const n of named) {
     const hits = await qloo.search({ query: n, types: "urn:entity:brand", take: 5 }).catch(() => []);
     const want = norm(n);
-    const hit = hits.find((h) => norm(h.name) === want) || hits.find((h) => norm(h.name).startsWith(want) || want.startsWith(norm(h.name)));
+    // exact, or the name followed by more words ("Rega" -> "Rega Research"); never a longer word ("Rega" -> "Regal Cinemas",
+    // found by the self-check evaluation on 22 Oct)
+    const words = (x) => String(x || "").toLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ").trim();
+    const hit = hits.find((h) => norm(h.name) === want) || hits.find((h) => words(h.name).startsWith(`${words(n)} `));
     if (hit && !used.has(hit.entity_id)) return { name: hit.name, entity_id: hit.entity_id, source: "named by the agent", named };
   }
   const brands = list(registry).filter((e) => /brand/.test(String(e.type)) && !used.has(e.entity_id) && typeof e.affinity === "number")

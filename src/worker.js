@@ -18,7 +18,7 @@ import { podcastPartners, categoryFor } from "./podcasts.js";
 import { makeQloo } from "./qloo.js";
 import { mockQloo } from "./mock-qloo.js";
 import { anthropicLLM, mockLLM, mockBaselineLLM } from "./llm.js";
-import { draftOutreach, mockOutreachLLM, OUTREACH_SYSTEM, OUTREACH_TOOL } from "./outreach.js";
+import { draftOutreach, mockOutreachLLM, lintDraft, OUTREACH_SYSTEM, OUTREACH_TOOL } from "./outreach.js";
 import { askFirst, promoCodes } from "../public/rank.js";
 
 /** Constant-time compare for the demo access code. */
@@ -128,8 +128,38 @@ export default {
       // Qloo-only comparison on the agent's own seed entities. A failed baseline or comparison never sinks the brief.
       const run = async (send) => {
         const t0 = Date.now();
+        // the agent's buying steps: it ranks the podcasts itself and chooses which shows get drafts (src/agent.js)
+        const bought = { pods: null, outreach: null };
+        const alsoLikeFrom = (registry, seedIds) => registry.filter((e) => !seedIds.includes(e.entity_id) && typeof e.affinity === "number" && /brand|artist/.test(String(e.type)))
+          .sort((a, b) => b.affinity - a.affinity).slice(0, 6).map((e) => e.name);
+        const actions = {
+          podcasts: async ({ entity_ids, category }, { registry }) => {
+            const seeds = list(entity_ids).slice(0, 3).map((id) => ({ entity_id: id, name: registry.find((e) => e.entity_id === id)?.name || id }));
+            if (!seeds.length) return { error: "pass the seed entity_ids" };
+            const p = await podcastPartners({ qloo, seeds, take: 20, category: categoryFor(references, category) });
+            if (p.error) return { error: p.error };
+            bought.pods = p; bought.seeds = seeds;
+            const suggested = new Set(askFirst(p.shows).shows.map((x) => x.name));
+            return { n: p.shows.length, for_model: { category: p.category, shows: p.shows.map((x) => ({ name: x.name, taste_fit: Math.round(x.affinity * 1000) / 1000,
+              advertisers_found: Array.isArray(x.advertisers) ? x.advertisers.length : "not in our data", sample_advertisers: list(x.advertisers).slice(0, 4),
+              category_brands_found: x.rivals ?? "unknown", suggested_first: suggested.has(x.name) })) } };
+          },
+          draft_outreach: async ({ shows, reason }, { registry }) => {
+            const p = bought.pods;
+            if (!p) return { error: "call podcasts first" };
+            const chosen = list(shows).slice(0, 3).map((n) => p.shows.find((x) => norm(x.name) === norm(n))).filter(Boolean);
+            if (!chosen.length) return { error: "use exact show names from the podcasts result" };
+            const codes = promoCodes(chosen.map((x) => x.name));
+            const o = await draftOutreach({ llm: outLLM, product, market, shows: chosen, codes, category: p.category, alsoLike: alsoLikeFrom(registry, bought.seeds.map((x) => x.entity_id)),
+              reference: bought.seeds.map((x) => x.name).join(", "), timeoutMs: Math.min(60000, RUN_TIMEOUT_MS - (Date.now() - t0) - 30000) });
+            bought.outreach = { ...o, chosen_by: "agent", reason: String(reason || "").replace(/\s+[—–]\s+/g, ", ").slice(0, 300) };
+            const checks = o.shows.map((d) => { const l = lintDraft(d, { product, fit: chosen.find((x) => x.name === d.show)?.affinity });
+              return { show: d.show, passed: l.asks_all && l.code && !l.invented_numbers.length, missing_asks: Object.keys(l.asks).filter((k) => !l.asks[k]), invented_numbers: l.invented_numbers }; });
+            return { n: o.shows.length, for_model: { drafts: o.shows.length, checks } };
+          },
+        };
         const [out, baseline] = await Promise.all([
-          runAgent({ llm, qloo, product, market, references, check: makeSelfCheck({ qloo, market }), onStep: (s) => send({ type: "step", run: market, step: s }) }),
+          runAgent({ llm, qloo, product, market, references, check: makeSelfCheck({ qloo, market }), actions, onStep: (s) => send({ type: "step", run: market, step: s }) }),
           body.compare === false ? null : runBaseline({ llm: baseLLM, product, market, references })
             .then((b) => { send({ type: "step", run: "no-data baseline", step: { tool: "baseline_done" } }); return b; })
             .catch((e) => ({ error: String(e.message || e) })),
@@ -157,7 +187,16 @@ export default {
               onStep: (s) => send({ type: "step", run: `${market} vs ${marketB}`, step: s }) }).catch((e) => ({ error: String(e.message || e) }))
             : null,
           gradeBoth().catch(() => null),
-          seedEntities.length ? podcastPartners({ qloo, seeds: seedEntities, take: 20, category: categoryFor(references, out.brief?.category) })
+          // the agent's own podcast step when it took it; otherwise the same steps run here as a fallback
+          bought.pods ? Promise.resolve({ ...bought.pods, outreach: bought.outreach || undefined }).then(async (p) => {
+            if (p.outreach) return p;
+            const first = askFirst(p.shows).shows;
+            if (!first.length) return p;
+            p.outreach = await draftOutreach({ llm: outLLM, product, market, shows: first, codes: promoCodes(first.map((x) => x.name)), category: p.category,
+              alsoLike: alsoLikeFrom(out.registry, out.seeds), reference: seedEntities.map((e) => e.name).join(", "), timeoutMs: Math.min(60000, RUN_TIMEOUT_MS - (Date.now() - t0) - 15000) })
+              .catch((e) => ({ error: String(e.message || e) }));
+            return p;
+          }) : seedEntities.length ? podcastPartners({ qloo, seeds: seedEntities, take: 20, category: categoryFor(references, out.brief?.category) })
             // the agent's outreach drafts for the shows to ask first, as soon as the shows are known
             .then(async (p) => {
               const first = askFirst(p?.shows).shows;
