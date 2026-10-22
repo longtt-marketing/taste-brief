@@ -4,7 +4,7 @@
 // picks it is partly circular, since they come from Qloo results, and the page and the benchmark say so.
 import { INSIGHT_TYPES } from "./qloo.js";
 
-const norm = (s) => String(s ?? "").toLowerCase().replace(/\(check in ads manager\)/g, "").replace(/[^\p{L}\p{N}]+/gu, " ").trim();
+export const norm = (s) => String(s ?? "").toLowerCase().replace(/\(check in ads manager\)/g, "").replace(/[^\p{L}\p{N}]+/gu, " ").trim();
 
 /** Candidate search strings for one pick: "Veja or On Running" -> ["Veja or On Running", "Veja", "On Running"]. */
 export function candidates(name) {
@@ -18,8 +18,10 @@ export async function resolvePick(qloo, name) {
   for (const q of candidates(name)) {
     const hits = await qloo.search({ query: q, take: 3 }).catch(() => []);
     const want = norm(q);
-    // exact name only: "Parkrun" must not become "parkrun Zalew Zyrardowski", a place in Poland
-    const hit = hits.find((h) => norm(h.name) === want);
+    // exact name only: "Parkrun" must not become "parkrun Zalew Zyrardowski", a place in Poland. Among exact names, a
+    // brand, artist or show comes before a place: the New York run (21/10) graded the sock brand Bombas as a town.
+    const exact = hits.filter((h) => norm(h.name) === want);
+    const hit = exact.find((h) => !/locality|place|destination/.test(String(h.type))) || exact[0];
     if (hit) return hit;
   }
   return null;
@@ -35,11 +37,12 @@ export async function scoreEntity(qloo, entity, seedIds, location) {
   return typeof e?.affinity === "number" ? e.affinity : null;
 }
 
-/** Grade a list of pick names: [{name, status: "scored" | "no_match" | "no_score", match, affinity}]. */
-export async function gradePicks(qloo, names, seedIds, location) {
+/** Grade a list of pick names: [{name, status: "scored" | "no_match" | "no_score", match, affinity}].
+ *  known: optional Map of norm(name) -> the Qloo entity the run itself returned under that name (used before a search). */
+export async function gradePicks(qloo, names, seedIds, location, known = new Map()) {
   const out = [];
   for (const name of names) {
-    const match = await resolvePick(qloo, name);
+    const match = known.get(norm(name)) || await resolvePick(qloo, name);
     if (!match) { out.push({ name, status: "no_match", match: null, affinity: null }); continue; }
     const affinity = await scoreEntity(qloo, match, seedIds, location);
     out.push({ name, status: affinity == null ? "no_score" : "scored", match: { name: match.name, type: match.type, entity_id: match.entity_id }, affinity });

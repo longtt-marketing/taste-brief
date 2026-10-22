@@ -2,6 +2,7 @@
 // input drove each pick. Next to each show, the advertisers its own episode notes already name (public RSS, read for the
 // podcast check in docs/podcast-check). The page orders the shows by Qloo's rank plus this ad-demand rank (public/rank.js).
 import SPONSORS from "./data/podcast-sponsors.json" with { type: "json" };
+import CATS from "./data/categories.json" with { type: "json" };
 
 const norm = (s) => String(s || "").toLowerCase().replace(/[^a-z0-9]/g, "");
 const INDEX = new Map(Object.entries(SPONSORS.shows || {}).map(([name, brands]) => [norm(name), { name, brands }]));
@@ -11,12 +12,26 @@ export function advertisersFor(showName) {
   return INDEX.get(norm(showName))?.brands ?? null;
 }
 
+const CAT_OF = new Map(Object.entries(CATS.categories).flatMap(([c, brands]) => brands.map((b) => [norm(b), c])));
+
+/** The product's category: from a reference brand we know (Allbirds -> footwear), else the agent's own pick. */
+export function categoryFor(references, agentCategory) {
+  for (const r of String(references || "").split(/[,;/]| and /)) { const c = CAT_OF.get(norm(r)); if (c) return c; }
+  return CATS.categories[agentCategory] ? agentCategory : null;
+}
+
+/** Brands of that category a show's notes already read: [] means the show is open to the category. */
+export function rivalsIn(advertisers, category) {
+  if (!category || !Array.isArray(advertisers)) return null;
+  return advertisers.filter((a) => CAT_OF.get(norm(a)) === category);
+}
+
 /**
  * @param qloo   client from makeQloo
  * @param seeds  [{ entity_id, name }] the brand (and comps) the brief was built on
  * @param take   how many shows to return
  */
-export async function podcastPartners({ qloo, seeds, take = 10 }) {
+export async function podcastPartners({ qloo, seeds, take = 10, category = null }) {
   const ids = (seeds || []).map((s) => s.entity_id).filter(Boolean);
   if (!ids.length) return { error: "no seed brand to read" };
   const names = new Map((seeds || []).map((s) => [s.entity_id, s.name]));
@@ -26,7 +41,9 @@ export async function podcastPartners({ qloo, seeds, take = 10 }) {
       name: s.name, entity_id: s.entity_id, affinity: s.affinity, popularity: s.popularity,
       driven_by: (s.explain || []).filter((x) => x.score > 0).sort((a, b) => b.score - a.score).map((x) => ({ name: names.get(x.entity_id) || x.entity_id, score: x.score })),
       advertisers: advertisersFor(s.name),
+      rivals: rivalsIn(advertisersFor(s.name), category),
     })),
+    category,
     data: { shows_with_sponsor_data: INDEX.size, source: SPONSORS.source, collected: SPONSORS.collected },
   };
 }

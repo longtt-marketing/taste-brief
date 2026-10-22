@@ -50,7 +50,12 @@ export function mockLLM() {
   const seen = {};
   return async (messages) => {
     const last = messages[messages.length - 1];
-    if (last.role === "tool") for (const r of last.results) seen[r.name + ":" + r.id] = JSON.parse(r.content);
+    let weak = [];
+    if (last.role === "tool") for (const r of last.results) {
+      // the self-check report is text: drop the interests it names as weak, as the real agent is asked to
+      if (String(r.content).startsWith("Self-check")) weak = (String(r.content).match(/Weak or not in Qloo: (.*?)\. Replace/) || [, ""])[1].split(", ");
+      else seen[r.name + ":" + r.id] = JSON.parse(r.content);
+    }
     const first = messages[0]?.content || "";
     const market = (first.match(/Market: ([^\n]*)/) || [])[1] || "";
     const product = (first.match(/Product: ([^\n]*)/) || [])[1] || "product";
@@ -67,7 +72,7 @@ export function mockLLM() {
         { name: "insights", input: { filter_type: "urn:entity:podcast", entity_ids: ids(), location: market, take: 4 } },
         { name: "demographics", input: { entity_ids: ids() } },
       ],
-      () => [{ name: "submit_brief", input: briefFrom(seen, product) }],
+      () => [{ name: "submit_brief", input: briefFrom(seen, product, weak) }],
     ];
     const calls = (plan[step] || plan[plan.length - 1])().map((c, i) => ({ ...c, id: `mock_${step}_${i}` }));
     step++;
@@ -75,19 +80,20 @@ export function mockLLM() {
   };
 }
 
-function briefFrom(seen, product) {
+function briefFrom(seen, product, weak = []) {
   const all = Object.entries(seen);
   const pick = (re) => all.filter(([k, v]) => k.startsWith("insights") && Array.isArray(v) && v[0]?.type?.match(re)).flatMap(([, v]) => v);
   const brands = pick(/brand/), artists = pick(/artist/), pods = pick(/podcast/);
   return {
     audience_summary: `[SYNTHETIC DATA] People whose tastes overlap with "${product}" also over-index on ${brands.slice(0, 2).map((b) => b.name).join(" and ")} and listen to ${artists[0]?.name || "?"}.`,
     audience_traits: brands.slice(0, 3).map((b) => ({ trait: `Shares taste with ${b.name}`, entity_ids: [b.entity_id], evidence: [`${b.name} (affinity ${b.affinity})`] })),
-    meta_interests: [...brands.slice(0, 3), ...artists.slice(0, 2)].map((e) => ({ interest: e.name, entity_ids: [e.entity_id], evidence: [`${e.name} (affinity ${e.affinity})`] })),
+    meta_interests: [...brands.slice(0, 3), ...artists.slice(0, 2)].filter((e) => !weak.includes(e.name)).map((e) => ({ interest: e.name, entity_ids: [e.entity_id], evidence: [`${e.name} (affinity ${e.affinity})`] })),
     creative_angles: pods.slice(0, 2).map((p) => ({ angle: `Speak like ${p.name}`, hook: "Placeholder hook from a synthetic run", entity_ids: [p.entity_id], evidence: [p.name] })),
     landing_page: { headline: "[SYNTHETIC] Headline written from taste signals", subheadline: "Replace by a live run", entity_ids: brands.slice(0, 1).map((b) => b.entity_id), evidence: brands.slice(0, 1).map((b) => b.name) },
     partnerships: brands.slice(3, 5).map((b) => ({ partner: b.name, idea: "Co-branded drop (synthetic)", entity_ids: [b.entity_id], evidence: [b.name] })),
     test_plan: brands.slice(0, 2).map((b, i) => ({ hypothesis: `[SYNTHETIC] This audience responds to ${b.name} cues`, variable: i ? "targeting" : "creative", ad_set: i ? `Interest: ${b.name}, with the control's usual creative` : `A creative in ${b.name}'s tone, shown to the control's broad audience`, why: "[SYNTHETIC] A plain guess would not name this brand.", kpi: "Cost per add to cart", stop_if: "Spend up to $300. Pause if cost per add to cart is 30% above the control once each arm has 20 add to carts, or at the cap.", entity_ids: [b.entity_id], evidence: [`${b.name} (affinity ${b.affinity})`] })),
     caveats: ["Synthetic run: all Qloo data is made up, not a real recommendation. Live mode uses real Qloo data."],
+    holdout_rival: "Sample Rival Brand", category: "footwear",
   };
 }
 

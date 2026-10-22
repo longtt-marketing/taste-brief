@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Taste Brief: pick podcasts by taste, not by chart rank</title>
-<meta name="description" content="An agent reads your audience's taste in Qloo and picks the podcasts to sponsor, the interests to target and the ad to test first. Checked against the podcasts 62 brands really sponsor: Qloo 65%, the chart 52%.">
+<meta name="description" content="An agent reads your audience's taste in Qloo and picks the podcasts to sponsor, the interests to target and the ad to test first. Checked against the podcasts 62 brands sponsor: Qloo 65%, the chart 52%.">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta property="og:title" content="Taste Brief: pick podcasts by taste, not by chart rank">
 <meta property="og:description" content="On 216 held-out US podcasts, Qloo ranked the shows 62 brands sponsor above the rest 65% of the time; the chart did 52%. Hypotheses locked before the data.">
@@ -23,7 +23,7 @@
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 var(--body)}
 main{max-width:1120px;margin:0 auto;padding:28px 16px 80px;display:flex;flex-direction:column;gap:24px}
 nav.top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
-nav.top .links{display:flex;flex-wrap:wrap;gap:18px;font-size:15px}
+nav.top .links{display:flex;flex-wrap:wrap;gap:4px 18px;font-size:15px}nav.top .links a{min-height:44px;display:inline-flex;align-items:center}
 a{color:var(--ok);text-underline-offset:3px;text-decoration-thickness:1px}a:hover{color:#fff}
 nav.top .links a{color:var(--mute);text-decoration:none}nav.top .links a:hover{color:var(--ink);text-decoration:underline}
 .hero{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(460px,100%),1fr));gap:48px;align-items:center}
@@ -34,7 +34,8 @@ nav.top .links a{color:var(--mute);text-decoration:none}nav.top .links a:hover{c
 .proof .big{margin:0;font-size:22px;font-weight:600;line-height:1.35}.proof .big .hi{color:var(--ok)}
 .pts{display:flex;flex-direction:column;gap:10px}
 .pt{display:grid;grid-template-columns:150px minmax(0,1fr) 52px;gap:12px;align-items:center;font-size:14px}
-.pt i{display:block;height:12px;border-radius:6px;background:#1c2a44}
+.pt i{position:relative;display:block;height:12px;border-radius:6px;background:#1c2a44}
+.pt i::after{content:"";position:absolute;left:50%;top:-4px;bottom:-4px;border-left:2px dashed #6b7f9e}
 .pt b{display:block;height:12px;border-radius:6px;background:var(--ok)}
 .pt b.base{background:#3a4a63}
 .pt span:last-child{font-family:var(--mono);text-align:right}
@@ -45,7 +46,7 @@ nav.top .links a{color:var(--mute);text-decoration:none}nav.top .links a:hover{c
 @media (max-width:600px){
   .stat-m{display:block;margin:14px 0 0;font-family:var(--mono);font-size:17px;font-variant-numeric:tabular-nums;color:var(--ok)}
   .pt{grid-template-columns:1fr auto;gap:4px 10px}.pt i{grid-column:1/-1;grid-row:2;height:8px}.pt b{height:8px}
-  nav.top .pill{display:none}
+  nav.top .pill{font-size:11px}
   .row button{width:100%}
 }
 .how{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:16px}
@@ -59,7 +60,8 @@ nav.top .links a{color:var(--mute);text-decoration:none}nav.top .links a:hover{c
 .pill.live{background:var(--ok-soft);color:var(--ok)}
 h1{font-family:var(--display);font-weight:700;font-size:clamp(36px,10vw,66px);line-height:1.0;letter-spacing:-.03em;margin:0}
 .lede{color:var(--mute);font-size:18px;margin:18px 0 0;max-width:34ch}
-.cta{display:flex;flex-wrap:wrap;align-items:center;gap:18px;margin-top:26px}.cta a{color:var(--mute);font-size:15px}
+.cta{display:flex;flex-wrap:wrap;align-items:center;gap:18px;margin-top:22px}.cta a{color:var(--mute);font-size:15px;min-height:44px;display:inline-flex;align-items:center}
+.qnote{margin:14px 0 0;font-size:14px;color:var(--faint);max-width:44ch}
 @media (max-width:600px){.lede{font-size:16px}}
 .panel{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px}
 .presets{display:flex;flex-wrap:wrap;align-items:center;gap:8px;color:var(--mute);font-size:14px;margin:0 0 18px}
@@ -75,7 +77,7 @@ button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid
 button.chip{font-size:14px;font-weight:500;border-radius:999px;padding:8px 16px;min-height:44px;background:transparent;color:var(--ink);border:1px solid #3a4c6b}
 button.chip:hover{border-color:var(--ink)}
 button.ghost{font-size:15px;font-weight:600;background:transparent;color:var(--ink);border:1px solid #3a4c6b}
-details.code summary{cursor:pointer;color:var(--faint);font-size:14px}
+details.code summary,details.trace summary{cursor:pointer;color:var(--faint);font-size:14px;min-height:44px;display:flex;align-items:center}
 details.code label{margin-top:10px;max-width:360px}
 .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin:0 0 10px}
 #status{margin:0;color:var(--mute);min-height:1.5em}
@@ -161,7 +163,7 @@ ul.items strong{font-weight:600}
 .banner.synthetic{background:var(--warn-soft);color:var(--warn);font-weight:600}
 .markets h2{font-family:var(--display);font-size:26px;letter-spacing:-.02em;text-transform:none;color:var(--ink);font-weight:700}
 .tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
-.tabs button{font-size:13px;font-weight:600;padding:6px 12px;min-height:36px;border-radius:999px;background:var(--line);color:var(--ink)}
+.tabs button{font-size:13px;font-weight:600;padding:6px 12px;min-height:44px;border-radius:999px;background:var(--line);color:var(--ink)}
 .tabs button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
 .mk h3{font-size:15px;margin:0 0 6px}
 .mk-row{display:flex;justify-content:space-between;gap:8px;font-size:14px;padding:4px 0;border-bottom:1px dashed var(--line)}
@@ -173,27 +175,58 @@ ul.items strong{font-weight:600}
 .vs .ours{border:1px solid var(--ok-line);background:var(--ok-bg)}
 .vs .ours h3{color:var(--ok)}
 .actions{display:flex;flex-wrap:wrap;gap:10px}
-details.trace{color:var(--faint);font-size:14px}
+details.trace{color:var(--faint);font-size:14px}details.trace li{overflow-wrap:anywhere}
 .err{color:var(--warn)}
+.monday{border:1px solid var(--ok-line);background:var(--ok-bg);border-radius:18px;padding:20px 22px;display:flex;flex-direction:column;gap:10px}
+.monday h2{margin:0;font-size:20px;font-family:var(--display)}.monday ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:15px}
+.monday .jump{align-self:flex-start;min-height:44px;display:inline-flex;align-items:center;font-weight:600}
+a.next{color:var(--ink);text-decoration:underline;text-underline-offset:3px;min-height:44px;display:inline-flex;align-items:center}a.next.none{color:var(--faint)}
+.loop #after-lock{display:flex;flex-direction:column;gap:14px}.verdicts .act{display:block;margin-top:4px;color:var(--dark-ink);font-size:13px}
 body.result #how{display:none}
 .runbar{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:center;border:1px solid var(--line);border-radius:14px;padding:12px 16px;font-size:14px;color:var(--mute)}
 .runbar b{color:var(--ink);font-weight:600}.runbar .acts{margin-left:auto;display:flex;flex-wrap:wrap;gap:8px}
-.runbar .acts button{font-size:13px;min-height:38px;padding:6px 14px;border-radius:10px}
+.runbar .acts button{font-size:13px;min-height:44px;padding:6px 14px;border-radius:10px}
 .scroll{overflow-x:auto}.loop .lockid{display:inline-block;max-width:100%;overflow-wrap:anywhere}.loop label{max-width:100%}.loop input[type=file]{width:100%;min-width:0}
 @media (max-width:600px){.verdicts thead{display:none}.verdicts,.verdicts tbody,.verdicts tr,.verdicts td{display:block}.verdicts tr{padding:10px 0;border-bottom:1px solid var(--dark-line)}.verdicts td{border:0;padding:2px 0}.verdicts td[data-label]::before{content:attr(data-label) ": ";color:#9aa0ad;font-size:12px}}
 @media (max-width:600px){.tests-card-inner .loop,.loop{margin-left:-12px;margin-right:-12px;padding:16px}.loop .steps{gap:8px}.runbar .acts{margin-left:0}}
 .pods-note{margin:14px 0 0;font-size:14px;color:var(--mute)}
 .stepk{margin:0 0 6px;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ok)}
-.ptable{overflow-x:auto}.ptable>div{min-width:760px}
-.phead,.prow{display:grid;grid-template-columns:40px minmax(0,2.1fr) minmax(0,1.2fr) minmax(0,1.7fr) 140px;gap:16px;align-items:center}
+.ptable{overflow-x:auto}.ptable>div{min-width:820px}
+.phead,.prow{display:grid;grid-template-columns:36px minmax(0,2fr) minmax(0,1.1fr) minmax(0,1.6fr) minmax(0,1.2fr) 150px;gap:14px;align-items:center}
+.ptable.nocat .phead,.ptable.nocat .prow{grid-template-columns:36px minmax(0,2fr) minmax(0,1.1fr) minmax(0,1.7fr) 150px}
 .phead{padding:0 0 10px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:12px;color:var(--faint)}
 .prow{padding:13px 0;border-bottom:1px solid #1c2a44}.prow .n{font-family:var(--mono);color:var(--acc)}.prow>b{font-size:16px;font-weight:600}
 .prow .fit{display:flex;align-items:center;gap:10px}.prow .fit i{display:block;flex:1;height:8px;border-radius:4px;background:#1c2a44}.prow .fit i b{display:block;height:8px;border-radius:4px;background:var(--ok)}
 .prow .fit>span{font-family:var(--mono);font-size:13px;color:var(--ok)}
 .prow .ads{display:flex;flex-direction:column;gap:2px;font-size:13px;color:var(--mute)}.prow .cnt{font-family:var(--mono);font-size:12px;color:var(--acc)}.prow .cnt.none{color:var(--faint)}
 .prow .next{font-size:13px;font-weight:600;color:var(--ink)}.prow .next.none{font-weight:500;color:var(--faint)}
-@media (max-width:640px){.ptable>div{min-width:0}.phead{display:none}.prow{grid-template-columns:30px minmax(0,1fr);gap:6px 10px;align-items:start}.prow>.fit,.prow>.ads,.prow>.next{grid-column:2}.prow .fit{max-width:260px}}
+@media (max-width:700px){.ptable>div{min-width:0}.phead{display:none}.ptable .prow,.ptable.nocat .prow{grid-template-columns:30px minmax(0,1fr);gap:4px 10px;align-items:start}.prow>.fit,.prow>.ads,.prow>.rv,.prow>.go{grid-column:2}.prow .fit{max-width:260px}}
 .tests-rule{margin:0 0 14px;font-size:14px;color:var(--mute)}
+.plan{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:24px;display:flex;flex-direction:column;gap:18px}
+.plan h2{margin:0;font-family:var(--display);font-size:clamp(24px,4vw,32px);letter-spacing:-.02em;line-height:1.15;text-wrap:balance}
+.plan .stepk{margin:0 0 6px}
+.acts3{list-style:none;margin:0;padding:0;display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr))}
+.acts3 li{border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:6px}
+.acts3 li:first-child{border-color:var(--ok-line);background:var(--ok-bg)}
+.acts3 .k{font-family:var(--mono);font-size:12px;color:var(--ok)}.acts3 li:nth-child(2) .k{color:var(--acc)}.acts3 li:nth-child(3) .k{color:var(--faint)}
+.acts3 b{font-size:16px;line-height:1.35}.acts3 span.s{font-size:14px;color:var(--mute)}
+.acts3 a{min-height:44px;display:inline-flex;align-items:center;font-weight:600}
+.grp{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 12px;padding:16px 0 8px;border-bottom:1px solid var(--line)}
+.grp h3{margin:0;font-size:17px;font-family:var(--display)}.grp span{font-size:13px;color:var(--faint)}.grp.open h3{color:var(--ok)}.grp.rival h3{color:var(--warn)}
+.prow .rv{font-size:13px;color:var(--mute)}.prow .rv .ml{display:none;font-style:normal;color:var(--faint)}@media (max-width:700px){.prow .rv .ml{display:inline}}.prow .rv.open{color:var(--ok)}.prow .rv.rival{color:var(--warn)}
+.prow .go{display:flex;flex-direction:column;gap:0}.prow .code{font-family:var(--mono);font-size:12px;color:var(--faint)}
+.more-n{margin:8px 0 0;font-size:13px;color:var(--faint)}
+.selfcheck{border:1px solid var(--line);border-radius:18px;padding:16px 20px;display:flex;flex-direction:column;gap:10px}
+.selfcheck .top{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;font-size:15px}
+.selfcheck .gchip.weak{border:1px dashed var(--warn);background:transparent}
+details.more{border:1px solid var(--line);border-radius:16px;background:#0d182b}
+details.more>summary{cursor:pointer;list-style:none;padding:12px 20px;min-height:64px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+details.more>summary .t{display:flex;flex-direction:column;gap:2px}
+details.more>summary::-webkit-details-marker{display:none}
+details.more>summary b{font-family:var(--display);font-size:18px}details.more>summary span{font-size:13px;color:var(--faint)}
+details.more>summary::after{content:"Open";font-family:var(--mono);font-size:12px;color:var(--ok)}details.more[open]>summary::after{content:"Close"}
+details.more>.in{padding:0 16px 16px;display:flex;flex-direction:column;gap:16px}
+.foot a,.pods-note a,.note a{min-height:44px;display:inline-flex;align-items:center}
 .loop button:disabled{opacity:1;background:var(--ok-soft);color:var(--ok);cursor:default}
 .loop input[type=file]::file-selector-button{font:inherit;font-weight:600;color:var(--dark-ink);background:transparent;border:1px solid #3a3f4a;border-radius:10px;padding:8px 12px;margin-right:10px;cursor:pointer}
 @media (min-width:900px){.path .grid{grid-template-columns:minmax(0,1fr) minmax(0,2fr)}.wide2{grid-column:1/-1}}
@@ -210,20 +243,21 @@ body.result #how{display:none}
 <p class="kicker">For brands buying podcast and social ads</p>
 <h1>Pick podcasts by taste, not by chart rank.</h1>
 <p class="lede">An agent reads your buyers' taste in Qloo and tells you which podcasts to sponsor first, the interests to target and the ad to test.</p>
+<p class="qnote">Qloo knows which brands, shows and artists the same people like. No customer data needed. Podcasts: mostly US shows today.</p>
 <div class="cta"><button id="replay" type="button" hidden>See a real run now</button><a href="#f">or build your own</a></div>
 </div>
 <div class="proof" id="proof">
 <p class="eyebrow">Real sponsorships · 216 podcasts · 62 brands</p>
 <p class="big">Shown one show a brand sponsors and one it doesn't, Qloo picked the sponsored one <span class="hi">65%</span> of the time. The chart managed 52%.</p>
-<div class="pts" aria-label="Points above a coin flip">
-<div class="pt"><span>Qloo taste</span><i><b style="width:100%"></b></i><span>+14.7</span></div>
-<div class="pt"><span>Ad volume</span><i><b class="base" style="width:56%"></b></i><span>+8.2</span></div>
-<div class="pt"><span>Qloo popularity</span><i><b class="base" style="width:18%"></b></i><span>+2.6</span></div>
-<div class="pt"><span>Chart rank</span><i><b class="base" style="width:15%"></b></i><span>+2.2</span></div>
-<p class="axis">Points above a coin flip (0 = 50%)</p>
+<div class="pts" role="img" aria-label="Picks the sponsored show: Qloo taste 65%, ad volume 58%, Qloo popularity 53%, chart rank 52%, a coin flip 50%">
+<div class="pt"><span>Qloo taste</span><i><b style="width:65%"></b></i><span>65%</span></div>
+<div class="pt"><span>Ads already run</span><i><b class="base" style="width:58%"></b></i><span>58%</span></div>
+<div class="pt"><span>Qloo popularity</span><i><b class="base" style="width:53%"></b></i><span>53%</span></div>
+<div class="pt"><span>Chart rank</span><i><b class="base" style="width:52%"></b></i><span>52%</span></div>
+<p class="axis">Bars run from 0 to 100%. The dashed line is a coin flip, 50%.</p>
 </div>
-<div class="chips"><span>Locked before the data</span><span>Holds in every genre</span><span>Forward test locked</span></div>
-<p class="foot">Sponsor reads from the shows' own episode notes, never shown to Qloo. Pre-registered labels give the same: 66% against 53%. <a href="/judge#podcasts">The full test</a></p>
+<div class="chips"><span>Rules locked before the data</span><span>Ahead of the chart in all 12 genres</span><span>Forward test due 30 Oct</span></div>
+<p class="foot">Answer key: sponsor reads in the shows' own episode notes, never shown to Qloo. With the looser labels we registered first: 66% against 53%. <a href="/judge#podcasts">The full test</a></p>
 </div>
 </header>
 
@@ -250,9 +284,9 @@ body.result #how{display:none}
   </section>
 
   <section class="how" id="how" aria-label="What you get">
-<div class="on"><span class="k">01 · Podcasts</span><h2>Shows your buyers love, that already sell ads</h2><p>Ranked by Qloo taste and proven ad demand.</p></div>
-<div><span class="k">02 · Paid social</span><h2>Interests Meta can target</h2><p>Each with the Qloo result behind it.</p></div>
-<div><span class="k">03 · Tests</span><h2>What to test first, locked</h2><p>One change per test, read back by a fixed rule.</p></div>
+<div class="on"><span class="k">01 · Podcasts</span><h2>Shows your buyers love, before your rivals book them</h2><p>Ranked by Qloo taste, with the ads each show already runs.</p></div>
+<div><span class="k">02 · Paid social</span><h2>Meta interests the agent checked</h2><p>Each scored on a rival's audience before you see it.</p></div>
+<div><span class="k">03 · Tests</span><h2>One change per test, locked</h2><p>Read back from your Ads Manager export by a fixed rule.</p></div>
 </section>
 <section aria-live="polite">
     <p id="status" role="status"></p>
@@ -261,7 +295,7 @@ body.result #how{display:none}
   <div id="out" style="display:flex;flex-direction:column;gap:16px"></div>
 </main>
 <script type="module">
-import { RULE, canonicalPlan, planHash, adSetRows, toCsv, parseCsv, readResults, verdicts } from "/verdict.js";
+import { RULE, canonicalPlan, planHash, adSetRows, toCsv, parseCsv, readResults, verdicts, problemWith } from "/verdict.js";
 import { agentPath } from "/path.js";
 import { sponsorReady } from "/rank.js";
 const $ = (s) => document.querySelector(s);
@@ -274,6 +308,7 @@ const LISTS = { brand: "Brands", artist: "Artists", "TV show": "TV shows", film:
 const num = (v) => (typeof v === "number" ? v.toFixed(3) : "");
 const signed = (v) => `${v > 0 ? "+" : v < 0 ? "−" : ""}${Math.abs(Number(v)).toFixed(2)}`;
 const cleanInterest = (s) => String(s ?? "").replace(/\s*\(check in ads manager\)\s*$/i, "");
+const utc = (t) => `${new Date(t).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short", timeZone: "UTC" })} UTC`;
 
 // The Qloo results the server checked for a line (name, affinity, type), and anything the check could not confirm.
 const ev = (item, builtOn = false) => {
@@ -332,17 +367,20 @@ function markets(m) {
 // One pick scored by Qloo for this audience: the affinity, or why there is none.
 const gradedChip = (g) => g.status === "scored"
   ? `<span class="gchip${g.affinity >= 0.9 ? " hi" : ""}">${esc(cleanInterest(g.name))} <span class="num">${num(g.affinity)}</span></span>`
+  : g.ownCall != null ? `<span class="gchip">${esc(cleanInterest(g.name))} <span class="why">not scored in this city check; ${num(g.ownCall)} in the agent's own call</span></span>`
   : `<span class="gchip none">${esc(cleanInterest(g.name))} <span class="why">${g.status === "no_match" ? "not in Qloo" : "no score for this audience"}</span></span>`;
 const gradedLine = (x) => `<p class="gline"><strong>${x.high} of ${x.picks}</strong> at affinity 0.9 or more · ${x.checkable} of ${x.picks} found and scored</p><div class="gchips">${list(x.graded).map(gradedChip).join("")}</div>`;
 
-function versus(base, b, unbacked, scored, market) {
+function versus(base, b, unbacked, scored, market, registry) {
+  const own = new Map(list(registry).filter((e) => typeof e.affinity === "number").map((e) => [String(e.name).toLowerCase(), e.affinity]));
+  const tb = scored ? { ...scored.taste_brief, graded: list(scored.taste_brief?.graded).map((g) => (g.status !== "scored" && own.has(String(g.name).toLowerCase()) ? { ...g, ownCall: own.get(String(g.name).toLowerCase()) } : g)) } : null;
   if (!base) return "";
   if (base.error) return `<p class="err">The plain AI comparison did not work this time: ${esc(base.error)}</p>`;
   const names = (x) => list(x.meta_interests).map((i) => esc(cleanInterest(i.interest))).join(", ");
   const city = esc(String(market || "").split(",")[0]);
-  return `<section class="panel card vs"><p class="stepk">Step 2 · Meta interests</p>${scored ? `<h2><span>The same question, with and without Qloo</span><small>every interest scored by Qloo for this brand's audience in ${city}</small></h2>` : ""}<div class="grid">
+  return `<section class="panel card vs">${scored ? `<h2><span>The same question, with and without Qloo</span><small>every interest scored by Qloo for this brand's audience in ${city}</small></h2>` : ""}<div class="grid">
     <div class="guess"><h3>Plain AI guess, no data</h3>${scored ? gradedLine(scored.plain) : `<p><strong>Interests:</strong> ${names(base)}</p>`}</div>
-    <div class="ours"><h3>Taste Brief, from Qloo</h3>${scored ? gradedLine(scored.taste_brief) : `<p><strong>Interests:</strong> ${names(b)}</p>`}</div>
+    <div class="ours"><h3>Taste Brief, from Qloo</h3>${scored ? gradedLine(tb) : `<p><strong>Interests:</strong> ${names(b)}</p>`}</div>
   </div>${scored ? `<p class="note">Same grader for both: each interest is looked up in Qloo by its exact name, then Qloo scores how much this audience likes it. Generic interests such as "Running" can't be scored. For Taste Brief's picks this is partly circular, since they come from Qloo; it shows how far each pick is from Qloo's view of the audience, not how an ad will do. A score here can differ slightly from the one cited in the brief below, which came from the agent's own call (some narrowed to a product tag).</p>` : ""}${!scored && list(unbacked).length ? `<p class="unbacked"><strong>The plain guess would target these, and Qloo returned none of them in this run:</strong> ${list(unbacked).map((x) => esc(cleanInterest(x.label))).join(", ")}. That does not make them wrong. It means they are a guess, so test them against the Qloo picks or leave them out.</p>` : ""}</section>`;
 }
 
@@ -366,7 +404,8 @@ fetch("/api/replay").then((r) => (r.ok ? r.json() : null)).then((j) => {
     for (const k of ["product", "market", "compare_market", "references"]) if (inp[k]) f[k].value = inp[k];
     $("#live").innerHTML = "";
     showResult(j);
-    $("#out").scrollIntoView({ behavior: "smooth", block: "start" });
+    ($("#plan") || $("#out")).scrollIntoView({ behavior: "smooth", block: "start" });
+    $("#plan")?.focus({ preventScroll: true });
   });
 }).catch(() => {});
 
@@ -392,51 +431,114 @@ function stepText(run, s) {
     if (i.filter_type === "urn:entity:place") return `Found places in ${esc(a)} and in ${esc(b)} that this audience likes${err}`;
     return `Compared ${esc(typeName(i.filter_type))} lists for ${esc(a)} and ${esc(b)}${s.n !== undefined ? ` <span class="n">${s.n} of top ${s.of} shared</span>` : ""}${err}`;
   }
-  if (s.tool === "submit_brief") return s.error ? "Sent the first draft back to the model to fix its format" : "Wrote the brief and checked what each line cites against Qloo's results";
+  if (s.tool === "submit_brief") return s.error ? "Sent the first draft back to the model to fix its format" : s.revised ? "Rewrote the brief without the weak picks" : "Wrote a first brief and checked what each line cites against Qloo's results";
+  if (s.tool === "self_check") return s.error ? `Self-check could not run <span class="err">(${esc(s.error)})</span>` : `Self-check: scored ${esc(s.n)} interests on the audience of ${esc(s.rival)} <span class="n">${esc(s.weak)} weak</span>`;
   if (s.tool === "baseline_done") return "Wrote a plain AI guess to compare against";
   if (s.tool === "graded") return `Scored both lists of interests with Qloo for this audience <span class="n">${s.n} picks</span>`;
   return `${esc(s.tool)}${n(s.n)}${err}`;
 }
 
+const dot = (t) => { const s = String(t ?? "").trim(); return !s ? "" : /[.!?]$/.test(s) ? s : `${s}.`; };
+
+// The podcast plan: shows grouped by what a buyer does next, a promo code and tracking link per show.
+const STOP = new Set(["the", "a", "an", "with", "and", "of", "podcast", "show", "has"]);
+const STOP2 = new Set([...STOP, "not", "but", "in", "on", "for", "to", "my", "your", "our", "is", "it", "me", "it's", "its", "this", "that", "you"]);
+function podcastPlan(j) {
+  const p = j.podcasts;
+  if (!p || p.error || !list(p.shows).length) return null;
+  const cat = p.category || null, used = new Set();
+  // a code a host can read aloud: the show's first distinctive word (ARMCHAIR, MESS), never the brand typed in the form,
+  // which may be a competitor
+  const code = (name) => {
+    const words = String(name).toLowerCase().replace(/[^a-z0-9' ]/g, " ").split(/\s+/).map((w) => w.replace(/'s$|'/g, "")).filter((w) => w.length > 2 && !STOP2.has(w));
+    let c = (words[0] || "show").toUpperCase().slice(0, 10);
+    for (let k = 2; used.has(c); k++) c = c.replace(/\d+$/, "") + k;
+    used.add(c);
+    return c;
+  };
+  const slug = (x) => String(x).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  const byAff = (a, b) => (Number(b.affinity) || 0) - (Number(a.affinity) || 0);
+  const shows = list(p.shows);
+  const ads = (s) => (Array.isArray(s.advertisers) ? s.advertisers : null);
+  const open = shows.filter((s) => ads(s)?.length && !list(s.rivals).length).sort(byAff);
+  const rival = sponsorReady(shows.filter((s) => list(s.rivals).length));
+  const noads = shows.filter((s) => ads(s) && !ads(s).length).sort(byAff);
+  const unknown = shows.filter((s) => !ads(s)).sort(byAff);
+  const groups = [
+    { key: "open", title: cat ? "Open to you" : "Sell ads", note: cat ? `They sell ads; no ${cat} brand found in their episode notes` : "Their episode notes already carry ads", rows: open },
+    { key: "rival", title: `A ${cat} brand already advertises`, note: "Proven for your category, so expect competition for the slot", rows: rival },
+    { key: "noads", title: "No ads found in their notes", note: "Ask whether they sell ads at all", rows: noads },
+    { key: "unknown", title: "Not in our ad data", note: "Your buyers like them; we have not read their episode notes", rows: unknown.slice(0, 5), more: Math.max(0, unknown.length - 5) },
+  ].filter((g) => g.rows.length);
+  let n = 0;
+  const link = (s) => `?utm_source=${slug(s.name)}&utm_medium=podcast&utm_campaign=taste-brief`;
+  for (const g of groups) for (const s of g.rows) { s._n = ++n; s._code = code(s.name); s._link = link(s); s._group = g.key; }
+  for (const s of unknown.slice(5)) { s._n = ++n; s._code = code(s.name); s._link = link(s); s._group = "unknown"; }
+  // ask first: shows that sell ads, open ones before ones a rival already uses; with none in our data, the best taste fits
+  const selling = [...open, ...rival].slice(0, 3);
+  const first = selling.length ? selling : [...shows].sort(byAff).slice(0, 3);
+  return { cat, groups, first, selling: selling.length > 0, all: [...groups.flatMap((g) => g.rows), ...unknown.slice(5)] };
+}
+const contactUrl = (s) => `https://www.google.com/search?q=${encodeURIComponent(`${s.name} podcast advertising`)}`;
+
 const mdBrief = (j) => {
-  const b = j.brief, d = j.demographics;
+  const b = j.brief, d = j.demographics, plan = podcastPlan(j);
   const src = (x) => list(x.verified).map((e) => `${e.name}${e.affinity != null ? ` ${num(e.affinity)}` : ""}`).join("; ");
   const line = (x, k) => `- ${cleanInterest(x[k])}${src(x) ? ` (Qloo: ${src(x)})` : ""}`;
-  return [`# Taste Brief: ${j.market}`, "", b.audience_summary || "", "",
+  const sc = j.self_check?.final;
+  return [`# Taste Brief: ${j.product}, ${j.market}`, "",
+    ...(plan ? ["## Podcast plan", "",
+      plan.first.length ? `1. Ask for rates this week: ${plan.first.map((s) => s.name).join(", ")}.${plan.selling ? "" : " We have no ad data for them, so ask whether they sell ads."} Ask each for its rate per episode, downloads per episode, host-read slots and the next open dates.` : "",
+      `2. Give each show its own promo code and tagged link (add the link to your landing page address): ${plan.first.map((s) => `${s.name}, code ${s._code}`).join("; ") || "see the table"}.`,
+      list(b.test_plan).length ? `3. Test Meta next to it: ${list(b.test_plan).length} ad sets against your usual ad. Lock the plan before you spend.` : "", "",
+      ...plan.groups.flatMap((g) => [`### ${g.title}: ${g.note}`, ...g.rows.map((s) => `- ${s.name}: taste fit ${Number(s.affinity).toFixed(2)}; ${Array.isArray(s.advertisers) ? (s.advertisers.length ? `ads in its notes: ${s.advertisers.join(", ")}` : "no ads found in its notes") : "not in our ad data"}${list(s.rivals).length ? `; ${plan.cat} brands: ${s.rivals.join(", ")}` : ""}; code ${s._code}; link ${s._link}`), ""])] : []),
+    "## Who the buyers are", b.audience_summary || "",
     d?.age ? `Qloo age index for ${list(d.seeds).join(" and ")}: ${Object.entries(d.age).map(([k, v]) => `${AGE[k] || k} ${signed(v)}`).join(", ")}` : "",
-    d?.gender ? `Qloo gender index: ${Object.entries(d.gender).map(([k, v]) => `${GENDER[k] || k} ${signed(v)}`).join(", ")}\n` : "",
-    "## Who they are", ...list(b.audience_traits).map((x) => line(x, "trait")), "",
-    "## Meta interests to test (check each in Ads Manager)", ...list(b.meta_interests).map((x) => line(x, "interest")), "",
+    d?.gender ? `Qloo gender index: ${Object.entries(d.gender).map(([k, v]) => `${GENDER[k] || k} ${signed(v)}`).join(", ")}` : "", "",
+    ...list(b.audience_traits).map((x) => line(x, "trait")), "",
+    `## Meta interests${sc?.rival ? ` (self-check on the audience of ${sc.rival.name})` : ""}`, ...list(b.meta_interests).map((x) => { const c = list(sc?.picks).find((q) => q.name === cleanInterest(x.interest)); return `${line(x, "interest")}${c ? ` [self-check: ${c.verdict}${c.affinity != null ? ` ${c.affinity.toFixed(3)}` : ""}]` : ""}`; }), "",
     "## Creative angles (our reading of the data)", ...list(b.creative_angles).map((x) => `- ${x.angle}: ${x.hook || ""}${src(x) ? ` (built on ${src(x)})` : ""}`), "",
     "## Landing page", `${b.landing_page?.headline || ""}`, `${b.landing_page?.subheadline || ""}`, "",
-    "## Partnerships", ...list(b.partnerships).map((x) => `- ${x.partner}: ${x.idea || ""}${src(x) ? ` (Qloo: ${src(x)})` : ""}`), "",
-    ...(list(b.test_plan).length ? ["## What to test first (each against the control: broad targeting, usual message)", ...list(b.test_plan).map((x) => `- ${x.hypothesis}. Changes: ${x.variable}. Run: ${x.ad_set}. Why: ${x.why || ""} Judge on: ${x.kpi}. Pause rule: ${x.stop_if}.${src(x) ? ` (Qloo: ${src(x)})` : ""}`), ""] : []),
-    ...(list(j.unbacked).length ? ["## The plain AI guess would also target (not in Qloo's results this run)", list(j.unbacked).map((x) => cleanInterest(x.label)).join(", "), ""] : []),
-    ...(list(b.caveats).length ? ["## Notes", ...list(b.caveats).map((c) => `- ${c}`)] : [])].join("\n");
+    ...(list(b.partnerships).length ? ["## Partnerships", ...list(b.partnerships).map((x) => `- ${x.partner}: ${x.idea || ""}${src(x) ? ` (Qloo: ${src(x)})` : ""}`), ""] : []),
+    ...(list(b.test_plan).length ? ["## Meta tests (each against your usual ad: broad targeting, same ages, usual message)", ...list(b.test_plan).map((x, i) => `- Test ${i + 1}, ${x.variable} only. ${dot(x.hypothesis)} Run: ${dot(x.ad_set)} Why: ${dot(x.why || "")} Judge on: ${dot(x.kpi)} Pause rule: ${dot(x.stop_if)}`), "",
+      `Locked rule: once a test and your usual ad each have ${RULE.minAddsToCart} adds to cart, the test is ahead if its cost per add to cart is at least ${Math.round(RULE.betterBy * 100)}% lower, pause if it is more than ${Math.round(RULE.worseBy * 100)}% higher, otherwise no clear difference. Up to ${RULE.cap} per ad set in your account currency.`, ""] : []),
+    ...(list(b.caveats).length ? ["## Notes from the agent", ...list(b.caveats).map((c) => `- ${c}`)] : [])].filter((x, i, a) => !(x === "" && a[i - 1] === "")).join("\n");
 };
 const csvInterests = (j) => {
   const q = (s) => `"${String(s ?? "").replace(/"/g, '""')}"`;
-  return ["interest,qloo_results,qloo_affinity,status", ...list(j.brief.meta_interests).map((x) =>
-    [q(cleanInterest(x.interest)), q(list(x.verified).map((e) => e.name).join("; ")), q(list(x.verified).map((e) => num(e.affinity)).join("; ")),
-      q(x.grounded ? "check in Meta Ads Manager" : "not confirmed by Qloo")].join(","))].join("\n");
+  const sc = j.self_check?.final;
+  return [`interest,qloo_results,qloo_affinity,self_check_on${sc?.rival ? ` ${sc.rival.name}` : ""},self_check_score`, ...list(j.brief.meta_interests).map((x) => {
+    const c = list(sc?.picks).find((p) => p.name === cleanInterest(x.interest));
+    return [q(cleanInterest(x.interest)), q(list(x.verified).map((e) => e.name).join("; ")), q(list(x.verified).map((e) => num(e.affinity)).join("; ")),
+      q(c ? c.verdict.replace(/_/g, " ") : x.grounded ? "not checked" : "not confirmed by Qloo"), q(c?.affinity != null ? c.affinity.toFixed(3) : "")].join(",");
+  })].join("\n");
+};
+const csvPodcasts = (j) => {
+  const q = (v) => `"${String(v ?? "").replace(/"/g, '""')}"`, plan = podcastPlan(j);
+  if (!plan) return "";
+  const G = { open: plan.cat ? "open to you" : "sells ads", rival: `a ${plan.cat} brand already advertises`, noads: "no ads found", unknown: "not in our ad data" };
+  const rv = (s) => (!Array.isArray(s.advertisers) ? "unknown" : list(s.rivals).length ? list(s.rivals).join("; ") : "none found");
+  return [`rank,show,group,taste_fit_qloo,ads_in_episode_notes,${plan.cat ? `${plan.cat.replace(/ /g, "_")}_brands,` : ""}promo_code,tracking_link_suffix,search_for_ad_contact`,
+    ...plan.all.map((s) => [s._n ?? "", q(s.name), q(G[s._group]), num(s.affinity), q(Array.isArray(s.advertisers) ? (s.advertisers.length ? s.advertisers.join("; ") : "none found") : "not in our data"), ...(plan.cat ? [q(rv(s))] : []), q(s._code), q(s._link), q(contactUrl(s))].join(","))].join("\n");
 };
 
 // Lock the plan, run it, read the results back with the rule that was locked. Plain code (verdict.js), no model.
 function loopPanel() {
   return `<div class="loop" id="loop"><h3>Lock it, run it, read it back</h3>
     <div class="steps">
-      <div class="step"><b>1. Lock the plan</b>A SHA-256 fingerprint of the control, the tests and the rule; the server keeps a receipt with its own time before any money is spent.</div>
-      <div class="step"><b>2. Run it</b>A planning sheet for building the ad sets in Ads Manager, named with the plan id, capped at ${RULE.cap} per arm.</div>
-      <div class="step"><b>3. Read it back</b>Upload the Ads Manager export. Checked against the receipt, each test reads ahead, pause, no clear difference or inconclusive.</div>
+      <div class="step"><b>1. Lock the plan</b>Saved with the server's time before any money is spent, so the results can't be cherry-picked later (a SHA-256 fingerprint).</div>
+      <div class="step"><b>2. Run it</b>A planning sheet for building the ad sets in Ads Manager, named with the plan id, capped at ${RULE.cap} per ad set in your currency.</div>
+      <div class="step"><b>3. Read it back</b>Upload the Ads Manager export. Each test reads ahead, pause, no clear difference or inconclusive, with what to do next.</div>
     </div>
-    <p class="note" style="margin:0">Locked rule: once the test and the control each have ${RULE.minAddsToCart} adds to cart, a test is ahead if its cost per add to cart is below the control's, pause if it is more than ${Math.round(RULE.worseBy * 100)}% above, otherwise no clear difference; an arm that hits its spend cap first is inconclusive. Exploratory calls for a small budget, not statistical proof.</p>
+    <p class="note" style="margin:0">Locked rule: once a test and your usual ad each have ${RULE.minAddsToCart} adds to cart, the test is ahead if its cost per add to cart is at least ${Math.round(RULE.betterBy * 100)}% lower, pause if it is more than ${Math.round(RULE.worseBy * 100)}% higher, otherwise no clear difference. Before that it reads keep running; an ad set that hits its spend cap first is inconclusive. ${RULE.minAddsToCart} adds to cart is a small-budget call, well below the 50 events Meta's learning phase wants, so treat it as a first read, not proof.</p>
     <div class="row"><button type="button" id="lock">Lock this test plan</button><span id="lock-out"></span></div>
     <div id="after-lock" hidden>
       <div class="row"><button type="button" class="ghost" id="dl-sheet">Download the planning sheet (CSV)</button><button type="button" class="ghost" id="dl-plan">Download the locked plan (JSON)</button></div>
       <div class="row"><label style="flex-direction:row;align-items:center;gap:10px;font-weight:600">Upload Ads Manager results (CSV)<input type="file" id="results-file" accept=".csv,text/csv"></label>
         <button type="button" class="ghost" id="sample-results">Try with sample numbers</button></div>
       <div id="verdict-out"></div>
-    </div></div>`;
+    </div>
+    <details class="code"><summary>Locked this plan earlier? Load its plan file</summary><label style="flex-direction:row;align-items:center;gap:10px;font-weight:600">Locked plan (JSON)<input type="file" id="plan-file" accept=".json,application/json"></label><p class="note" id="plan-file-out" style="margin:0"></p></details></div>`;
 }
 
 const download = (name, text, type) => {
@@ -462,15 +564,36 @@ function wireLoop(j) {
       const out = await r.json();
       if (r.ok && out.receipt?.hash === hash) locked.receipt = out.receipt;
     } catch {}
-    const when = locked.receipt ? `server receipt ${new Date(locked.receipt.received_at).toLocaleString()}` : `not stored on the server, browser time ${new Date(lockedAt).toLocaleString()}`;
+    const when = locked.receipt ? `server receipt ${utc(locked.receipt.received_at)}` : `not stored on the server, browser time ${utc(lockedAt)}`;
     $("#lock-out").innerHTML = `<span class="lockid">Plan ${esc(locked.id)} · SHA-256 ${esc(hash.slice(0, 16))}… · ${esc(when)}</span>`;
     $("#after-lock").hidden = false;
   });
   const slug = () => String(j.market).replace(/[^a-z0-9]+/gi, "-").toLowerCase();
   $("#dl-sheet").addEventListener("click", () => locked && download(`taste-brief-ad-sets-${locked.id}-${slug()}.csv`, toCsv(adSetRows({ market: j.market, tests, planId: locked.id })), "text/csv"));
-  $("#dl-plan").addEventListener("click", () => locked && download(`taste-brief-plan-${locked.id}.json`, JSON.stringify({ sha256: locked.hash, plan: JSON.parse(locked.canonical) }, null, 2), "application/json"));
+  $("#dl-plan").addEventListener("click", () => locked && download(`taste-brief-plan-${locked.id}.json`, JSON.stringify({ sha256: locked.hash, server_receipt: locked.receipt?.received_at || null, plan: JSON.parse(locked.canonical) }, null, 2), "application/json"));
+  // a plan locked on another day: its file restores the id, so the ad sets already named in Ads Manager still match
+  $("#plan-file").addEventListener("change", async (e) => {
+    const f = e.target.files?.[0]; if (!f) return;
+    try {
+      const saved = JSON.parse(await f.text()), canonical = JSON.stringify(saved.plan);
+      const hash = await planHash(canonical);
+      if (hash !== saved.sha256) throw new Error("the file was changed after locking");
+      const r = await fetch(`/api/lock/${hash}`), receipt = r.ok ? (await r.json()).receipt : null;
+      locked = { canonical, hash, id: hash.slice(0, 8), lockedAt: saved.plan.locked_at, receipt, tests: saved.plan.tests };
+      btn.disabled = true; btn.textContent = "Locked";
+      $("#lock-out").innerHTML = `<span class="lockid">Plan ${esc(locked.id)} · SHA-256 ${esc(hash.slice(0, 16))}… · ${receipt ? `server receipt ${esc(utc(receipt.received_at))}` : "no server receipt"}</span>`;
+      $("#after-lock").hidden = false;
+      $("#plan-file-out").textContent = `Loaded plan ${locked.id}. Upload its Ads Manager export above.`;
+    } catch (err) { $("#plan-file-out").textContent = `Could not load that file: ${err.message}.`; }
+  });
   const show = async (csvText, sample) => {
-    const v = verdicts(readResults(parseCsv(csvText), locked.id));
+    const rows = parseCsv(csvText), problem = problemWith(rows, locked.id);
+    if (problem) { $("#verdict-out").innerHTML = `<p class="err">${esc(problem)}</p>`; return; }
+    const planArms = ["Control", ...JSON.parse(locked.canonical).tests.map((t) => t.arm)];
+    const lockedRule = { ...RULE, ...(JSON.parse(locked.canonical).rule || {}) }; // read with the rule in the receipt, not today's
+    const arms = readResults(rows, locked.id, planArms), v = verdicts(arms, lockedRule);
+    const missing = planArms.filter((a) => !arms[a]);
+    const over = Object.entries(arms).filter(([, a]) => a.spend > lockedRule.cap * 1.05).map(([k]) => k);
     // read the receipt back from the server and check it is the plan on this page
     // real results get verdicts only when the server receipt matches the plan; sample numbers are an illustration either way
     let verified = false, check = `<p class="err">No server receipt for this plan, so there are no verdicts for real results.</p>`;
@@ -479,16 +602,21 @@ function wireLoop(j) {
       const got = r.ok ? (await r.json()).receipt : null;
       if (got && got.canonical === locked.canonical) {
         verified = true;
-        check = `<p class="note">Checked against the server receipt: this plan, unchanged, was received at ${esc(new Date(got.received_at).toLocaleString())}. Results are read with the rule in that receipt.</p>`;
+        check = `<p class="note">Checked against the server receipt: this plan, unchanged, was received at ${esc(utc(got.received_at))}. Results are read with the rule in that receipt.</p>`;
       } else if (got) check = `<p class="err">The server receipt does not match this plan, so there are no verdicts.</p>`;
     } catch {}
     if (!verified && !sample) { $("#verdict-out").innerHTML = check; return; }
     const cls = (x) => (x === "ahead" ? "v-ahead" : x === "pause" ? "v-pause" : "v-other");
+    const NEXT = { ahead: "Next: move budget from your usual ad to this one.", pause: "Next: pause this ad set.", "no clear difference": "Next: keep your usual ad; this change did not matter.", inconclusive: "Next: raise the cap or stop; not enough data.", "keep running": "Next: leave it on and upload a new export later.", "no control": "Next: add the Control ad set to the export." };
+    const armLabel = (arm) => { const k = Number(String(arm).replace(/\D/g, "")); const t = (locked.tests || tests)[k - 1]; return t ? `<br><span class="note">${t.variable === "targeting" ? "targeting only" : t.variable === "creative" ? "creative only" : esc(t.variable)}</span>` : ""; };
     const money = (x) => (x == null ? "n/a" : x.toFixed(2));
-    $("#verdict-out").innerHTML = (sample ? `<div class="banner synthetic">Sample numbers, made up to show how the rule reads results. No ads were run.</div>` : "") + check
-      + (v.length ? `<div class="scroll"><table class="verdicts"><thead><tr><th>Arm</th><th>Spend</th><th>Adds to cart</th><th>Cost per add to cart (control)</th><th>Verdict</th></tr></thead><tbody>${v.map((r) =>
-        `<tr><td><strong>${esc(r.arm)}</strong></td><td data-label="Spend">${money(r.spend)}</td><td data-label="Adds to cart">${esc(r.addsToCart)}</td><td data-label="Cost per add to cart (control)">${money(r.cost)} (${money(r.controlCost)})</td><td><span class="${cls(r.verdict)}">${esc(r.verdict)}</span><br><span class="note">${esc(r.why)}</span></td></tr>`).join("")}</tbody></table></div>`
-        : `<p class="err">No ad sets named TB-${esc(locked.id)} in that file. Export from Ads Manager at the ad set level, with Amount spent and Adds to cart.</p>`);
+    const c = arms.Control;
+    const controlRow = c ? `<tr><td><strong>Control</strong><br><span class="note">your usual ad</span></td><td data-label="Spend">${money(c.spend)}</td><td data-label="Adds to cart">${esc(c.addsToCart)}</td><td data-label="Cost per add to cart">${money(c.addsToCart ? c.spend / c.addsToCart : null)}</td><td>the yardstick</td></tr>` : "";
+    $("#verdict-out").innerHTML = (sample ? `<div class="banner synthetic">Sample numbers, made up to show how the rule reads results. We ran no ads.</div>` : "") + check
+      + (missing.length ? `<p class="err">Not in this export: ${missing.map(esc).join(", ")}. Add ${missing.length === 1 ? "it" : "them"} to read every test.</p>` : "")
+      + (over.length ? `<p class="err">Spent more than the locked cap of ${lockedRule.cap}: ${over.map(esc).join(", ")}. The plan was not run as locked, so read these verdicts with care.</p>` : "")
+      + `<div class="scroll"><table class="verdicts"><thead><tr><th>Ad set</th><th>Spend</th><th>Adds to cart</th><th>Cost per add to cart</th><th>Verdict</th></tr></thead><tbody>${controlRow}${v.map((r) =>
+        `<tr><td><strong>${esc(r.arm)}</strong>${armLabel(r.arm)}</td><td data-label="Spend">${money(r.spend)}</td><td data-label="Adds to cart">${esc(r.addsToCart)}</td><td data-label="Cost per add to cart">${money(r.cost)}</td><td><span class="${cls(r.verdict)}">${esc(r.verdict)}</span><br><span class="note">${esc(r.why)}</span><span class="act">${esc(NEXT[r.verdict] || "")}</span></td></tr>`).join("")}</tbody></table></div>`;
   };
   $("#results-file").addEventListener("change", async (e) => { const f = e.target.files?.[0]; if (f && locked) show(await f.text(), false); });
   $("#sample-results").addEventListener("click", () => {
@@ -500,27 +628,58 @@ function wireLoop(j) {
   });
 }
 
-// Podcasts ranked by Qloo for this brand, with Qloo's own explanation, and the advertisers each show's episode notes
-// already name. The proof numbers are the pre-registered held-out test in docs/podcast-check.
-// strict labels (DEVIATION-1.md), the headline result; the pre-registered labels give 0.663 against 0.528
-const PODCAST_TEST = { shows: 216, brands: 62, qloo: 0.647, chart: 0.522 };
-function podcastPanel(p) {
-  if (!p || p.error || !list(p.shows).length) return "";
-  const t = PODCAST_TEST;
-  const seeds = [...new Set(list(p.shows).flatMap((s) => list(s.driven_by).map((d) => d.name)))];
-  const shows = sponsorReady(list(p.shows)).slice(0, 8);
-  const affs = shows.map((s) => Number(s.affinity) || 0), lo = Math.min(...affs) - 0.01, hi = Math.max(...affs);
-  const li = shows.map((s, i) => {
-    const ads = list(s.advertisers);
-    const fit = Math.max(4, Math.round(((Number(s.affinity) - lo) / Math.max(hi - lo, 0.001)) * 100));
-    return `<div class="prow"><span class="n">${String(i + 1).padStart(2, "0")}</span><b>${esc(s.name)}</b>`
-      + `<span class="fit"><i><b style="width:${fit}%"></b></i><span>${s.affinity == null ? "" : Number(s.affinity).toFixed(3)}</span></span>`
-      + `<span class="ads"><span class="cnt${ads.length ? "" : " none"}">${ads.length ? `${ads.length} advertiser${ads.length === 1 ? "" : "s"}` : "None found"}</span>${ads.length ? `<span>${ads.slice(0, 3).map(esc).join(", ")}${ads.length > 3 ? ` +${ads.length - 3}` : ""}</span>` : ""}</span>`
-      + `<span class="next${ads.length ? "" : " none"}">${ads.length ? "Request rates" : "Ask if it sells ads"}</span></div>`;
-  });
-  return `<section class="panel card pods-card"><p class="stepk">Step 1 · Podcasts to sponsor first</p><h2><span>Shows ${seeds.length === 1 ? `${esc(seeds[0])} fans love` : "this audience loves"} that already sell ads</span><small>taste fit from Qloo (explainability: ${seeds.length === 1 ? `driven by ${esc(seeds[0])} fans` : "per show"}), ordered by taste and proven ad demand</small></h2>
-    <div class="ptable"><div class="phead"><span>#</span><span>Show</span><span>Taste fit</span><span>Proven ad demand</span><span>Next step</span></div>${li.join("")}</div>
-    <p class="pods-note">Taste fit: how much the brand's fans like the show (Qloo). Proven ad demand: advertisers its episode notes already run. In the locked test on ${t.shows} held-out US podcasts and ${t.brands} brands, Qloo's taste rank put a show the brand sponsors above one it doesn't ${Math.round(t.qloo * 100)}% of the time (the chart ${Math.round(t.chart * 100)}%), and this order, taste plus ad demand, found 1.9 sponsored shows in a top 10 on average in an exploratory count, against 1.6 for either alone and 0.8 for the chart. Mostly US shows: check reach in your market. <a href="/judge#podcasts">The test</a></p></section>`;
+// The podcast plan: what to do this week, then every show grouped by what a buyer does next. Proof numbers come from the
+// locked test in docs/podcast-check (strict labels) and the open-shows check (open-shows.json).
+function planPanel(j) {
+  const plan = podcastPlan(j);
+  if (!plan) return "";
+  const seeds = [...new Set(list(j.podcasts.shows).flatMap((s) => list(s.driven_by).map((d) => d.name)))];
+  const fans = seeds.length === 1 ? `${esc(seeds[0])} fans` : "your buyers";
+  const tests = list(j.brief?.test_plan).length;
+  const firstNames = plan.first.map((s) => esc(s.name));
+  const allOpen = plan.first.length && plan.first.every((s) => !list(s.rivals).length);
+  const acts = [
+    plan.first.length ? `<li><span class="k">1 · Ask for rates this week</span><b>${firstNames.join(", ")}</b><span class="s">${!plan.selling ? "Your buyers like them most; we have no ad data for them, so ask whether they sell ads." : allOpen && plan.cat ? `They sell ads, and we found no ${esc(plan.cat)} brand in their episode notes.` : "They already sell ads, and your buyers like them."} Ask for the rate per episode, downloads, host-read slots and open dates.</span></li>` : "",
+    plan.first.length ? `<li><span class="k">2 · One code per show</span><b>${plan.first.map((s) => esc(s._code)).join(", ")}</b><span class="s">A promo code the host can read out, and a tagged link per show (add it to your landing page address), so you can count what each read sells.</span></li>` : "",
+    tests ? `<li><span class="k">3 · Test Meta next to it</span><b>${tests} ad set${tests === 1 ? "" : "s"} against your usual ad</b><span class="s">Lock the plan before you spend, read it back from Ads Manager.</span><a href="#tests">Open the tests</a></li>` : "",
+  ].filter(Boolean);
+  const head = `<div class="phead"><span>#</span><span>Show</span><span>Taste fit</span><span>Ads in its episodes</span>${plan.cat ? `<span>${esc(plan.cat[0].toUpperCase() + plan.cat.slice(1))} brands</span>` : ""}<span>Next step</span></div>`;
+  const row = (s) => {
+    const ads = Array.isArray(s.advertisers) ? s.advertisers : null;
+    const fit = Math.max(4, Math.round(((Number(s.affinity) - 0.8) / 0.2) * 100));
+    const adsCell = ads == null ? `<span class="cnt none">Not in our ad data</span>` : ads.length
+      ? `<span class="cnt">${ads.length} advertiser${ads.length === 1 ? "" : "s"}${ads.length >= 10 ? ", a busy show" : ""}</span><span>${ads.slice(0, 3).map(esc).join(", ")}${ads.length > 3 ? ` +${ads.length - 3}` : ""}</span>`
+      : `<span class="cnt none">No ads found in its notes</span>`;
+    const ml = `<i class="ml">${esc(plan.cat)} brands: </i>`;
+    const rv = !plan.cat ? "" : ads == null ? `<span class="rv">${ml}Unknown</span>` : list(s.rivals).length ? `<span class="rv rival">${ml}${list(s.rivals).map(esc).join(", ")}</span>` : `<span class="rv open">${ml}None found</span>`;
+    return `<div class="prow"><span class="n">${String(s._n).padStart(2, "0")}</span><b>${esc(s.name)}</b>`
+      + `<span class="fit"><i><b style="width:${Math.min(100, fit)}%"></b></i><span>${Number(s.affinity).toFixed(2)}</span></span>`
+      + `<span class="ads"${ads?.length ? ` title="${ads.map(esc).join(", ")}"` : ""}>${adsCell}</span>${rv}`
+      + `<span class="go"><a class="next${ads?.length ? "" : " none"}" href="${contactUrl(s)}" target="_blank" rel="noopener">${ads?.length ? "Search for ad contact ↗" : "Search: does it sell ads? ↗"}</a><span class="code">code ${esc(s._code)}</span></span></div>`;
+  };
+  const body = plan.groups.map((g) => `<div class="grp ${g.key}"><h3>${esc(g.title)}</h3><span>${esc(g.note)}</span></div>${g.rows.map(row).join("")}${g.more ? `<p class="more-n">${g.more} more in the podcasts CSV.</p>` : ""}`).join("");
+  return `<section class="plan" id="plan" tabindex="-1"><div><p class="stepk">Your podcast plan</p><h2>${plan.cat ? `Book the shows ${fans} love before another ${esc(plan.cat)} brand does` : `Shows ${fans} love that already sell ads`}</h2></div>
+    <ol class="acts3">${acts.join("")}</ol>
+    <div class="ptable${plan.cat ? "" : " nocat"}"><div>${head}${body}</div></div>
+    <div class="row" style="margin:0"><button type="button" class="ghost js-dl-md">Download the plan</button><button type="button" class="ghost js-dl-pods">Podcasts CSV</button></div>
+    <p class="pods-note">Taste fit: how much ${fans} like the show, from Qloo (bar from 0.80 to 1.00). Ads: brands its episode notes already read, from 662 US shows we read. On 216 held-out US podcasts this taste rank picked the show a brand sponsors 65% of the time, the chart 52%. Open shows are ranked by Qloo too; whether rivals go there next is only a hint so far (exploratory). Most shows are American: check reach in your market. <a href="/judge#podcasts">How we checked</a></p></section>`;
+}
+
+// The agent's check of its own Meta interests, on a rival's audience, before the brief was shown.
+function selfCheckPanel(j) {
+  const sc = j.self_check;
+  if (!sc || sc.error || !sc.final?.rival) return "";
+  const f = sc.final, first = sc.first || f;
+  const names = (r) => list(r.picks).map((p) => p.name);
+  const dropped = names(first).filter((n) => !names(f).includes(n)), added = names(f).filter((n) => !names(first).includes(n));
+  const chip = (p) => `<span class="gchip${p.verdict === "strong" ? " hi" : p.verdict === "fair" ? "" : " weak"}">${esc(p.name)} <span class="num">${p.affinity != null ? p.affinity.toFixed(3) : ""}</span> <span class="why">${esc(p.verdict.replace(/_/g, " "))}</span></span>`;
+  const still = f.weak.length ? ` ${f.weak.length} ${f.weak.length === 1 ? "is" : "are"} still below the bar: check ${f.weak.map(esc).join(", ")} before you spend.` : "";
+  const what = sc.revised
+    ? `${first.weak.length} ${first.weak.length === 1 ? "was" : "were"} weak, so it rewrote the brief before you saw it${dropped.length ? `: dropped ${dropped.map(esc).join(", ")}` : ""}${added.length ? `; added ${added.map(esc).join(", ")}` : ""}.${still}`
+    : still || " All passed, so it kept the brief as written.";
+  return `<section class="selfcheck" id="check"><div class="top"><span class="pill live">Agent self-check</span><span>Scored its ${list(first.picks).length} Meta interests on the audience of ${esc(f.rival.name)}, ${f.rival.source === "closest uncited brand" ? `the closest brand in this run that the brief did not cite${list(f.rival.named).length ? `, since none of the rivals it named (${list(f.rival.named).map(esc).join(", ")}) could be used` : ""}` : "a rival it named and did not use"}. ${what}</span></div>
+    <div class="gchips">${list(f.picks).map(chip).join("")}</div>
+    <p class="note" style="margin:0">Strong is 0.9 or more for the rival's audience, fair 0.8 to 0.9; weak is lower, or Qloo has no score for that audience. A pick that only fits the agent's own seed brand is the one to doubt.</p></section>`;
 }
 
 // The agent's own decisions in this run, read from its Qloo calls, and what it chose not to use (its caveats).
@@ -538,8 +697,8 @@ function pathPanel(j) {
   const caveats = list(j.brief?.caveats);
   return `<section class="panel path"><div class="grid">
     <div><h3>How the agent worked this out</h3><ol>${steps.map((x) => `<li>${x}</li>`).join("")}</ol>
-      <p class="note">${p.qlooCalls} Qloo calls, chosen by the agent for this product and city, not a fixed script. Every call is listed at the bottom.</p></div>
-    ${caveats.length ? `<div><h3>What it chose not to use</h3><ul>${caveats.map((x) => `<li>${esc(x)}</li>`).join("")}</ul></div>` : ""}
+      <p class="note">The agent chose these ${p.qlooCalls} Qloo calls for this product and city. The app then runs fixed steps: the podcast ranking, the self-check, grading both interest lists and the second city. Every call is listed below.</p></div>
+    ${caveats.length ? `<div><h3>Its notes and what it left out</h3><ul>${caveats.map((x) => `<li>${esc(x)}</li>`).join("")}</ul></div>` : ""}
   </div></section>`;
 }
 
@@ -550,66 +709,79 @@ function testsCard(b, j) {
   const same = tp.every((x) => x.kpi === tp[0].kpi && x.stop_if === tp[0].stop_if);
   const city = esc(String(j.market).split(",")[0]);
   const lines = tp.map((x) => `<li><strong>${esc(x.hypothesis)}</strong><dl><dt>Changes</dt><dd>${x.variable === "targeting" ? "Targeting only, with your usual creative" : x.variable === "creative" ? "Creative only, on the broad audience" : esc(x.variable)}</dd><dt>Run</dt><dd>${esc(x.ad_set)}</dd>${x.why ? `<dt>Why</dt><dd>${esc(x.why)}</dd>` : ""}${same ? "" : `<dt>Judge on</dt><dd>${esc(x.kpi)}</dd><dt>Pause rule</dt><dd>${esc(x.stop_if)}</dd>`}</dl>${ev(x, true)}</li>`).join("");
-  return card("What to test first", `<p class="stepk" style="margin-top:-6px">Step 3 · Against the usual ad</p><p class="tests-rule">Control for every test: broad targeting in ${city}, same ages, your usual message. Each test changes one thing${same ? `, judged on ${esc(lc(tp[0].kpi))}` : ""}. The rule for reading results is locked below.</p><ul class="tests">${lines}</ul>${loopPanel()}`, "each test rests on the Qloo results shown");
+  return card("What to test first", `<p class="tests-rule">Your usual ad is the control: broad targeting in ${city}, same ages, your usual message. Each test changes one thing${same ? `, judged on ${esc(lc(tp[0].kpi))}` : ""}. The rule for reading results is locked below.</p><ul class="tests">${lines}</ul>${loopPanel()}`, "each test rests on the Qloo results shown");
 }
 
-// Draw one result: from a run that just finished, or the recorded run of the example.
+// Draw one result: from a run that just finished, or the recorded run of the example. The podcast plan is the main
+// flow; Meta, the tests and how the agent worked open below it.
+const more = (id, title, sub, inner) => inner ? `<details class="more" id="${id}"><summary><span class="t"><b>${title}</b><span>${sub}</span></span></summary><div class="in">${inner}</div></details>` : "";
 function showResult(j) {
   const b = j.brief, c = j.check || { grounded: 0, total: 0, flagged: [] };
   document.body.classList.add("result");
+  if (j.mode === "live" && j.quota && typeof j.quota.left === "number") $("#mode").textContent = `Live Qloo data · ${j.quota.left} free runs left today`;
   $("#status").textContent = "";
   $("#live").innerHTML = "";
-  const when = j.recorded ? new Date(j.recorded.at).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" }) : "";
-  const asked = `<b>${esc(j.product)}</b><span>${esc(j.market)}${j.compare_market ? ` vs ${esc(j.compare_market)}` : ""}</span>${j.references ? `<span>${esc(j.references)}</span>` : ""}`;
-  const steps = `<span>${j.trace.length} agent steps${j.run?.qloo_calls ? `, ${j.run.qloo_calls} Qloo calls with grading and the city lists` : ""}</span><span class="acts"><button type="button" class="ghost" id="copy-md">Copy the brief</button><button type="button" class="ghost" id="dl-csv">Interests as CSV</button></span>`;
+  const cat = j.podcasts?.category;
+  const asked = `<b>${esc(j.product)}</b><span>${esc(j.market)}${j.compare_market ? ` vs ${esc(j.compare_market)}` : ""}</span>${j.references ? `<span>brand: ${esc(j.references)}</span>` : ""}${cat ? `<span>category: ${esc(cat)}</span>` : ""}`;
+  const acts = `<span class="acts"><button type="button" id="dl-md">Download the plan</button><button type="button" class="ghost" id="copy-md">Copy as text</button><button type="button" class="ghost" id="dl-pods">Podcasts CSV</button><button type="button" class="ghost" id="dl-csv">Interests CSV</button></span>`;
   const banner = j.mode === "replay"
-    ? `<div class="runbar"><span class="pill live">Real run · ${esc(when)}</span>${asked}${steps}</div>`
+    ? `<div class="runbar"><span class="pill live">Recorded real run · ${esc(utc(j.recorded.at))}</span>${asked}${acts}</div>`
     : j.mode === "live"
-    ? `<div class="runbar"><span>Live run on real Qloo data${j.quota ? `, ${j.quota.left} free runs left today` : ""}</span>${asked}${steps}</div>`
-    : `<div class="banner synthetic">Sample data. The names and numbers below are made up to show how it works. Add the access code, or come back tomorrow, for real Qloo data.</div><div class="runbar">${asked}${steps}</div>`;
+    ? `<div class="runbar"><span class="pill live">Live run on real Qloo data</span>${asked}${acts}</div>`
+    : `<div class="banner synthetic">Sample data. The names and numbers below are made up to show how it works. Add the access code, or come back tomorrow, for real Qloo data.</div><div class="runbar">${asked}${acts}</div>`;
   const warn = [j.incomplete ? `The model's brief still had a problem after two resends (${esc(j.incomplete)}). Treat it as a draft.` : "",
     j.mode === "live" && j.signal?.weak ? `Limited high affinity results: Qloo returned ${j.signal.strong} results with affinity 0.9 or more for this seed. That threshold is this tool's rule of thumb, not a confidence score; a closer comparable brand may give more to work with.` : ""].filter(Boolean);
-  $("#out").innerHTML = `${banner}${warn.map((w) => `<div class="banner synthetic">${w}</div>`).join("")}
-    ${podcastPanel(j.podcasts)}
-    <section class="panel card"><div class="grid">
-      <div><p class="eyebrow">Taste signals for this brand · ${esc(String(j.market).split(",")[0])} as location</p><p class="summary">${esc(b.audience_summary)}</p><p class="note" style="margin:-8px 0 12px">Summary written by the model. The lines below each cite the Qloo results they rest on.</p>
-        <div class="score${c.grounded === c.total ? "" : " part"}"><b>${c.grounded} of ${c.total}</b> structured items cite Qloo results returned in this run, with matching ids and values</div></div>
+  const city = esc(String(j.market).split(",")[0]);
+  const nInt = list(b.meta_interests).length, nTests = list(b.test_plan).length;
+  const meta = `<section class="panel card"><div class="grid">
+      <div><p class="eyebrow">Who the buyers are · Qloo, ${city} as location</p><p class="summary">${esc(b.audience_summary)}</p><p class="note" style="margin:-8px 0 12px">Summary written by the model. The lines below each cite the Qloo results they rest on.</p>
+        <div class="score${c.grounded === c.total ? "" : " part"}"><b>${c.grounded} of ${c.total}</b> items cite Qloo results returned in this run, with matching ids and values</div></div>
       <div>${demographics(j.demographics)}</div>
     </div></section>
-    ${pathPanel(j)}
-    ${versus(j.baseline, b, j.unbacked, j.scored, j.market)}
-    <div class="grid">
-      ${card("Who they are", items(b.audience_traits, (x) => esc(x.trait)))}
-      ${card("Meta interests to test", items(b.meta_interests, (x) => `<strong>${esc(cleanInterest(x.interest))}</strong>`), "check each in Ads Manager")}
+    <div class="grid">${card("Meta interests to test", items(b.meta_interests, (x) => `<strong>${esc(cleanInterest(x.interest))}</strong>`), "check each in Ads Manager")}${card("Who they are", items(b.audience_traits, (x) => esc(x.trait)))}</div>
+    ${versus(j.baseline, b, j.unbacked, j.scored, j.market, j.registry)}`;
+  const creative = `<div class="grid">
       ${card("Creative angles", items(b.creative_angles, (x) => `<strong>${esc(x.angle)}</strong><br><span class="hook">${esc(x.hook)}</span>`, true), "our reading of the data")}
-      ${card("Landing page", `<p style="margin:0 0 6px"><strong>${esc(b.landing_page?.headline)}</strong></p><p style="margin:0">${esc(b.landing_page?.subheadline)}</p>${ev(b.landing_page, true)}`, "our reading of the data").replace('class="panel card"', `class="panel card${list(b.partnerships).length ? "" : " wide2"}"`)}
+      ${card("Landing page", `<p style="margin:0 0 6px"><strong>${esc(b.landing_page?.headline)}</strong></p><p style="margin:0">${esc(b.landing_page?.subheadline)}</p>${ev(b.landing_page, true)}`, "our reading of the data")}
       ${list(b.partnerships).length ? card("Partnerships", items(b.partnerships, (x) => `<strong>${esc(x.partner)}</strong>: ${esc(x.idea)}`)) : ""}
-    </div>
-    ${list(b.test_plan).length ? testsCard(b, j) : ""}
-    ${markets(j.markets)}
-    <details class="trace"><summary>Every Qloo call the agent made</summary>${j.run ? `<p class="note">This run: ${esc(j.run.seconds)} s, ${esc(j.run.qloo_calls)} Qloo calls, ${esc(j.run.model_calls)} model calls, version ${esc(String(j.run.version).slice(0, 8))}, ${esc(j.run.at)}.</p>` : ""}<ol>${list(j.trace).map((t) =>
-      `<li>${esc(t.tool)} ${t.input ? esc(JSON.stringify(t.input)) : ""}${t.n !== undefined ? `: ${t.n} results` : ""}${t.error ? ` <span class="err">${esc(t.error)}</span>` : ""}</li>`).join("")}</ol></details>`;
+    </div>`;
+  const trace = `<details class="trace"><summary>Every call in this run</summary>${j.run ? `<p class="note">This run: ${esc(j.run.seconds)} s, ${esc(j.run.qloo_calls)} Qloo calls, ${esc(j.run.model_calls)} model calls, version ${esc(String(j.run.version).slice(0, 8))}, ${esc(utc(j.run.at))}.</p>` : ""}<ol>${list(j.trace).map((t) =>
+      `<li>${esc(t.tool)} ${t.input ? esc(JSON.stringify(t.input)) : ""}${t.rival ? ` on ${esc(t.rival)}: ${esc(t.weak)} weak of ${esc(t.n)}` : ""}${t.n !== undefined && !t.rival ? `: ${t.n} results` : ""}${t.error ? ` <span class="err">${esc(t.error)}</span>` : ""}</li>`).join("")}</ol></details>`;
+  $("#out").innerHTML = `${banner}${warn.map((w) => `<div class="banner synthetic">${w}</div>`).join("")}
+    ${planPanel(j)}
+    ${selfCheckPanel(j)}
+    ${more("meta", "Meta interests", `${nInt} picks, each with its Qloo score, and the same model guessing without Qloo`, meta)}
+    ${nTests ? more("tests", "Ad tests and the locked plan", `${nTests} test${nTests === 1 ? "" : "s"} against your usual ad, read back from your Ads Manager export`, testsCard(b, j)) : ""}
+    ${more("creative", "Creative, landing page and partnerships", "the model's reading of the data, each line built on Qloo results", creative)}
+    ${more("agent", "How the agent decided", `${agentPath(j.trace).qlooCalls} Qloo calls it chose, and what it left out`, pathPanel(j) + trace)}
+    ${j.markets && !j.markets.error ? more("cities", `${esc(String(j.markets.market_a).split(",")[0])} and ${esc(String(j.markets.market_b).split(",")[0])}, side by side`, "the same Qloo lists for each city, no AI in this step", markets(j.markets)) : ""}`;
   wireLoop(j);
   document.querySelectorAll(".tabs button").forEach((btn) => btn.addEventListener("click", () => {
     document.querySelectorAll(".tabs button").forEach((x) => x.setAttribute("aria-pressed", String(x === btn)));
     document.querySelectorAll("[data-pane]").forEach((p) => { p.hidden = p.dataset.pane !== btn.dataset.tab; });
   }));
+  // a link to a section inside a closed panel opens the panel first
+  $("#out").querySelectorAll('a[href^="#"]').forEach((a) => a.addEventListener("click", (e) => {
+    const t = document.getElementById(a.getAttribute("href").slice(1));
+    const d = t?.closest("details") || (t?.tagName === "DETAILS" ? t : null);
+    if (d) { d.open = true; e.preventDefault(); t.scrollIntoView({ behavior: "smooth", block: "start" }); (d === t ? d.querySelector("summary") : t).focus?.({ preventScroll: true }); }
+  }));
+  const slug = String(j.market).replace(/[^a-z0-9]+/gi, "-").toLowerCase();
   $("#copy-md").addEventListener("click", async (ev2) => {
     try { await navigator.clipboard.writeText(mdBrief(j)); ev2.target.textContent = "Copied"; } catch { ev2.target.textContent = "Could not copy"; }
   });
-  $("#dl-csv").addEventListener("click", () => {
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(new Blob([csvInterests(j)], { type: "text/csv" }));
-    a.download = `taste-brief-interests-${String(j.market).replace(/[^a-z0-9]+/gi, "-").toLowerCase()}.csv`;
-    a.click(); URL.revokeObjectURL(a.href);
-  });
+  $("#dl-md").addEventListener("click", () => download(`taste-brief-plan-${slug}.md`, mdBrief(j), "text/markdown"));
+  $("#dl-pods").addEventListener("click", () => download(`taste-brief-podcasts-${slug}.csv`, csvPodcasts(j), "text/csv"));
+  document.querySelectorAll(".js-dl-md").forEach((b) => b.addEventListener("click", () => download(`taste-brief-plan-${slug}.md`, mdBrief(j), "text/markdown")));
+  document.querySelectorAll(".js-dl-pods").forEach((b) => b.addEventListener("click", () => download(`taste-brief-podcasts-${slug}.csv`, csvPodcasts(j), "text/csv")));
+  $("#dl-csv").addEventListener("click", () => download(`taste-brief-interests-${slug}.csv`, csvInterests(j), "text/csv"));
 }
 
 $("#f").addEventListener("submit", async (e) => {
   e.preventDefault();
   const data = { ...Object.fromEntries(new FormData(e.target)), stream: true };
   $("#go").disabled = true; $("#out").innerHTML = ""; $("#live").innerHTML = "";
-  $("#status").textContent = "Working on it. A live run usually takes one to two minutes, and each step shows up below.";
+  $("#status").textContent = "Working on it. A live run takes about a minute, sometimes two, and each step shows up below.";
   const ctl = new AbortController();
   const timer = setTimeout(() => ctl.abort(), 180000);
   try {
@@ -626,7 +798,7 @@ $("#f").addEventListener("submit", async (e) => {
         const line = buf.slice(0, k).trim(); buf = buf.slice(k + 1);
         if (!line) continue;
         const m = JSON.parse(line);
-        if (m.type === "start") $("#status").textContent = m.mode === "live" ? "Live run on real Qloo data. Each step shows up below, one to two minutes in all." : "Running on sample data. Each step shows up below.";
+        if (m.type === "start") $("#status").textContent = m.mode === "live" ? "Live run on real Qloo data. Each step shows up below, about a minute in all." : "Running on sample data. Each step shows up below.";
         else if (m.type === "step") { const li = document.createElement("li"); li.innerHTML = stepText(m.run, m.step); $("#live").append(li); }
         else if (m.type === "error") throw new Error(m.error);
         else if (m.type === "result") j = m;
@@ -634,6 +806,7 @@ $("#f").addEventListener("submit", async (e) => {
     }
     if (!j) throw new Error("the run stopped before the brief was ready. Please try again.");
     showResult(j);
+    $("#plan")?.focus();
   } catch (err) {
     const msg = err.name === "AbortError" ? "the run took too long. Please try again." : err.message;
     $("#status").innerHTML = `<span class="err">Something went wrong: ${esc(msg)}</span>`;

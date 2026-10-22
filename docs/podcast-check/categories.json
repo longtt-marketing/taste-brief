@@ -1,0 +1,259 @@
+{
+ "note": "Category of each brand in brands.json, assigned by hand from what each company sells (added 22 Oct 2026, for the open-shows check). A brand's rivals are the other brands in its category.",
+ "categories": {
+  "mental wellness": [
+   "BetterHelp",
+   "Talkspace",
+   "Calm",
+   "Headspace"
+  ],
+  "mobile carrier": [
+   "Mint Mobile",
+   "Visible",
+   "T-Mobile",
+   "Verizon"
+  ],
+  "apparel": [
+   "Quince",
+   "Mack Weldon",
+   "Rhone",
+   "True Classic",
+   "Bombas",
+   "Lululemon",
+   "Vuori",
+   "Alo Yoga",
+   "Fabletics",
+   "Old Navy",
+   "Bonobos",
+   "Untuckit",
+   "Stitch Fix",
+   "Skims",
+   "Lands' End",
+   "Jenni Kayne",
+   "Evereve",
+   "ThirdLove",
+   "Knix",
+   "Honeylove",
+   "Shapermint"
+  ],
+  "footwear": [
+   "Allbirds",
+   "Rothy's",
+   "Hoka",
+   "Kizik",
+   "Cariuma"
+  ],
+  "meal kits": [
+   "HelloFresh",
+   "Home Chef",
+   "Green Chef",
+   "Factor",
+   "Hungryroot"
+  ],
+  "grocery delivery": [
+   "ButcherBox",
+   "Thrive Market"
+  ],
+  "food delivery": [
+   "Uber Eats",
+   "DoorDash"
+  ],
+  "website builders": [
+   "Squarespace",
+   "Shopify",
+   "Wix",
+   "GoDaddy"
+  ],
+  "hiring": [
+   "Indeed",
+   "ZipRecruiter"
+  ],
+  "business software": [
+   "NetSuite",
+   "Gusto",
+   "Ramp",
+   "Mercury",
+   "Vanta",
+   "Deel",
+   "QuickBooks",
+   "HubSpot"
+  ],
+  "productivity apps": [
+   "Notion",
+   "Canva",
+   "Grammarly"
+  ],
+  "insurance": [
+   "Allstate",
+   "Progressive",
+   "GEICO",
+   "State Farm",
+   "Liberty Mutual",
+   "Policygenius"
+  ],
+  "betting": [
+   "DraftKings",
+   "FanDuel",
+   "BetMGM",
+   "PrizePicks",
+   "Underdog Fantasy",
+   "Chumba Casino"
+  ],
+  "supplements": [
+   "Athletic Greens",
+   "Drink LMNT",
+   "Liquid I.V.",
+   "Ritual",
+   "Thorne",
+   "Huel",
+   "Ka'Chava",
+   "Nutrafol"
+  ],
+  "drinks": [
+   "Olipop",
+   "Poppi",
+   "Celsius",
+   "Liquid Death",
+   "Smartwater"
+  ],
+  "restaurants and coffee": [
+   "Starbucks",
+   "McDonald's"
+  ],
+  "packaged food": [
+   "Magic Spoon",
+   "Quaker",
+   "Graza"
+  ],
+  "health services": [
+   "hims",
+   "Zocdoc",
+   "Noom"
+  ],
+  "personal finance": [
+   "Cash App",
+   "Chime",
+   "American Express",
+   "Capital One",
+   "Rocket Money",
+   "Monarch Money",
+   "NerdWallet",
+   "Rakuten",
+   "Rocket Mortgage"
+  ],
+  "fitness tech": [
+   "Oura",
+   "WHOOP",
+   "Peloton",
+   "Hydrow"
+  ],
+  "sleep and bedding": [
+   "Eight Sleep",
+   "Helix Sleep",
+   "Saatva",
+   "Purple",
+   "Casper",
+   "Sleep Number",
+   "Cozy Earth",
+   "Brooklinen"
+  ],
+  "learning": [
+   "Babbel",
+   "Rosetta Stone",
+   "MasterClass"
+  ],
+  "audiobooks": [
+   "Audible"
+  ],
+  "streaming": [
+   "Hulu",
+   "Peacock",
+   "Paramount+",
+   "Netflix"
+  ],
+  "home security": [
+   "SimpliSafe"
+  ],
+  "beauty and grooming": [
+   "Manscaped",
+   "Lume",
+   "Prose",
+   "Quip",
+   "Laura Geller",
+   "Sephora"
+  ],
+  "pets": [
+   "Smalls",
+   "The Farmer's Dog",
+   "BarkBox",
+   "Chewy"
+  ],
+  "cars": [
+   "Toyota",
+   "Nissan",
+   "Hyundai",
+   "Subaru",
+   "Lexus",
+   "Volvo"
+  ],
+  "retailers": [
+   "Walmart",
+   "Target",
+   "Kohl's",
+   "Nordstrom",
+   "Macy's",
+   "Wayfair",
+   "Etsy",
+   "Temu",
+   "Lowe's",
+   "Home Depot",
+   "Uncommon Goods"
+  ],
+  "home and kitchen": [
+   "Caraway",
+   "HexClad",
+   "Blueland"
+  ],
+  "consumer electronics": [
+   "Sonos",
+   "Raycon",
+   "Dyson",
+   "Aura Frames"
+  ],
+  "eyewear and accessories": [
+   "Warby Parker",
+   "Ridge",
+   "Mejuri",
+   "Blue Nile",
+   "Brilliant Earth",
+   "Kendra Scott"
+  ],
+  "online privacy": [
+   "ExpressVPN",
+   "NordVPN",
+   "Surfshark",
+   "DeleteMe",
+   "LifeLock",
+   "1Password"
+  ],
+  "tickets": [
+   "SeatGeek",
+   "StubHub"
+  ],
+  "dating": [
+   "Hinge",
+   "Bumble"
+  ],
+  "DNA tests": [
+   "Ancestry",
+   "23andMe"
+  ],
+  "travel": [
+   "Delta",
+   "Booking.com",
+   "Expedia",
+   "Airbnb",
+   "Vrbo"
+  ]
+ }
+}

@@ -8,12 +8,13 @@
 //   synthetic data, clearly labelled. Without DEMO_CODE configured (local dev) everything is live when keys exist.
 import { runAgent, runBaseline, BASELINE_SYSTEM, TOOLS } from "./agent.js";
 import { unbackedBy } from "./evidence.js";
-import { gradePicks, summarize } from "./grade.js";
+import { gradePicks, summarize, norm } from "./grade.js";
+import { makeSelfCheck } from "./selfcheck.js";
 
 const list = (v) => (Array.isArray(v) ? v : []);
 import { compareMarkets } from "./markets.js";
 import { makeReceipts } from "./receipt.js";
-import { podcastPartners } from "./podcasts.js";
+import { podcastPartners, categoryFor } from "./podcasts.js";
 import { makeQloo } from "./qloo.js";
 import { mockQloo } from "./mock-qloo.js";
 import { anthropicLLM, mockLLM, mockBaselineLLM } from "./llm.js";
@@ -29,7 +30,7 @@ const json = (data, status = 200) => new Response(JSON.stringify(data), {
   status, headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" },
 });
 const today = () => new Date().toISOString().slice(0, 10);
-const RUN_TIMEOUT_MS = 150000;
+const RUN_TIMEOUT_MS = 170000; // the self-check can add one model turn
 
 async function quota(env) {
   const limit = Number(env.FREE_DAILY || 25);
@@ -107,7 +108,10 @@ export default {
       const acc = await access(env, body.code);
       if (acc.error) return json({ error: acc.error }, acc.status);
       const live = acc.live;
-      const qloo = live ? makeQloo({ apiKey: env.QLOO_API_KEY }) : mockQloo();
+      // every Qloo call of the run is counted here, the agent's, the self-check's and the fixed steps', so the page reports the real number
+      let qlooCount = 0;
+      const rawQloo = live ? makeQloo({ apiKey: env.QLOO_API_KEY }) : mockQloo();
+      const qloo = Object.fromEntries(Object.entries(rawQloo).map(([k, f]) => [k, typeof f === "function" ? (...a) => { qlooCount++; return f(...a); } : f]));
       const llm = live ? anthropicLLM({ apiKey: env.ANTHROPIC_API_KEY, workspaceId: env.ANTHROPIC_WORKSPACE_ID, model: env.MODEL || undefined }) : mockLLM();
       const baseLLM = live
         ? anthropicLLM({ apiKey: env.ANTHROPIC_API_KEY, workspaceId: env.ANTHROPIC_WORKSPACE_ID, model: env.MODEL || undefined, system: BASELINE_SYSTEM,
@@ -120,7 +124,7 @@ export default {
       const run = async (send) => {
         const t0 = Date.now();
         const [out, baseline] = await Promise.all([
-          runAgent({ llm, qloo, product, market, references, onStep: (s) => send({ type: "step", run: market, step: s }) }),
+          runAgent({ llm, qloo, product, market, references, check: makeSelfCheck({ qloo, market }), onStep: (s) => send({ type: "step", run: market, step: s }) }),
           body.compare === false ? null : runBaseline({ llm: baseLLM, product, market, references })
             .then((b) => { send({ type: "step", run: "no-data baseline", step: { tool: "baseline_done" } }); return b; })
             .catch((e) => ({ error: String(e.message || e) })),
@@ -136,7 +140,8 @@ export default {
           .filter((n) => n && !seedNames.has(n.toLowerCase().replace(/\s*\(check in ads manager\)\s*/i, ""))).slice(0, 10);
         const gradeBoth = async () => {
           if (!baseline || baseline.error || !out.seeds.length) return null;
-          const [tb, plain] = [await gradePicks(qloo, picks(out.brief), out.seeds, market), await gradePicks(qloo, picks(baseline), out.seeds, market)];
+          const known = new Map(out.registry.map((e) => [norm(e.name), e])); // the brief's own picks are graded as the entities it cited
+          const [tb, plain] = [await gradePicks(qloo, picks(out.brief), out.seeds, market, known), await gradePicks(qloo, picks(baseline), out.seeds, market, known)];
           send({ type: "step", run: market, step: { tool: "graded", n: tb.length + plain.length } });
           return { taste_brief: { graded: tb, ...summarize(tb) }, plain: { graded: plain, ...summarize(plain) } };
         };
@@ -147,7 +152,7 @@ export default {
               onStep: (s) => send({ type: "step", run: `${market} vs ${marketB}`, step: s }) }).catch((e) => ({ error: String(e.message || e) }))
             : null,
           gradeBoth().catch(() => null),
-          seedEntities.length ? podcastPartners({ qloo, seeds: seedEntities, take: 20 }).catch((e) => ({ error: String(e.message || e) })) : null,
+          seedEntities.length ? podcastPartners({ qloo, seeds: seedEntities, take: 20, category: categoryFor(references, out.brief?.category) }).catch((e) => ({ error: String(e.message || e) })) : null,
         ]);
         // what the plain guess would target that Qloo did not return anywhere in this run (entities, tags or city lists)
         const returned = [...out.registry, ...(out.tags || []), ...(markets?.types || []).flatMap((t) => [...(t.only_a || []), ...(t.only_b || []), ...(t.shared || [])])];
@@ -155,8 +160,7 @@ export default {
         // enough to check a run later without publishing Qloo payloads: which deployed version, how long, how many calls
         // the city comparison makes one insights call per city for each list type
         const graded = [...(scored?.taste_brief?.graded || []), ...(scored?.plain?.graded || [])];
-        const qlooCalls = out.trace.filter((s) => ["search", "insights", "demographics", "tags"].includes(s.tool)).length
-          + 2 * (markets?.types || []).length + graded.length + graded.filter((g) => g.match).length + (podcasts?.shows ? 1 : 0);
+        const qlooCalls = qlooCount;
         const runInfo = { version: env.CF_VERSION_METADATA?.id || "local", seconds: Math.round((Date.now() - t0) / 1000),
           qloo_calls: qlooCalls, model_calls: (llm.usage?.calls || 0) + (baseLLM.usage?.calls || 0), at: new Date().toISOString() };
         // the inputs go back to the same visitor only, so the page can lock the test plan with them

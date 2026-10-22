@@ -10,7 +10,7 @@ export function agentPath(trace) {
   const t = Array.isArray(trace) ? trace : [];
   const out = { searched: [], tags: [], reads: [], demographics: false, qlooCalls: 0 };
   for (const s of t) {
-    if (s.tool === "submit_brief") continue;
+    if (!["search", "tags", "insights", "demographics"].includes(s.tool)) continue; // the brief and the self-check are not Qloo calls the agent chose
     out.qlooCalls++;
     const i = s.input || {};
     if (s.tool === "search" && i.query) out.searched.push(String(i.query));

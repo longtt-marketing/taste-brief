@@ -1,0 +1,13 @@
+{
+  "note": "Every live run with the agent's self-check on 22 Oct 2026, written down from the run results (the full results are not kept: Qloo's terms do not allow publishing its responses). Verdicts are the self-check's bands: strong 0.9+, fair 0.8 to 0.9, weak below 0.8 or no score for the rival's audience, not_in_qloo.",
+  "runs": [
+    { "at": "2026-10-22, before 02:44Z (local dev server)", "product": "Wool running sneakers, $120, sustainable", "market": "New York, NY", "rival": "Rothy's", "first_weak": [], "rewritten": false },
+    { "at": "2026-10-22T02:44:19Z", "product": "Wool running sneakers, $120, sustainable", "market": "New York, NY", "rival": "Rothy's", "first_weak": [], "rewritten": false },
+    { "at": "2026-10-22, about 02:46Z", "product": "Specialty coffee subscription, $25 a month", "market": "Seoul, South Korea", "rival": "Lucky Chouette 7 (fallback: the closest uncited brand, before the rival fix)", "first_weak": ["Olive Young (no score for the rival's audience)"], "rewritten": true, "after": "Olive Young replaced by Baemin (strong); 0 weak" },
+    { "at": "2026-10-22, about 02:46Z", "product": "Turntable for first time vinyl buyers, $199", "market": "Berlin, Germany", "rival": "Haagen-Dazs (fallback, before the rival fix)", "first_weak": ["Mozilla Firefox (not in Qloo)"], "rewritten": true, "after": "Mozilla Firefox replaced by Product Hunt, still weak; shown as such" },
+    { "at": "2026-10-22, about 02:58Z", "product": "Turntable for first time vinyl buyers, $199", "market": "Berlin, Germany", "rival": "Sony (named by the agent after Pro-Ject, which Qloo did not know)", "first_weak": [], "rewritten": false },
+    { "at": "2026-10-22T02:48:48Z", "product": "Wool running sneakers, $120, sustainable", "market": "New York, NY", "rival": "Rothy's", "first_weak": [], "rewritten": false },
+    { "at": "2026-10-22T03:20:16Z", "product": "Wool running sneakers, $120, sustainable", "market": "New York, NY", "rival": "Rothy's", "first_weak": [], "rewritten": false, "recorded_example": true }
+  ],
+  "summary": "7 runs, 2 rewritten after the self-check. Both rewrites used a fallback rival from before the fix that tries the agent's named rivals in order."
+}

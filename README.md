@@ -1,40 +1,48 @@
 # Taste Brief
 
 An agent for brands buying podcast and social ads. Give it a product, a market and your brand or a close competitor; it
-reads the audience's taste in Qloo (brands, artists, shows, podcasts, places, age and gender) and returns the podcasts to
-sponsor first, Meta interests, creative angles, partners and up to three ad tests, each changing one thing from an obvious
-control and locked before spending. Every structured recommendation cites its Qloo sources, and code checks the cited ids
+reads the audience's taste in Qloo (brands, artists, shows, podcasts, places, age and gender) and returns a podcast plan
+(shows grouped as open to you, a rival already advertises, or not in our ad data, each with a promo code), Meta interests
+that the agent checks on a rival's audience before you see them, creative angles, and up to three ad tests, each changing
+one thing from an obvious control and locked before spending. Every structured recommendation cites its Qloo sources, and code checks the cited ids
 and values against what Qloo returned.
 
 Built for the [Qloo Agentic Hackathon](https://qloo.devpost.com/).
 
-## Does Qloo pick the podcasts brands really sponsor?
+## Does Qloo pick the podcasts brands sponsor?
 
 The answer key is real sponsorships: sponsor reads that podcasts publish in their own episode notes (public RSS), never
 shown to Qloo. Hypotheses were locked and pushed before any held-out show was read
 ([docs/podcast-check/PREREGISTRATION.md](docs/podcast-check/PREREGISTRATION.md); check the fingerprints on any OS with
 `python scripts/podcast/verify_lock.py`). With the strict sponsor label declared before analysis (82 of 100 matches are
 sponsor reads, read by Claude), on 216 held-out US podcasts and 62 brands, Qloo ranked a show the brand sponsors above one
-it doesn't 65% of the time (AUC 0.647, 95% CI 0.611 to 0.684), against Apple chart rank 0.522, Qloo popularity 0.526 and
-ad volume 0.582. With the pre-registered label: 0.663 on 259 shows and 76 brands. All pre-registered hypotheses pass on
+it doesn't 65% of the time (AUC 0.647, 95% interval 0.60 to 0.70 resampling brands and shows), against Apple chart rank 0.522, Qloo popularity 0.526 and
+ad volume 0.582. With the pre-registered label: 0.663 on 259 shows and 76 brands. The three pre-registered hypotheses pass on
 both. Exploratory checks, not pre-registered ([robustness.json](docs/podcast-check/robustness.json),
 [recency.json](docs/podcast-check/recency.json)): the brand's own Qloo score beats other brands' scores on the same shows
-(0.65 against 0.57), Qloo beats the chart inside every genre (0.62 against 0.55), it holds for the most recent deals (0.62 against 0.45, 43 placements, suggestive only), resampling shows as well as brands gives 0.60 to 0.70, and counting only sponsorships whose notes carry the brand's own web
+(0.65 against 0.57), Qloo is ahead of the chart in all 12 genres (0.62 against 0.55 within genre), it holds for the most recent deals (0.62 against 0.45, 43 placements, suggestive only), and counting only sponsorships whose notes carry the brand's own web
 address (84% of them) Qloo still scores 0.64 against 0.52 ([confirmed.json](docs/podcast-check/confirmed.json)). In the top 10,
 Qloo plus ad volume (the H3 combination, which the app uses to order podcasts) finds 1.9 sponsored shows on average
-against 1.6 for either alone (an exploratory count). A prospective check is locked: Qloo's ranks were frozen on 21 Oct 2026 and sponsorships in
+against 1.6 for either alone (an exploratory count). Among open shows, where no brand of the category had advertised yet,
+Qloo pointed to the one the category moved into next with AUC 0.58 across 12 categories (0.48 to 0.67), against 0.50 for
+ad volume and 0.42 for the chart: not conclusive, and mostly apparel ([open-shows.json](docs/podcast-check/open-shows.json)).
+A prospective check is locked: Qloo's ranks were frozen on 21 Oct 2026 and sponsorships in
 later episodes are read on 29 or 30 Oct ([PREREGISTRATION-2.md](docs/podcast-check/PREREGISTRATION-2.md)). Details and
 scripts: [docs/podcast-check](docs/podcast-check/), [scripts/podcast](scripts/podcast/).
 
 A second set of benchmarks is graded by Qloo itself on a held-out competitor's audience (61% of Taste Brief's interests
-score 0.9+ against 19% for the same model without data), by Meta's interest list (35% targetable and 0.9+ against 13%)
-and by a negative control (62% on the right competitor against 27% on an unrelated brand). Details in
+score 0.9+ against 20% for the same model without data), by Meta's interest list (35% targetable and 0.9+ against 13%)
+and by a negative control (86 of 139 picks at 0.9+ on the right competitor against 37 on an unrelated brand). Details in
 [docs/benchmark](docs/benchmark/README.md).
 
 ## How it works
 - `src/agent.js`: tool-using agent loop on Claude. Tools: `search`, `insights`, `demographics`, `tags`, and
-  `submit_brief` (the only way to finish, including the `test_plan`). The agent looks up tags for the product category and passes them next to
-  the brand, so the brief reflects the product too. Every item must cite the Qloo `entity_id`s it rests on.
+  `submit_brief` (the only way to finish, including the `test_plan`, the product `category` and up to three
+  `holdout_rival`s). The agent looks up tags for the product category and passes them next to the brand, so the brief
+  reflects the product too. Every item must cite the Qloo `entity_id`s it rests on.
+- `src/selfcheck.js`: the agent's self-check. Its first brief's Meta interests are scored by Qloo on the audience of a
+  rival it named but did not use; a pick below 0.8, or one Qloo cannot score there, goes back to the agent once to replace
+  or drop, and both rounds are shown.
 - `src/evidence.js`: the evidence gate. A claim counts as grounded only when the entity ids it cites were returned by a
   Qloo call in the same run; the seed entity grounds only claims about itself, or an age/gender claim whose numbers are
   Qloo's demographics for that seed; affinity numbers quoted in the text must match what Qloo returned; one Meta interest
@@ -48,7 +56,9 @@ and by a negative control (62% on the right competitor against 27% on an unrelat
 - `public/verdict.js`: lock the test plan (SHA-256 of the control, tests and rule, with a timestamp), write the planning
   sheet named with the plan id, and read an Ads Manager export back with the locked rule. Pure functions, no model.
 - `src/podcasts.js`: podcasts ranked by Qloo for the brand with `feature.explainability`, plus the advertisers each
-  show's episode notes already run (`src/data/podcast-sponsors.json`, 662 shows; evidence only, never used to rank).
+  show's episode notes already run (`src/data/podcast-sponsors.json`, 662 shows) and which of them are in the product's
+  category (`src/data/categories.json`), so the page can mark a show open or taken. `public/rank.js` orders shows by taste
+  plus ad count; open shows by taste alone.
 - `src/grade.js`: one grader for any list of picks: exact name lookup in Qloo, then the affinity Qloo gives that
   entity for the brand's audience in the market (`filter.results.entities`). Used by the page and the benchmark.
 - `src/markets.js`: the second market, without a model in between. Places use `filter.location.query`, so each list is
@@ -64,8 +74,7 @@ and by a negative control (62% on the right competitor against 27% on an unrelat
 ## Live demo
 https://taste-brief.thelongmarketing.workers.dev (Cloudflare Worker). **See a recorded live run now** shows the last real run
 of the page's example instantly (kept in KV, only for that exact example, never for what a visitor types). A live run calls Qloo and Claude, so the public
-page allows a limited number of free live runs per day; judges also have an access code in the submission for unlimited
-live runs. When neither applies the page runs on synthetic data and says so in a banner.
+page allows 25 free live runs a day, no code needed; an access code (not published) allows more. When neither applies the page runs on synthetic data and says so in a banner.
 
 ![The same question with and without Qloo, both lists scored by Qloo for the audience](docs/screenshots/0-with-and-without.png)
 ![What to test first: each test changes one thing from the obvious ad set, with the Qloo results it rests on](docs/screenshots/1-what-to-test.png)

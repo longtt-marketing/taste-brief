@@ -2,6 +2,10 @@ import { sourcesFrom, registryFrom, annotateBrief, checkEvidence } from "./evide
 // The agent: an LLM that plans Qloo calls, reads the taste signals, and must finish by calling submit_brief.
 // Every claim in the brief carries the Qloo evidence it came from, so the output is checkable, not a guess.
 import { INSIGHT_TYPES } from "./qloo.js";
+import CATS from "./data/categories.json" with { type: "json" };
+import { feedback } from "./selfcheck.js";
+
+export const CATEGORIES = Object.keys(CATS.categories);
 
 export const SYSTEM = `You are Taste Brief, a strategist for performance marketers.
 Given a product and a market, you use Qloo's taste graph to find whose tastes overlap with the product and what else
@@ -41,8 +45,13 @@ Method:
      market. Cite the results each test rests on. If the Qloo results show nothing a plain guess would not, propose one
      test and say so in caveats.
    - Any item that quotes the age or gender index must also cite the seed entity id those numbers belong to.
+   - holdout_rival: one to three direct competitors of the product, comma separated, best first, that you did not
+     search for, use as a seed or cite: well-known brands that sell the same kind of product. The app scores your Meta
+     interests on the first one Qloo knows before the brief is shown; picks that only fit your own seed come back to you
+     to replace or drop.
+   - category: the product's category from the list, so the app can tell which podcasts its rivals already sponsor.
    If Qloo returned nothing useful for a section, leave it short and say so in caveats; never invent.
-Keep copy concrete and short, in plain natural English a marketer would write. Never use dashes (— or –) as
+Avoid "X, not Y" contrasts and lists of three in copy. Creative copy uses only product facts given in the input (no invented ingredients, materials or claims); where a hook needs a fact you were not given, write [confirm]. The app ranks podcasts to sponsor separately, so do not judge podcast results in caveats. Keep copy concrete and short, in plain natural English a marketer would write. Never use dashes (— or –) as
 punctuation: use commas or full stops. No buzzwords. Meta interests must be names that plausibly exist as Meta Ads interests.`;
 
 const str = { type: "string" };
@@ -119,8 +128,10 @@ export const TOOLS = [
         partnerships: cited({ partner: str, idea: str }),
         test_plan: { ...cited({ hypothesis: str, variable: { type: "string", enum: ["creative", "targeting"] }, ad_set: str, why: str, kpi: str, stop_if: str }), minItems: 1, maxItems: 3 },
         caveats: strArr,
+        holdout_rival: { type: "string", description: "one to three direct competitors you did not use, comma separated; your Meta interests are scored on the first one Qloo knows" },
+        category: { type: "string", enum: [...CATEGORIES, "other"] },
       },
-      required: ["audience_summary", "audience_traits", "meta_interests", "creative_angles", "landing_page", "test_plan"],
+      required: ["audience_summary", "audience_traits", "meta_interests", "creative_angles", "landing_page", "test_plan", "holdout_rival", "category"],
     },
   },
 ].map((t) => (t.strict ? { ...t, input_schema: strictSchema(t.input_schema) } : t));
@@ -130,7 +141,9 @@ export const TOOLS = [
  *  brief items carry {verified, problems, grounded} from the evidence gate (src/evidence.js);
  *  demographics is Qloo's own age/gender output for the seeds, not the model's summary of it. */
 /** onStep (optional) is called with each trace entry as it happens, so a page can show the agent working live. */
-export async function runAgent({ llm, qloo, product, market, references = "", maxSteps = 10, onStep = () => {} }) {
+/** check (optional): async (brief, {registry, seeds}) -> {rival, picks, weak}. Run on the first usable brief; when picks
+ *  are weak the agent gets the report once and submits again, and the second report is the one shown. */
+export async function runAgent({ llm, qloo, product, market, references = "", maxSteps = 10, onStep = () => {}, check = null }) {
   const messages = [{
     role: "user",
     content: `Product: ${product}\nMarket: ${market}\nReference brands or competitors (optional): ${references || "none"}`,
@@ -139,6 +152,21 @@ export async function runAgent({ llm, qloo, product, market, references = "", ma
   const seen = [];
   const calls = []; // {tool, input, output} of every successful Qloo call: the evidence registry is built from these
   let rejected = 0;
+  let firstCheck = null, firstResult = null; // the first usable brief is kept until a rewrite succeeds
+  const finish = (brief, incomplete, selfCheck) => {
+    const reg = registryFrom(calls);
+    const demo = calls.find((c) => c.tool === "demographics" && c.output?.length);
+    return {
+      brief: annotateBrief(brief, reg), trace, sources: sourcesFrom(seen), incomplete, signal: signalFrom(reg), self_check: selfCheck,
+      registry: [...reg.entities.values()], seeds: [...reg.seeds], check: summary(checkEvidence(brief, reg)),
+      // tags have no entity_id, so they are not in the registry; kept so "did Qloo return this?" can see them
+      tags: calls.filter((c) => c.tool === "tags").flatMap((c) => c.output || []).filter((t) => t?.name).map((t) => ({ tag_id: t.tag_id, name: t.name })),
+      demographics: demo ? {
+        seeds: ids(demo.input?.entity_ids).map((id) => reg.entities.get(id)?.name || id),
+        age: demo.output[0]?.age || null, gender: demo.output[0]?.gender || null,
+      } : null,
+    };
+  };
   for (let step = 0; step < maxSteps; step++) {
     const turn = await llm(messages);
     messages.push({ role: "assistant", content: turn.raw });
@@ -163,20 +191,25 @@ export async function runAgent({ llm, qloo, product, market, references = "", ma
         }
         // still broken after two resends: return it, but say so, so the page never shows it as a finished brief
         const incomplete = problem || null;
-        trace.push({ tool: "submit_brief", ...(incomplete ? { error: `kept with a problem: ${incomplete}` } : {}) });
+        trace.push({ tool: "submit_brief", ...(firstCheck ? { revised: true } : {}), ...(incomplete ? { error: `kept with a problem: ${incomplete}` } : {}) });
         onStep(trace.at(-1));
+        // a rewrite that came back broken: show the first brief, with its self-check, rather than a broken one
+        if (incomplete && firstResult) return firstResult;
         const reg = registryFrom(calls);
-        const demo = calls.find((c) => c.tool === "demographics" && c.output?.length);
-        return {
-          brief: annotateBrief(brief, reg), trace, sources: sourcesFrom(seen), incomplete, signal: signalFrom(reg),
-          registry: [...reg.entities.values()], seeds: [...reg.seeds], check: summary(checkEvidence(brief, reg)),
-          // tags have no entity_id, so they are not in the registry; kept so "did Qloo return this?" can see them
-          tags: calls.filter((c) => c.tool === "tags").flatMap((c) => c.output || []).filter((t) => t?.name).map((t) => ({ tag_id: t.tag_id, name: t.name })),
-          demographics: demo ? {
-            seeds: ids(demo.input?.entity_ids).map((id) => reg.entities.get(id)?.name || id),
-            age: demo.output[0]?.age || null, gender: demo.output[0]?.gender || null,
-          } : null,
-        };
+        let selfCheck = null;
+        if (check && !incomplete) {
+          const report = await check(brief, { registry: [...reg.entities.values()], seeds: [...reg.seeds] }).catch((e) => ({ error: String(e.message || e) }));
+          trace.push({ tool: "self_check", rival: report.rival?.name, n: report.picks?.length, weak: report.weak?.length, error: report.error });
+          onStep(trace.at(-1));
+          if (!firstCheck && report.weak?.length && report.rival && step < maxSteps - 1) {
+            firstCheck = report;
+            firstResult = finish(brief, null, { first: report, final: report, revised: false, rewrite_failed: true });
+            results.push({ id: call.id, name: call.name, content: feedback(report) });
+            continue;
+          }
+          selfCheck = report.error ? { error: report.error } : { first: firstCheck || report, final: report, revised: !!firstCheck };
+        }
+        return finish(brief, incomplete, selfCheck);
       }
       let out;
       try {
@@ -191,6 +224,7 @@ export async function runAgent({ llm, qloo, product, market, references = "", ma
     }
     messages.push({ role: "tool", results });
   }
+  if (firstResult) return firstResult; // the agent never sent its rewrite: keep the first brief
   throw new Error(`agent did not submit a brief in ${maxSteps} steps`);
 }
 
