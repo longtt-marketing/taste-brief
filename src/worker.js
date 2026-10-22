@@ -198,8 +198,8 @@ export default {
             const o = await draftOutreach({ llm: outLLM, product, market, shows: chosen, codes, category: p.category, alsoLike: alsoLikeFrom(registry, bought.seeds.map((x) => x.entity_id)),
               reference: bought.seeds.map((x) => x.name).join(", "), timeoutMs: Math.min(60000, RUN_TIMEOUT_MS - (Date.now() - t0) - 30000) });
             bought.outreach = { ...o, chosen_by: "agent", reason: String(reason || "").replace(/\s+[—–]\s+/g, ", ").slice(0, 300) };
-            const checks = o.shows.map((d) => { const l = lintDraft(d, { product, fit: chosen.find((x) => x.name === d.show)?.affinity });
-              return { show: d.show, passed: l.asks_all && l.code && !l.invented_numbers.length && !l.host_read_repeats.length && !l.host_read_padding, repeats: l.host_read_repeats, padding: l.host_read_padding, missing_asks: Object.keys(l.asks).filter((k) => !l.asks[k]), invented_numbers: l.invented_numbers }; });
+            const checks = o.shows.map((d) => { const show = chosen.find((x) => x.name === d.show); const l = lintDraft(d, { product, fit: show?.affinity, rivals: show?.rivals });
+              return { show: d.show, passed: l.asks_all && l.code && !l.invented_numbers.length && !l.host_read_repeats.length && !l.host_read_padding && !l.names_rival.length, names_rival: l.names_rival, repeats: l.host_read_repeats, padding: l.host_read_padding, missing_asks: Object.keys(l.asks).filter((k) => !l.asks[k]), invented_numbers: l.invented_numbers }; });
             return { n: o.shows.length, for_model: { drafts: o.shows.length, checks } };
           },
         };

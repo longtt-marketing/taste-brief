@@ -47,3 +47,9 @@ test("outreach: the synthetic drafts are labelled and carry the code", async () 
   assert.match(o.shows[1].host_read, /ARMCHAIR/);
   assert.equal(await draftOutreach({ llm: mockOutreachLLM(), product: "p", market: "m", shows: [], codes: [] }), null);
 });
+
+test("outreach: the lint flags a draft that names a brand of the product's own category", () => {
+  const d = { show: "Absolutely Not", code: "ABSOLUTELY", why_fit: "x", email_subject: "Rates", email_body: "Hello Absolutely Not team, we see you already read for Quince and Lululemon. Could you share your rate, downloads, host-read slots, dates and exclusivity? Code ABSOLUTELY.", host_read: "[BRAND] sneakers. Code ABSOLUTELY." };
+  assert.deepEqual(lintDraft(d, { product: "Wool sneakers", rivals: ["Lululemon"] }).names_rival, ["Lululemon"]);
+  assert.deepEqual(lintDraft(d, { product: "Wool sneakers", rivals: [] }).names_rival, []);
+});

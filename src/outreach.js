@@ -37,7 +37,7 @@ the same read with only the name changed. Write, for each show:
   slots, next open dates, and whether the category is exclusive. Say in one line why it fits, the right way round:
   "people who like brands like ours, such as [reference brand], also like your show", and in one more line how the
   product connects to what this show is about, taken from its description or tags. You may name one or two advertisers
-  found in its notes as brands it already reads for. Never claim the show's listeners like anything else. Mention the
+  found in its notes as brands it already reads for, but never a brand of the product's own category. Never claim the show's listeners like anything else. Mention the
   proposed promo code. Sign with [YOUR NAME] and [BRAND].
 - host_read: a host-read script of 40 to 70 words, in a host's voice, that a host could read on air as it is. Name the
   sponsor as [BRAND]. Open with one line that ties the product to this show's subject, in the host's words, without
@@ -85,7 +85,7 @@ export function checkOutreach(out, shows, codes) {
 
 /** Plain checks on one draft, used by the outreach evaluation (scripts/outreach-eval.mjs) and the tests: does the email
  *  ask for the five things a buyer needs, carry the code, and invent no numbers; how many brackets are left. */
-export function lintDraft(d, { product = "", fit = null } = {}) {
+export function lintDraft(d, { product = "", fit = null, rivals = [] } = {}) {
   // asked in the body itself: a subject line "Sponsorship rates" is not a question, and "availability" may mean slots
   // (AI review, 22 Oct)
   const email = String(d.email_body || "").toLowerCase();
@@ -102,7 +102,10 @@ export function lintDraft(d, { product = "", fit = null } = {}) {
   const repeats = [...new Set(said.filter((n, i) => said.indexOf(n) !== i))];
   const padding = /whole pitch|that'?s (?:it|all)|again,|this (?:script|read|ad)\b/i.test(spoken);
   const words = spoken.split(/\s+/).filter(Boolean).length + 8; // the host's own line counts for about 8 words
-  return { asks_all: Object.values(asks).every(Boolean), asks, code: text.includes(d.code), invented_numbers: numbers, host_read_brackets: brackets,
+  // naming a brand of the product's own category that already reads on the show tips the buyer's hand (AI review, 22 Oct)
+  const all = `${d.email_body} ${d.host_read}`.toLowerCase();
+  const namesRival = (Array.isArray(rivals) ? rivals : []).filter((r) => r && all.includes(String(r).toLowerCase()));
+  return { asks_all: Object.values(asks).every(Boolean), asks, code: text.includes(d.code), invented_numbers: numbers, host_read_brackets: brackets, names_rival: namesRival,
     host_read_repeats: repeats, host_read_padding: padding, host_read_words: words,
     opens_with_show: norm(d.email_body.split("\n")[0].slice(0, 60)).includes(norm(d.show).slice(0, 8)) };
 }
