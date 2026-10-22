@@ -1,0 +1,515 @@
+{
+ "note": "A person, blind: the entrant (who runs paid social campaigns) labelled the same 100 strict-label samples (precision-sample-strict.json) on 22 Oct 2026, 10:21 to 10:39 UTC, on a page that showed only the show, the brand and the snippet, never Claude's or ChatGPT's per-item labels; the 82 of 100 total had already been published, so the reader knew it. Y = paid sponsor read (ad read, promo code, vanity link or 'sponsored by'), N = not, ? = unsure. The entrant built the project, so a buyer outside it would be a stronger check.",
+ "labels": [
+  {
+   "i": 0,
+   "brand": "Aura Frames",
+   "label": "Y"
+  },
+  {
+   "i": 1,
+   "brand": "Shopify",
+   "label": "Y"
+  },
+  {
+   "i": 2,
+   "brand": "Factor",
+   "label": "Y"
+  },
+  {
+   "i": 3,
+   "brand": "Mint Mobile",
+   "label": "Y"
+  },
+  {
+   "i": 4,
+   "brand": "Airbnb",
+   "label": "Y"
+  },
+  {
+   "i": 5,
+   "brand": "NordVPN",
+   "label": "Y"
+  },
+  {
+   "i": 6,
+   "brand": "Thrive Market",
+   "label": "Y"
+  },
+  {
+   "i": 7,
+   "brand": "DraftKings",
+   "label": "Y"
+  },
+  {
+   "i": 8,
+   "brand": "DoorDash",
+   "label": "N"
+  },
+  {
+   "i": 9,
+   "brand": "ThirdLove",
+   "label": "Y"
+  },
+  {
+   "i": 10,
+   "brand": "Athletic Greens",
+   "label": "Y"
+  },
+  {
+   "i": 11,
+   "brand": "Cash App",
+   "label": "Y"
+  },
+  {
+   "i": 12,
+   "brand": "Gusto",
+   "label": "Y"
+  },
+  {
+   "i": 13,
+   "brand": "Quince",
+   "label": "Y"
+  },
+  {
+   "i": 14,
+   "brand": "Bombas",
+   "label": "Y"
+  },
+  {
+   "i": 15,
+   "brand": "DraftKings",
+   "label": "Y"
+  },
+  {
+   "i": 16,
+   "brand": "FanDuel",
+   "label": "Y"
+  },
+  {
+   "i": 17,
+   "brand": "Olipop",
+   "label": "Y"
+  },
+  {
+   "i": 18,
+   "brand": "BetterHelp",
+   "label": "Y"
+  },
+  {
+   "i": 19,
+   "brand": "Factor",
+   "label": "Y"
+  },
+  {
+   "i": 20,
+   "brand": "Quince",
+   "label": "Y"
+  },
+  {
+   "i": 21,
+   "brand": "Warby Parker",
+   "label": "Y"
+  },
+  {
+   "i": 22,
+   "brand": "Factor",
+   "label": "Y"
+  },
+  {
+   "i": 23,
+   "brand": "Helix Sleep",
+   "label": "Y"
+  },
+  {
+   "i": 24,
+   "brand": "Home Depot",
+   "label": "N"
+  },
+  {
+   "i": 25,
+   "brand": "Magic Spoon",
+   "label": "Y"
+  },
+  {
+   "i": 26,
+   "brand": "Shopify",
+   "label": "Y"
+  },
+  {
+   "i": 27,
+   "brand": "Rosetta Stone",
+   "label": "Y"
+  },
+  {
+   "i": 28,
+   "brand": "Quince",
+   "label": "Y"
+  },
+  {
+   "i": 29,
+   "brand": "Bombas",
+   "label": "Y"
+  },
+  {
+   "i": 30,
+   "brand": "Starbucks",
+   "label": "N"
+  },
+  {
+   "i": 31,
+   "brand": "Etsy",
+   "label": "N"
+  },
+  {
+   "i": 32,
+   "brand": "Peacock",
+   "label": "N"
+  },
+  {
+   "i": 33,
+   "brand": "Cash App",
+   "label": "Y"
+  },
+  {
+   "i": 34,
+   "brand": "Factor",
+   "label": "Y"
+  },
+  {
+   "i": 35,
+   "brand": "Netflix",
+   "label": "?"
+  },
+  {
+   "i": 36,
+   "brand": "Athletic Greens",
+   "label": "Y"
+  },
+  {
+   "i": 37,
+   "brand": "Skims",
+   "label": "Y"
+  },
+  {
+   "i": 38,
+   "brand": "Fabletics",
+   "label": "Y"
+  },
+  {
+   "i": 39,
+   "brand": "Ridge",
+   "label": "Y"
+  },
+  {
+   "i": 40,
+   "brand": "Dyson",
+   "label": "N"
+  },
+  {
+   "i": 41,
+   "brand": "Smalls",
+   "label": "Y"
+  },
+  {
+   "i": 42,
+   "brand": "Fabletics",
+   "label": "Y"
+  },
+  {
+   "i": 43,
+   "brand": "Ritual",
+   "label": "Y"
+  },
+  {
+   "i": 44,
+   "brand": "Quince",
+   "label": "Y"
+  },
+  {
+   "i": 45,
+   "brand": "Ramp",
+   "label": "Y"
+  },
+  {
+   "i": 46,
+   "brand": "Huel",
+   "label": "Y"
+  },
+  {
+   "i": 47,
+   "brand": "DraftKings",
+   "label": "Y"
+  },
+  {
+   "i": 48,
+   "brand": "Huel",
+   "label": "Y"
+  },
+  {
+   "i": 49,
+   "brand": "Cash App",
+   "label": "Y"
+  },
+  {
+   "i": 50,
+   "brand": "BetterHelp",
+   "label": "Y"
+  },
+  {
+   "i": 51,
+   "brand": "Drink LMNT",
+   "label": "Y"
+  },
+  {
+   "i": 52,
+   "brand": "Netflix",
+   "label": "N"
+  },
+  {
+   "i": 53,
+   "brand": "ExpressVPN",
+   "label": "Y"
+  },
+  {
+   "i": 54,
+   "brand": "Ka'Chava",
+   "label": "Y"
+  },
+  {
+   "i": 55,
+   "brand": "Honeylove",
+   "label": "Y"
+  },
+  {
+   "i": 56,
+   "brand": "McDonald's",
+   "label": "N"
+  },
+  {
+   "i": 57,
+   "brand": "MasterClass",
+   "label": "N"
+  },
+  {
+   "i": 58,
+   "brand": "Netflix",
+   "label": "N"
+  },
+  {
+   "i": 59,
+   "brand": "American Express",
+   "label": "Y"
+  },
+  {
+   "i": 60,
+   "brand": "ButcherBox",
+   "label": "Y"
+  },
+  {
+   "i": 61,
+   "brand": "Cozy Earth",
+   "label": "Y"
+  },
+  {
+   "i": 62,
+   "brand": "Cash App",
+   "label": "Y"
+  },
+  {
+   "i": 63,
+   "brand": "Cozy Earth",
+   "label": "Y"
+  },
+  {
+   "i": 64,
+   "brand": "Smalls",
+   "label": "Y"
+  },
+  {
+   "i": 65,
+   "brand": "Raycon",
+   "label": "Y"
+  },
+  {
+   "i": 66,
+   "brand": "Netflix",
+   "label": "N"
+  },
+  {
+   "i": 67,
+   "brand": "Honeylove",
+   "label": "Y"
+  },
+  {
+   "i": 68,
+   "brand": "Peacock",
+   "label": "?"
+  },
+  {
+   "i": 69,
+   "brand": "Warby Parker",
+   "label": "Y"
+  },
+  {
+   "i": 70,
+   "brand": "The Farmer's Dog",
+   "label": "Y"
+  },
+  {
+   "i": 71,
+   "brand": "Shopify",
+   "label": "Y"
+  },
+  {
+   "i": 72,
+   "brand": "Vuori",
+   "label": "Y"
+  },
+  {
+   "i": 73,
+   "brand": "Booking.com",
+   "label": "Y"
+  },
+  {
+   "i": 74,
+   "brand": "Fabletics",
+   "label": "Y"
+  },
+  {
+   "i": 75,
+   "brand": "Old Navy",
+   "label": "?"
+  },
+  {
+   "i": 76,
+   "brand": "Shopify",
+   "label": "Y"
+  },
+  {
+   "i": 77,
+   "brand": "Rocket Money",
+   "label": "Y"
+  },
+  {
+   "i": 78,
+   "brand": "Zocdoc",
+   "label": "Y"
+  },
+  {
+   "i": 79,
+   "brand": "Liquid I.V.",
+   "label": "Y"
+  },
+  {
+   "i": 80,
+   "brand": "Drink LMNT",
+   "label": "Y"
+  },
+  {
+   "i": 81,
+   "brand": "NordVPN",
+   "label": "Y"
+  },
+  {
+   "i": 82,
+   "brand": "Quince",
+   "label": "Y"
+  },
+  {
+   "i": 83,
+   "brand": "ZipRecruiter",
+   "label": "Y"
+  },
+  {
+   "i": 84,
+   "brand": "Quince",
+   "label": "Y"
+  },
+  {
+   "i": 85,
+   "brand": "McDonald's",
+   "label": "N"
+  },
+  {
+   "i": 86,
+   "brand": "Warby Parker",
+   "label": "Y"
+  },
+  {
+   "i": 87,
+   "brand": "Factor",
+   "label": "Y"
+  },
+  {
+   "i": 88,
+   "brand": "Magic Spoon",
+   "label": "N"
+  },
+  {
+   "i": 89,
+   "brand": "Knix",
+   "label": "Y"
+  },
+  {
+   "i": 90,
+   "brand": "Ridge",
+   "label": "Y"
+  },
+  {
+   "i": 91,
+   "brand": "Expedia",
+   "label": "N"
+  },
+  {
+   "i": 92,
+   "brand": "Honeylove",
+   "label": "Y"
+  },
+  {
+   "i": 93,
+   "brand": "Gusto",
+   "label": "N"
+  },
+  {
+   "i": 94,
+   "brand": "Wayfair",
+   "label": "Y"
+  },
+  {
+   "i": 95,
+   "brand": "Nutrafol",
+   "label": "Y"
+  },
+  {
+   "i": 96,
+   "brand": "NetSuite",
+   "label": "Y"
+  },
+  {
+   "i": 97,
+   "brand": "Factor",
+   "label": "Y"
+  },
+  {
+   "i": 98,
+   "brand": "Cash App",
+   "label": "Y"
+  },
+  {
+   "i": 99,
+   "brand": "Cash App",
+   "label": "Y"
+  }
+ ],
+ "yes": 82,
+ "no": 15,
+ "unsure": 3,
+ "claude_yes": 82,
+ "agreement_on_sure": "97 of 97",
+ "unsure_items_claude_said": {
+  "35": "N",
+  "68": "N",
+  "75": "N"
+ }
+}

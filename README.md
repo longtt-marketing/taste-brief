@@ -16,7 +16,7 @@ The answer key is real sponsorships: sponsor reads that podcasts publish in thei
 shown to Qloo. Hypotheses were locked and pushed before any held-out show was read
 ([docs/podcast-check/PREREGISTRATION.md](docs/podcast-check/PREREGISTRATION.md); check the fingerprints on any OS with
 `python scripts/podcast/verify_lock.py`). With the strict sponsor label declared before analysis (82 of 100 matches are
-sponsor reads, read by Claude), on 216 held-out US podcasts and 62 brands, Qloo ranked a show the brand sponsors above one
+sponsor reads, read by Claude and then by a person blind to the per-item labels: the same 82, 15 not, 3 unsure), on 216 held-out US podcasts and 62 brands, Qloo ranked a show the brand sponsors above one
 it doesn't 65% of the time (AUC 0.647, 95% interval 0.60 to 0.70 resampling brands and shows), against Apple chart rank 0.522, Qloo popularity 0.526 and
 ad volume 0.582. With the pre-registered label: 0.663 on 259 shows and 76 brands. The three pre-registered hypotheses pass on
 both. Exploratory checks, not pre-registered ([robustness.json](docs/podcast-check/robustness.json),
