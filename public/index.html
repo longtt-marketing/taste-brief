@@ -302,8 +302,8 @@ details.more>.in{padding:0 16px 16px;display:flex;flex-direction:column;gap:16px
   </section>
 
   <section class="how" id="how" aria-label="What you get">
-<div class="on"><span class="k">01 · Podcasts</span><h2>Shows your buyers love, before your rivals book them</h2><p>Ranked by Qloo taste, with the ads each show already runs.</p></div>
-<div><span class="k">02 · Paid social</span><h2>Meta interests the agent checked</h2><p>Each scored on a rival's audience before you see it.</p></div>
+<div class="on"><span class="k">01 · Podcasts</span><h2>Shows your buyers love, three to ask first</h2><p>Ranked by Qloo taste, next to the ads each show already runs.</p></div>
+<div><span class="k">02 · Paid social</span><h2>Meta interests, checked twice</h2><p>On a rival's audience in Qloo, and in Meta's own interest list.</p></div>
 <div><span class="k">03 · Tests</span><h2>One change per test, locked</h2><p>Read back from your Ads Manager export by a fixed rule.</p></div>
 </section>
 <section aria-live="polite">
@@ -462,8 +462,8 @@ function stepText(run, s) {
     if (i.filter_type === "urn:entity:place") return `Found places in ${esc(a)} and in ${esc(b)} that this audience likes${err}`;
     return `Compared ${esc(typeName(i.filter_type))} lists for ${esc(a)} and ${esc(b)}${s.n !== undefined ? ` <span class="n">${s.n} of top ${s.of} shared</span>` : ""}${err}`;
   }
-  if (s.tool === "submit_brief") return s.error ? "Sent the first draft back to the model to fix its format" : s.revised ? "Rewrote the brief without the weak picks" : "Wrote a first brief and checked what each line cites against Qloo's results";
-  if (s.tool === "self_check") return s.error ? `Self-check could not run <span class="err">(${esc(s.error)})</span>` : `Self-check: scored ${esc(s.n)} interests on the audience of ${esc(s.rival)} <span class="n">${esc(s.weak)} weak</span>`;
+  if (s.tool === "submit_brief") return s.error ? "Sent the first draft back to the model to fix its format" : s.revised ? "Rewrote the brief without the picks that failed the check" : "Wrote a first brief and checked what each line cites against Qloo's results";
+  if (s.tool === "self_check") return s.error ? `Self-check could not run <span class="err">(${esc(s.error)})</span>` : `Self-check: scored ${esc(s.n)} interests on the audience of ${esc(s.rival)} <span class="n">${esc(s.weak)} weak${s.not_in_meta != null ? `, ${esc(s.not_in_meta)} not in Meta` : ""}</span>`;
   if (s.tool === "baseline_done") return "Wrote a plain AI guess to compare against";
   if (s.tool === "podcasts") return s.error ? `Podcast ranking failed <span class="err">(${esc(s.error)})</span>` : `Ranked podcasts this audience likes, with the ads in their notes <span class="n">${esc(s.n)} shows</span>`;
   if (s.tool === "draft_outreach") return s.error ? `Drafts could not be written <span class="err">(${esc(s.error)})</span>` : `Chose ${esc(list(s.input?.shows).join(", "))} to ask first and wrote the drafts`;
@@ -729,14 +729,19 @@ function selfCheckPanel(j) {
   const f = sc.final, first = sc.first || f;
   const names = (r) => list(r.picks).map((p) => p.name);
   const dropped = names(first).filter((n) => !names(f).includes(n)), added = names(f).filter((n) => !names(first).includes(n));
-  const chip = (p) => `<span class="gchip${p.verdict === "strong" ? " hi" : p.verdict === "fair" ? "" : " weak"}">${esc(p.name)} <span class="num">${p.affinity != null ? p.affinity.toFixed(3) : ""}</span> <span class="why">${esc(p.verdict.replace(/_/g, " "))}</span></span>`;
-  const still = f.weak.length ? ` ${f.weak.length} ${f.weak.length === 1 ? "is" : "are"} still below the bar: check ${f.weak.map(esc).join(", ")} before you spend.` : "";
+  // Meta's interest search ran inside the check when the run had a token: a pick Meta lacks goes back like a weak one
+  const metaOn = list(first.picks).some((p) => p.meta), notMeta = (r) => list(r.not_in_meta);
+  const chip = (p) => `<span class="gchip${p.verdict === "strong" ? " hi" : p.verdict === "fair" ? "" : " weak"}${p.meta === "not_found" ? " weak" : ""}">${esc(p.name)} <span class="num">${p.affinity != null ? p.affinity.toFixed(3) : ""}</span> <span class="why">${esc(p.verdict.replace(/_/g, " "))}${p.meta === "targetable" ? " · in Meta" : p.meta === "not_found" ? " · not in Meta" : ""}</span></span>`;
+  const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+  const still = [f.weak.length ? `${plural(f.weak.length, "is", "are")} still below the bar (${f.weak.map(esc).join(", ")})` : "", notMeta(f).length ? `${notMeta(f).map(esc).join(", ")} ${notMeta(f).length === 1 ? "is" : "are"} still not in Meta, so no test should target ${notMeta(f).length === 1 ? "it" : "them"}` : ""].filter(Boolean);
+  const reasons = [first.weak.length ? `${plural(first.weak.length, "was", "were")} weak` : "", notMeta(first).length ? `${plural(notMeta(first).length, "was", "were")} not in Meta` : ""].filter(Boolean);
   const what = sc.revised
-    ? `${first.weak.length} ${first.weak.length === 1 ? "was" : "were"} weak, so it rewrote the brief before you saw it${dropped.length ? `: dropped ${dropped.map(esc).join(", ")}` : ""}${added.length ? `; added ${added.map(esc).join(", ")}` : ""}.${still}`
-    : still || " All passed, so it kept the brief as written.";
-  return `<section class="selfcheck" id="check"><div class="top"><span class="pill live">Agent self-check</span><span>Scored its ${list(first.picks).length} Meta interests on the audience of ${esc(f.rival.name)}, ${f.rival.source === "closest uncited brand" ? `the closest brand in this run that the brief did not cite${list(f.rival.named).length ? `, since none of the rivals it named (${list(f.rival.named).map(esc).join(", ")}) could be used` : ""}` : "a rival it named and did not use"}. ${what}</span></div>
+    ? `${reasons.join(" and ")}, so it rewrote the brief before you saw it${dropped.length ? `: dropped ${dropped.map(esc).join(", ")}` : ""}${added.length ? `; added ${added.map(esc).join(", ")}` : ""}.${still.length ? ` ${still.join("; ")}.` : ""}`
+    : still.length ? ` ${still.join("; ")}.` : " All passed, so it kept the brief as written.";
+  const once = (t) => t.replace(/\.\./g, ".");
+  return `<section class="selfcheck" id="check"><div class="top"><span class="pill live">Agent self-check</span><span>Scored its ${list(first.picks).length} Meta interests on the audience of ${esc(f.rival.name)}, ${f.rival.source === "closest uncited brand" ? `the closest brand in this run that the brief did not cite${list(f.rival.named).length ? `, since none of the rivals it named (${list(f.rival.named).map(esc).join(", ")}) could be used` : ""}` : "a rival it named and did not use"}${metaOn ? ", and looked each one up in Meta's interest search" : ""}. ${once(what)}</span></div>
     <div class="gchips">${list(f.picks).map(chip).join("")}</div>
-    <p class="note" style="margin:0">Strong is 0.9 or more for the rival's audience, fair 0.8 to 0.9; weak is lower, or Qloo has no score for that audience. A pick that only fits the agent's own seed brand is the one to doubt.</p></section>`;
+    <p class="note" style="margin:0">Strong is 0.9 or more for the rival's audience, fair 0.8 to 0.9; weak is lower, or Qloo has no score for that audience. A pick that only fits the agent's own seed brand is the one to doubt${metaOn ? ", and one Meta does not have cannot be targeted" : ""}. The chips show the brief you see.</p></section>`;
 }
 
 // The agent's own decisions in this run, read from its Qloo calls, and what it chose not to use (its caveats).

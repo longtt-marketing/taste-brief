@@ -119,7 +119,7 @@ claim through, and a pipeline-failure triage that never lowers the evidence thre
 - Creative angles, the landing page, the summary and the test plan are the model's interpretation of the cited results,
   and are labelled so.
 - The city comparison looks at each city's top 12; a name missing from one top 12 may still rank lower there.
-- Each interest is looked up in Meta's interest search during the run (`src/meta.js`, needs `META_ACCESS_TOKEN`, search only, no ad account); one missing as named is flagged, and a test that names it says so. Meta's audience sizes are worldwide.
+- Each interest is looked up in Meta's interest search inside the agent's self-check (`src/meta.js`, needs `META_ACCESS_TOKEN`, search only, no ad account); a missing one goes back to the agent once to be replaced. A targeting test that still names one after the rewrite is marked "not ready to launch" (`docs/meta-loop/`). Meta's audience sizes are worldwide.
 - When Qloo returns a wrong match (e.g. a magazine for a shoe brand) the agent is told to skip it and say so; it may miss.
 
 Built by a marketer with AI coding assistance (Claude Code); every change reviewed and tested. License: MIT.

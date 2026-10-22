@@ -1,0 +1,279 @@
+{
+ "run_at": "2026-10-22T08:25:12.252Z",
+ "plan": "docs/meta-loop/PLAN.md",
+ "model": "app default",
+ "runs": 11,
+ "errors": [],
+ "revised": 10,
+ "bad_tests": {
+  "first": 14,
+  "final": 3,
+  "runs_with_bad_final": 3
+ },
+ "in_meta_share": {
+  "first": 0.537,
+  "final": 0.89
+ },
+ "guard_share_09": {
+  "first": 0.797,
+  "final": 0.758,
+  "cases": 8
+ },
+ "launchable": false,
+ "rows": [
+  {
+   "product": "Specialty coffee subscription, $25 a month",
+   "market": "Seoul, South Korea",
+   "reference": "Blue Bottle Coffee",
+   "held_out": "Intelligentsia Coffee",
+   "revised": true,
+   "rival": "Peet's Coffee & Tea",
+   "first_not_in_meta": [
+    "Verve Coffee Roasters",
+    "La Colombe Coffee Roasters",
+    "Eater"
+   ],
+   "final_not_in_meta": [
+    "Illy Coffee",
+    "Momofuku"
+   ],
+   "first_in_meta_share": 0.5,
+   "final_in_meta_share": 0.667,
+   "first_bad_tests": 1,
+   "final_bad_tests": 1,
+   "final_targeting_tests": 2,
+   "rival_is_held_out": false,
+   "first_share_09": 1,
+   "final_share_09": 1
+  },
+  {
+   "product": "Turntable for first time vinyl buyers, $199",
+   "market": "Berlin, Germany",
+   "reference": "Audio-Technica",
+   "held_out": "Sonos",
+   "revised": false,
+   "rival": "Sony",
+   "first_not_in_meta": [],
+   "final_not_in_meta": [],
+   "first_in_meta_share": 1,
+   "final_in_meta_share": 1,
+   "first_bad_tests": 0,
+   "final_bad_tests": 0,
+   "final_targeting_tests": 2,
+   "rival_is_held_out": false,
+   "first_share_09": 0.714,
+   "final_share_09": 0.714
+  },
+  {
+   "product": "Plant based protein bars",
+   "market": "Los Angeles, USA",
+   "reference": "RXBAR",
+   "held_out": "Kind Snacks",
+   "revised": true,
+   "rival": "Quest Nutrition",
+   "first_not_in_meta": [
+    "Perfect Bar",
+    "Larabar",
+    "Kind Snacks",
+    "Ragnar Relay",
+    "Health-Ade Kombucha"
+   ],
+   "final_not_in_meta": [
+    "Primal Kitchen"
+   ],
+   "first_in_meta_share": 0.375,
+   "final_in_meta_share": 0.857,
+   "first_bad_tests": 2,
+   "final_bad_tests": 1,
+   "final_targeting_tests": 2,
+   "rival_is_held_out": false,
+   "first_share_09": 0.875,
+   "final_share_09": 0.714
+  },
+  {
+   "product": "Flavored sparkling water",
+   "market": "Chicago, USA",
+   "reference": "LaCroix",
+   "held_out": "Perrier",
+   "revised": true,
+   "rival": "Topo Chico Hard Seltzer",
+   "first_not_in_meta": [
+    "Orangetheory Fitness",
+    "RxBar",
+    "KIND Snacks",
+    "Bleachers (band)"
+   ],
+   "final_not_in_meta": [],
+   "first_in_meta_share": 0.429,
+   "final_in_meta_share": 1,
+   "first_bad_tests": 2,
+   "final_bad_tests": 0,
+   "final_targeting_tests": 2,
+   "rival_is_held_out": false,
+   "first_share_09": 0.286,
+   "final_share_09": 0.4
+  },
+  {
+   "product": "Affordable skincare serum, $15",
+   "market": "Paris, France",
+   "reference": "The Ordinary",
+   "held_out": "CeraVe",
+   "revised": true,
+   "rival": "Typology Skincare",
+   "first_not_in_meta": [
+    "Emily in Paris",
+    "Dior Beauty"
+   ],
+   "final_not_in_meta": [
+    "L'Or\\u00e9al"
+   ],
+   "first_in_meta_share": 0.667,
+   "final_in_meta_share": 0.8,
+   "first_bad_tests": 0,
+   "final_bad_tests": 0,
+   "final_targeting_tests": 1,
+   "rival_is_held_out": false,
+   "first_share_09": 0.667,
+   "final_share_09": 0.4
+  },
+  {
+   "product": "Yoga leggings",
+   "market": "Sydney, Australia",
+   "reference": "Lululemon",
+   "held_out": "Alo Yoga",
+   "revised": true,
+   "rival": "Lorna Jane",
+   "first_not_in_meta": [
+    "Alo Yoga",
+    "Orangetheory Fitness",
+    "Emily in Paris"
+   ],
+   "final_not_in_meta": [],
+   "first_in_meta_share": 0.5,
+   "final_in_meta_share": 1,
+   "first_bad_tests": 2,
+   "final_bad_tests": 0,
+   "final_targeting_tests": 2,
+   "rival_is_held_out": false,
+   "first_share_09": 0.833,
+   "final_share_09": 1
+  },
+  {
+   "product": "Hard seltzer",
+   "market": "Austin, USA",
+   "reference": "White Claw",
+   "held_out": "Truly Hard Seltzer",
+   "revised": true,
+   "rival": "High Noon Sun Sips",
+   "first_not_in_meta": [
+    "Parker McCollum",
+    "Koe Wetzel",
+    "LaCroix Sparkling Water",
+    "Casamigos"
+   ],
+   "final_not_in_meta": [
+    "Cody Johnson"
+   ],
+   "first_in_meta_share": 0.429,
+   "final_in_meta_share": 0.8,
+   "first_bad_tests": 1,
+   "final_bad_tests": 1,
+   "final_targeting_tests": 2,
+   "rival_is_held_out": false,
+   "first_share_09": 1,
+   "final_share_09": 1
+  },
+  {
+   "product": "Hazy IPA craft beer",
+   "market": "Portland, USA",
+   "reference": "Sierra Nevada",
+   "held_out": "Lagunitas Brewing Company",
+   "revised": true,
+   "rival": "Stone Brewing Company",
+   "first_not_in_meta": [
+    "Great Notion Brewing"
+   ],
+   "final_not_in_meta": [],
+   "first_in_meta_share": 0.833,
+   "final_in_meta_share": 1,
+   "first_bad_tests": 1,
+   "final_bad_tests": 0,
+   "final_targeting_tests": 2,
+   "rival_is_held_out": false,
+   "first_share_09": 1,
+   "final_share_09": 0.833
+  },
+  {
+   "product": "Language learning app subscription",
+   "market": "Mexico City, Mexico",
+   "reference": "Duolingo",
+   "held_out": "Babbel",
+   "revised": true,
+   "rival": "Babbel",
+   "first_not_in_meta": [
+    "Kindle",
+    "The Economist",
+    "Niantic",
+    "Emily in Paris"
+   ],
+   "final_not_in_meta": [],
+   "first_in_meta_share": 0.5,
+   "final_in_meta_share": 1,
+   "first_bad_tests": 1,
+   "final_bad_tests": 0,
+   "final_targeting_tests": 1,
+   "rival_is_held_out": true,
+   "first_share_09": 0.125,
+   "final_share_09": 0
+  },
+  {
+   "product": "Meal kit delivery",
+   "market": "Toronto, Canada",
+   "reference": "HelloFresh",
+   "held_out": "Blue Apron",
+   "revised": true,
+   "rival": "Blue Apron",
+   "first_not_in_meta": [
+    "Sweat",
+    "Headspace",
+    "Ugly Delicious",
+    "Somebody Feed Phil"
+   ],
+   "final_not_in_meta": [
+    "Céline Dion"
+   ],
+   "first_in_meta_share": 0.429,
+   "final_in_meta_share": 0.833,
+   "first_bad_tests": 2,
+   "final_bad_tests": 0,
+   "final_targeting_tests": 2,
+   "rival_is_held_out": true,
+   "first_share_09": 0.857,
+   "final_share_09": 0.667
+  },
+  {
+   "product": "Wool running sneakers, $120, sustainable",
+   "market": "New York, NY",
+   "reference": "Allbirds",
+   "held_out": null,
+   "revised": true,
+   "rival": "Rothy's",
+   "first_not_in_meta": [
+    "Tracksmith",
+    "GREATS",
+    "Saturdays NYC",
+    "Native Shoes",
+    "Maggie Rogers",
+    "Somebody Feed Phil"
+   ],
+   "final_not_in_meta": [
+    "Leon Bridges"
+   ],
+   "first_in_meta_share": 0.25,
+   "final_in_meta_share": 0.833,
+   "first_bad_tests": 2,
+   "final_bad_tests": 0,
+   "final_targeting_tests": 2
+  }
+ ]
+}

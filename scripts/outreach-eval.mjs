@@ -1,4 +1,4 @@
-// Outreach evaluation: 10 products the app was not built on, run through the same steps a live run takes for the drafts
+// Outreach evaluation: 10 products (the first is the page's own product, in another city), run through the same steps a live run takes for the drafts
 // (Qloo seed brand, podcasts with sponsor data, the three shows to ask first, one Claude call), then each draft checked in
 // plain code (src/outreach.js lintDraft): does the email ask for the five things a buyer needs, carry the code and open
 // with the show's name; does any draft hold a number or a product claim the input did not give; how many brackets the
@@ -21,7 +21,7 @@ if (!vars.QLOO_API_KEY || !vars.ANTHROPIC_API_KEY) { console.error("needs QLOO_A
 const qloo = makeQloo({ apiKey: vars.QLOO_API_KEY });
 const llm = anthropicLLM({ apiKey: vars.ANTHROPIC_API_KEY, workspaceId: vars.ANTHROPIC_WORKSPACE_ID || undefined, model: vars.MODEL || undefined, system: OUTREACH_SYSTEM, tools: [OUTREACH_TOOL] });
 
-// fixed before the run; none of them is the example the app was tuned on
+// fixed before the first run (22 Oct); the first is the page's product in Chicago, the other nine were never run in the app
 export const CASES = [
   ["Wool running sneakers, $120, sustainable", "Chicago, IL", "Allbirds"],
   ["Specialty coffee subscription, $25 a month", "Austin, TX", "Blue Bottle Coffee"],
@@ -40,6 +40,17 @@ const CLAIMS = /\b(comfortable|comfort|durable|lightweight|breathable|soft|cozy|
 // what earlier runs of this file found, kept so a later run does not erase them
 const PREVIOUS = existsSync("docs/outreach-eval.json") ? (({ run_at, pass, drafts, first_run, known_issue, earlier }) => ({ run_at, pass, drafts, first_run, known_issue, earlier }))(JSON.parse(readFileSync("docs/outreach-eval.json", "utf8"))) : null;
 const rows = [], full = [];
+// how alike one product's drafts are once the show's name and code are taken out: mean word overlap (Jaccard) over pairs.
+// 1 would be one template with the name swapped; a judge (22 Oct) read the earlier drafts as one template.
+const words = (t, d) => new Set(String(t || "").toLowerCase().split(d.show.toLowerCase()).join(" ").split(String(d.code || "").toLowerCase()).join(" ")
+  .replace(/\[[^\]]*\]/g, " ").replace(/[^a-z0-9$]+/g, " ").split(" ").filter((w) => w.length > 2));
+const jac = (a, b) => { const i = [...a].filter((x) => b.has(x)).length; return a.size + b.size - i ? i / (a.size + b.size - i) : 1; };
+export function sameness(ds) {
+  const pairs = []; for (let i = 0; i < ds.length; i++) for (let j = i + 1; j < ds.length; j++) pairs.push([ds[i], ds[j]]);
+  if (!pairs.length) return null;
+  const m = (k) => +(pairs.reduce((a, [x, y]) => a + jac(words(x[k], x), words(y[k], y)), 0) / pairs.length).toFixed(3);
+  return { email_body: m("email_body"), host_read: m("host_read") };
+}
 for (const [product, market, reference] of CASES) {
   const row = { product, market, reference };
   try {
@@ -49,6 +60,7 @@ for (const [product, market, reference] of CASES) {
     row.seed_matched_exactly = !!hit && key(hit.name) === key(reference);
     if (!hit) throw new Error("reference brand not in Qloo");
     const seed = { entity_id: hit.entity_id, name: hit.name };
+    row.seed = hit.name; // reported: a near-miss match (a judge found Monarch Money matched another brand) reads the wrong audience
     const category = categoryFor(reference, null);
     const pods = await podcastPartners({ qloo, seeds: [seed], take: 20, category });
     const { shows } = askFirst(pods.shows);
@@ -66,6 +78,7 @@ for (const [product, market, reference] of CASES) {
         && lint.host_read_brackets <= 4 && !lint.host_read_repeats.length && !lint.host_read_padding && lint.host_read_words <= 80 };
     });
     row.asked = shows.length;
+    row.sameness = sameness(out.shows);
     full.push({ product, market, reference, category, shows: shows.map((s) => s.name), drafts: out.shows });
   } catch (e) {
     row.error = String(e.message || e);
@@ -80,6 +93,7 @@ const sum = {
   opens_with_show: drafts.filter((d) => d.opens_with_show).length, no_invented_numbers: drafts.filter((d) => !d.invented_numbers.length).length,
   no_unsupported_claims: drafts.filter((d) => !d.unsupported_claims.length).length,
   host_read_no_repeats: drafts.filter((d) => !d.host_read_repeats.length).length, host_read_no_padding: drafts.filter((d) => !d.host_read_padding).length,
+  sameness_mean: (() => { const s = rows.map((r) => r.sameness).filter(Boolean); return s.length ? { email_body: +(s.reduce((a, x) => a + x.email_body, 0) / s.length).toFixed(3), host_read: +(s.reduce((a, x) => a + x.host_read, 0) / s.length).toFixed(3) } : null; })(),
   host_read_words_mean: drafts.length ? Math.round(drafts.reduce((a, d) => a + d.host_read_words, 0) / drafts.length) : null, host_read_brackets_mean: drafts.length ? +(drafts.reduce((a, d) => a + d.host_read_brackets, 0) / drafts.length).toFixed(2) : null,
   note: "Checks in plain code: the five asks (rate, downloads, host-read slots, dates, exclusivity), the proposed code, the show's name in the opening line, numbers not in the input, a fixed list of product claims not in the input, and in the host read: no number said twice, no filler remarks, at most 80 words. A pass is not a human review; it finds missing asks, invented facts and padding of these kinds only.",
   earlier: PREVIOUS,

@@ -1,30 +1,39 @@
 {
- "run_at": "2026-10-22T05:09:50.246Z",
+ "run_at": "2026-10-22T08:12:30.436Z",
  "model": "claude-sonnet-5-5",
  "cases": 10,
  "drafts": 18,
- "pass": 18,
+ "pass": 17,
  "asks_all": 18,
  "code": 18,
  "opens_with_show": 18,
- "no_invented_numbers": 18,
+ "no_invented_numbers": 17,
  "no_unsupported_claims": 18,
  "host_read_no_repeats": 18,
  "host_read_no_padding": 18,
- "host_read_words_mean": 42,
+ "sameness_mean": {
+  "email_body": 0.603,
+  "host_read": 0.311
+ },
+ "host_read_words_mean": 47,
  "host_read_brackets_mean": 4,
  "note": "Checks in plain code: the five asks (rate, downloads, host-read slots, dates, exclusivity), the proposed code, the show's name in the opening line, numbers not in the input, a fixed list of product claims not in the input, and in the host read: no number said twice, no filler remarks, at most 80 words. A pass is not a human review; it finds missing asks, invented facts and padding of these kinds only.",
  "earlier": {
-  "run_at": "2026-10-22T04:14:05.856Z",
+  "run_at": "2026-10-22T05:09:50.246Z",
   "pass": 18,
   "drafts": 18,
-  "first_run": {
-   "at": "2026-10-22T04:10Z",
-   "pass": 11,
+  "earlier": {
+   "run_at": "2026-10-22T04:14:05.856Z",
+   "pass": 18,
    "drafts": 18,
-   "what_failed": "Mostly the checker: list numbering (1. 2. 3.) and a digit in a show's name (10% Happier) counted as invented numbers. One real issue: a host read repeated [OFFER] and [LANDING PAGE]; the checker now counts distinct placeholders. Both runs drew new drafts from the model; this file holds the second."
-  },
-  "known_issue": "Qloo has no brand named Monarch Money; the evaluation matched 'Money' instead (seed_matched_exactly false), so those two drafts cite the wrong reference brand. In the app the agent picks its own seed and can see the mismatch."
+   "first_run": {
+    "at": "2026-10-22T04:10Z",
+    "pass": 11,
+    "drafts": 18,
+    "what_failed": "Mostly the checker: list numbering (1. 2. 3.) and a digit in a show's name (10% Happier) counted as invented numbers. One real issue: a host read repeated [OFFER] and [LANDING PAGE]; the checker now counts distinct placeholders. Both runs drew new drafts from the model; this file holds the second."
+   },
+   "known_issue": "Qloo has no brand named Monarch Money; the evaluation matched 'Money' instead (seed_matched_exactly false), so those two drafts cite the wrong reference brand. In the app the agent picks its own seed and can see the mismatch."
+  }
  },
  "rows": [
   {
@@ -32,26 +41,8 @@
    "market": "Chicago, IL",
    "reference": "Allbirds",
    "seed_matched_exactly": true,
+   "seed": "Allbirds",
    "drafts": [
-    {
-     "asks_all": true,
-     "asks": {
-      "rate": true,
-      "downloads": true,
-      "host_read": true,
-      "dates": true,
-      "exclusive": true
-     },
-     "code": true,
-     "invented_numbers": [],
-     "host_read_brackets": 4,
-     "host_read_repeats": [],
-     "host_read_padding": false,
-     "host_read_words": 41,
-     "opens_with_show": true,
-     "unsupported_claims": [],
-     "pass": true
-    },
     {
      "asks_all": true,
      "asks": {
@@ -85,19 +76,155 @@
      "host_read_brackets": 4,
      "host_read_repeats": [],
      "host_read_padding": false,
-     "host_read_words": 36,
+     "host_read_words": 41,
+     "opens_with_show": true,
+     "unsupported_claims": [],
+     "pass": true
+    },
+    {
+     "asks_all": true,
+     "asks": {
+      "rate": true,
+      "downloads": true,
+      "host_read": true,
+      "dates": true,
+      "exclusive": true
+     },
+     "code": true,
+     "invented_numbers": [],
+     "host_read_brackets": 4,
+     "host_read_repeats": [],
+     "host_read_padding": false,
+     "host_read_words": 46,
      "opens_with_show": true,
      "unsupported_claims": [],
      "pass": true
     }
    ],
-   "asked": 3
+   "asked": 3,
+   "sameness": {
+    "email_body": 0.549,
+    "host_read": 0.408
+   }
   },
   {
    "product": "Specialty coffee subscription, $25 a month",
    "market": "Austin, TX",
    "reference": "Blue Bottle Coffee",
    "seed_matched_exactly": true,
+   "seed": "Blue Bottle Coffee",
+   "drafts": [
+    {
+     "asks_all": true,
+     "asks": {
+      "rate": true,
+      "downloads": true,
+      "host_read": true,
+      "dates": true,
+      "exclusive": true
+     },
+     "code": true,
+     "invented_numbers": [],
+     "host_read_brackets": 4,
+     "host_read_repeats": [],
+     "host_read_padding": false,
+     "host_read_words": 53,
+     "opens_with_show": true,
+     "unsupported_claims": [],
+     "pass": true
+    }
+   ],
+   "asked": 1,
+   "sameness": null
+  },
+  {
+   "product": "Plant-based protein powder, $45",
+   "market": "Los Angeles, CA",
+   "reference": "Orgain",
+   "seed_matched_exactly": true,
+   "seed": "Orgain",
+   "drafts": [
+    {
+     "asks_all": true,
+     "asks": {
+      "rate": true,
+      "downloads": true,
+      "host_read": true,
+      "dates": true,
+      "exclusive": true
+     },
+     "code": true,
+     "invented_numbers": [],
+     "host_read_brackets": 4,
+     "host_read_repeats": [],
+     "host_read_padding": false,
+     "host_read_words": 43,
+     "opens_with_show": true,
+     "unsupported_claims": [],
+     "pass": true
+    },
+    {
+     "asks_all": true,
+     "asks": {
+      "rate": true,
+      "downloads": true,
+      "host_read": true,
+      "dates": true,
+      "exclusive": true
+     },
+     "code": true,
+     "invented_numbers": [],
+     "host_read_brackets": 4,
+     "host_read_repeats": [],
+     "host_read_padding": false,
+     "host_read_words": 40,
+     "opens_with_show": true,
+     "unsupported_claims": [],
+     "pass": true
+    }
+   ],
+   "asked": 2,
+   "sameness": {
+    "email_body": 0.677,
+    "host_read": 0.343
+   }
+  },
+  {
+   "product": "Meal kit for two, $60 a week",
+   "market": "Boston, MA",
+   "reference": "HelloFresh",
+   "seed_matched_exactly": true,
+   "seed": "HelloFresh",
+   "drafts": [
+    {
+     "asks_all": true,
+     "asks": {
+      "rate": true,
+      "downloads": true,
+      "host_read": true,
+      "dates": true,
+      "exclusive": true
+     },
+     "code": true,
+     "invented_numbers": [],
+     "host_read_brackets": 4,
+     "host_read_repeats": [],
+     "host_read_padding": false,
+     "host_read_words": 53,
+     "opens_with_show": true,
+     "unsupported_claims": [],
+     "pass": true
+    }
+   ],
+   "asked": 1,
+   "sameness": null
+  },
+  {
+   "product": "Mattress in a box, $900",
+   "market": "Denver, CO",
+   "reference": "Casper",
+   "seed_matched_exactly": true,
+   "seed": "Casper",
    "drafts": [
     {
      "asks_all": true,
@@ -114,175 +241,6 @@
      "host_read_repeats": [],
      "host_read_padding": false,
      "host_read_words": 49,
-     "opens_with_show": true,
-     "unsupported_claims": [],
-     "pass": true
-    }
-   ],
-   "asked": 1
-  },
-  {
-   "product": "Plant-based protein powder, $45",
-   "market": "Los Angeles, CA",
-   "reference": "Orgain",
-   "seed_matched_exactly": true,
-   "drafts": [
-    {
-     "asks_all": true,
-     "asks": {
-      "rate": true,
-      "downloads": true,
-      "host_read": true,
-      "dates": true,
-      "exclusive": true
-     },
-     "code": true,
-     "invented_numbers": [],
-     "host_read_brackets": 4,
-     "host_read_repeats": [],
-     "host_read_padding": false,
-     "host_read_words": 43,
-     "opens_with_show": true,
-     "unsupported_claims": [],
-     "pass": true
-    },
-    {
-     "asks_all": true,
-     "asks": {
-      "rate": true,
-      "downloads": true,
-      "host_read": true,
-      "dates": true,
-      "exclusive": true
-     },
-     "code": true,
-     "invented_numbers": [],
-     "host_read_brackets": 4,
-     "host_read_repeats": [],
-     "host_read_padding": false,
-     "host_read_words": 43,
-     "opens_with_show": true,
-     "unsupported_claims": [],
-     "pass": true
-    }
-   ],
-   "asked": 2
-  },
-  {
-   "product": "Meal kit for two, $60 a week",
-   "market": "Boston, MA",
-   "reference": "HelloFresh",
-   "seed_matched_exactly": true,
-   "drafts": [
-    {
-     "asks_all": true,
-     "asks": {
-      "rate": true,
-      "downloads": true,
-      "host_read": true,
-      "dates": true,
-      "exclusive": true
-     },
-     "code": true,
-     "invented_numbers": [],
-     "host_read_brackets": 4,
-     "host_read_repeats": [],
-     "host_read_padding": false,
-     "host_read_words": 42,
-     "opens_with_show": true,
-     "unsupported_claims": [],
-     "pass": true
-    }
-   ],
-   "asked": 1
-  },
-  {
-   "product": "Mattress in a box, $900",
-   "market": "Denver, CO",
-   "reference": "Casper",
-   "seed_matched_exactly": true,
-   "drafts": [
-    {
-     "asks_all": true,
-     "asks": {
-      "rate": true,
-      "downloads": true,
-      "host_read": true,
-      "dates": true,
-      "exclusive": true
-     },
-     "code": true,
-     "invented_numbers": [],
-     "host_read_brackets": 4,
-     "host_read_repeats": [],
-     "host_read_padding": false,
-     "host_read_words": 38,
-     "opens_with_show": true,
-     "unsupported_claims": [],
-     "pass": true
-    },
-    {
-     "asks_all": true,
-     "asks": {
-      "rate": true,
-      "downloads": true,
-      "host_read": true,
-      "dates": true,
-      "exclusive": true
-     },
-     "code": true,
-     "invented_numbers": [],
-     "host_read_brackets": 4,
-     "host_read_repeats": [],
-     "host_read_padding": false,
-     "host_read_words": 41,
-     "opens_with_show": true,
-     "unsupported_claims": [],
-     "pass": true
-    }
-   ],
-   "asked": 2
-  },
-  {
-   "product": "Language learning app, $13 a month",
-   "market": "Seattle, WA",
-   "reference": "Duolingo",
-   "seed_matched_exactly": true,
-   "drafts": [
-    {
-     "asks_all": true,
-     "asks": {
-      "rate": true,
-      "downloads": true,
-      "host_read": true,
-      "dates": true,
-      "exclusive": true
-     },
-     "code": true,
-     "invented_numbers": [],
-     "host_read_brackets": 4,
-     "host_read_repeats": [],
-     "host_read_padding": false,
-     "host_read_words": 38,
-     "opens_with_show": true,
-     "unsupported_claims": [],
-     "pass": true
-    },
-    {
-     "asks_all": true,
-     "asks": {
-      "rate": true,
-      "downloads": true,
-      "host_read": true,
-      "dates": true,
-      "exclusive": true
-     },
-     "code": true,
-     "invented_numbers": [],
-     "host_read_brackets": 4,
-     "host_read_repeats": [],
-     "host_read_padding": false,
-     "host_read_words": 40,
      "opens_with_show": true,
      "unsupported_claims": [],
      "pass": true
@@ -307,13 +265,89 @@
      "pass": true
     }
    ],
-   "asked": 3
+   "asked": 2,
+   "sameness": {
+    "email_body": 0.606,
+    "host_read": 0.303
+   }
+  },
+  {
+   "product": "Language learning app, $13 a month",
+   "market": "Seattle, WA",
+   "reference": "Duolingo",
+   "seed_matched_exactly": true,
+   "seed": "Duolingo",
+   "drafts": [
+    {
+     "asks_all": true,
+     "asks": {
+      "rate": true,
+      "downloads": true,
+      "host_read": true,
+      "dates": true,
+      "exclusive": true
+     },
+     "code": true,
+     "invented_numbers": [],
+     "host_read_brackets": 4,
+     "host_read_repeats": [],
+     "host_read_padding": false,
+     "host_read_words": 53,
+     "opens_with_show": true,
+     "unsupported_claims": [],
+     "pass": true
+    },
+    {
+     "asks_all": true,
+     "asks": {
+      "rate": true,
+      "downloads": true,
+      "host_read": true,
+      "dates": true,
+      "exclusive": true
+     },
+     "code": true,
+     "invented_numbers": [],
+     "host_read_brackets": 4,
+     "host_read_repeats": [],
+     "host_read_padding": false,
+     "host_read_words": 49,
+     "opens_with_show": true,
+     "unsupported_claims": [],
+     "pass": true
+    },
+    {
+     "asks_all": true,
+     "asks": {
+      "rate": true,
+      "downloads": true,
+      "host_read": true,
+      "dates": true,
+      "exclusive": true
+     },
+     "code": true,
+     "invented_numbers": [],
+     "host_read_brackets": 4,
+     "host_read_repeats": [],
+     "host_read_padding": false,
+     "host_read_words": 46,
+     "opens_with_show": true,
+     "unsupported_claims": [],
+     "pass": true
+    }
+   ],
+   "asked": 3,
+   "sameness": {
+    "email_body": 0.467,
+    "host_read": 0.293
+   }
   },
   {
    "product": "Natural deodorant, $13",
    "market": "Miami, FL",
    "reference": "Native",
    "seed_matched_exactly": true,
+   "seed": "Native",
    "drafts": [
     {
      "asks_all": true,
@@ -329,19 +363,21 @@
      "host_read_brackets": 4,
      "host_read_repeats": [],
      "host_read_padding": false,
-     "host_read_words": 38,
+     "host_read_words": 44,
      "opens_with_show": true,
      "unsupported_claims": [],
      "pass": true
     }
    ],
-   "asked": 1
+   "asked": 1,
+   "sameness": null
   },
   {
    "product": "Sparkling prebiotic soda, $2.50 a can",
    "market": "Brooklyn, NY",
    "reference": "Olipop",
    "seed_matched_exactly": true,
+   "seed": "Olipop",
    "drafts": [
     {
      "asks_all": true,
@@ -357,7 +393,7 @@
      "host_read_brackets": 4,
      "host_read_repeats": [],
      "host_read_padding": false,
-     "host_read_words": 40,
+     "host_read_words": 54,
      "opens_with_show": true,
      "unsupported_claims": [],
      "pass": true
@@ -376,19 +412,24 @@
      "host_read_brackets": 4,
      "host_read_repeats": [],
      "host_read_padding": false,
-     "host_read_words": 40,
+     "host_read_words": 50,
      "opens_with_show": true,
      "unsupported_claims": [],
      "pass": true
     }
    ],
-   "asked": 2
+   "asked": 2,
+   "sameness": {
+    "email_body": 0.645,
+    "host_read": 0.195
+   }
   },
   {
    "product": "Budgeting app, $99 a year",
    "market": "San Francisco, CA",
    "reference": "Monarch Money",
    "seed_matched_exactly": false,
+   "seed": "Money",
    "drafts": [
     {
      "asks_all": true,
@@ -400,14 +441,16 @@
       "exclusive": true
      },
      "code": true,
-     "invented_numbers": [],
+     "invented_numbers": [
+      "40"
+     ],
      "host_read_brackets": 4,
      "host_read_repeats": [],
      "host_read_padding": false,
-     "host_read_words": 51,
+     "host_read_words": 46,
      "opens_with_show": true,
      "unsupported_claims": [],
-     "pass": true
+     "pass": false
     },
     {
      "asks_all": true,
@@ -423,19 +466,24 @@
      "host_read_brackets": 4,
      "host_read_repeats": [],
      "host_read_padding": false,
-     "host_read_words": 51,
+     "host_read_words": 48,
      "opens_with_show": true,
      "unsupported_claims": [],
      "pass": true
     }
    ],
-   "asked": 2
+   "asked": 2,
+   "sameness": {
+    "email_body": 0.676,
+    "host_read": 0.324
+   }
   },
   {
    "product": "Fresh dog food delivery, $3 a day",
    "market": "Atlanta, GA",
    "reference": "The Farmer's Dog",
    "seed_matched_exactly": true,
+   "seed": "The Farmer's Dog",
    "drafts": [
     {
      "asks_all": true,
@@ -451,13 +499,14 @@
      "host_read_brackets": 4,
      "host_read_repeats": [],
      "host_read_padding": false,
-     "host_read_words": 41,
+     "host_read_words": 53,
      "opens_with_show": true,
      "unsupported_claims": [],
      "pass": true
     }
    ],
-   "asked": 1
+   "asked": 1,
+   "sameness": null
   }
  ]
 }
