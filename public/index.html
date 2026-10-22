@@ -219,8 +219,9 @@ body.result #how{display:none}
 .plan .lede2{margin:8px 0 0;font-size:15px;color:var(--mute);max-width:80ch}
 .asks{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr))}
 .ask{border:1px solid var(--line);border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:12px;background:#0d182b}
-.ask-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px}.ask-h h3{margin:0;font-family:var(--display);font-size:19px}
-.ask .fitn{font-family:var(--mono);font-size:14px;color:var(--ok);white-space:nowrap}.ask .why{margin:0;font-size:14px;color:var(--mute)}
+.ask-h{display:flex;align-items:center;gap:12px}.ask-h>div{display:flex;flex-direction:column;gap:2px;min-width:0}.ask-h h3{margin:0;font-family:var(--display);font-size:19px;line-height:1.2}
+.ask .cover{width:56px;height:56px;flex:none;border-radius:12px;background:var(--line);object-fit:cover}
+.ask .fitn{font-family:var(--mono);font-size:13px;color:var(--ok)}.ask .why{margin:0;font-size:14px;color:var(--mute)}
 .ask dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:13px}.ask dt{color:var(--faint)}.ask dd{margin:0}.ask dd.ok{color:var(--ok)}.ask dd.nv{color:var(--warn)}.ask dd.mono{font-family:var(--mono)}
 .ask-b{display:flex;flex-wrap:wrap;gap:8px}.ask-b button{font-size:13px;padding:8px 14px;min-height:44px;border-radius:10px}
 .ask details.draft{border-top:1px solid var(--line);padding-top:4px}.ask details.draft summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-size:13px;color:var(--faint)}
@@ -647,9 +648,11 @@ function planPanel(j) {
     const d = plan.drafts.get(s.name);
     const ads = Array.isArray(s.advertisers) ? s.advertisers : null;
     const rv = !plan.cat ? "" : ads == null ? "unknown" : list(s.rivals).length ? list(s.rivals).map(esc).join(", ") : "none found";
-    return `<article class="ask" data-i="${i}"><div class="ask-h"><h3>${esc(s.name)}</h3><span class="fitn">fit ${Number(s.affinity).toFixed(2)}</span></div>
+    const rank = [...list(j.podcasts.shows)].sort((a, b) => (Number(b.affinity) || 0) - (Number(a.affinity) || 0)).indexOf(s) + 1;
+    const img = /^https:\/\/images\.qloo\.com\//.test(String(s.image || "")) ? `<img class="cover" src="${esc(s.image)}" alt="" width="56" height="56" loading="lazy">` : `<span class="cover" aria-hidden="true"></span>`;
+    return `<article class="ask" data-i="${i}"><div class="ask-h">${img}<div><h3>${esc(s.name)}</h3><span class="fitn">#${rank} of ${list(j.podcasts.shows).length} for ${fans}</span></div></div>
       ${d?.why_fit ? `<p class="why">${esc(d.why_fit)}</p>` : ""}
-      <dl><dt>Ads found</dt><dd>${ads == null ? "not in our ad data" : ads.length ? `${ads.length}: ${ads.slice(0, 3).map(esc).join(", ")}${ads.length > 3 ? ` +${ads.length - 3}` : ""}` : "none found"}</dd>
+      <dl><dt>Taste fit (Qloo)</dt><dd>${Number(s.affinity).toFixed(2)}</dd><dt>Ads found</dt><dd>${ads == null ? "not in our ad data" : ads.length ? `${ads.length}: ${ads.slice(0, 3).map(esc).join(", ")}${ads.length > 3 ? ` +${ads.length - 3}` : ""}` : "none found"}</dd>
       ${plan.cat ? `<dt>${esc(plan.cat[0].toUpperCase() + plan.cat.slice(1))} brands</dt><dd class="${rv === "none found" ? "ok" : ""}">${rv}</dd>` : ""}
       <dt>Rate, reach, dates</dt><dd class="nv">not verified</dd><dt>Proposed code</dt><dd class="mono">${esc(s._code)}</dd></dl>
       ${d ? `<div class="ask-b"><button type="button" class="js-copy" data-k="email" data-i="${i}">Copy rate request</button><button type="button" class="ghost js-copy" data-k="script" data-i="${i}">Copy host-read script</button></div>

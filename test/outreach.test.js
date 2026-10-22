@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { draftOutreach, checkOutreach, outreachInput, mockOutreachLLM } from "../src/outreach.js";
+import { draftOutreach, checkOutreach, outreachInput, mockOutreachLLM, lintDraft } from "../src/outreach.js";
 
 const shows = [
   { name: "Absolutely Not", affinity: 0.954, advertisers: ["Quince", "Nutrafol"], rivals: [] },
@@ -15,15 +15,25 @@ test("outreach: the model sees each show's fit, ads, category brands and code, a
   assert.doesNotMatch(msg, /downloads|rate/i);
 });
 
-test("outreach: drafts are matched to the shows asked about, trimmed and cleaned of dashes", () => {
+test("outreach: drafts are matched to the right show, never handed to another, never used twice", () => {
   const out = checkOutreach({ shows: [
-    { show: "armchair expert with dax shepard", why_fit: "Fits — well", email_subject: "S", email_body: "B", host_read: "H" },
-    { show: "Some other show", why_fit: "x", email_subject: "x", email_body: "x", host_read: "x" },
+    { show: "Armchair Expert", why_fit: "Fits — well", email_subject: "S", email_body: "Hello Armchair team", host_read: "code ARMCHAIR" },
+    { show: "Some other show", why_fit: "x", email_subject: "x", email_body: "Hi Absolutely Not, code ABSOLUTELY", host_read: "x" },
   ] }, shows, codes);
-  assert.equal(out[0].show, "Absolutely Not", "falls back to the order given");
-  assert.equal(out[1].show, "Armchair Expert with Dax Shepard");
-  assert.equal(out[1].why_fit, "Fits, well");
-  assert.equal(out[1].code, "ARMCHAIR");
+  assert.deepEqual(out.map((o) => [o.show, o.code]), [["Absolutely Not", "ABSOLUTELY"], ["Armchair Expert with Dax Shepard", "ARMCHAIR"]]);
+  assert.equal(out[1].why_fit, "Fits, well", "a shortened name still matches its own show");
+  const none = checkOutreach({ shows: [{ show: "Unrelated", why_fit: "x", email_subject: "x", email_body: "Hello Unrelated team", host_read: "code XYZ" }] }, shows, codes);
+  assert.equal(none.length, 0, "a draft that names neither show nor code is dropped, not given to the first show");
+});
+
+test("outreach: the lint flags missing asks, invented numbers and extra brackets", () => {
+  const good = { show: "Absolutely Not", code: "ABSOLUTELY", why_fit: "Allbirds fans like this show (Qloo taste fit 0.95).",
+    email_subject: "Sponsorship rates for Absolutely Not", email_body: "Hello Absolutely Not team,\nCould you share your rate per episode, average downloads, host-read slots, next open dates and whether footwear is exclusive? Code ABSOLUTELY.",
+    host_read: "Wool running sneakers, sustainable, $120. [HOST: one line about trying them] Use code ABSOLUTELY. [OFFER] [LANDING PAGE]" };
+  const g = lintDraft(good, { product: "Wool running sneakers, $120, sustainable", fit: 0.954 });
+  assert.equal(g.asks_all, true); assert.equal(g.code, true); assert.deepEqual(g.invented_numbers, []); assert.equal(g.host_read_brackets, 3); assert.equal(g.opens_with_show, true);
+  const bad = lintDraft({ ...good, email_body: "Hi there, what is your rate? We see 50,000 listeners. Code ABSOLUTELY." }, { product: "Wool running sneakers, $120", fit: 0.954 });
+  assert.equal(bad.asks_all, false); assert.deepEqual(bad.invented_numbers, ["50,000"]); assert.equal(bad.opens_with_show, false);
 });
 
 test("outreach: the synthetic drafts are labelled and carry the code", async () => {

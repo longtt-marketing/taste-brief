@@ -38,7 +38,7 @@ export async function podcastPartners({ qloo, seeds, take = 10, category = null 
   const shows = await qloo.insights({ filter_type: "urn:entity:podcast", entity_ids: ids, explain: true, take });
   return {
     shows: shows.map((s) => ({
-      name: s.name, entity_id: s.entity_id, affinity: s.affinity, popularity: s.popularity,
+      name: s.name, entity_id: s.entity_id, affinity: s.affinity, popularity: s.popularity, image: s.image || null,
       driven_by: (s.explain || []).filter((x) => x.score > 0).sort((a, b) => b.score - a.score).map((x) => ({ name: names.get(x.entity_id) || x.entity_id, score: x.score })),
       advertisers: advertisersFor(s.name),
       rivals: rivalsIn(advertisersFor(s.name), category),

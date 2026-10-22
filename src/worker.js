@@ -166,7 +166,9 @@ export default {
               const seedSet = new Set(out.seeds);
               const alsoLike = out.registry.filter((e) => !seedSet.has(e.entity_id) && typeof e.affinity === "number" && /brand|artist/.test(String(e.type)))
                 .sort((a, b) => b.affinity - a.affinity).slice(0, 6).map((e) => e.name);
-              p.outreach = await draftOutreach({ llm: outLLM, product, market, shows: first, codes, category: p.category, alsoLike })
+              const left = RUN_TIMEOUT_MS - (Date.now() - t0) - 15000;
+              p.outreach = await draftOutreach({ llm: outLLM, product, market, shows: first, codes, category: p.category, alsoLike,
+                reference: seedEntities.map((e) => e.name).join(", "), timeoutMs: Math.min(60000, left) })
                 .then((o) => { send({ type: "step", run: market, step: { tool: "outreach", n: o?.shows?.length || 0 } }); return o; })
                 .catch((e) => ({ error: String(e.message || e) }));
               return p;

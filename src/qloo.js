@@ -17,6 +17,8 @@ export function slimEntity(e) {
     popularity: e.popularity ?? null,
     tags: (e.tags || []).slice(0, 6).map((t) => t.name || t.tag_id || t.id),
     description: (e.properties?.description || "").slice(0, 160),
+    // Qloo's own image for the entity (podcast cover art), shown on the page; only its own CDN is kept
+    ...(/^https:\/\/images\.qloo\.com\//.test(e.properties?.image?.url || "") ? { image: e.properties.image.url } : {}),
     // feature.explainability: Qloo's own account of which input drove this result, and how much (0 to 1)
     ...(e.query?.explainability ? { explain: (e.query.explainability["signal.interests.entities"] || []).map((x) => ({ entity_id: x.entity_id, score: x.score })) } : {}),
   };

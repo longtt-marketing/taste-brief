@@ -25,51 +25,79 @@ export const OUTREACH_TOOL = {
 };
 
 export const OUTREACH_SYSTEM = `You write podcast sponsorship outreach for a media buyer. For each show you get its Qloo taste fit
-for the brand's audience (0 to 1), the advertisers found in its episode notes, the brands of the product's category found
-there, and a proposed promo code. You also get the product as the user typed it and a few things the same audience likes,
-from Qloo. Write, for each show:
-- why_fit: one sentence under 20 words for the buyer, in the form "[brand] fans like this show (Qloo taste fit 0.95)", then the
-  same audience also likes one or two of the things listed. Do not say the show's listeners like them, and do not repeat
-  the advertiser list (the page shows it).
-- email_subject and email_body: a short rate request to the show's ad sales contact, under 110 words. Ask for the rate per
-  episode, average downloads per episode, host-read slots, the next open dates, and whether the category is exclusive.
-  Say in one line why it fits, the right way round: people who like the brand also like this show (that is what the
-  taste fit measures). Never claim the show's listeners like anything else. Mention the proposed promo code. Sign with
-  [YOUR NAME] and [BRAND].
-- host_read: a 30 second host-read script, about 70 words, that a host could read in their own voice, ending with the
-  promo code and [LANDING PAGE].
-Rules: use only product facts given in the input; for anything else (materials, benefits, offer, price changes) write a
-[bracketed placeholder]. Never invent rates, downloads, listener numbers or names of people. Plain natural English, no
-dashes as punctuation, no "X, not Y" contrasts, no lists of three adjectives. Call submit_outreach once.`;
+for the audience of a reference brand (0 to 1; the reference brand is the user's own brand or a close competitor), the
+advertisers found in its episode notes, the brands of the product's category found there, and a proposed promo code. You
+also get the product as the user typed it and a few things the same audience likes, from Qloo. Write, for each show:
+- why_fit: one sentence under 20 words for the buyer: "[reference brand] fans like this show (Qloo taste fit 0.95)", then
+  one or two things the same audience also likes. Do not say the show's listeners like them, and do not list advertisers.
+- email_subject and email_body: a rate request to the show's ad sales team, under 110 words, that opens with the show's
+  name (for example "Hello Absolutely Not team,"). Ask for: rate per episode, average downloads per episode, host-read
+  slots, next open dates, and whether the category is exclusive. Say in one line why it fits, the right way round:
+  "people who like brands like ours, such as [reference brand], also like your show". Never claim the show's listeners
+  like anything else. Mention the proposed promo code. Sign with [YOUR NAME] and [BRAND].
+- host_read: a 30 second host-read script, about 70 words, in a host's voice. Use every product fact given (material,
+  product type, price, and words such as "sustainable") and nothing else about the product: no benefits, comfort, fit,
+  durability or comparisons that were not given. Leave exactly one line for the host's own words as [HOST: one line about
+  trying them], then end with the promo code, [OFFER] and [LANDING PAGE]. No other brackets.
+Rules: never invent rates, downloads, listener numbers, discounts or names of people. Plain natural English, no dashes as
+punctuation, no "X, not Y" contrasts, no lists of three adjectives. Call submit_outreach once.`;
 
 const clean = (s, max) => String(s ?? "").replace(/\s+[—–]\s+/g, ", ").replace(/[—–]/g, ", ").trim().slice(0, max);
+const norm = (x) => String(x || "").toLowerCase().replace(/[^a-z0-9]/g, "");
 
 /** The model's message for the shows, with only what it needs. */
-export function outreachInput({ product, market, shows, codes, category, alsoLike }) {
+export function outreachInput({ product, market, shows, codes, category, alsoLike, reference }) {
   return `Product: ${product}
 Market: ${market}
 Category: ${category || "unknown"}
+Reference brand (the user's brand or a close competitor): ${reference || "none given"}
 The same audience also likes (Qloo): ${alsoLike.join(", ") || "none given"}
 Shows:
 ${shows.map((s, i) => `${i + 1}. ${s.name} | taste fit ${Number(s.affinity).toFixed(2)} | advertisers in notes: ${Array.isArray(s.advertisers) ? (s.advertisers.join(", ") || "none found") : "not in our data"} | ${category || "category"} brands in notes: ${Array.isArray(s.advertisers) ? (Array.isArray(s.rivals) && s.rivals.length ? s.rivals.join(", ") : "none found") : "unknown"} | proposed code: ${codes[i]}`).join("\n")}`;
 }
 
-/** Keep only drafts for the shows asked about, in that order, trimmed; a missing one stays missing. */
+/** Keep only drafts that belong to the shows asked about: matched by name (exact, or one name starting the other), else
+ *  any unused draft that names the show or its code. A draft is never used twice; a missing one stays missing.
+ *  (The independent review of 22 Oct found a shortened name could hand one show's email to another.) */
 export function checkOutreach(out, shows, codes) {
   const got = Array.isArray(out?.shows) ? out.shows : [];
-  const norm = (x) => String(x || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+  const used = new Set();
+  const take = (d) => { if (!d || used.has(d)) return null; used.add(d); return d; };
+  const names = (d) => norm(d?.show);
+  const mentions = (d, s, code) => { const t = `${d?.email_subject} ${d?.email_body} ${d?.host_read}`; return norm(t).includes(norm(s.name).slice(0, 12)) || t.includes(code); };
   return shows.map((s, i) => {
-    const d = got.find((g) => norm(g.show) === norm(s.name)) || got[i];
+    const want = norm(s.name);
+    const d = take(got.find((g) => !used.has(g) && names(g) === want))
+      || take(got.find((g) => !used.has(g) && names(g) && (want.startsWith(names(g)) || names(g).startsWith(want))))
+      || take(got.find((g) => !used.has(g) && mentions(g, s, codes[i])));
     if (!d) return null;
     return { show: s.name, code: codes[i], why_fit: clean(d.why_fit, 300), email_subject: clean(d.email_subject, 140),
       email_body: clean(d.email_body, 1200), host_read: clean(d.host_read, 900) };
   }).filter(Boolean);
 }
 
+/** Plain checks on one draft, used by the outreach evaluation (scripts/outreach-eval.mjs) and the tests: does the email
+ *  ask for the five things a buyer needs, carry the code, and invent no numbers; how many brackets are left. */
+export function lintDraft(d, { product = "", fit = null } = {}) {
+  const email = `${d.email_subject}\n${d.email_body}`.toLowerCase();
+  const asks = { rate: /rate/.test(email), downloads: /download/.test(email), host_read: /host[- ]read/.test(email),
+    dates: /date|availab/.test(email), exclusive: /exclusiv/.test(email) };
+  // numbers the draft may use: the product line's, the taste fit, "30" (seconds), and any in the show's own name
+  const allowed = new Set([...(`${product} ${d.show}`.match(/\d+(?:[.,]\d+)?/g) || []), ...(fit != null ? [Number(fit).toFixed(2), String(Number(fit).toFixed(2)).replace(/^0/, "")] : []), "30"]);
+  const text = `${d.email_body} ${d.host_read} ${d.why_fit}`.replace(/(^|\s)\d{1,2}[.)](?=\s)/g, " "); // list numbering is not a claim
+  const numbers = (text.match(/\d+(?:[.,]\d+)?/g) || []).filter((n) => !allowed.has(n) && !allowed.has(n.replace(/^0/, "")));
+  const brackets = new Set(d.host_read.match(/\[[^\]]+\]/g) || []).size; // distinct placeholders left for the buyer
+  return { asks_all: Object.values(asks).every(Boolean), asks, code: text.includes(d.code), invented_numbers: numbers, host_read_brackets: brackets,
+    opens_with_show: norm(d.email_body.split("\n")[0].slice(0, 60)).includes(norm(d.show).slice(0, 8)) };
+}
+
 /** Run it: llm is an adapter made with OUTREACH_SYSTEM and [OUTREACH_TOOL]. */
-export async function draftOutreach({ llm, product, market, shows, codes, category, alsoLike = [] }) {
+export async function draftOutreach({ llm, product, market, shows, codes, category, alsoLike = [], reference = "", timeoutMs = 60000 }) {
   if (!shows.length) return null;
-  const turn = await llm([{ role: "user", content: outreachInput({ product, market, shows, codes, category, alsoLike }) }]);
+  // its own deadline, so a slow draft never costs the run its brief (the worker passes the time left)
+  let timer;
+  const late = new Promise((_, reject) => { timer = setTimeout(() => reject(new Error("the drafts took too long this time")), Math.max(1000, timeoutMs)); });
+  const turn = await Promise.race([llm([{ role: "user", content: outreachInput({ product, market, shows, codes, category, alsoLike, reference }) }]), late]).finally(() => clearTimeout(timer));
   const call = turn.calls.find((c) => c.name === "submit_outreach");
   if (!call) throw new Error("the model did not return outreach drafts");
   return { shows: checkOutreach(call.input, shows, codes) };
