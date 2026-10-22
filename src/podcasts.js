@@ -39,6 +39,7 @@ export async function podcastPartners({ qloo, seeds, take = 10, category = null 
   return {
     shows: shows.map((s) => ({
       name: s.name, entity_id: s.entity_id, affinity: s.affinity, popularity: s.popularity, image: s.image || null,
+      about: s.description || "", tags: Array.isArray(s.tags) ? s.tags.slice(0, 4) : [],
       driven_by: (s.explain || []).filter((x) => x.score > 0).sort((a, b) => b.score - a.score).map((x) => ({ name: names.get(x.entity_id) || x.entity_id, score: x.score })),
       advertisers: advertisersFor(s.name),
       rivals: rivalsIn(advertisersFor(s.name), category),

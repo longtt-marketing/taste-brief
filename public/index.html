@@ -262,7 +262,7 @@ details.more>.in{padding:0 16px 16px;display:flex;flex-direction:column;gap:16px
 <h1>Sponsor the podcasts your buyers like.</h1>
 <p class="lede">An agent reads your buyers' taste in Qloo and tells you which podcasts to sponsor first, the interests to target and the ad to test.</p>
 <p class="qnote">Qloo knows which brands, shows and artists the same people like. No customer data needed. Podcasts: mostly US shows today.</p>
-<div class="cta"><button id="replay" type="button" hidden>See a real run now</button><a href="#f">or build your own</a></div>
+<div class="cta"><button id="replay" type="button">See a real run now</button><a href="#f">or build your own</a></div>
 </div>
 <div class="proof" id="proof">
 <p class="eyebrow">Real sponsorships · 216 podcasts · 62 brands</p>
@@ -422,11 +422,15 @@ fetch("/api/health").then((r) => r.json()).then((h) => {
 }).catch(() => { $("#mode").textContent = "Offline"; });
 
 // A recorded live run of the example, so a visitor sees a real result without a code or a wait.
-fetch("/api/replay").then((r) => (r.ok ? r.json() : null)).then((j) => {
-  if (!j?.brief) return;
+const replayed = fetch("/api/replay").then((r) => (r.ok ? r.json() : null)).catch(() => null);
+replayed.then((j) => { if (!j?.brief) $("#replay").hidden = true; });
+{
   const btn = $("#replay");
-  btn.hidden = false;
-  btn.addEventListener("click", () => {
+  btn.addEventListener("click", async () => {
+    btn.setAttribute("aria-busy", "true");
+    const j = await replayed;
+    btn.removeAttribute("aria-busy");
+    if (!j?.brief) { btn.hidden = true; return; }
     const f = $("#f").elements, inp = j.recorded?.inputs || {};
     for (const k of ["product", "market", "compare_market", "references"]) if (inp[k]) f[k].value = inp[k];
     $("#live").innerHTML = "";
@@ -434,7 +438,7 @@ fetch("/api/replay").then((r) => (r.ok ? r.json() : null)).then((j) => {
     ($("#plan") || $("#out")).scrollIntoView({ behavior: "smooth", block: "start" });
     $("#plan")?.focus({ preventScroll: true });
   });
-}).catch(() => {});
+}
 
 document.querySelectorAll("button.chip").forEach((b) => b.addEventListener("click", () => {
   const [product, market, compare_market, references] = b.dataset.p.split("|");
@@ -508,7 +512,7 @@ function podcastPlan(j) {
   const drafts = new Map(list(p.outreach?.shows).map((d) => [d.show, d]));
   // where the agent's choice differs from the fixed rule, say so: the rule is what the page would pick on its own
   const ruleOnly = chosen.length ? auto.shows.filter((s) => !chosen.some((c) => c.name === s.name)).map((s) => s.name) : [];
-  return { cat, groups, first, selling, all: ordered, drafts, outreachError: p.outreach?.error || null, reason: p.outreach?.chosen_by === "agent" ? p.outreach.reason : "",
+  return { cat, groups, first, selling, all: ordered, drafts, outreachError: p.outreach?.error || null, reason: p.outreach?.chosen_by === "agent" ? p.outreach.reason : "", byRule: p.outreach?.chosen_by === "rule" && list(p.outreach?.shows).length > 0,
     ruleOnly, sameAsRule: chosen.length > 0 && !ruleOnly.length };
 }
 const contactUrl = (s) => `https://www.google.com/search?q=${encodeURIComponent(`${s.name} podcast advertising`)}`;
@@ -708,7 +712,7 @@ function planPanel(j) {
     : plan.cat && plan.first.every((s) => !list(s.rivals).length) ? `They sell ads, and no ${esc(plan.cat)} brand was found in their episode notes. Rates, reach and open dates are not verified: the email asks for them.`
     : "They already sell ads, and your buyers like them. Rates, reach and open dates are not verified: the email asks for them.";
   return `<section class="plan" id="plan" tabindex="-1"><div><p class="stepk">Your podcast plan</p><h2>${hasDrafts ? "Three shows to ask first, with the email ready" : `Three shows ${fans} love to ask first`}</h2><p class="lede2">${lede}</p></div>
-    ${plan.reason ? `<p class="agentwhy"><span class="pill live">Chosen by the agent</span> ${esc(plan.reason)} <span class="rulecmp">${plan.sameAsRule ? "The fixed rule (sells ads, no category brand found, then taste fit) picks the same three." : `The fixed rule would have asked ${esc(plan.ruleOnly.join(", "))} instead.`}</span></p>` : ""}
+    ${plan.reason ? `<p class="agentwhy"><span class="pill live">Chosen by the agent</span> ${esc(plan.reason)} <span class="rulecmp">${plan.sameAsRule ? "The fixed rule (sells ads, no category brand found, then taste fit) picks the same three." : `The fixed rule would have asked ${esc(plan.ruleOnly.join(", "))} instead.`}</span></p>` : ""}${plan.byRule ? `<p class="agentwhy"><span class="pill">Chosen by the fixed rule</span> The agent did not choose shows this time, so the page used its fixed rule: shows that sell ads with no ${esc(plan.cat || "category")} brand found, then taste fit.</p>` : ""}
     <div class="asks">${plan.first.map(firstCard).join("")}</div>
     ${hasDrafts ? `<p class="note" style="margin:0">Drafts written by the agent from this run's Qloo results and the product facts you gave; anything it was not told is in [brackets]. Nothing is sent: you copy, edit and send. A proposed code works once the show agrees to read it: it shows which orders came from each show, and the tagged link counts clicks. Neither counts how often the ad played.</p>` : plan.outreachError ? `<p class="note err" style="margin:0">The agent could not write the drafts this time: ${esc(plan.outreachError)}</p>` : ""}
     ${tests ? `<p class="note" style="margin:0">Next to the podcasts: ${tests} Meta test${tests === 1 ? "" : "s"} against your usual ad, locked before you spend. <a href="#tests">Open the tests</a></p>` : ""}
@@ -765,7 +769,7 @@ function testsCard(b, j) {
   // a targeting test that names an interest Meta does not have cannot be built as written
   const named = (text, name) => new RegExp(`(^|[^\\p{L}\\p{N}])${String(name).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}($|[^\\p{L}\\p{N}])`, "iu").test(String(text || ""));
   const missing = (x) => x.variable !== "targeting" ? [] : list(j.meta_check?.taste_brief).filter((m) => m?.status === "not_found" && named(x.ad_set, m.name)).map((m) => m.name);
-  const lines = tp.map((x) => `<li><strong>${esc(x.hypothesis)}</strong><dl><dt>Changes</dt><dd>${x.variable === "targeting" ? "Targeting only, with your usual creative" : x.variable === "creative" ? "Creative only, on the broad audience" : esc(x.variable)}</dd><dt>Run</dt><dd>${esc(x.ad_set)}</dd>${missing(x).length ? `<dt>In Meta</dt><dd class="mwarn">Not in Meta's interest list as named: ${missing(x).map(esc).join(", ")}. Build the ad set with the others, or find the nearest interest in Ads Manager and note it in the plan.</dd>` : ""}${x.why ? `<dt>Why</dt><dd>${esc(x.why)}</dd>` : ""}${same ? "" : `<dt>Judge on</dt><dd>${esc(x.kpi)}</dd><dt>Pause rule</dt><dd>${esc(x.stop_if)}</dd>`}</dl>${ev(x, true)}</li>`).join("");
+  const lines = tp.map((x) => `<li><strong>${esc(x.hypothesis)}</strong><dl><dt>Changes</dt><dd>${x.variable === "targeting" ? "Targeting only, with your usual creative" : x.variable === "creative" ? "Creative only, on the broad audience" : esc(x.variable)}</dd><dt>Run</dt><dd>${esc(x.ad_set)}</dd>${missing(x).length ? `<dt>In Meta</dt><dd class="mwarn"><strong>Not ready to launch.</strong> Meta has no interest named ${missing(x).map(esc).join(", ")}. Build the ad set with the interests Meta has, or swap in the nearest one from Ads Manager and note it in the plan before you lock it.</dd>` : ""}${x.why ? `<dt>Why</dt><dd>${esc(x.why)}</dd>` : ""}${same ? "" : `<dt>Judge on</dt><dd>${esc(x.kpi)}</dd><dt>Pause rule</dt><dd>${esc(x.stop_if)}</dd>`}</dl>${ev(x, true)}</li>`).join("");
   return card("What to test first", `<p class="tests-rule">Your usual ad is the control: broad targeting in ${city}, same ages, your usual message. Each test changes one thing${same ? `, judged on ${esc(lc(tp[0].kpi))}` : ""}. The rule for reading results is locked below.</p><ul class="tests">${lines}</ul>${loopPanel()}`, "each test rests on the Qloo results shown");
 }
 

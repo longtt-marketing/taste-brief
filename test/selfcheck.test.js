@@ -77,3 +77,19 @@ test("open shows: category from a known reference brand, rivals in a show's note
   assert.deepEqual(rivalsIn(["Squarespace"], "footwear"), [], "open to the category");
   assert.equal(rivalsIn(null, "footwear"), null, "a show we have no notes for is unknown, not open");
 });
+
+test("self-check: an interest Meta does not have sends the brief back, even when Qloo scores it well", async () => {
+  const { needsRewrite } = await import("../src/selfcheck.js");
+  const qloo = mockQloo();
+  const brief = { holdout_rival: "", meta_interests: [{ interest: "Patagonia" }, { interest: "Outdoor Voices" }] };
+  const meta = async (names) => new Map(names.map((n) => [n, n === "Outdoor Voices" ? { name: n, status: "not_found", nearest: [] } : { name: n, status: "targetable" }]));
+  const report = await makeSelfCheck({ qloo, market: "London", meta })(brief, { registry: [], seeds: [] });
+  assert.deepEqual(report.not_in_meta, ["Outdoor Voices"]);
+  assert.equal(needsRewrite(report), true);
+  const text = feedback(report);
+  assert.match(text, /Outdoor Voices[^\n]*NOT in Meta/);
+  assert.match(text, /No targeting test may name an interest that is not in Meta/);
+  // without a Meta lookup, and with nothing weak, the brief stands
+  const plain = await makeSelfCheck({ qloo, market: "London" })({ holdout_rival: "", meta_interests: [] }, { registry: [], seeds: [] });
+  assert.equal(needsRewrite(plain), false);
+});

@@ -129,3 +129,26 @@ test("replay: a recording without the Meta check gets it once, marked as added l
     globalThis.fetch = real;
   }
 });
+
+test("worker: one run looks a Meta name up once, shared by the self-check and the final check", async () => {
+  const { metaLookup } = await import("../src/worker.js");
+  const asked = [];
+  const fake = () => { const f = async () => []; f.many = async (qs) => { asked.push(...qs); return qs.map((q) => (q === "Running" ? [{ id: "1", name: "Running (physical exercise)" }] : [])); }; return f; };
+  const look = metaLookup({ META_ACCESS_TOKEN: "x" }, fake);
+  const first = await look(["Running", "Outdoor Voices"]);
+  assert.equal(first.get("Running").status, "targetable");
+  assert.equal(first.get("Outdoor Voices").status, "not_found");
+  await look(["Running", "Trail running"]);
+  assert.deepEqual(asked, ["Running", "Outdoor Voices", "Trail running"], "a name already looked up is not asked again");
+  assert.equal(metaLookup({}), null, "no token, no lookup");
+});
+
+test("lock: new receipts are capped per day, a plan already locked is still served", async () => {
+  const { LOCKS_PER_DAY } = await import("../src/worker.js");
+  const store = new Map([[`locks:${new Date().toISOString().slice(0, 10)}`, String(LOCKS_PER_DAY)]]);
+  const env = { MOCK: "1", ASSETS: publicAssets, QUOTA: { get: async (k) => store.get(k) ?? null, put: async (k, v) => { store.set(k, v); } } };
+  const plan = JSON.stringify({ v: 1, tests: [], rule: "x" });
+  const r = await worker.fetch(new Request(url + "/api/lock", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ canonical: plan }) }), env);
+  assert.equal(r.status, 429);
+  assert.ok(![...store.keys()].some((k) => k.startsWith("lock:")), "nothing stored past the cap");
+});

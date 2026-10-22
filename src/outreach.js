@@ -26,17 +26,22 @@ export const OUTREACH_TOOL = {
 
 export const OUTREACH_SYSTEM = `You write podcast sponsorship outreach for a media buyer. For each show you get its Qloo taste fit
 for the audience of a reference brand (0 to 1; the reference brand is the user's own brand or a close competitor), the
-advertisers found in its episode notes, the brands of the product's category found there, and a proposed promo code. You
-also get the product as the user typed it and a few things the same audience likes, from Qloo. Write, for each show:
+advertisers found in its episode notes, the brands of the product's category found there, the show's own description
+and tags from Qloo, and a proposed promo code. You also get the product as the user typed it and a few things the same
+audience likes, from Qloo. Each show's drafts must be written for that show: two shows must not get the same email or
+the same read with only the name changed. Write, for each show:
 - why_fit: one sentence under 20 words for the buyer: "[reference brand] fans like this show (Qloo taste fit 0.95)", then
   one or two things the same audience also likes. Do not say the show's listeners like them, and do not list advertisers.
 - email_subject and email_body: a rate request to the show's ad sales team, under 110 words, that opens with the show's
   name (for example "Hello Absolutely Not team,"). Ask for: rate per episode, average downloads per episode, host-read
   slots, next open dates, and whether the category is exclusive. Say in one line why it fits, the right way round:
-  "people who like brands like ours, such as [reference brand], also like your show". Never claim the show's listeners
-  like anything else. Mention the proposed promo code. Sign with [YOUR NAME] and [BRAND].
+  "people who like brands like ours, such as [reference brand], also like your show", and in one more line how the
+  product connects to what this show is about, taken from its description or tags. You may name one or two advertisers
+  found in its notes as brands it already reads for. Never claim the show's listeners like anything else. Mention the
+  proposed promo code. Sign with [YOUR NAME] and [BRAND].
 - host_read: a host-read script of 40 to 70 words, in a host's voice, that a host could read on air as it is. Name the
-  sponsor as [BRAND]. Use every product fact given (material, product type, price, and words such as "sustainable"),
+  sponsor as [BRAND]. Open with one line that ties the product to this show's subject, in the host's words, without
+  claims about the listeners or the product beyond the facts given. Use every product fact given (material, product type, price, and words such as "sustainable"),
   each once, and nothing else about the product: no benefits, comfort, fit, durability or comparisons that were not
   given. Never repeat the price, never pad, never comment on the script itself (no "that is the whole pitch"). Leave the
   host room for their own words as [HOST: a line or two about trying them], then end with the promo code, [OFFER] and
@@ -55,7 +60,7 @@ Category: ${category || "unknown"}
 Reference brand (the user's brand or a close competitor): ${reference || "none given"}
 The same audience also likes (Qloo): ${alsoLike.join(", ") || "none given"}
 Shows:
-${shows.map((s, i) => `${i + 1}. ${s.name} | taste fit ${Number(s.affinity).toFixed(2)} | advertisers in notes: ${Array.isArray(s.advertisers) ? (s.advertisers.join(", ") || "none found") : "not in our data"} | ${category || "category"} brands in notes: ${Array.isArray(s.advertisers) ? (Array.isArray(s.rivals) && s.rivals.length ? s.rivals.join(", ") : "none found") : "unknown"} | proposed code: ${codes[i]}`).join("\n")}`;
+${shows.map((s, i) => `${i + 1}. ${s.name} | about: ${String(s.about || "").replace(/\s+/g, " ").replace(/\|/g, "/").slice(0, 160) || "no description"}${Array.isArray(s.tags) && s.tags.length ? ` | tags: ${s.tags.join(", ")}` : ""} | taste fit ${Number(s.affinity).toFixed(2)} | advertisers in notes: ${Array.isArray(s.advertisers) ? (s.advertisers.join(", ") || "none found") : "not in our data"} | ${category || "category"} brands in notes: ${Array.isArray(s.advertisers) ? (Array.isArray(s.rivals) && s.rivals.length ? s.rivals.join(", ") : "none found") : "unknown"} | proposed code: ${codes[i]}`).join("\n")}`;
 }
 
 /** Keep only drafts that belong to the shows asked about: matched by name (exact, or one name starting the other), else
@@ -81,9 +86,11 @@ export function checkOutreach(out, shows, codes) {
 /** Plain checks on one draft, used by the outreach evaluation (scripts/outreach-eval.mjs) and the tests: does the email
  *  ask for the five things a buyer needs, carry the code, and invent no numbers; how many brackets are left. */
 export function lintDraft(d, { product = "", fit = null } = {}) {
-  const email = `${d.email_subject}\n${d.email_body}`.toLowerCase();
-  const asks = { rate: /rate/.test(email), downloads: /download/.test(email), host_read: /host[- ]read/.test(email),
-    dates: /date|availab/.test(email), exclusive: /exclusiv/.test(email) };
+  // asked in the body itself: a subject line "Sponsorship rates" is not a question, and "availability" may mean slots
+  // (judge, 22 Oct)
+  const email = String(d.email_body || "").toLowerCase();
+  const asks = { rate: /\brates?\b/.test(email), downloads: /download/.test(email), host_read: /host[- ]read/.test(email),
+    dates: /\bdates?\b/.test(email), exclusive: /exclusiv/.test(email) };
   // numbers the draft may use: the product line's, the taste fit, "30" (seconds), and any in the show's own name
   const allowed = new Set([...(`${product} ${d.show}`.match(/\d+(?:[.,]\d+)?/g) || []), ...(fit != null ? [Number(fit).toFixed(2), String(Number(fit).toFixed(2)).replace(/^0/, "")] : []), "30"]);
   const text = `${d.email_body} ${d.host_read} ${d.why_fit}`.replace(/(^|\s)\d{1,2}[.)](?=\s)/g, " "); // list numbering is not a claim
@@ -117,8 +124,8 @@ export function mockOutreachLLM() {
   return async (messages) => {
     const lines = String(messages[0].content).split("\n").filter((l) => /^\d+\. /.test(l));
     const shows = lines.map((l) => {
-      const [name, fit, , , code] = l.replace(/^\d+\. /, "").split(" | ");
-      const c = code.replace("proposed code: ", "");
+      const parts = l.replace(/^\d+\. /, "").split(" | ");
+      const name = parts[0], fit = parts.find((x) => x.startsWith("taste fit")), c = parts.at(-1).replace("proposed code: ", "");
       return { show: name, why_fit: `[SYNTHETIC] ${fit}.`, email_subject: `[SYNTHETIC] Sponsorship rates for ${name}`,
         email_body: `[SYNTHETIC] Hi, could you share your rate per episode, average downloads, host-read slots, open dates and category exclusivity? Code ${c}. [YOUR NAME], [BRAND]`,
         host_read: `[SYNTHETIC] [Product line]. Use code ${c} at [LANDING PAGE].` };

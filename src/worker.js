@@ -76,17 +76,32 @@ export const isExample = (b) => Object.keys(EXAMPLE).every((k) => sameText(b?.[k
  *  visitor's free run of the same inputs must not change the run the story and the judge page quote. */
 export const keepsReplay = (acc, body, result) => !!acc?.live && acc.reason !== "free daily quota" && isExample(body) && !result?.incomplete;
 const REPLAY_KEY = "replay:example";
+export const LOCKS_PER_DAY = 300; // new plan receipts per day, for everyone together
 
 // the interests as a buyer would type them in Ads Manager, without the seed brand itself
 const interestNames = (b, skip = new Set()) => list(b?.meta_interests).map((i) => String(i?.interest || "").replace(/\s*\(check in ads manager\)\s*/i, "").trim())
   .filter((n) => n && !skip.has(n.toLowerCase())).slice(0, 10);
+/** Meta's interest search for one run, remembered by name: the self-check and the final check share it, so a name is
+ *  looked up once and the run stays inside the Worker's budget of outgoing requests. null without META_ACCESS_TOKEN. */
+export function metaLookup(env, makeSearch = makeMeta) {
+  if (!env.META_ACCESS_TOKEN) return null;
+  const search = makeSearch({ token: env.META_ACCESS_TOKEN, version: env.META_API_VERSION || "v26.0" });
+  const seen = new Map();
+  return async (names) => {
+    const need = [...new Set(names)].filter((n) => !seen.has(n));
+    // a failed lookup is kept as "unknown" too: asking again would spend the run's request budget on the same error
+    if (need.length) for (const m of await checkInterests(search, need)) seen.set(m.name, m);
+    return new Map(names.map((n) => [n, seen.get(n)]));
+  };
+}
+
 /** Both lists of interests looked up in Meta's interest search: can each be targeted as named? Needs META_ACCESS_TOKEN
  *  (search only, no ad account, no spend); without it, or on any error, the page says the check did not run. */
-async function metaCheck(env, brief, baseline, skip) {
-  if (!env.META_ACCESS_TOKEN) return null;
-  const search = makeMeta({ token: env.META_ACCESS_TOKEN, version: env.META_API_VERSION || "v26.0" });
+async function metaCheck(lookup, brief, baseline, skip) {
+  if (!lookup) return null;
   const tbNames = interestNames(brief, skip), plainNames = baseline && !baseline.error ? interestNames(baseline, skip) : [];
-  const checked = await checkInterests(search, [...new Set([...tbNames, ...plainNames])]); // one batched request for both lists
+  const found = await lookup([...new Set([...tbNames, ...plainNames])]); // one batched request for the names not seen yet
+  const checked = [...found.values()];
   // every lookup failed (an expired token, Meta down): say the check did not run, never "0 of 6 in Meta"
   if (checked.length && checked.every((m) => m.status === "unknown")) return { error: checked[0].error || "Meta interest search failed" };
   const by = new Map(checked.map((m) => [m.name, m]));
@@ -104,7 +119,7 @@ export default {
       // a run recorded before the Meta check existed gets it once, on its own interests, marked as added later
       if (rec?.brief && !rec.meta_check && env.META_ACCESS_TOKEN) {
         const skip = new Set(list(rec.seeds).map((id) => String(list(rec.registry).find((e) => e.entity_id === id)?.name || "").toLowerCase()));
-        const m = await metaCheck(env, rec.brief, rec.baseline, skip).catch(() => null);
+        const m = await metaCheck(metaLookup(env), rec.brief, rec.baseline, skip).catch(() => null);
         if (m && !m.error) { rec.meta_check = { ...m, added_after_recording: true }; await env.QUOTA.put(REPLAY_KEY, JSON.stringify(rec)).catch(() => {}); }
       }
       return rec ? json(rec) : new Response(saved, { headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" } });
@@ -113,7 +128,11 @@ export default {
       if (!env.QUOTA) return json({ error: "receipts are not stored here" }, 503);
       let body;
       try { body = await req.json(); } catch { return json({ error: "send JSON" }, 400); }
+      const dayKey = `locks:${new Date().toISOString().slice(0, 10)}`;
+      const today = Number(await env.QUOTA.get(dayKey).catch(() => 0)) || 0;
+      if (today >= LOCKS_PER_DAY) return json({ error: "too many plans locked today; try again tomorrow" }, 429);
       const out = await makeReceipts(env.QUOTA).lock(body?.canonical);
+      if (out.created) await env.QUOTA.put(dayKey, String(today + 1), { expirationTtl: 2 * 86400 }).catch(() => {});
       return out.error ? json({ error: out.error }, 400) : json(out, out.created ? 201 : 200);
     }
     if (url.pathname.startsWith("/api/lock/")) {
@@ -151,6 +170,7 @@ export default {
         ? anthropicLLM({ apiKey: env.ANTHROPIC_API_KEY, workspaceId: env.ANTHROPIC_WORKSPACE_ID, model: env.MODEL || undefined, system: OUTREACH_SYSTEM, tools: [OUTREACH_TOOL] })
         : mockOutreachLLM();
       const meta = { mode: live ? "live" : "synthetic", access: acc.reason, quota: acc.quota || null };
+      const metaFor = live ? metaLookup(env) : null; // shared by the self-check and the final Meta check
 
       // One run: the agent (Qloo + Claude) and the no-data baseline side by side; then, with a second market, the
       // Qloo-only comparison on the agent's own seed entities. A failed baseline or comparison never sinks the brief.
@@ -168,7 +188,7 @@ export default {
             if (p.error) return { error: p.error };
             bought.pods = p; bought.seeds = seeds;
             // the facts only: the page's fixed rule (askFirst) is not passed, so the choice is the agent's own
-            return { n: p.shows.length, for_model: { category: p.category, shows: p.shows.map((x) => ({ name: x.name, taste_fit: Math.round(x.affinity * 1000) / 1000,
+            return { n: p.shows.length, for_model: { category: p.category, shows: p.shows.map((x) => ({ name: x.name, about: String(x.about || "").slice(0, 160), tags: list(x.tags), taste_fit: Math.round(x.affinity * 1000) / 1000,
               advertisers_found: Array.isArray(x.advertisers) ? x.advertisers.length : "not in our data", sample_advertisers: list(x.advertisers).slice(0, 6),
               category_brands_found: x.rivals ?? "unknown" })) } };
           },
@@ -182,12 +202,12 @@ export default {
               reference: bought.seeds.map((x) => x.name).join(", "), timeoutMs: Math.min(60000, RUN_TIMEOUT_MS - (Date.now() - t0) - 30000) });
             bought.outreach = { ...o, chosen_by: "agent", reason: String(reason || "").replace(/\s+[—–]\s+/g, ", ").slice(0, 300) };
             const checks = o.shows.map((d) => { const l = lintDraft(d, { product, fit: chosen.find((x) => x.name === d.show)?.affinity });
-              return { show: d.show, passed: l.asks_all && l.code && !l.invented_numbers.length, missing_asks: Object.keys(l.asks).filter((k) => !l.asks[k]), invented_numbers: l.invented_numbers }; });
+              return { show: d.show, passed: l.asks_all && l.code && !l.invented_numbers.length && !l.host_read_repeats.length && !l.host_read_padding, repeats: l.host_read_repeats, padding: l.host_read_padding, missing_asks: Object.keys(l.asks).filter((k) => !l.asks[k]), invented_numbers: l.invented_numbers }; });
             return { n: o.shows.length, for_model: { drafts: o.shows.length, checks } };
           },
         };
         const [out, baseline] = await Promise.all([
-          runAgent({ llm, qloo, product, market, references, check: makeSelfCheck({ qloo, market }), actions, onStep: (s) => send({ type: "step", run: market, step: s }) }),
+          runAgent({ llm, qloo, product, market, references, check: makeSelfCheck({ qloo, market, meta: metaFor }), actions, onStep: (s) => send({ type: "step", run: market, step: s }) }),
           body.compare === false ? null : runBaseline({ llm: baseLLM, product, market, references })
             .then((b) => { send({ type: "step", run: "no-data baseline", step: { tool: "baseline_done" } }); return b; })
             .catch((e) => ({ error: String(e.message || e) })),
@@ -222,6 +242,7 @@ export default {
             if (!first.length) return p;
             p.outreach = await draftOutreach({ llm: outLLM, product, market, shows: first, codes: promoCodes(first.map((x) => x.name)), category: p.category,
               alsoLike: alsoLikeFrom(out.registry, out.seeds), reference: seedEntities.map((e) => e.name).join(", "), timeoutMs: Math.min(60000, RUN_TIMEOUT_MS - (Date.now() - t0) - 15000) })
+              .then((o) => (o ? { ...o, chosen_by: "rule" } : o))
               .catch((e) => ({ error: String(e.message || e) }));
             return p;
           }) : seedEntities.length ? podcastPartners({ qloo, seeds: seedEntities, take: 20, category: categoryFor(references, out.brief?.category) })
@@ -236,12 +257,12 @@ export default {
               const left = RUN_TIMEOUT_MS - (Date.now() - t0) - 15000;
               p.outreach = await draftOutreach({ llm: outLLM, product, market, shows: first, codes, category: p.category, alsoLike,
                 reference: seedEntities.map((e) => e.name).join(", "), timeoutMs: Math.min(60000, left) })
-                .then((o) => { send({ type: "step", run: market, step: { tool: "outreach", n: o?.shows?.length || 0 } }); return o; })
+                .then((o) => { send({ type: "step", run: market, step: { tool: "outreach", n: o?.shows?.length || 0 } }); return o ? { ...o, chosen_by: "rule" } : o; })
                 .catch((e) => ({ error: String(e.message || e) }));
               return p;
             })
             .catch((e) => ({ error: String(e.message || e) })) : null,
-          live ? metaCheck(env, out.brief, baseline, seedNames)
+          live ? metaCheck(metaFor, out.brief, baseline, seedNames)
             .then((m) => { if (m) send({ type: "step", run: market, step: { tool: "meta_check", n: m.taste_brief.length + m.plain.length, found: [...m.taste_brief, ...m.plain].filter((x) => x.status === "targetable").length } }); return m; })
             .catch((e) => ({ error: String(e.message || e) })) : null,
         ]);

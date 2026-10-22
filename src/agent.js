@@ -3,7 +3,7 @@ import { sourcesFrom, registryFrom, annotateBrief, checkEvidence } from "./evide
 // Every claim in the brief carries the Qloo evidence it came from, so the output is checkable, not a guess.
 import { INSIGHT_TYPES } from "./qloo.js";
 import CATS from "./data/categories.json" with { type: "json" };
-import { feedback } from "./selfcheck.js";
+import { feedback, needsRewrite } from "./selfcheck.js";
 
 export const CATEGORIES = Object.keys(CATS.categories);
 
@@ -220,9 +220,9 @@ export async function runAgent({ llm, qloo, product, market, references = "", ma
         let selfCheck = null;
         if (check && !incomplete) {
           const report = await check(brief, { registry: [...reg.entities.values()], seeds: [...reg.seeds] }).catch((e) => ({ error: String(e.message || e) }));
-          trace.push({ tool: "self_check", rival: report.rival?.name, n: report.picks?.length, weak: report.weak?.length, error: report.error });
+          trace.push({ tool: "self_check", rival: report.rival?.name, n: report.picks?.length, weak: report.weak?.length, not_in_meta: report.not_in_meta?.length, error: report.error });
           onStep(trace.at(-1));
-          if (!firstCheck && report.weak?.length && report.rival && step < maxSteps - 1) {
+          if (!firstCheck && needsRewrite(report) && step < maxSteps - 1) {
             firstCheck = report;
             firstResult = finish(brief, null, { first: report, final: report, revised: false, rewrite_failed: true });
             results.push({ id: call.id, name: call.name, content: feedback(report) });
