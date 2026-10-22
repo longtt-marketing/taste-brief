@@ -3,6 +3,7 @@
 // podcast check in docs/podcast-check). The page orders the shows by Qloo's rank plus this ad-demand rank (public/rank.js).
 import SPONSORS from "./data/podcast-sponsors.json" with { type: "json" };
 import CATS from "./data/categories.json" with { type: "json" };
+import ALSO from "./data/category-also.json" with { type: "json" };
 
 const norm = (s) => String(s || "").toLowerCase().replace(/[^a-z0-9]/g, "");
 const INDEX = new Map(Object.entries(SPONSORS.shows || {}).map(([name, brands]) => [norm(name), { name, brands }]));
@@ -20,10 +21,13 @@ export function categoryFor(references, agentCategory) {
   return CATS.categories[agentCategory] ? agentCategory : null;
 }
 
-/** Brands of that category a show's notes already read: [] means the show is open to the category. */
+const ALSO_IN = new Map(Object.entries(ALSO.also || {}).map(([c, brands]) => [c, new Set(brands.map(norm))]));
+
+/** Brands of that category a show's notes already read: [] means the show is open to the category. A brand counts for its
+ *  main category and for any second one it also sells in (data/category-also.json). */
 export function rivalsIn(advertisers, category) {
   if (!category || !Array.isArray(advertisers)) return null;
-  return advertisers.filter((a) => CAT_OF.get(norm(a)) === category);
+  return advertisers.filter((a) => CAT_OF.get(norm(a)) === category || !!ALSO_IN.get(category)?.has(norm(a)));
 }
 
 /**

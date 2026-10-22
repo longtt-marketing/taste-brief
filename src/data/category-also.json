@@ -1,0 +1,8 @@
+{
+ "note": "App only, added 22 Oct 2026 after a judge found Lululemon, which sells running shoes, counted only as apparel. The podcast check and open-shows analyses use categories.json unchanged.",
+ "also": {
+  "footwear": [
+   "Lululemon"
+  ]
+ }
+}

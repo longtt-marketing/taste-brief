@@ -76,6 +76,8 @@ test("open shows: category from a known reference brand, rivals in a show's note
   assert.deepEqual(rivalsIn(["Hoka", "Squarespace", "Rothy's"], "footwear"), ["Hoka", "Rothy's"]);
   assert.deepEqual(rivalsIn(["Squarespace"], "footwear"), [], "open to the category");
   assert.equal(rivalsIn(null, "footwear"), null, "a show we have no notes for is unknown, not open");
+  assert.deepEqual(rivalsIn(["Lululemon", "Quince"], "footwear"), ["Lululemon"], "a brand that also sells shoes counts for footwear");
+  assert.deepEqual(rivalsIn(["Lululemon"], "apparel"), ["Lululemon"], "and still for its main category");
 });
 
 test("self-check: an interest Meta does not have sends the brief back, even when Qloo scores it well", async () => {

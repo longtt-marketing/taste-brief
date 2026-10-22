@@ -73,3 +73,17 @@ test("results: hitting the cap before enough adds to cart is inconclusive, never
   assert.equal(verdicts({ "Test 1": { spend: 100, addsToCart: 30 } })[0].verdict, "no control");
   assert.equal(verdicts({ Control: { spend: 200, addsToCart: 20 }, "Test 1": { spend: 196, addsToCart: 20 } })[0].verdict, "no clear difference", "2% cheaper is not ahead");
 });
+
+test("verdict: a targeting test that names an interest Meta lacks is never ready, and is left out of the lock", async () => {
+  const { missingInMeta, readyTests } = await import("../public/verdict.js");
+  const meta = { taste_brief: [{ name: "Outdoor Voices", status: "not_found" }, { name: "Bombas", status: "targetable" }] };
+  const tests = [
+    { variable: "targeting", ad_set: "Usual creative, interests Bombas and Outdoor Voices" },
+    { variable: "targeting", ad_set: "Usual creative, interests Bombas" },
+    { variable: "creative", ad_set: "Broad audience; a creative about Outdoor Voices fans" },
+  ];
+  assert.deepEqual(missingInMeta(tests[0], meta), ["Outdoor Voices"]);
+  assert.deepEqual(missingInMeta(tests[2], meta), [], "a creative test names no interest to target");
+  assert.deepEqual(readyTests(tests, meta).map((t) => t.ad_set), [tests[1].ad_set, tests[2].ad_set]);
+  assert.equal(readyTests(tests, null).length, 3, "without a Meta check nothing is held back");
+});

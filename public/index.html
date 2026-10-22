@@ -282,8 +282,8 @@ details.more>.in{padding:0 16px 16px;display:flex;flex-direction:column;gap:16px
   <section class="panel">
     <p class="presets" aria-label="Examples">Start from an example:
       <button type="button" class="chip" data-p="Wool running sneakers, $120, sustainable|New York, NY|London, UK|Allbirds">Wool sneakers in New York and London</button>
-      <button type="button" class="chip" data-p="Specialty coffee subscription, $25 a month|Seoul, South Korea|Tokyo, Japan|Blue Bottle Coffee">Coffee subscription in Seoul and Tokyo</button>
-      <button type="button" class="chip" data-p="Turntable for first time vinyl buyers, $199|Berlin, Germany|Mexico City, Mexico|Audio-Technica">Turntable in Berlin and Mexico City</button>
+      <button type="button" class="chip" data-p="Specialty coffee subscription, $25 a month|Austin, TX|Seattle, WA|Blue Bottle Coffee">Coffee subscription in Austin and Seattle</button>
+      <button type="button" class="chip" data-p="Turntable for first time vinyl buyers, $199|Chicago, IL|Los Angeles, CA|Audio-Technica">Turntable in Chicago and Los Angeles</button>
     </p>
     <form id="f">
       <div class="fields">
@@ -313,8 +313,8 @@ details.more>.in{padding:0 16px 16px;display:flex;flex-direction:column;gap:16px
   <div id="out" style="display:flex;flex-direction:column;gap:16px"></div>
 </main>
 <script type="module">
-import { RULE, canonicalPlan, planHash, adSetRows, toCsv, parseCsv, readResults, verdicts, problemWith } from "/verdict.js";
-import { agentPath } from "/path.js";
+import { RULE, canonicalPlan, planHash, adSetRows, toCsv, parseCsv, readResults, verdicts, problemWith, missingInMeta, readyTests } from "/verdict.js";
+import { agentPath, checkedCaveats } from "/path.js";
 import { sponsorReady, askFirst, promoCodes } from "/rank.js";
 const $ = (s) => document.querySelector(s);
 // a spaced dash used as punctuation in model text reads as a comma; hyphens inside words stay
@@ -539,7 +539,7 @@ const mdBrief = (j) => {
     ...(list(b.partnerships).length ? ["## Partnerships", ...list(b.partnerships).map((x) => `- ${x.partner}: ${x.idea || ""}${src(x) ? ` (Qloo: ${src(x)})` : ""}`), ""] : []),
     ...(list(b.test_plan).length ? ["## Meta tests (each against your usual ad: broad targeting, same ages, usual message)", ...list(b.test_plan).map((x, i) => `- Test ${i + 1}, ${x.variable} only. ${dot(x.hypothesis)} Run: ${dot(x.ad_set)} Why: ${dot(x.why || "")} Judge on: ${dot(x.kpi)} Pause rule: ${dot(x.stop_if)}`), "",
       `Locked rule: once a test and your usual ad each have ${RULE.minAddsToCart} adds to cart, the test is ahead if its cost per add to cart is at least ${Math.round(RULE.betterBy * 100)}% lower, pause if it is more than ${Math.round(RULE.worseBy * 100)}% higher, otherwise no clear difference. Up to ${RULE.cap} per ad set in your account currency.`, ""] : []),
-    ...(list(b.caveats).length ? ["## Notes from the agent", ...list(b.caveats).map((c) => `- ${c}`)] : [])].filter((x, i, a) => !(x === "" && a[i - 1] === "")).join("\n");
+    ...(checkedCaveats(b).kept.length ? ["## Notes from the agent", ...checkedCaveats(b).kept.map((c) => `- ${c}`)] : [])].filter((x, i, a) => !(x === "" && a[i - 1] === "")).join("\n");
 };
 const csvInterests = (j) => {
   const q = (s) => `"${String(s ?? "").replace(/"/g, '""')}"`;
@@ -591,7 +591,7 @@ const download = (name, text, type) => {
 function wireLoop(j) {
   const btn = $("#lock");
   if (!btn) return;
-  const tests = list(j.brief?.test_plan);
+  const tests = readyTests(j.brief?.test_plan, j.meta_check);
   let locked = null;
   btn.addEventListener("click", async () => {
     const lockedAt = new Date().toISOString();
@@ -757,7 +757,7 @@ function pathPanel(j) {
     p.demographics ? "Checked the age and gender index" : "",
     p.podcasts ? `Ranked podcasts for this audience${p.drafted.length ? ` and chose ${p.drafted.map(esc).join(", ")} to ask first` : ""}` : "",
   ].filter(Boolean);
-  const caveats = list(j.brief?.caveats);
+  const caveats = checkedCaveats(j.brief).kept; // a note that points to a [marker] the brief never uses is left out
   return `<section class="panel path"><div class="grid">
     <div><h3>How the agent worked this out</h3><ol>${steps.map((x) => `<li>${x}</li>`).join("")}</ol>
       <p class="note">The agent chose these ${p.qlooCalls} Qloo calls for this product and city${p.drafted.length ? ", and which shows get drafts" : ""}. The app then runs fixed steps: the self-check, grading both interest lists and the second city. Every call is listed below.</p></div>
@@ -771,11 +771,10 @@ function testsCard(b, j) {
   const tp = list(b.test_plan);
   const same = tp.every((x) => x.kpi === tp[0].kpi && x.stop_if === tp[0].stop_if);
   const city = esc(String(j.market).split(",")[0]);
-  // a targeting test that names an interest Meta does not have cannot be built as written
-  const named = (text, name) => new RegExp(`(^|[^\\p{L}\\p{N}])${String(name).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}($|[^\\p{L}\\p{N}])`, "iu").test(String(text || ""));
-  const missing = (x) => x.variable !== "targeting" ? [] : list(j.meta_check?.taste_brief).filter((m) => m?.status === "not_found" && named(x.ad_set, m.name)).map((m) => m.name);
+  // a targeting test that names an interest Meta does not have cannot be built as written (verdict.js, the same gate the lock uses)
+  const missing = (x) => missingInMeta(x, j.meta_check);
   const lines = tp.map((x) => `<li><strong>${esc(x.hypothesis)}</strong><dl><dt>Changes</dt><dd>${x.variable === "targeting" ? "Targeting only, with your usual creative" : x.variable === "creative" ? "Creative only, on the broad audience" : esc(x.variable)}</dd><dt>Run</dt><dd>${esc(x.ad_set)}</dd>${missing(x).length ? `<dt>In Meta</dt><dd class="mwarn"><strong>Not ready to launch.</strong> Meta has no interest named ${missing(x).map(esc).join(", ")}. Build the ad set with the interests Meta has, or swap in the nearest one from Ads Manager and note it in the plan before you lock it.</dd>` : ""}${x.why ? `<dt>Why</dt><dd>${esc(x.why)}</dd>` : ""}${same ? "" : `<dt>Judge on</dt><dd>${esc(x.kpi)}</dd><dt>Pause rule</dt><dd>${esc(x.stop_if)}</dd>`}</dl>${ev(x, true)}</li>`).join("");
-  return card("What to test first", `<p class="tests-rule">Your usual ad is the control: broad targeting in ${city}, same ages, your usual message. Each test changes one thing${same ? `, judged on ${esc(lc(tp[0].kpi))}` : ""}. The rule for reading results is locked below.</p><ul class="tests">${lines}</ul>${loopPanel()}`, "each test rests on the Qloo results shown");
+  return card("What to test first", `<p class="tests-rule">Your usual ad is the control: broad targeting in ${city}, same ages, your usual message. Each test changes one thing${same ? `, judged on ${esc(lc(tp[0].kpi))}` : ""}. The rule for reading results is locked below.${tp.length - readyTests(tp, j.meta_check).length ? ` <strong>${readyTests(tp, j.meta_check).length} of ${tp.length} can be launched as written; the plan locks only those.</strong>` : ""}</p><ul class="tests">${lines}</ul>${loopPanel()}`, "each test rests on the Qloo results shown");
 }
 
 // Draw one result: from a run that just finished, or the recorded run of the example. The podcast plan is the main
@@ -861,7 +860,7 @@ $("#f").addEventListener("submit", async (e) => {
   e.preventDefault();
   const data = { ...Object.fromEntries(new FormData(e.target)), stream: true };
   $("#go").disabled = true; $("#out").innerHTML = ""; $("#live").innerHTML = "";
-  $("#status").textContent = "Working on it. A live run takes about a minute, sometimes two, and each step shows up below.";
+  $("#status").textContent = "Working on it. A live run takes about two minutes, and each step shows up below.";
   const ctl = new AbortController();
   const timer = setTimeout(() => ctl.abort(), 180000);
   try {
@@ -878,7 +877,7 @@ $("#f").addEventListener("submit", async (e) => {
         const line = buf.slice(0, k).trim(); buf = buf.slice(k + 1);
         if (!line) continue;
         const m = JSON.parse(line);
-        if (m.type === "start") $("#status").textContent = m.mode === "live" ? "Live run on real Qloo data. Each step shows up below, about a minute in all." : "Running on sample data. Each step shows up below.";
+        if (m.type === "start") $("#status").textContent = m.mode === "live" ? "Live run on real Qloo data. Each step shows up below, about two minutes in all." : "Running on sample data. Each step shows up below.";
         else if (m.type === "step") { const li = document.createElement("li"); li.innerHTML = stepText(m.run, m.step); $("#live").append(li); }
         else if (m.type === "error") throw new Error(m.error);
         else if (m.type === "result") j = m;

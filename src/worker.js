@@ -114,15 +114,8 @@ export default {
     if (url.pathname === "/api/replay") {
       const saved = env.QUOTA ? await env.QUOTA.get(REPLAY_KEY).catch(() => null) : null;
       if (!saved) return json({ error: "no recorded run yet" }, 404);
-      let rec = null;
-      try { rec = JSON.parse(saved); } catch { /* served as stored */ }
-      // a run recorded before the Meta check existed gets it once, on its own interests, marked as added later
-      if (rec?.brief && !rec.meta_check && env.META_ACCESS_TOKEN) {
-        const skip = new Set(list(rec.seeds).map((id) => String(list(rec.registry).find((e) => e.entity_id === id)?.name || "").toLowerCase()));
-        const m = await metaCheck(metaLookup(env), rec.brief, rec.baseline, skip).catch(() => null);
-        if (m && !m.error) { rec.meta_check = { ...m, added_after_recording: true }; await env.QUOTA.put(REPLAY_KEY, JSON.stringify(rec)).catch(() => {}); }
-      }
-      return rec ? json(rec) : new Response(saved, { headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" } });
+      // served as stored: a GET never writes (the recorded run carries its own Meta check since 22 Oct)
+      return new Response(saved, { headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" } });
     }
     if (url.pathname === "/api/lock" && req.method === "POST") {
       if (!env.QUOTA) return json({ error: "receipts are not stored here" }, 503);

@@ -5,6 +5,21 @@
 // ahead needs a clear margin too (betterBy), so a 1% cheaper test does not move the budget (media buyer review, 22 Oct)
 export const RULE = { cap: 300, minAddsToCart: 20, worseBy: 0.3, betterBy: 0.15 };
 
+const list = (v) => (Array.isArray(v) ? v : []);
+const named = (text, name) => new RegExp(`(^|[^\\p{L}\\p{N}])${String(name).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}($|[^\\p{L}\\p{N}])`, "iu").test(String(text || ""));
+
+/** Interests a targeting test names that Meta's interest search did not find in this run (empty for creative tests). */
+export function missingInMeta(test, metaCheck) {
+  if (test?.variable !== "targeting") return [];
+  return list(metaCheck?.taste_brief).filter((m) => m?.status === "not_found" && named(test.ad_set, m.name)).map((m) => m.name);
+}
+
+/** The tests that can be launched as written. The gate is code, not the model: both judges of 22 Oct asked that a test
+ *  naming a missing interest never be presented, or locked, as ready. */
+export function readyTests(tests, metaCheck) {
+  return list(tests).filter((t) => !missingInMeta(t, metaCheck).length);
+}
+
 /** The plan as it gets locked: control, tests and rule, in a fixed key order so the same plan always hashes the same. */
 export function canonicalPlan({ product, market, references, tests, rule = RULE, lockedAt }) {
   return JSON.stringify({

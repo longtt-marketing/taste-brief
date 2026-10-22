@@ -26,3 +26,16 @@ export function agentPath(trace) {
   }
   return out;
 }
+
+/** The agent's notes, without any that point to a [marker] the brief never uses: a judge found a recorded note saying
+ *  claims "are marked [confirm]" when no [confirm] appears anywhere (22 Oct). Returns {kept, dropped}. */
+export function checkedCaveats(brief) {
+  const caveats = Array.isArray(brief?.caveats) ? brief.caveats.map(String) : [];
+  const rest = JSON.stringify({ ...(brief || {}), caveats: undefined }).toLowerCase();
+  const kept = [], dropped = [];
+  for (const c of caveats) {
+    const marks = (c.match(/\[[^\]]{1,40}\]/g) || []).map((m) => m.toLowerCase());
+    (marks.some((m) => !rest.includes(m)) ? dropped : kept).push(c);
+  }
+  return { kept, dropped };
+}
