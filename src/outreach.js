@@ -35,10 +35,12 @@ also get the product as the user typed it and a few things the same audience lik
   slots, next open dates, and whether the category is exclusive. Say in one line why it fits, the right way round:
   "people who like brands like ours, such as [reference brand], also like your show". Never claim the show's listeners
   like anything else. Mention the proposed promo code. Sign with [YOUR NAME] and [BRAND].
-- host_read: a 30 second host-read script, about 70 words, in a host's voice. Use every product fact given (material,
-  product type, price, and words such as "sustainable") and nothing else about the product: no benefits, comfort, fit,
-  durability or comparisons that were not given. Leave exactly one line for the host's own words as [HOST: one line about
-  trying them], then end with the promo code, [OFFER] and [LANDING PAGE]. No other brackets.
+- host_read: a host-read script of 40 to 70 words, in a host's voice, that a host could read on air as it is. Name the
+  sponsor as [BRAND]. Use every product fact given (material, product type, price, and words such as "sustainable"),
+  each once, and nothing else about the product: no benefits, comfort, fit, durability or comparisons that were not
+  given. Never repeat the price, never pad, never comment on the script itself (no "that is the whole pitch"). Leave the
+  host room for their own words as [HOST: a line or two about trying them], then end with the promo code, [OFFER] and
+  [LANDING PAGE]. No other brackets.
 Rules: never invent rates, downloads, listener numbers, discounts or names of people. Plain natural English, no dashes as
 punctuation, no "X, not Y" contrasts, no lists of three adjectives. Call submit_outreach once.`;
 
@@ -87,7 +89,14 @@ export function lintDraft(d, { product = "", fit = null } = {}) {
   const text = `${d.email_body} ${d.host_read} ${d.why_fit}`.replace(/(^|\s)\d{1,2}[.)](?=\s)/g, " "); // list numbering is not a claim
   const numbers = (text.match(/\d+(?:[.,]\d+)?/g) || []).filter((n) => !allowed.has(n) && !allowed.has(n.replace(/^0/, "")));
   const brackets = new Set(d.host_read.match(/\[[^\]]+\]/g) || []).size; // distinct placeholders left for the buyer
+  // a read a host can use as it is: no fact said twice to fill time, no remarks about the script itself
+  const spoken = d.host_read.replace(/\[[^\]]*\]/g, " ");
+  const said = spoken.match(/\$?\d+(?:[.,]\d+)?/g) || [];
+  const repeats = [...new Set(said.filter((n, i) => said.indexOf(n) !== i))];
+  const padding = /whole pitch|that'?s (?:it|all)|again,|this (?:script|read|ad)\b/i.test(spoken);
+  const words = spoken.split(/\s+/).filter(Boolean).length + 8; // the host's own line counts for about 8 words
   return { asks_all: Object.values(asks).every(Boolean), asks, code: text.includes(d.code), invented_numbers: numbers, host_read_brackets: brackets,
+    host_read_repeats: repeats, host_read_padding: padding, host_read_words: words,
     opens_with_show: norm(d.email_body.split("\n")[0].slice(0, 60)).includes(norm(d.show).slice(0, 8)) };
 }
 

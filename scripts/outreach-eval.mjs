@@ -37,6 +37,8 @@ export const CASES = [
 // product claims a draft may not make unless the product line says them
 const CLAIMS = /\b(comfortable|comfort|durable|lightweight|breathable|soft|cozy|waterproof|odor[- ]?free|award[- ]winning|best[- ]selling|clinically|organic|vegan|gluten[- ]free|keto|zero sugar|no sugar|non[- ]toxic|aluminum[- ]free|grass[- ]fed|human[- ]grade|vet[- ]approved|free shipping|money[- ]back|guarantee)\b/gi;
 
+// what earlier runs of this file found, kept so a later run does not erase them
+const PREVIOUS = existsSync("docs/outreach-eval.json") ? (({ run_at, pass, drafts, first_run, known_issue, earlier }) => ({ run_at, pass, drafts, first_run, known_issue, earlier }))(JSON.parse(readFileSync("docs/outreach-eval.json", "utf8"))) : null;
 const rows = [], full = [];
 for (const [product, market, reference] of CASES) {
   const row = { product, market, reference };
@@ -60,7 +62,8 @@ for (const [product, market, reference] of CASES) {
       const lint = lintDraft(d, { product, fit: show?.affinity });
       const claimText = `${d.email_body} ${d.host_read}`.replace(/\[[^\]]*\]/g, " ");
       const claims = [...new Set((claimText.match(CLAIMS) || []).map((c) => c.toLowerCase()))].filter((c) => !product.toLowerCase().includes(c));
-      return { ...lint, unsupported_claims: claims, pass: lint.asks_all && lint.code && lint.opens_with_show && !lint.invented_numbers.length && !claims.length && lint.host_read_brackets <= 3 };
+      return { ...lint, unsupported_claims: claims, pass: lint.asks_all && lint.code && lint.opens_with_show && !lint.invented_numbers.length && !claims.length
+        && lint.host_read_brackets <= 4 && !lint.host_read_repeats.length && !lint.host_read_padding && lint.host_read_words <= 80 };
     });
     row.asked = shows.length;
     full.push({ product, market, reference, category, shows: shows.map((s) => s.name), drafts: out.shows });
@@ -75,8 +78,11 @@ const sum = {
   run_at: new Date().toISOString(), model: vars.MODEL || "claude-sonnet-5-5", cases: rows.length, drafts: drafts.length,
   pass: drafts.filter((d) => d.pass).length, asks_all: drafts.filter((d) => d.asks_all).length, code: drafts.filter((d) => d.code).length,
   opens_with_show: drafts.filter((d) => d.opens_with_show).length, no_invented_numbers: drafts.filter((d) => !d.invented_numbers.length).length,
-  no_unsupported_claims: drafts.filter((d) => !d.unsupported_claims.length).length, host_read_brackets_mean: drafts.length ? +(drafts.reduce((a, d) => a + d.host_read_brackets, 0) / drafts.length).toFixed(2) : null,
-  note: "Checks in plain code: the five asks (rate, downloads, host-read slots, dates, exclusivity), the proposed code, the show's name in the opening line, numbers not in the input, a fixed list of product claims not in the input. A pass is not a human review; it finds missing asks and invented facts of these kinds only.",
+  no_unsupported_claims: drafts.filter((d) => !d.unsupported_claims.length).length,
+  host_read_no_repeats: drafts.filter((d) => !d.host_read_repeats.length).length, host_read_no_padding: drafts.filter((d) => !d.host_read_padding).length,
+  host_read_words_mean: drafts.length ? Math.round(drafts.reduce((a, d) => a + d.host_read_words, 0) / drafts.length) : null, host_read_brackets_mean: drafts.length ? +(drafts.reduce((a, d) => a + d.host_read_brackets, 0) / drafts.length).toFixed(2) : null,
+  note: "Checks in plain code: the five asks (rate, downloads, host-read slots, dates, exclusivity), the proposed code, the show's name in the opening line, numbers not in the input, a fixed list of product claims not in the input, and in the host read: no number said twice, no filler remarks, at most 80 words. A pass is not a human review; it finds missing asks, invented facts and padding of these kinds only.",
+  earlier: PREVIOUS,
   rows,
 };
 mkdirSync(".results", { recursive: true });

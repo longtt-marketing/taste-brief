@@ -22,12 +22,15 @@ Method:
    tv_show / movie / podcast. Pass the market as location. For places, also pass filter_location = the city, so the
    places are really in that city.
 4. demographics: get the age and gender skew of the seed entities (Qloo's demographics are not location-specific).
-5. podcasts: call it once with the seed entity ids and the product's category. It returns the podcasts this audience
-   likes, with the advertisers found in each show's episode notes and the brands of the category found there.
+5. podcasts: call it once with the seed entity ids and the product's category. It returns the 20 podcasts this
+   audience likes most in the US (not by city), with the advertisers found in each show's episode notes and the brands
+   of the category found there.
 6. draft_outreach: choose up to three shows to ask for rates first and call it with their exact names and one sentence of
-   reason. Prefer shows with advertisers found and no category brand found, then taste fit. Skip a show whose topic
-   plainly clashes with the product (for example a children's show for alcohol) and say so in the reason. It writes a
-   rate request and a host-read script for each and tells you whether each draft passed its checks.
+   reason. Weigh four things and name the ones that decided it: does the show sell ads (advertisers found; one is thin
+   evidence, many is strong); is a brand of the category already there (it may hold exclusivity, or it may show the
+   category works on that show); does the show's subject and tone suit this product and price; and taste fit. Skip a
+   show whose subject plainly clashes with the product (a children's show for alcohol). It writes a rate request and a
+   host-read script for each and tells you whether each draft passed its checks.
 7. submit_brief. Rules for every item:
    - entity_ids: the Qloo entity_id(s) of the results the item rests on, copied exactly from the tool output. Cite the
      non-seed results that support the item. A seed may be cited only for an item about the seed itself.

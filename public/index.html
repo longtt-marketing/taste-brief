@@ -227,6 +227,7 @@ body.result #how{display:none}
 .ask details.draft{border-top:1px solid var(--line);padding-top:4px}.ask details.draft summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-size:13px;color:var(--faint)}
 .ask details.draft p{margin:6px 0;font-size:13px;line-height:1.5;color:var(--mute)}.ask .mono-s{font-family:var(--mono);font-size:12px;color:var(--faint)}
 .agentwhy{margin:0;font-size:14px;color:var(--mute);display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.agentwhy .rulecmp{flex-basis:100%;font-size:13px}
 .plan h3.wsh{margin:8px 0 0;font-family:var(--display);font-size:18px}
 .selfcheck{border:1px solid var(--line);border-radius:18px;padding:16px 20px;display:flex;flex-direction:column;gap:10px}
 .selfcheck .top{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;font-size:15px}
@@ -399,7 +400,7 @@ function versus(base, b, unbacked, scored, market, registry) {
 fetch("/api/health").then((r) => r.json()).then((h) => {
   const q = h.free_today, liveOk = h.live_qloo && h.live_llm;
   const free = liveOk && h.code_required && q && q.left > 0;
-  $("#mode").textContent = !liveOk ? "Sample data" : !h.code_required ? "Live Qloo data" : free ? `Live Qloo data · ${q.left} free runs left today` : "Live data with an access code";
+  $("#mode").textContent = !liveOk ? "Sample data" : !h.code_required ? "Live Qloo data" : free ? `Live Qloo data · ${q.left} shared free runs left today` : "Live data with an access code";
   if (liveOk && (free || !h.code_required)) $("#mode").classList.add("live");
   $("#code-help").textContent = free ? "not needed while free runs last" : h.code_required ? "needed for live data today" : "not needed here";
   const pre = new URLSearchParams(location.search).get("code");
@@ -476,7 +477,9 @@ function podcastPlan(j) {
     { key: "unknown", title: "Not in our ad data", note: "Your buyers like them; we have not read their episode notes", rows: unknown.slice(0, 5), more: Math.max(0, unknown.length - 5) },
   ].filter((g) => g.rows.length);
   // the shows the agent itself chose to ask first (draft_outreach), else the same rule the page would apply
-  const chosen = p.outreach?.chosen_by === "agent" ? list(p.outreach.shows).map((d) => shows.find((s) => s.name === d.show)).filter(Boolean) : [];
+  // in taste order, so the cards read #1, #2, #5 like the worksheet below them
+  const chosen = p.outreach?.chosen_by === "agent" ? list(p.outreach.shows).map((d) => shows.find((s) => s.name === d.show)).filter(Boolean)
+    .sort((a, b) => (Number(b.affinity) || 0) - (Number(a.affinity) || 0)) : [];
   const auto = askFirst(shows);
   const first = chosen.length ? chosen : auto.shows, selling = chosen.length ? chosen.some((s) => list(s.advertisers).length) : auto.selling;
   const ordered = [...groups.flatMap((g) => g.rows), ...unknown.slice(5)];
@@ -488,7 +491,10 @@ function podcastPlan(j) {
   for (const s of unknown.slice(5)) { s._n = ++n; s._group = "unknown"; }
   for (const s of ordered) { s._code = codes.get(s); s._link = link(s); }
   const drafts = new Map(list(p.outreach?.shows).map((d) => [d.show, d]));
-  return { cat, groups, first, selling, all: ordered, drafts, outreachError: p.outreach?.error || null, reason: p.outreach?.chosen_by === "agent" ? p.outreach.reason : "" };
+  // where the agent's choice differs from the fixed rule, say so: the rule is what the page would pick on its own
+  const ruleOnly = chosen.length ? auto.shows.filter((s) => !chosen.some((c) => c.name === s.name)).map((s) => s.name) : [];
+  return { cat, groups, first, selling, all: ordered, drafts, outreachError: p.outreach?.error || null, reason: p.outreach?.chosen_by === "agent" ? p.outreach.reason : "",
+    ruleOnly, sameAsRule: chosen.length > 0 && !ruleOnly.length };
 }
 const contactUrl = (s) => `https://www.google.com/search?q=${encodeURIComponent(`${s.name} podcast advertising`)}`;
 
@@ -684,7 +690,7 @@ function planPanel(j) {
     : plan.cat && plan.first.every((s) => !list(s.rivals).length) ? `They sell ads, and no ${esc(plan.cat)} brand was found in their episode notes. Rates, reach and open dates are not verified: the email asks for them.`
     : "They already sell ads, and your buyers like them. Rates, reach and open dates are not verified: the email asks for them.";
   return `<section class="plan" id="plan" tabindex="-1"><div><p class="stepk">Your podcast plan</p><h2>${hasDrafts ? "Three shows to ask first, with the email ready" : `Three shows ${fans} love to ask first`}</h2><p class="lede2">${lede}</p></div>
-    ${plan.reason ? `<p class="agentwhy"><span class="pill live">Chosen by the agent</span> ${esc(plan.reason)}</p>` : ""}
+    ${plan.reason ? `<p class="agentwhy"><span class="pill live">Chosen by the agent</span> ${esc(plan.reason)} <span class="rulecmp">${plan.sameAsRule ? "The fixed rule (sells ads, no category brand found, then taste fit) picks the same three." : `The fixed rule would have asked ${esc(plan.ruleOnly.join(", "))} instead.`}</span></p>` : ""}
     <div class="asks">${plan.first.map(firstCard).join("")}</div>
     ${hasDrafts ? `<p class="note" style="margin:0">Drafts written by the agent from this run's Qloo results and the product facts you gave; anything it was not told is in [brackets]. Nothing is sent: you copy, edit and send. A proposed code works once the show agrees to read it: it shows which orders came from each show, and the tagged link counts clicks. Neither counts how often the ad played.</p>` : plan.outreachError ? `<p class="note err" style="margin:0">The agent could not write the drafts this time: ${esc(plan.outreachError)}</p>` : ""}
     ${tests ? `<p class="note" style="margin:0">Next to the podcasts: ${tests} Meta test${tests === 1 ? "" : "s"} against your usual ad, locked before you spend. <a href="#tests">Open the tests</a></p>` : ""}
@@ -748,7 +754,7 @@ const more = (id, title, sub, inner) => inner ? `<details class="more" id="${id}
 function showResult(j) {
   const b = j.brief, c = j.check || { grounded: 0, total: 0, flagged: [] };
   document.body.classList.add("result");
-  if (j.mode === "live" && j.quota && typeof j.quota.left === "number") $("#mode").textContent = `Live Qloo data · ${j.quota.left} free runs left today`;
+  if (j.mode === "live" && j.quota && typeof j.quota.left === "number") $("#mode").textContent = `Live Qloo data · ${j.quota.left} shared free runs left today`;
   $("#status").textContent = "";
   $("#live").innerHTML = "";
   const cat = j.podcasts?.category;

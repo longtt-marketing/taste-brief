@@ -78,7 +78,7 @@ and by a negative control (86 of 139 picks at 0.9+ on the right competitor again
 ## Live demo
 https://taste-brief.thelongmarketing.workers.dev (Cloudflare Worker). **See a recorded live run now** shows the last real run
 of the page's example instantly (kept in KV, only for that exact example, never for what a visitor types). A live run calls Qloo and Claude, so the public
-page allows 25 free live runs a day, no code needed; an access code (not published) allows more. When neither applies the page runs on synthetic data and says so in a banner.
+page allows 25 free live runs a day, shared by all visitors, no code needed; an access code (not published) allows more. When neither applies the page runs on synthetic data and says so in a banner.
 
 ![The same question with and without Qloo, both lists scored by Qloo for the audience](docs/screenshots/0-with-and-without.png)
 ![What to test first: each test changes one thing from the obvious ad set, with the Qloo results it rests on](docs/screenshots/1-what-to-test.png)

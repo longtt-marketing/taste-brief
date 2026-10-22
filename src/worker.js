@@ -128,7 +128,7 @@ export default {
       // Qloo-only comparison on the agent's own seed entities. A failed baseline or comparison never sinks the brief.
       const run = async (send) => {
         const t0 = Date.now();
-        // the agent's buying steps: it ranks the podcasts itself and chooses which shows get drafts (src/agent.js)
+        // the agent's buying steps: it reads Qloo's podcast ranking with the ad data and chooses which shows get drafts (src/agent.js)
         const bought = { pods: null, outreach: null };
         const alsoLikeFrom = (registry, seedIds) => registry.filter((e) => !seedIds.includes(e.entity_id) && typeof e.affinity === "number" && /brand|artist/.test(String(e.type)))
           .sort((a, b) => b.affinity - a.affinity).slice(0, 6).map((e) => e.name);
@@ -139,10 +139,10 @@ export default {
             const p = await podcastPartners({ qloo, seeds, take: 20, category: categoryFor(references, category) });
             if (p.error) return { error: p.error };
             bought.pods = p; bought.seeds = seeds;
-            const suggested = new Set(askFirst(p.shows).shows.map((x) => x.name));
+            // the facts only: the page's fixed rule (askFirst) is not passed, so the choice is the agent's own
             return { n: p.shows.length, for_model: { category: p.category, shows: p.shows.map((x) => ({ name: x.name, taste_fit: Math.round(x.affinity * 1000) / 1000,
-              advertisers_found: Array.isArray(x.advertisers) ? x.advertisers.length : "not in our data", sample_advertisers: list(x.advertisers).slice(0, 4),
-              category_brands_found: x.rivals ?? "unknown", suggested_first: suggested.has(x.name) })) } };
+              advertisers_found: Array.isArray(x.advertisers) ? x.advertisers.length : "not in our data", sample_advertisers: list(x.advertisers).slice(0, 6),
+              category_brands_found: x.rivals ?? "unknown" })) } };
           },
           draft_outreach: async ({ shows, reason }, { registry }) => {
             const p = bought.pods;
@@ -225,7 +225,9 @@ export default {
           qloo_calls: qlooCalls, model_calls: (llm.usage?.calls || 0) + (baseLLM.usage?.calls || 0) + (outLLM.usage?.calls || 0), at: new Date().toISOString() };
         // the inputs go back to the same visitor only, so the page can lock the test plan with them
         const result = { ...meta, product, references, compare_market: marketB, market, ...out, baseline, unbacked, scored, markets, podcasts, run: runInfo };
-        if (live && isExample(body) && env.QUOTA && !result.incomplete) {
+        // only the owner's runs (access code) replace the recorded example: a visitor's free run of the same inputs must
+        // not change the run the story and the judge page quote
+        if (live && acc.reason !== "free daily quota" && isExample(body) && env.QUOTA && !result.incomplete) {
           const { quota, access, ...keep } = result;
           await env.QUOTA.put(REPLAY_KEY, JSON.stringify({ ...keep, mode: "replay", recorded: { at: runInfo.at, version: runInfo.version, inputs: EXAMPLE } })).catch(() => {});
         }
