@@ -87,7 +87,7 @@ code{font-family:var(--mono);font-size:13px;background:var(--code);border-radius
   </header>
 
   <section class="panel sum" aria-label="The answer in one screen">
-    <p class="q">Shown one show a brand sponsors and one it doesn't, which ranks the sponsored one higher? 216 US podcasts, 61 brands, strict labels, rules locked first.</p>
+    <p class="q">Shown one show a brand sponsors and one it doesn't, which ranks the sponsored one higher? 216 US podcasts, 62 brands (61 with Qloo data), strict labels. The main test was locked first; the genre prior and other brands' Qloo score were added later.</p>
     <div class="pts" role="img" aria-label="Picks the sponsored show: Qloo taste for this brand 65%, ads a show already runs 58%, genre prior 57%, other brands' Qloo score 57%, Qloo popularity 53%, Apple chart rank 52%">
       <div class="pt"><span>Qloo taste, this brand</span><i><b style="width:65%"></b></i><span>65%</span></div>
       <div class="pt"><span>Ads a show already runs</span><i><b class="base" style="width:58.3%"></b></i><span>58%</span></div>
@@ -96,7 +96,7 @@ code{font-family:var(--mono);font-size:13px;background:var(--code);border-radius
       <div class="pt"><span>Qloo popularity</span><i><b class="base" style="width:52.6%"></b></i><span>53%</span></div>
       <div class="pt"><span>Apple chart rank</span><i><b class="base" style="width:52.2%"></b></i><span>52%</span></div>
     </div>
-    <p class="axis">The brand's own Qloo score beats the average of other brands' Qloo scores by 8 points (95% interval 4 to 13), for 47 of 61 brands: the signal is about this brand's buyers, not podcasts in general. Dashed line: a coin flip. <code>robustness.json</code>, strict.</p>
+    <p class="axis">The brand's own Qloo score beats the average of other brands' Qloo scores by 8 points (95% interval 4 to 13), for 47 of 61 brands: the signal is about this brand's buyers, not podcasts in general. Dashed line: a coin flip. <code>results-strict.json</code> and <code>robustness.json</code>, strict.</p>
     <div class="tiles">
       <div class="tile"><span class="k ok">Holds · Meta loop</span><b>14 → 3</b><p>Tests naming an interest Meta lacks, before and after the agent's rewrite (11 runs, plan locked first). A code gate keeps the 3 out of the plan you lock. <a href="#selfcheck">Details</a></p></div>
       <div class="tile"><span class="k ok">Holds · drafts</span><b>17 of 18</b><p>Rate requests and host reads pass the code checks on 10 products; drafts for different shows now share 60% of their words, down from 96%. <a href="#selfcheck">Details</a></p></div>
