@@ -41,7 +41,8 @@ export function askFirst(shows, n = 3) {
   return { shows: selling.length ? selling : [...list].sort(byAff).slice(0, n), selling: selling.length > 0 };
 }
 
-const STOP = new Set(["the", "a", "an", "with", "and", "of", "podcast", "show", "has", "not", "but", "in", "on", "for", "to", "my", "your", "our", "is", "it", "me", "its", "this", "that", "you"]);
+const STOP = new Set(["the", "a", "an", "with", "and", "of", "podcast", "show", "has", "not", "but", "in", "on", "for", "to", "my", "your", "our", "is", "it", "me", "its", "this", "that", "you",
+  "how", "why", "what", "who", "when", "where", "all", "about", "from", "out", "are", "was", "can", "get", "just", "now", "here", "there"]);
 /** One promo code per show that a host can read out: the show's first distinctive word (ARMCHAIR, BEAUTIFUL). */
 export function promoCodes(names) {
   const used = new Set();

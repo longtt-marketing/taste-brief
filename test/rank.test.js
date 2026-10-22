@@ -31,4 +31,5 @@ test("askFirst: open shows by taste, then shows a rival uses; with no ad data, t
 });
 test("promoCodes: a readable word per show, never twice", () => {
   assert.deepEqual(promoCodes(["Absolutely Not", "Armchair Expert with Dax Shepard", "A Beautiful Mess Podcast", "Absolutely Fine"]), ["ABSOLUTELY", "ARMCHAIR", "BEAUTIFUL", "ABSOLUTELY2"]);
+  assert.deepEqual(promoCodes(["How I Built This with Guy Raz", "10% Happier with Dan Harris"]), ["BUILT", "HAPPIER"]); // function words are skipped
 });

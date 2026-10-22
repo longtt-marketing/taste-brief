@@ -92,3 +92,40 @@ test("replay: a live run of the page's example is kept in KV and served at /api/
   assert.equal(r.status, 200);
   assert.equal((await r.json()).mode, "replay");
 });
+
+test("replay: only the owner's live run of the example replaces it, never a visitor's free run", async () => {
+  const { keepsReplay, EXAMPLE } = await import("../src/worker.js");
+  assert.equal(keepsReplay({ live: true, reason: "access code" }, EXAMPLE, {}), true);
+  assert.equal(keepsReplay({ live: true, reason: "free daily quota" }, EXAMPLE, {}), false);
+  assert.equal(keepsReplay({ live: false, reason: "no API keys configured" }, EXAMPLE, {}), false);
+  assert.equal(keepsReplay({ live: true, reason: "access code" }, { ...EXAMPLE, market: "Paris" }, {}), false);
+  assert.equal(keepsReplay({ live: true, reason: "access code" }, EXAMPLE, { incomplete: "bad brief" }), false);
+});
+
+test("replay: a recording without the Meta check gets it once, marked as added later; a failed check is not stored", async () => {
+  const rec = { mode: "replay", brief: { meta_interests: [{ interest: "Bombas" }, { interest: "Tracksmith (check in Ads Manager)" }] }, baseline: { meta_interests: [{ interest: "Running" }] }, seeds: [], registry: [] };
+  const store = new Map([["replay:example", JSON.stringify(rec)]]);
+  const env = { MOCK: "1", ASSETS: publicAssets, META_ACCESS_TOKEN: "test-token", QUOTA: { get: async (k) => store.get(k) ?? null, put: async (k, v) => { store.set(k, v); } } };
+  const real = globalThis.fetch;
+  try {
+    let sent = null;
+    globalThis.fetch = async (u, init) => { sent = { u: String(u), init }; return new Response(JSON.stringify([
+      { code: 200, body: JSON.stringify({ data: [{ id: "1", name: "Bombas", audience_size_lower_bound: 1, audience_size_upper_bound: 2 }] }) },
+      { code: 200, body: JSON.stringify({ data: [] }) },
+      { code: 200, body: JSON.stringify({ data: [{ id: "3", name: "Running" }] }) }]), { status: 200 }); };
+    const j = await (await worker.fetch(new Request(url + "/api/replay"), env)).json();
+    assert.ok(!sent.u.includes("test-token") && !String(sent.init.body).includes("test-token"), "the token travels only in the header");
+    assert.deepEqual(j.meta_check.taste_brief.map((m) => m.status), ["targetable", "not_found"]);
+    assert.equal(j.meta_check.plain[0].status, "targetable");
+    assert.equal(j.meta_check.added_after_recording, true);
+    assert.ok(JSON.parse(store.get("replay:example")).meta_check, "stored once");
+    // a bad token: every lookup fails, so the page hears that the check did not run, and nothing is stored
+    store.set("replay:example", JSON.stringify(rec));
+    globalThis.fetch = async () => new Response(JSON.stringify({ error: { message: "Error validating access token" } }), { status: 400 });
+    const k = await (await worker.fetch(new Request(url + "/api/replay"), env)).json();
+    assert.equal(k.meta_check, undefined);
+    assert.equal(JSON.parse(store.get("replay:example")).meta_check, undefined);
+  } finally {
+    globalThis.fetch = real;
+  }
+});

@@ -145,6 +145,11 @@ ul.items strong{font-weight:600}
 .gchip.hi{background:var(--ok-soft);color:var(--ink)}
 .gchip.none{background:transparent;border:1px dashed #d9a877;color:var(--mute)}
 .gchip .num{font-family:var(--mono)}
+.mchip{display:inline-block;margin-left:8px;font-family:var(--mono);font-size:12px;border-radius:999px;padding:2px 9px;vertical-align:1px}
+.mchip.in{background:var(--ok-soft);color:var(--ok)}.mchip.out{border:1px dashed var(--warn-line);color:var(--warn)}
+.mline{margin:0 0 10px;font-size:15px;color:var(--mute)}.mline strong{color:var(--ink)}
+.mwarn{color:var(--warn)}
+@media (max-width:560px){.mchip{display:table;margin:4px 0 0}}
 .gchip .why{font-size:12px}
 .unbacked{margin:14px 0 0;padding-top:12px;border-top:1px solid var(--line);font-size:14px;color:var(--mute)}
 .summary{font-size:18px;line-height:1.5;margin:0 0 14px}
@@ -321,6 +326,15 @@ const LISTS = { brand: "Brands", artist: "Artists", "TV show": "TV shows", film:
 const num = (v) => (typeof v === "number" ? v.toFixed(3) : "");
 const signed = (v) => `${v > 0 ? "+" : v < 0 ? "−" : ""}${Math.abs(Number(v)).toFixed(2)}`;
 const cleanInterest = (s) => String(s ?? "").replace(/\s*\(check in ads manager\)\s*$/i, "");
+// Meta's interest search, run on each interest: can a buyer target it as named, and how big is it (worldwide)
+const metaOf = (j, name, side = "taste_brief") => list(j?.meta_check?.[side]).find((m) => String(m.name).toLowerCase() === cleanInterest(name).toLowerCase());
+const people = (n) => (n >= 1e6 ? `${(n / 1e6).toFixed(n >= 1e8 ? 0 : 1)}M` : `${Math.max(1, Math.round(n / 1e3))}K`);
+const metaChip = (m) => !m ? "" : m.status === "targetable"
+  ? `<span class="mchip in">In Meta${m.audience?.[0] ? ` · ${people(m.audience[0])} to ${people(m.audience[1])}` : ""}</span>`
+  : m.status === "not_found" ? `<span class="mchip out">Not in Meta as named${list(m.nearest).length ? ` · closest: ${esc(m.nearest[0])}` : ""}</span>`
+  : `<span class="mchip out">Meta check failed</span>`;
+// counted over the names Meta answered for; a failed lookup is neither in nor out
+const metaCount = (xs) => { const k = list(xs).filter((m) => m && m.status !== "unknown"); return `${k.filter((m) => m.status === "targetable").length} of ${k.length}`; };
 const utc = (t) => `${new Date(t).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short", timeZone: "UTC" })} UTC`;
 
 // The Qloo results the server checked for a line (name, affinity, type), and anything the check could not confirm.
@@ -450,6 +464,7 @@ function stepText(run, s) {
   if (s.tool === "podcasts") return s.error ? `Podcast ranking failed <span class="err">(${esc(s.error)})</span>` : `Ranked podcasts this audience likes, with the ads in their notes <span class="n">${esc(s.n)} shows</span>`;
   if (s.tool === "draft_outreach") return s.error ? `Drafts could not be written <span class="err">(${esc(s.error)})</span>` : `Chose ${esc(list(s.input?.shows).join(", "))} to ask first and wrote the drafts`;
   if (s.tool === "outreach") return `Wrote a rate request and a host-read script for the shows to ask first <span class="n">${s.n} shows</span>`;
+  if (s.tool === "meta_check") return `Looked up every interest in Meta's interest list <span class="n">${esc(s.found)} of ${esc(s.n)} found</span>`;
   if (s.tool === "graded") return `Scored both lists of interests with Qloo for this audience <span class="n">${s.n} picks</span>`;
   return `${esc(s.tool)}${n(s.n)}${err}`;
 }
@@ -525,10 +540,13 @@ const mdBrief = (j) => {
 const csvInterests = (j) => {
   const q = (s) => `"${String(s ?? "").replace(/"/g, '""')}"`;
   const sc = j.self_check?.final;
-  return [`interest,qloo_results,qloo_affinity,self_check_on${sc?.rival ? ` ${sc.rival.name}` : ""},self_check_score`, ...list(j.brief.meta_interests).map((x) => {
+  return [`interest,qloo_results,qloo_affinity,self_check_on${sc?.rival ? ` ${sc.rival.name}` : ""},self_check_score,in_meta,meta_interest_id,meta_audience_worldwide`, ...list(j.brief.meta_interests).map((x) => {
     const c = list(sc?.picks).find((p) => p.name === cleanInterest(x.interest));
+    const m = metaOf(j, x.interest);
     return [q(cleanInterest(x.interest)), q(list(x.verified).map((e) => e.name).join("; ")), q(list(x.verified).map((e) => num(e.affinity)).join("; ")),
-      q(c ? c.verdict.replace(/_/g, " ") : x.grounded ? "not checked" : "not confirmed by Qloo"), q(c?.affinity != null ? c.affinity.toFixed(3) : "")].join(",");
+      q(c ? c.verdict.replace(/_/g, " ") : x.grounded ? "not checked" : "not confirmed by Qloo"), q(c?.affinity != null ? c.affinity.toFixed(3) : ""),
+      q(!m ? "not checked" : m.status === "targetable" ? "yes" : m.status === "not_found" ? "not as named" : "check failed"), q(m?.interest?.id || ""),
+      q(m?.audience?.[0] ? `${m.audience[0]} to ${m.audience[1]}` : "")].join(",");
   })].join("\n");
 };
 const csvPodcasts = (j) => {
@@ -744,7 +762,10 @@ function testsCard(b, j) {
   const tp = list(b.test_plan);
   const same = tp.every((x) => x.kpi === tp[0].kpi && x.stop_if === tp[0].stop_if);
   const city = esc(String(j.market).split(",")[0]);
-  const lines = tp.map((x) => `<li><strong>${esc(x.hypothesis)}</strong><dl><dt>Changes</dt><dd>${x.variable === "targeting" ? "Targeting only, with your usual creative" : x.variable === "creative" ? "Creative only, on the broad audience" : esc(x.variable)}</dd><dt>Run</dt><dd>${esc(x.ad_set)}</dd>${x.why ? `<dt>Why</dt><dd>${esc(x.why)}</dd>` : ""}${same ? "" : `<dt>Judge on</dt><dd>${esc(x.kpi)}</dd><dt>Pause rule</dt><dd>${esc(x.stop_if)}</dd>`}</dl>${ev(x, true)}</li>`).join("");
+  // a targeting test that names an interest Meta does not have cannot be built as written
+  const named = (text, name) => new RegExp(`(^|[^\\p{L}\\p{N}])${String(name).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}($|[^\\p{L}\\p{N}])`, "iu").test(String(text || ""));
+  const missing = (x) => x.variable !== "targeting" ? [] : list(j.meta_check?.taste_brief).filter((m) => m?.status === "not_found" && named(x.ad_set, m.name)).map((m) => m.name);
+  const lines = tp.map((x) => `<li><strong>${esc(x.hypothesis)}</strong><dl><dt>Changes</dt><dd>${x.variable === "targeting" ? "Targeting only, with your usual creative" : x.variable === "creative" ? "Creative only, on the broad audience" : esc(x.variable)}</dd><dt>Run</dt><dd>${esc(x.ad_set)}</dd>${missing(x).length ? `<dt>In Meta</dt><dd class="mwarn">Not in Meta's interest list as named: ${missing(x).map(esc).join(", ")}. Build the ad set with the others, or find the nearest interest in Ads Manager and note it in the plan.</dd>` : ""}${x.why ? `<dt>Why</dt><dd>${esc(x.why)}</dd>` : ""}${same ? "" : `<dt>Judge on</dt><dd>${esc(x.kpi)}</dd><dt>Pause rule</dt><dd>${esc(x.stop_if)}</dd>`}</dl>${ev(x, true)}</li>`).join("");
   return card("What to test first", `<p class="tests-rule">Your usual ad is the control: broad targeting in ${city}, same ages, your usual message. Each test changes one thing${same ? `, judged on ${esc(lc(tp[0].kpi))}` : ""}. The rule for reading results is locked below.</p><ul class="tests">${lines}</ul>${loopPanel()}`, "each test rests on the Qloo results shown");
 }
 
@@ -774,7 +795,7 @@ function showResult(j) {
         <div class="score${c.grounded === c.total ? "" : " part"}"><b>${c.grounded} of ${c.total}</b> items cite Qloo results returned in this run, with matching ids and values</div></div>
       <div>${demographics(j.demographics)}</div>
     </div></section>
-    <div class="grid">${card("Meta interests to test", items(b.meta_interests, (x) => `<strong>${esc(cleanInterest(x.interest))}</strong>`), "check each in Ads Manager")}${card("Who they are", items(b.audience_traits, (x) => esc(x.trait)))}</div>
+    <div class="grid">${card("Meta interests to test", `${j.meta_check && !j.meta_check.error ? `<p class="mline"><strong>${metaCount(j.meta_check.taste_brief)}</strong> can be targeted in Meta as named${list(j.meta_check.plain).length ? ` · the plain guess: ${metaCount(j.meta_check.plain)}` : ""}</p>` : ""}${items(b.meta_interests, (x) => `<strong>${esc(cleanInterest(x.interest))}</strong>${metaChip(metaOf(j, x.interest))}`)}${j.meta_check && !j.meta_check.error ? `<p class="note">Looked up in Meta's interest search ${j.meta_check.added_after_recording ? "after this run was recorded" : "during this run"} (${esc(utc(j.meta_check.checked_at))}). Audience sizes are Meta's worldwide estimates, not ${city}. Meta has dropped many niche brands, so a strong Qloo fit can still be missing there.</p>` : ""}${j.meta_check?.error ? `<p class="note">The Meta check did not run this time (${esc(j.meta_check.error)}). Check each name in Ads Manager.</p>` : ""}`, j.meta_check && !j.meta_check.error ? "checked in Meta's interest list" : "check each in Ads Manager")}${card("Who they are", items(b.audience_traits, (x) => esc(x.trait)))}</div>
     ${versus(j.baseline, b, j.unbacked, j.scored, j.market, j.registry)}`;
   const creative = `<div class="grid">
       ${card("Creative angles", items(b.creative_angles, (x) => `<strong>${esc(x.angle)}</strong><br><span class="hook">${esc(x.hook)}</span>`, true), "our reading of the data")}

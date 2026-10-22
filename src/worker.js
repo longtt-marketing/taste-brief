@@ -9,6 +9,7 @@
 import { runAgent, runBaseline, BASELINE_SYSTEM, TOOLS } from "./agent.js";
 import { unbackedBy } from "./evidence.js";
 import { gradePicks, summarize, norm } from "./grade.js";
+import { makeMeta, checkInterests } from "./meta.js";
 import { makeSelfCheck } from "./selfcheck.js";
 
 const list = (v) => (Array.isArray(v) ? v : []);
@@ -71,15 +72,42 @@ function withTimeout(promise, ms) {
 export const EXAMPLE = { product: "Wool running sneakers, $120, sustainable", market: "New York, NY", compare_market: "London, UK", references: "Allbirds" };
 const sameText = (a, b) => String(a || "").trim().toLowerCase() === String(b || "").trim().toLowerCase();
 export const isExample = (b) => Object.keys(EXAMPLE).every((k) => sameText(b?.[k], EXAMPLE[k]));
+/** Only the owner's live run of the example (access code, or a local run without one) replaces the recorded run: a
+ *  visitor's free run of the same inputs must not change the run the story and the judge page quote. */
+export const keepsReplay = (acc, body, result) => !!acc?.live && acc.reason !== "free daily quota" && isExample(body) && !result?.incomplete;
 const REPLAY_KEY = "replay:example";
+
+// the interests as a buyer would type them in Ads Manager, without the seed brand itself
+const interestNames = (b, skip = new Set()) => list(b?.meta_interests).map((i) => String(i?.interest || "").replace(/\s*\(check in ads manager\)\s*/i, "").trim())
+  .filter((n) => n && !skip.has(n.toLowerCase())).slice(0, 10);
+/** Both lists of interests looked up in Meta's interest search: can each be targeted as named? Needs META_ACCESS_TOKEN
+ *  (search only, no ad account, no spend); without it, or on any error, the page says the check did not run. */
+async function metaCheck(env, brief, baseline, skip) {
+  if (!env.META_ACCESS_TOKEN) return null;
+  const search = makeMeta({ token: env.META_ACCESS_TOKEN, version: env.META_API_VERSION || "v26.0" });
+  const tbNames = interestNames(brief, skip), plainNames = baseline && !baseline.error ? interestNames(baseline, skip) : [];
+  const checked = await checkInterests(search, [...new Set([...tbNames, ...plainNames])]); // one batched request for both lists
+  // every lookup failed (an expired token, Meta down): say the check did not run, never "0 of 6 in Meta"
+  if (checked.length && checked.every((m) => m.status === "unknown")) return { error: checked[0].error || "Meta interest search failed" };
+  const by = new Map(checked.map((m) => [m.name, m]));
+  return { checked_at: new Date().toISOString(), source: "Meta Marketing API interest search (adinterest)", taste_brief: tbNames.map((n) => by.get(n)), plain: plainNames.map((n) => by.get(n)) };
+}
 
 export default {
   async fetch(req, env) {
     const url = new URL(req.url);
     if (url.pathname === "/api/replay") {
       const saved = env.QUOTA ? await env.QUOTA.get(REPLAY_KEY).catch(() => null) : null;
-      return saved ? new Response(saved, { headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" } })
-        : json({ error: "no recorded run yet" }, 404);
+      if (!saved) return json({ error: "no recorded run yet" }, 404);
+      let rec = null;
+      try { rec = JSON.parse(saved); } catch { /* served as stored */ }
+      // a run recorded before the Meta check existed gets it once, on its own interests, marked as added later
+      if (rec?.brief && !rec.meta_check && env.META_ACCESS_TOKEN) {
+        const skip = new Set(list(rec.seeds).map((id) => String(list(rec.registry).find((e) => e.entity_id === id)?.name || "").toLowerCase()));
+        const m = await metaCheck(env, rec.brief, rec.baseline, skip).catch(() => null);
+        if (m && !m.error) { rec.meta_check = { ...m, added_after_recording: true }; await env.QUOTA.put(REPLAY_KEY, JSON.stringify(rec)).catch(() => {}); }
+      }
+      return rec ? json(rec) : new Response(saved, { headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" } });
     }
     if (url.pathname === "/api/lock" && req.method === "POST") {
       if (!env.QUOTA) return json({ error: "receipts are not stored here" }, 503);
@@ -181,7 +209,7 @@ export default {
           return { taste_brief: { graded: tb, ...summarize(tb) }, plain: { graded: plain, ...summarize(plain) } };
         };
         const seedEntities = out.seeds.map((id) => ({ entity_id: id, name: out.registry.find((e) => e.entity_id === id)?.name || id }));
-        const [markets, scored, podcasts] = await Promise.all([
+        const [markets, scored, podcasts, meta_check] = await Promise.all([
           marketB.length >= 2
             ? compareMarkets({ qloo, seedIds: out.seeds.slice(0, 3), marketA: market, marketB,
               onStep: (s) => send({ type: "step", run: `${market} vs ${marketB}`, step: s }) }).catch((e) => ({ error: String(e.message || e) }))
@@ -213,6 +241,9 @@ export default {
               return p;
             })
             .catch((e) => ({ error: String(e.message || e) })) : null,
+          live ? metaCheck(env, out.brief, baseline, seedNames)
+            .then((m) => { if (m) send({ type: "step", run: market, step: { tool: "meta_check", n: m.taste_brief.length + m.plain.length, found: [...m.taste_brief, ...m.plain].filter((x) => x.status === "targetable").length } }); return m; })
+            .catch((e) => ({ error: String(e.message || e) })) : null,
         ]);
         // what the plain guess would target that Qloo did not return anywhere in this run (entities, tags or city lists)
         const returned = [...out.registry, ...(out.tags || []), ...(markets?.types || []).flatMap((t) => [...(t.only_a || []), ...(t.only_b || []), ...(t.shared || [])])];
@@ -224,10 +255,10 @@ export default {
         const runInfo = { version: env.CF_VERSION_METADATA?.id || "local", seconds: Math.round((Date.now() - t0) / 1000),
           qloo_calls: qlooCalls, model_calls: (llm.usage?.calls || 0) + (baseLLM.usage?.calls || 0) + (outLLM.usage?.calls || 0), at: new Date().toISOString() };
         // the inputs go back to the same visitor only, so the page can lock the test plan with them
-        const result = { ...meta, product, references, compare_market: marketB, market, ...out, baseline, unbacked, scored, markets, podcasts, run: runInfo };
+        const result = { ...meta, product, references, compare_market: marketB, market, ...out, baseline, unbacked, scored, markets, podcasts, meta_check, run: runInfo };
         // only the owner's runs (access code) replace the recorded example: a visitor's free run of the same inputs must
         // not change the run the story and the judge page quote
-        if (live && acc.reason !== "free daily quota" && isExample(body) && env.QUOTA && !result.incomplete) {
+        if (keepsReplay(acc, body, result) && env.QUOTA) {
           const { quota, access, ...keep } = result;
           await env.QUOTA.put(REPLAY_KEY, JSON.stringify({ ...keep, mode: "replay", recorded: { at: runInfo.at, version: runInfo.version, inputs: EXAMPLE } })).catch(() => {});
         }

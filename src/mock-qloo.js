@@ -19,9 +19,12 @@ export function mockQloo() {
       return fake("Sample match for", types, [query, query + " (alt)", query + " (similar)"]).slice(0, take)
         .map((e, i) => ({ ...e, entity_id: `MOCK-SEED-${i + 1}` }));
     },
-    async insights({ filter_type, take = 6, location = "" }) {
+    async insights({ filter_type, take = 6, location = "", result_ids }) {
       // shift the synthetic list by a hash of the location so two markets give visibly different (still fake) answers
       const list = DATA[filter_type] || [];
+      // like the API, a list of result ids restricts the answer to those entities; the synthetic data scores only every
+      // other one, so the self-check still finds picks it cannot score
+      if (Array.isArray(result_ids)) return list.filter((e, i) => result_ids.includes(e.entity_id) && i % 2 === 0).slice(0, take);
       const shift = [...String(location)].reduce((h, c) => (h * 31 + c.charCodeAt(0)) % 997, 0) % Math.max(1, list.length);
       return [...list.slice(shift), ...list.slice(0, shift)].slice(0, take);
     },

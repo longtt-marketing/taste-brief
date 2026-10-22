@@ -40,14 +40,29 @@ export async function scoreEntity(qloo, entity, seedIds, location) {
 /** Grade a list of pick names: [{name, status: "scored" | "no_match" | "no_score", match, affinity}].
  *  known: optional Map of norm(name) -> the Qloo entity the run itself returned under that name (used before a search). */
 export async function gradePicks(qloo, names, seedIds, location, known = new Map()) {
-  const out = [];
-  for (const name of names) {
-    const match = known.get(norm(name)) || await resolvePick(qloo, name);
-    if (!match) { out.push({ name, status: "no_match", match: null, affinity: null }); continue; }
-    const affinity = await scoreEntity(qloo, match, seedIds, location);
-    out.push({ name, status: affinity == null ? "no_score" : "scored", match: { name: match.name, type: match.type, entity_id: match.entity_id }, affinity });
+  const matches = [];
+  for (const name of names) matches.push(known.get(norm(name)) || await resolvePick(qloo, name));
+  // one insights call per entity type scores every pick of that type: filter.results.entities takes a list, and the
+  // scores equal one call per pick (checked 22 Oct). A Worker run has a fixed budget of outgoing requests.
+  const byType = new Map();
+  for (const m of matches) {
+    if (!m) continue;
+    const t = String(m.type || ""), ft = t.startsWith("urn:entity:") ? t : `urn:entity:${t}`;
+    if (!INSIGHT_TYPES.includes(ft)) continue;
+    if (!byType.has(ft)) byType.set(ft, new Set());
+    byType.get(ft).add(m.entity_id);
   }
-  return out;
+  const scores = new Map();
+  for (const [filter_type, ids] of byType) {
+    const r = await qloo.insights({ filter_type, entity_ids: seedIds, location, result_ids: [...ids], take: ids.size }).catch(() => []);
+    for (const e of r) if (ids.has(e.entity_id) && typeof e.affinity === "number") scores.set(e.entity_id, e.affinity);
+  }
+  return names.map((name, i) => {
+    const match = matches[i];
+    if (!match) return { name, status: "no_match", match: null, affinity: null };
+    const affinity = scores.get(match.entity_id) ?? null;
+    return { name, status: affinity == null ? "no_score" : "scored", match: { name: match.name, type: match.type, entity_id: match.entity_id }, affinity };
+  });
 }
 
 /** Summary of a graded list: how many could be checked, mean affinity of those, how many at 0.9 or more. */
