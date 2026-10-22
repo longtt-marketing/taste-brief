@@ -1,5 +1,5 @@
 {
- "run_at": "2026-10-22T04:14:05.856Z",
+ "run_at": "2026-10-22T05:09:50.246Z",
  "model": "claude-sonnet-5-5",
  "cases": 10,
  "drafts": 18,
@@ -9,8 +9,23 @@
  "opens_with_show": 18,
  "no_invented_numbers": 18,
  "no_unsupported_claims": 18,
- "host_read_brackets_mean": 3,
- "note": "Checks in plain code: the five asks (rate, downloads, host-read slots, dates, exclusivity), the proposed code, the show's name in the opening line, numbers not in the input, a fixed list of product claims not in the input. A pass is not a human review; it finds missing asks and invented facts of these kinds only.",
+ "host_read_no_repeats": 18,
+ "host_read_no_padding": 18,
+ "host_read_words_mean": 42,
+ "host_read_brackets_mean": 4,
+ "note": "Checks in plain code: the five asks (rate, downloads, host-read slots, dates, exclusivity), the proposed code, the show's name in the opening line, numbers not in the input, a fixed list of product claims not in the input, and in the host read: no number said twice, no filler remarks, at most 80 words. A pass is not a human review; it finds missing asks, invented facts and padding of these kinds only.",
+ "earlier": {
+  "run_at": "2026-10-22T04:14:05.856Z",
+  "pass": 18,
+  "drafts": 18,
+  "first_run": {
+   "at": "2026-10-22T04:10Z",
+   "pass": 11,
+   "drafts": 18,
+   "what_failed": "Mostly the checker: list numbering (1. 2. 3.) and a digit in a show's name (10% Happier) counted as invented numbers. One real issue: a host read repeated [OFFER] and [LANDING PAGE]; the checker now counts distinct placeholders. Both runs drew new drafts from the model; this file holds the second."
+  },
+  "known_issue": "Qloo has no brand named Monarch Money; the evaluation matched 'Money' instead (seed_matched_exactly false), so those two drafts cite the wrong reference brand. In the app the agent picks its own seed and can see the mismatch."
+ },
  "rows": [
   {
    "product": "Wool running sneakers, $120, sustainable",
@@ -29,7 +44,10 @@
      },
      "code": true,
      "invented_numbers": [],
-     "host_read_brackets": 3,
+     "host_read_brackets": 4,
+     "host_read_repeats": [],
+     "host_read_padding": false,
+     "host_read_words": 41,
      "opens_with_show": true,
      "unsupported_claims": [],
      "pass": true
@@ -45,7 +63,10 @@
      },
      "code": true,
      "invented_numbers": [],
-     "host_read_brackets": 3,
+     "host_read_brackets": 4,
+     "host_read_repeats": [],
+     "host_read_padding": false,
+     "host_read_words": 40,
      "opens_with_show": true,
      "unsupported_claims": [],
      "pass": true
@@ -61,7 +82,10 @@
      },
      "code": true,
      "invented_numbers": [],
-     "host_read_brackets": 3,
+     "host_read_brackets": 4,
+     "host_read_repeats": [],
+     "host_read_padding": false,
+     "host_read_words": 36,
      "opens_with_show": true,
      "unsupported_claims": [],
      "pass": true
@@ -86,7 +110,10 @@
      },
      "code": true,
      "invented_numbers": [],
-     "host_read_brackets": 3,
+     "host_read_brackets": 4,
+     "host_read_repeats": [],
+     "host_read_padding": false,
+     "host_read_words": 49,
      "opens_with_show": true,
      "unsupported_claims": [],
      "pass": true
@@ -111,7 +138,10 @@
      },
      "code": true,
      "invented_numbers": [],
-     "host_read_brackets": 3,
+     "host_read_brackets": 4,
+     "host_read_repeats": [],
+     "host_read_padding": false,
+     "host_read_words": 43,
      "opens_with_show": true,
      "unsupported_claims": [],
      "pass": true
@@ -127,7 +157,10 @@
      },
      "code": true,
      "invented_numbers": [],
-     "host_read_brackets": 3,
+     "host_read_brackets": 4,
+     "host_read_repeats": [],
+     "host_read_padding": false,
+     "host_read_words": 43,
      "opens_with_show": true,
      "unsupported_claims": [],
      "pass": true
@@ -152,7 +185,10 @@
      },
      "code": true,
      "invented_numbers": [],
-     "host_read_brackets": 3,
+     "host_read_brackets": 4,
+     "host_read_repeats": [],
+     "host_read_padding": false,
+     "host_read_words": 42,
      "opens_with_show": true,
      "unsupported_claims": [],
      "pass": true
@@ -177,7 +213,10 @@
      },
      "code": true,
      "invented_numbers": [],
-     "host_read_brackets": 3,
+     "host_read_brackets": 4,
+     "host_read_repeats": [],
+     "host_read_padding": false,
+     "host_read_words": 38,
      "opens_with_show": true,
      "unsupported_claims": [],
      "pass": true
@@ -193,7 +232,10 @@
      },
      "code": true,
      "invented_numbers": [],
-     "host_read_brackets": 3,
+     "host_read_brackets": 4,
+     "host_read_repeats": [],
+     "host_read_padding": false,
+     "host_read_words": 41,
      "opens_with_show": true,
      "unsupported_claims": [],
      "pass": true
@@ -218,7 +260,10 @@
      },
      "code": true,
      "invented_numbers": [],
-     "host_read_brackets": 3,
+     "host_read_brackets": 4,
+     "host_read_repeats": [],
+     "host_read_padding": false,
+     "host_read_words": 38,
      "opens_with_show": true,
      "unsupported_claims": [],
      "pass": true
@@ -234,7 +279,10 @@
      },
      "code": true,
      "invented_numbers": [],
-     "host_read_brackets": 3,
+     "host_read_brackets": 4,
+     "host_read_repeats": [],
+     "host_read_padding": false,
+     "host_read_words": 40,
      "opens_with_show": true,
      "unsupported_claims": [],
      "pass": true
@@ -250,7 +298,10 @@
      },
      "code": true,
      "invented_numbers": [],
-     "host_read_brackets": 3,
+     "host_read_brackets": 4,
+     "host_read_repeats": [],
+     "host_read_padding": false,
+     "host_read_words": 44,
      "opens_with_show": true,
      "unsupported_claims": [],
      "pass": true
@@ -275,7 +326,10 @@
      },
      "code": true,
      "invented_numbers": [],
-     "host_read_brackets": 3,
+     "host_read_brackets": 4,
+     "host_read_repeats": [],
+     "host_read_padding": false,
+     "host_read_words": 38,
      "opens_with_show": true,
      "unsupported_claims": [],
      "pass": true
@@ -300,7 +354,10 @@
      },
      "code": true,
      "invented_numbers": [],
-     "host_read_brackets": 3,
+     "host_read_brackets": 4,
+     "host_read_repeats": [],
+     "host_read_padding": false,
+     "host_read_words": 40,
      "opens_with_show": true,
      "unsupported_claims": [],
      "pass": true
@@ -316,7 +373,10 @@
      },
      "code": true,
      "invented_numbers": [],
-     "host_read_brackets": 3,
+     "host_read_brackets": 4,
+     "host_read_repeats": [],
+     "host_read_padding": false,
+     "host_read_words": 40,
      "opens_with_show": true,
      "unsupported_claims": [],
      "pass": true
@@ -341,7 +401,10 @@
      },
      "code": true,
      "invented_numbers": [],
-     "host_read_brackets": 3,
+     "host_read_brackets": 4,
+     "host_read_repeats": [],
+     "host_read_padding": false,
+     "host_read_words": 51,
      "opens_with_show": true,
      "unsupported_claims": [],
      "pass": true
@@ -357,7 +420,10 @@
      },
      "code": true,
      "invented_numbers": [],
-     "host_read_brackets": 3,
+     "host_read_brackets": 4,
+     "host_read_repeats": [],
+     "host_read_padding": false,
+     "host_read_words": 51,
      "opens_with_show": true,
      "unsupported_claims": [],
      "pass": true
@@ -382,7 +448,10 @@
      },
      "code": true,
      "invented_numbers": [],
-     "host_read_brackets": 3,
+     "host_read_brackets": 4,
+     "host_read_repeats": [],
+     "host_read_padding": false,
+     "host_read_words": 41,
      "opens_with_show": true,
      "unsupported_claims": [],
      "pass": true
@@ -390,13 +459,5 @@
    ],
    "asked": 1
   }
- ],
- "first_run": {
-  "at": "2026-10-22T04:10Z",
-  "pass": 11,
-  "drafts": 18,
-  "what_failed": "Mostly the checker: list numbering (1. 2. 3.) and a digit in a show's name (10% Happier) counted as invented numbers. One real issue: a host read repeated [OFFER] and [LANDING PAGE]; the checker now counts distinct placeholders. Both runs drew new drafts from the model; this file holds the second."
- },
- "known_issue": "Qloo has no brand named Monarch Money; the evaluation matched 'Money' instead (seed_matched_exactly false), so those two drafts cite the wrong reference brand. In the app the agent picks its own seed and can see the mismatch.",
- "read_by_hand": "Three drafts were read in full (protein powder, deodorant, budgeting app): every fact matches the input; the host reads are thin where the product line gives few facts, which is the intended trade (no invented claims)."
+ ]
 }

@@ -17,8 +17,9 @@ for (const line of (existsSync(".dev.vars") ? readFileSync(".dev.vars", "utf8") 
 }
 if (!vars.QLOO_API_KEY || !vars.ANTHROPIC_API_KEY) { console.error("needs QLOO_API_KEY and ANTHROPIC_API_KEY in .dev.vars"); process.exit(2); }
 const qloo = makeQloo({ apiKey: vars.QLOO_API_KEY });
-const llm = anthropicLLM({ apiKey: vars.ANTHROPIC_API_KEY, workspaceId: vars.ANTHROPIC_WORKSPACE_ID || undefined, model: vars.MODEL || undefined,
-  toolChoice: { type: "tool", name: "draft_outreach" } });
+// the model does not accept a forced tool choice (400 on the first run, before any result), so it gets the app's own
+// tools and any other tool it calls answers that this replay only takes draft_outreach (PLAN.md, deviation 1)
+const llm = anthropicLLM({ apiKey: vars.ANTHROPIC_API_KEY, workspaceId: vars.ANTHROPIC_WORKSPACE_ID || undefined, model: vars.MODEL || undefined });
 
 const norm = (s) => String(s || "").toLowerCase().replace(/[^a-z0-9]/g, "");
 const read = (p) => JSON.parse(readFileSync(p, "utf8"));
@@ -51,8 +52,17 @@ for (const brand of BRANDS) {
       { role: "assistant", content: [{ type: "tool_use", id: "pods_1", name: "podcasts", input: { entity_ids: [hit.entity_id], category: row.category } }] },
       { role: "tool", results: [{ id: "pods_1", content: JSON.stringify(forModel) }] },
     ];
-    const res = await llm(messages);
-    const call = res.calls.find((c) => c.name === "draft_outreach");
+    let call = null, turns = 0;
+    while (!call && turns < 4) {
+      const res = await llm(messages);
+      turns++;
+      call = res.calls.find((c) => c.name === "draft_outreach") || null;
+      if (call || !res.calls.length) break;
+      messages.push({ role: "assistant", content: res.raw });
+      messages.push({ role: "tool", results: res.calls.map((c) => ({ id: c.id, content: JSON.stringify({ error: "not available in this replay: choose the shows to ask first now, with draft_outreach" }) })) });
+    }
+    row.model_turns = turns;
+    if (!call) throw new Error("the model never called draft_outreach");
     const A = [...new Set((call?.input?.shows || []).map((n) => shows.find((s) => norm(s.name) === norm(n))).filter(Boolean))].slice(0, 3);
     const inData = shows.filter((s) => s.advertisers);
     const R = askFirst(shows).shows;

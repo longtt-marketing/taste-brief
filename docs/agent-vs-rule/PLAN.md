@@ -41,6 +41,13 @@ the result is reported as no evidence of a difference; if below zero, as the rul
 T and P against R; how often A and R pick the same three shows; the shows where they differ and the agent's reason;
 brands with no Qloo match or no shows with ad data are counted and left out.
 
+## Deviation 1 (22 Oct, before any result)
+
+The first run stopped on every brand with an API error: this model does not accept a forced tool choice. No pick was
+made, so no result was seen. The replay now gives the model the app's own tools without forcing one; if it calls any
+tool other than `draft_outreach`, that call answers "not available in this replay: choose the shows to ask first now",
+for at most 4 turns. Everything else is unchanged.
+
 ## Known limits
 
 - The hidden answer is past sponsorships, not results. A show a brand bought is not proof it paid off.
