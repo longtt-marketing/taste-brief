@@ -18,6 +18,8 @@ import { podcastPartners, categoryFor } from "./podcasts.js";
 import { makeQloo } from "./qloo.js";
 import { mockQloo } from "./mock-qloo.js";
 import { anthropicLLM, mockLLM, mockBaselineLLM } from "./llm.js";
+import { draftOutreach, mockOutreachLLM, OUTREACH_SYSTEM, OUTREACH_TOOL } from "./outreach.js";
+import { askFirst, promoCodes } from "../public/rank.js";
 
 /** Constant-time compare for the demo access code. */
 function same(a, b) {
@@ -117,6 +119,9 @@ export default {
         ? anthropicLLM({ apiKey: env.ANTHROPIC_API_KEY, workspaceId: env.ANTHROPIC_WORKSPACE_ID, model: env.MODEL || undefined, system: BASELINE_SYSTEM,
           tools: TOOLS.filter((t) => t.name === "submit_brief") }) // forced tool_choice is rejected by the model; the prompt asks for it
         : mockBaselineLLM();
+      const outLLM = live
+        ? anthropicLLM({ apiKey: env.ANTHROPIC_API_KEY, workspaceId: env.ANTHROPIC_WORKSPACE_ID, model: env.MODEL || undefined, system: OUTREACH_SYSTEM, tools: [OUTREACH_TOOL] })
+        : mockOutreachLLM();
       const meta = { mode: live ? "live" : "synthetic", access: acc.reason, quota: acc.quota || null };
 
       // One run: the agent (Qloo + Claude) and the no-data baseline side by side; then, with a second market, the
@@ -152,7 +157,21 @@ export default {
               onStep: (s) => send({ type: "step", run: `${market} vs ${marketB}`, step: s }) }).catch((e) => ({ error: String(e.message || e) }))
             : null,
           gradeBoth().catch(() => null),
-          seedEntities.length ? podcastPartners({ qloo, seeds: seedEntities, take: 20, category: categoryFor(references, out.brief?.category) }).catch((e) => ({ error: String(e.message || e) })) : null,
+          seedEntities.length ? podcastPartners({ qloo, seeds: seedEntities, take: 20, category: categoryFor(references, out.brief?.category) })
+            // the agent's outreach drafts for the shows to ask first, as soon as the shows are known
+            .then(async (p) => {
+              const first = askFirst(p?.shows).shows;
+              if (!first.length) return p;
+              const codes = promoCodes(first.map((s) => s.name));
+              const seedSet = new Set(out.seeds);
+              const alsoLike = out.registry.filter((e) => !seedSet.has(e.entity_id) && typeof e.affinity === "number" && /brand|artist/.test(String(e.type)))
+                .sort((a, b) => b.affinity - a.affinity).slice(0, 6).map((e) => e.name);
+              p.outreach = await draftOutreach({ llm: outLLM, product, market, shows: first, codes, category: p.category, alsoLike })
+                .then((o) => { send({ type: "step", run: market, step: { tool: "outreach", n: o?.shows?.length || 0 } }); return o; })
+                .catch((e) => ({ error: String(e.message || e) }));
+              return p;
+            })
+            .catch((e) => ({ error: String(e.message || e) })) : null,
         ]);
         // what the plain guess would target that Qloo did not return anywhere in this run (entities, tags or city lists)
         const returned = [...out.registry, ...(out.tags || []), ...(markets?.types || []).flatMap((t) => [...(t.only_a || []), ...(t.only_b || []), ...(t.shared || [])])];
@@ -162,7 +181,7 @@ export default {
         const graded = [...(scored?.taste_brief?.graded || []), ...(scored?.plain?.graded || [])];
         const qlooCalls = qlooCount;
         const runInfo = { version: env.CF_VERSION_METADATA?.id || "local", seconds: Math.round((Date.now() - t0) / 1000),
-          qloo_calls: qlooCalls, model_calls: (llm.usage?.calls || 0) + (baseLLM.usage?.calls || 0), at: new Date().toISOString() };
+          qloo_calls: qlooCalls, model_calls: (llm.usage?.calls || 0) + (baseLLM.usage?.calls || 0) + (outLLM.usage?.calls || 0), at: new Date().toISOString() };
         // the inputs go back to the same visitor only, so the page can lock the test plan with them
         const result = { ...meta, product, references, compare_market: marketB, market, ...out, baseline, unbacked, scored, markets, podcasts, run: runInfo };
         if (live && isExample(body) && env.QUOTA && !result.incomplete) {

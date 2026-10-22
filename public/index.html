@@ -216,6 +216,16 @@ body.result #how{display:none}
 .prow .rv{font-size:13px;color:var(--mute)}.prow .rv .ml{display:none;font-style:normal;color:var(--faint)}@media (max-width:700px){.prow .rv .ml{display:inline}}.prow .rv.open{color:var(--ok)}.prow .rv.rival{color:var(--warn)}
 .prow .go{display:flex;flex-direction:column;gap:0}.prow .code{font-family:var(--mono);font-size:12px;color:var(--faint)}
 .more-n{margin:8px 0 0;font-size:13px;color:var(--faint)}
+.plan .lede2{margin:8px 0 0;font-size:15px;color:var(--mute);max-width:80ch}
+.asks{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr))}
+.ask{border:1px solid var(--line);border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:12px;background:#0d182b}
+.ask-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px}.ask-h h3{margin:0;font-family:var(--display);font-size:19px}
+.ask .fitn{font-family:var(--mono);font-size:14px;color:var(--ok);white-space:nowrap}.ask .why{margin:0;font-size:14px;color:var(--mute)}
+.ask dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:13px}.ask dt{color:var(--faint)}.ask dd{margin:0}.ask dd.ok{color:var(--ok)}.ask dd.nv{color:var(--warn)}.ask dd.mono{font-family:var(--mono)}
+.ask-b{display:flex;flex-wrap:wrap;gap:8px}.ask-b button{font-size:13px;padding:8px 14px;min-height:44px;border-radius:10px}
+.ask details.draft{border-top:1px solid var(--line);padding-top:4px}.ask details.draft summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-size:13px;color:var(--faint)}
+.ask details.draft p{margin:6px 0;font-size:13px;line-height:1.5;color:var(--mute)}.ask .mono-s{font-family:var(--mono);font-size:12px;color:var(--faint)}
+.plan h3.wsh{margin:8px 0 0;font-family:var(--display);font-size:18px}
 .selfcheck{border:1px solid var(--line);border-radius:18px;padding:16px 20px;display:flex;flex-direction:column;gap:10px}
 .selfcheck .top{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;font-size:15px}
 .selfcheck .gchip.weak{border:1px dashed var(--warn);background:transparent}
@@ -297,7 +307,7 @@ details.more>.in{padding:0 16px 16px;display:flex;flex-direction:column;gap:16px
 <script type="module">
 import { RULE, canonicalPlan, planHash, adSetRows, toCsv, parseCsv, readResults, verdicts, problemWith } from "/verdict.js";
 import { agentPath } from "/path.js";
-import { sponsorReady } from "/rank.js";
+import { sponsorReady, askFirst, promoCodes } from "/rank.js";
 const $ = (s) => document.querySelector(s);
 // a spaced dash used as punctuation in model text reads as a comma; hyphens inside words stay
 const esc = (s) => String(s ?? "").replace(/\s+[—–]\s+/g, ", ").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -434,28 +444,19 @@ function stepText(run, s) {
   if (s.tool === "submit_brief") return s.error ? "Sent the first draft back to the model to fix its format" : s.revised ? "Rewrote the brief without the weak picks" : "Wrote a first brief and checked what each line cites against Qloo's results";
   if (s.tool === "self_check") return s.error ? `Self-check could not run <span class="err">(${esc(s.error)})</span>` : `Self-check: scored ${esc(s.n)} interests on the audience of ${esc(s.rival)} <span class="n">${esc(s.weak)} weak</span>`;
   if (s.tool === "baseline_done") return "Wrote a plain AI guess to compare against";
+  if (s.tool === "outreach") return `Wrote a rate request and a host-read script for the shows to ask first <span class="n">${s.n} shows</span>`;
   if (s.tool === "graded") return `Scored both lists of interests with Qloo for this audience <span class="n">${s.n} picks</span>`;
   return `${esc(s.tool)}${n(s.n)}${err}`;
 }
 
 const dot = (t) => { const s = String(t ?? "").trim(); return !s ? "" : /[.!?]$/.test(s) ? s : `${s}.`; };
 
-// The podcast plan: shows grouped by what a buyer does next, a promo code and tracking link per show.
-const STOP = new Set(["the", "a", "an", "with", "and", "of", "podcast", "show", "has"]);
-const STOP2 = new Set([...STOP, "not", "but", "in", "on", "for", "to", "my", "your", "our", "is", "it", "me", "it's", "its", "this", "that", "you"]);
+// The podcast plan: shows grouped by what a buyer does next, a proposed promo code and tracking link per show. The
+// shows to ask first and their codes come from public/rank.js, the same functions the worker uses for the agent's drafts.
 function podcastPlan(j) {
   const p = j.podcasts;
   if (!p || p.error || !list(p.shows).length) return null;
-  const cat = p.category || null, used = new Set();
-  // a code a host can read aloud: the show's first distinctive word (ARMCHAIR, MESS), never the brand typed in the form,
-  // which may be a competitor
-  const code = (name) => {
-    const words = String(name).toLowerCase().replace(/[^a-z0-9' ]/g, " ").split(/\s+/).map((w) => w.replace(/'s$|'/g, "")).filter((w) => w.length > 2 && !STOP2.has(w));
-    let c = (words[0] || "show").toUpperCase().slice(0, 10);
-    for (let k = 2; used.has(c); k++) c = c.replace(/\d+$/, "") + k;
-    used.add(c);
-    return c;
-  };
+  const cat = p.category || null;
   const slug = (x) => String(x).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
   const byAff = (a, b) => (Number(b.affinity) || 0) - (Number(a.affinity) || 0);
   const shows = list(p.shows);
@@ -465,19 +466,22 @@ function podcastPlan(j) {
   const noads = shows.filter((s) => ads(s) && !ads(s).length).sort(byAff);
   const unknown = shows.filter((s) => !ads(s)).sort(byAff);
   const groups = [
-    { key: "open", title: cat ? "Open to you" : "Sell ads", note: cat ? `They sell ads; no ${cat} brand found in their episode notes` : "Their episode notes already carry ads", rows: open },
+    { key: "open", title: cat ? `Sell ads, no ${cat} brand found` : "Sell ads", note: "Found in their episode notes; open dates not verified", rows: open },
     { key: "rival", title: `A ${cat} brand already advertises`, note: "Proven for your category, so expect competition for the slot", rows: rival },
     { key: "noads", title: "No ads found in their notes", note: "Ask whether they sell ads at all", rows: noads },
     { key: "unknown", title: "Not in our ad data", note: "Your buyers like them; we have not read their episode notes", rows: unknown.slice(0, 5), more: Math.max(0, unknown.length - 5) },
   ].filter((g) => g.rows.length);
-  let n = 0;
+  const { shows: first, selling } = askFirst(shows);
+  const ordered = [...groups.flatMap((g) => g.rows), ...unknown.slice(5)];
+  const codeOrder = [...first, ...ordered.filter((s) => !first.includes(s))];
+  const codes = new Map(codeOrder.map((s, i) => [s, promoCodes(codeOrder.map((x) => x.name))[i]]));
   const link = (s) => `?utm_source=${slug(s.name)}&utm_medium=podcast&utm_campaign=taste-brief`;
-  for (const g of groups) for (const s of g.rows) { s._n = ++n; s._code = code(s.name); s._link = link(s); s._group = g.key; }
-  for (const s of unknown.slice(5)) { s._n = ++n; s._code = code(s.name); s._link = link(s); s._group = "unknown"; }
-  // ask first: shows that sell ads, open ones before ones a rival already uses; with none in our data, the best taste fits
-  const selling = [...open, ...rival].slice(0, 3);
-  const first = selling.length ? selling : [...shows].sort(byAff).slice(0, 3);
-  return { cat, groups, first, selling: selling.length > 0, all: [...groups.flatMap((g) => g.rows), ...unknown.slice(5)] };
+  let n = 0;
+  for (const g of groups) for (const s of g.rows) { s._n = ++n; s._group = g.key; }
+  for (const s of unknown.slice(5)) { s._n = ++n; s._group = "unknown"; }
+  for (const s of ordered) { s._code = codes.get(s); s._link = link(s); }
+  const drafts = new Map(list(p.outreach?.shows).map((d) => [d.show, d]));
+  return { cat, groups, first, selling, all: ordered, drafts, outreachError: p.outreach?.error || null };
 }
 const contactUrl = (s) => `https://www.google.com/search?q=${encodeURIComponent(`${s.name} podcast advertising`)}`;
 
@@ -489,7 +493,8 @@ const mdBrief = (j) => {
   return [`# Taste Brief: ${j.product}, ${j.market}`, "",
     ...(plan ? ["## Podcast plan", "",
       plan.first.length ? `1. Ask for rates this week: ${plan.first.map((s) => s.name).join(", ")}.${plan.selling ? "" : " We have no ad data for them, so ask whether they sell ads."} Ask each for its rate per episode, downloads per episode, host-read slots and the next open dates.` : "",
-      `2. Give each show its own promo code and tagged link (add the link to your landing page address): ${plan.first.map((s) => `${s.name}, code ${s._code}`).join("; ") || "see the table"}.`,
+      `2. Propose a promo code and a tagged link to each show (add the link to your landing page address): ${plan.first.map((s) => `${s.name}, code ${s._code}`).join("; ") || "see the table"}. A code shows which orders came from a show once the host reads it; the link counts clicks.`,
+      ...plan.first.flatMap((s) => { const d = plan.drafts.get(s.name); return d ? ["", `### Draft for ${s.name} (written by the agent; edit before you send)`, `Why it fits: ${d.why_fit}`, `Subject: ${d.email_subject}`, d.email_body, "", `Host read, about 30 seconds: ${d.host_read}`] : []; }),
       list(b.test_plan).length ? `3. Test Meta next to it: ${list(b.test_plan).length} ad sets against your usual ad. Lock the plan before you spend.` : "", "",
       ...plan.groups.flatMap((g) => [`### ${g.title}: ${g.note}`, ...g.rows.map((s) => `- ${s.name}: taste fit ${Number(s.affinity).toFixed(2)}; ${Array.isArray(s.advertisers) ? (s.advertisers.length ? `ads in its notes: ${s.advertisers.join(", ")}` : "no ads found in its notes") : "not in our ad data"}${list(s.rivals).length ? `; ${plan.cat} brands: ${s.rivals.join(", ")}` : ""}; code ${s._code}; link ${s._link}`), ""])] : []),
     "## Who the buyers are", b.audience_summary || "",
@@ -516,10 +521,11 @@ const csvInterests = (j) => {
 const csvPodcasts = (j) => {
   const q = (v) => `"${String(v ?? "").replace(/"/g, '""')}"`, plan = podcastPlan(j);
   if (!plan) return "";
-  const G = { open: plan.cat ? "open to you" : "sells ads", rival: `a ${plan.cat} brand already advertises`, noads: "no ads found", unknown: "not in our ad data" };
+  const G = { open: plan.cat ? `sells ads, no ${plan.cat} brand found` : "sells ads", rival: `a ${plan.cat} brand already advertises`, noads: "no ads found", unknown: "not in our ad data" };
   const rv = (s) => (!Array.isArray(s.advertisers) ? "unknown" : list(s.rivals).length ? list(s.rivals).join("; ") : "none found");
-  return [`rank,show,group,taste_fit_qloo,ads_in_episode_notes,${plan.cat ? `${plan.cat.replace(/ /g, "_")}_brands,` : ""}promo_code,tracking_link_suffix,search_for_ad_contact`,
-    ...plan.all.map((s) => [s._n ?? "", q(s.name), q(G[s._group]), num(s.affinity), q(Array.isArray(s.advertisers) ? (s.advertisers.length ? s.advertisers.join("; ") : "none found") : "not in our data"), ...(plan.cat ? [q(rv(s))] : []), q(s._code), q(s._link), q(contactUrl(s))].join(","))].join("\n");
+  const NV = "not verified";
+  return [`rank,show,group,ask_first,taste_fit_qloo,ads_in_episode_notes,${plan.cat ? `${plan.cat.replace(/ /g, "_")}_brands,` : ""}rate_per_episode,downloads_per_episode,ad_format,ad_contact,next_open_dates,proposed_promo_code,tracking_link_suffix,search_for_ad_contact,status`,
+    ...plan.all.map((s) => [s._n ?? "", q(s.name), q(G[s._group]), plan.first.includes(s) ? "yes" : "", num(s.affinity), q(Array.isArray(s.advertisers) ? (s.advertisers.length ? s.advertisers.join("; ") : "none found") : "not in our data"), ...(plan.cat ? [q(rv(s))] : []), NV, NV, NV, NV, NV, q(s._code), q(s._link), q(contactUrl(s)), plan.first.includes(s) ? "to contact" : "shortlist"].join(","))].join("\n");
 };
 
 // Lock the plan, run it, read the results back with the rule that was locked. Plain code (verdict.js), no model.
@@ -628,27 +634,34 @@ function wireLoop(j) {
   });
 }
 
-// The podcast plan: what to do this week, then every show grouped by what a buyer does next. Proof numbers come from the
-// locked test in docs/podcast-check (strict labels) and the open-shows check (open-shows.json).
+// The podcast plan: the three shows to ask first, each with the agent's rate request and host-read script, then every
+// show as a worksheet. Proof numbers come from the locked test in docs/podcast-check (strict labels).
 function planPanel(j) {
   const plan = podcastPlan(j);
   if (!plan) return "";
   const seeds = [...new Set(list(j.podcasts.shows).flatMap((s) => list(s.driven_by).map((d) => d.name)))];
   const fans = seeds.length === 1 ? `${esc(seeds[0])} fans` : "your buyers";
   const tests = list(j.brief?.test_plan).length;
-  const firstNames = plan.first.map((s) => esc(s.name));
-  const allOpen = plan.first.length && plan.first.every((s) => !list(s.rivals).length);
-  const acts = [
-    plan.first.length ? `<li><span class="k">1 · Ask for rates this week</span><b>${firstNames.join(", ")}</b><span class="s">${!plan.selling ? "Your buyers like them most; we have no ad data for them, so ask whether they sell ads." : allOpen && plan.cat ? `They sell ads, and we found no ${esc(plan.cat)} brand in their episode notes.` : "They already sell ads, and your buyers like them."} Ask for the rate per episode, downloads, host-read slots and open dates.</span></li>` : "",
-    plan.first.length ? `<li><span class="k">2 · One code per show</span><b>${plan.first.map((s) => esc(s._code)).join(", ")}</b><span class="s">A promo code the host can read out, and a tagged link per show (add it to your landing page address), so you can count what each read sells.</span></li>` : "",
-    tests ? `<li><span class="k">3 · Test Meta next to it</span><b>${tests} ad set${tests === 1 ? "" : "s"} against your usual ad</b><span class="s">Lock the plan before you spend, read it back from Ads Manager.</span><a href="#tests">Open the tests</a></li>` : "",
-  ].filter(Boolean);
+  const hasDrafts = plan.drafts.size > 0;
+  const firstCard = (s, i) => {
+    const d = plan.drafts.get(s.name);
+    const ads = Array.isArray(s.advertisers) ? s.advertisers : null;
+    const rv = !plan.cat ? "" : ads == null ? "unknown" : list(s.rivals).length ? list(s.rivals).map(esc).join(", ") : "none found";
+    return `<article class="ask" data-i="${i}"><div class="ask-h"><h3>${esc(s.name)}</h3><span class="fitn">fit ${Number(s.affinity).toFixed(2)}</span></div>
+      ${d?.why_fit ? `<p class="why">${esc(d.why_fit)}</p>` : ""}
+      <dl><dt>Ads found</dt><dd>${ads == null ? "not in our ad data" : ads.length ? `${ads.length}: ${ads.slice(0, 3).map(esc).join(", ")}${ads.length > 3 ? ` +${ads.length - 3}` : ""}` : "none found"}</dd>
+      ${plan.cat ? `<dt>${esc(plan.cat[0].toUpperCase() + plan.cat.slice(1))} brands</dt><dd class="${rv === "none found" ? "ok" : ""}">${rv}</dd>` : ""}
+      <dt>Rate, reach, dates</dt><dd class="nv">not verified</dd><dt>Proposed code</dt><dd class="mono">${esc(s._code)}</dd></dl>
+      ${d ? `<div class="ask-b"><button type="button" class="js-copy" data-k="email" data-i="${i}">Copy rate request</button><button type="button" class="ghost js-copy" data-k="script" data-i="${i}">Copy host-read script</button></div>
+      <details class="draft"><summary>Read what the agent wrote</summary><p class="mono-s">Subject: ${esc(d.email_subject)}</p><p>${esc(d.email_body).replace(/\n/g, "<br>")}</p><p class="mono-s">Host read, about 30 seconds</p><p>${esc(d.host_read).replace(/\n/g, "<br>")}</p></details>`
+        : `<a class="next" href="${contactUrl(s)}" target="_blank" rel="noopener">Search for ad contact ↗</a>`}</article>`;
+  };
   const head = `<div class="phead"><span>#</span><span>Show</span><span>Taste fit</span><span>Ads in its episodes</span>${plan.cat ? `<span>${esc(plan.cat[0].toUpperCase() + plan.cat.slice(1))} brands</span>` : ""}<span>Next step</span></div>`;
   const row = (s) => {
     const ads = Array.isArray(s.advertisers) ? s.advertisers : null;
     const fit = Math.max(4, Math.round(((Number(s.affinity) - 0.8) / 0.2) * 100));
     const adsCell = ads == null ? `<span class="cnt none">Not in our ad data</span>` : ads.length
-      ? `<span class="cnt">${ads.length} advertiser${ads.length === 1 ? "" : "s"}${ads.length >= 10 ? ", a busy show" : ""}</span><span>${ads.slice(0, 3).map(esc).join(", ")}${ads.length > 3 ? ` +${ads.length - 3}` : ""}</span>`
+      ? `<span class="cnt">${ads.length} advertiser${ads.length === 1 ? "" : "s"}</span><span>${ads.slice(0, 3).map(esc).join(", ")}${ads.length > 3 ? ` +${ads.length - 3}` : ""}</span>`
       : `<span class="cnt none">No ads found in its notes</span>`;
     const ml = `<i class="ml">${esc(plan.cat)} brands: </i>`;
     const rv = !plan.cat ? "" : ads == null ? `<span class="rv">${ml}Unknown</span>` : list(s.rivals).length ? `<span class="rv rival">${ml}${list(s.rivals).map(esc).join(", ")}</span>` : `<span class="rv open">${ml}None found</span>`;
@@ -658,11 +671,17 @@ function planPanel(j) {
       + `<span class="go"><a class="next${ads?.length ? "" : " none"}" href="${contactUrl(s)}" target="_blank" rel="noopener">${ads?.length ? "Search for ad contact ↗" : "Search: does it sell ads? ↗"}</a><span class="code">code ${esc(s._code)}</span></span></div>`;
   };
   const body = plan.groups.map((g) => `<div class="grp ${g.key}"><h3>${esc(g.title)}</h3><span>${esc(g.note)}</span></div>${g.rows.map(row).join("")}${g.more ? `<p class="more-n">${g.more} more in the podcasts CSV.</p>` : ""}`).join("");
-  return `<section class="plan" id="plan" tabindex="-1"><div><p class="stepk">Your podcast plan</p><h2>${plan.cat ? `Book the shows ${fans} love before another ${esc(plan.cat)} brand does` : `Shows ${fans} love that already sell ads`}</h2></div>
-    <ol class="acts3">${acts.join("")}</ol>
+  const lede = !plan.selling ? "We have no ad data for these shows, so the first question is whether they sell ads."
+    : plan.cat && plan.first.every((s) => !list(s.rivals).length) ? `They sell ads, and no ${esc(plan.cat)} brand was found in their episode notes. Rates, reach and open dates are not verified: the email asks for them.`
+    : "They already sell ads, and your buyers like them. Rates, reach and open dates are not verified: the email asks for them.";
+  return `<section class="plan" id="plan" tabindex="-1"><div><p class="stepk">Your podcast plan</p><h2>${hasDrafts ? "Three shows to ask first, with the email ready" : `Three shows ${fans} love to ask first`}</h2><p class="lede2">${lede}</p></div>
+    <div class="asks">${plan.first.map(firstCard).join("")}</div>
+    ${hasDrafts ? `<p class="note" style="margin:0">Drafts written by the agent from this run's Qloo results and the product facts you gave; anything it was not told is in [brackets]. Nothing is sent: you copy, edit and send. A proposed code works once the show agrees to read it: it shows which orders came from each show, and the tagged link counts clicks. Neither counts how often the ad played.</p>` : plan.outreachError ? `<p class="note err" style="margin:0">The agent could not write the drafts this time: ${esc(plan.outreachError)}</p>` : ""}
+    ${tests ? `<p class="note" style="margin:0">Next to the podcasts: ${tests} Meta test${tests === 1 ? "" : "s"} against your usual ad, locked before you spend. <a href="#tests">Open the tests</a></p>` : ""}
+    <h3 class="wsh">Every show, as a worksheet</h3>
     <div class="ptable${plan.cat ? "" : " nocat"}"><div>${head}${body}</div></div>
-    <div class="row" style="margin:0"><button type="button" class="ghost js-dl-md">Download the plan</button><button type="button" class="ghost js-dl-pods">Podcasts CSV</button></div>
-    <p class="pods-note">Taste fit: how much ${fans} like the show, from Qloo (bar from 0.80 to 1.00). Ads: brands its episode notes already read, from 662 US shows we read. On 216 held-out US podcasts this taste rank picked the show a brand sponsors 65% of the time, the chart 52%. Open shows are ranked by Qloo too; whether rivals go there next is only a hint so far (exploratory). Most shows are American: check reach in your market. <a href="/judge#podcasts">How we checked</a></p></section>`;
+    <div class="row" style="margin:0"><button type="button" class="ghost js-dl-pods">Worksheet CSV</button><button type="button" class="ghost js-dl-md">Download the plan</button></div>
+    <p class="pods-note">Taste fit: how much ${fans} like the show, from Qloo (bar from 0.80 to 1.00). Ads: brands its episode notes already read, from 662 US shows we read. On 216 held-out US podcasts, this taste rank picked the show a brand sponsors 65% of the time; the chart, 52%. <a href="/judge#podcasts">How we checked</a></p></section>`;
 }
 
 // The agent's check of its own Meta interests, on a rival's audience, before the brief was shown.
@@ -772,6 +791,15 @@ function showResult(j) {
   });
   $("#dl-md").addEventListener("click", () => download(`taste-brief-plan-${slug}.md`, mdBrief(j), "text/markdown"));
   $("#dl-pods").addEventListener("click", () => download(`taste-brief-podcasts-${slug}.csv`, csvPodcasts(j), "text/csv"));
+  const plan0 = podcastPlan(j);
+  document.querySelectorAll(".js-copy").forEach((b) => b.addEventListener("click", async () => {
+    const s = plan0?.first[Number(b.dataset.i)], d = s && plan0.drafts.get(s.name);
+    if (!d) return;
+    const text = b.dataset.k === "email" ? `Subject: ${d.email_subject}\n\n${d.email_body}` : d.host_read;
+    const label = b.textContent;
+    try { await navigator.clipboard.writeText(text); b.textContent = "Copied"; } catch { b.textContent = "Could not copy"; }
+    setTimeout(() => { b.textContent = label; }, 1600);
+  }));
   document.querySelectorAll(".js-dl-md").forEach((b) => b.addEventListener("click", () => download(`taste-brief-plan-${slug}.md`, mdBrief(j), "text/markdown")));
   document.querySelectorAll(".js-dl-pods").forEach((b) => b.addEventListener("click", () => download(`taste-brief-podcasts-${slug}.csv`, csvPodcasts(j), "text/csv")));
   $("#dl-csv").addEventListener("click", () => download(`taste-brief-interests-${slug}.csv`, csvInterests(j), "text/csv"));

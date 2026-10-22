@@ -2,7 +2,8 @@
 
 An agent for brands buying podcast and social ads. Give it a product, a market and your brand or a close competitor; it
 reads the audience's taste in Qloo (brands, artists, shows, podcasts, places, age and gender) and returns a podcast plan
-(shows grouped as open to you, a rival already advertises, or not in our ad data, each with a promo code), Meta interests
+(three shows to ask first, each with an agent-written rate request and host-read script; every show in a worksheet grouped
+as sells ads with no category brand found, a rival already advertises, or not in our ad data), Meta interests
 that the agent checks on a rival's audience before you see them, creative angles, and up to three ad tests, each changing
 one thing from an obvious control and locked before spending. Every structured recommendation cites its Qloo sources, and code checks the cited ids
 and values against what Qloo returned.
@@ -40,6 +41,9 @@ and by a negative control (86 of 139 picks at 0.9+ on the right competitor again
   `submit_brief` (the only way to finish, including the `test_plan`, the product `category` and up to three
   `holdout_rival`s). The agent looks up tags for the product category and passes them next to the brand, so the brief
   reflects the product too. Every item must cite the Qloo `entity_id`s it rests on.
+- `src/outreach.js`: one more Claude call writes a rate request email and a 30 second host-read script for the three
+  shows to ask first (`askFirst` and `promoCodes` in `public/rank.js`, shared with the page), from the run's results and the
+  product facts typed; unknowns stay in [brackets]; nothing is sent.
 - `src/selfcheck.js`: the agent's self-check. Its first brief's Meta interests are scored by Qloo on the audience of a
   rival it named but did not use; a pick below 0.8, or one Qloo cannot score there, goes back to the agent once to replace
   or drop, and both rounds are shown.
