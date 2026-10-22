@@ -182,7 +182,7 @@ export default {
             bought.pods = p; bought.seeds = seeds;
             // the facts only: the page's fixed rule (askFirst) is not passed, so the choice is the agent's own
             return { n: p.shows.length, for_model: { category: p.category, shows: p.shows.map((x) => ({ name: x.name, about: String(x.about || "").slice(0, 160), tags: list(x.tags), taste_fit: Math.round(x.affinity * 1000) / 1000,
-              advertisers_found: Array.isArray(x.advertisers) ? x.advertisers.length : "not in our data", sample_advertisers: list(x.advertisers).slice(0, 6),
+              popularity: Math.round((Number(x.popularity) || 0) * 1000) / 1000, advertisers_found: Array.isArray(x.advertisers) ? x.advertisers.length : "not in our data", sample_advertisers: list(x.advertisers).slice(0, 6),
               category_brands_found: x.rivals ?? "unknown" })) } };
           },
           draft_outreach: async ({ shows, reason }, { registry }) => {

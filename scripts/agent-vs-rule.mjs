@@ -19,7 +19,7 @@ for (const line of (existsSync(".dev.vars") ? readFileSync(".dev.vars", "utf8") 
 }
 if (!vars.QLOO_API_KEY || !vars.ANTHROPIC_API_KEY) { console.error("needs QLOO_API_KEY and ANTHROPIC_API_KEY in .dev.vars"); process.exit(2); }
 const qloo = makeQloo({ apiKey: vars.QLOO_API_KEY });
-const SAME = process.env.SAME === "1";
+const SAME = process.env.SAME === "1", POP = process.env.POP === "1"; // POP: PLAN-3, the agent also sees popularity
 // the model does not accept a forced tool choice (400 on the first run, before any result), so it gets the app's own
 // tools and any other tool it calls answers that this replay only takes draft_outreach (PLAN.md, deviation 1)
 const llm = anthropicLLM({ apiKey: vars.ANTHROPIC_API_KEY, workspaceId: vars.ANTHROPIC_WORKSPACE_ID || undefined, model: vars.MODEL || undefined });
@@ -50,7 +50,7 @@ for (const brand of BRANDS) {
     if (!shows.some((s) => s.advertisers)) { row.skipped = "no show in the ad data"; rows.push(row); continue; }
 
     // the agent's step, as the app runs it (src/worker.js actions.podcasts), with the brand's name left out
-    const forModel = { category: row.category, shows: shows.map((x) => ({ name: x.name, ...(SAME ? { about: String(x.about).slice(0, 160), tags: x.tags } : {}), taste_fit: Math.round(x.affinity * 1000) / 1000,
+    const forModel = { category: row.category, shows: shows.map((x) => ({ name: x.name, ...(SAME ? { about: String(x.about).slice(0, 160), tags: x.tags } : {}), taste_fit: Math.round(x.affinity * 1000) / 1000, ...(POP ? { popularity: Math.round((Number(x.popularity) || 0) * 1000) / 1000 } : {}),
       advertisers_found: x.advertisers ? x.advertisers.length : "not in our data", sample_advertisers: (x.advertisers || []).slice(0, 6),
       category_brands_found: x.rivals ?? "unknown" })) };
     const messages = [
@@ -81,7 +81,7 @@ for (const brand of BRANDS) {
     row.error = String(e.message || e);
   }
   rows.push(row);
-  writeFileSync(SAME ? ".results/agent-vs-rule-same-partial.json" : ".results/agent-vs-rule-partial.json", JSON.stringify(rows, null, 1));
+  writeFileSync(POP ? ".results/agent-vs-rule-pop-partial.json" : SAME ? ".results/agent-vs-rule-same-partial.json" : ".results/agent-vs-rule-partial.json", JSON.stringify(rows, null, 1));
   console.log(brand, row.skipped || row.error || `A ${row.A.hits} R ${row.R.hits} T ${row.T.hits} P ${row.P.hits}${row.same_as_rule ? " same" : ""}`);
 }
 
@@ -94,11 +94,11 @@ const diff = (k) => {
   const d = ok.map((r) => r.A.hits - r[k].hits), boots = [];
   for (let i = 0; i < 10000; i++) { let s = 0; for (let j = 0; j < d.length; j++) s += d[Math.floor(rand() * d.length)]; boots.push(s / d.length); }
   boots.sort((a, b) => a - b);
-  return { mean: +mean(d).toFixed(3), ci95: [+boots[249].toFixed(3), +boots[9749].toFixed(3)], agent_more: d.filter((x) => x > 0).length, rule_more: d.filter((x) => x < 0).length, ties: d.filter((x) => x === 0).length };
+  return { mean: +mean(d).toFixed(3), ci95: [+boots[249].toFixed(3), +boots[9749].toFixed(3)], agent_more: d.filter((x) => x > 0).length, other_more: d.filter((x) => x < 0).length, ties: d.filter((x) => x === 0).length };
 };
 const per = (k) => ({ hits: ok.reduce((a, r) => a + r[k].hits, 0), mean_hits: +mean(ok.map((r) => r[k].hits)).toFixed(3), picks_outside_data: ok.reduce((a, r) => a + r[k].outside_data, 0) });
 const res = {
-  run_at: new Date().toISOString(), model: vars.MODEL || "claude-sonnet-5-5", plan: SAME ? "docs/agent-vs-rule/PLAN-2.md" : "docs/agent-vs-rule/PLAN.md",
+  run_at: new Date().toISOString(), model: vars.MODEL || "claude-sonnet-5-5", plan: POP ? "docs/agent-vs-rule/PLAN-3.md" : SAME ? "docs/agent-vs-rule/PLAN-2.md" : "docs/agent-vs-rule/PLAN.md",
   brands: BRANDS.length, compared: ok.length, skipped: rows.filter((r) => r.skipped).map((r) => ({ brand: r.brand, why: r.skipped })), errors: rows.filter((r) => r.error).map((r) => ({ brand: r.brand, error: r.error })),
   answers_in_lists: ok.reduce((a, r) => a + r.answers_in_list, 0),
   policies: { agent: per("A"), rule: per("R"), taste: per("T"), popularity: per("P") },
@@ -106,5 +106,5 @@ const res = {
   same_three_as_rule: ok.filter((r) => r.same_as_rule).length,
   rows: rows.map(({ answers_in_list, ...r }) => r),
 };
-writeFileSync(SAME ? "docs/agent-vs-rule/results-same.json" : "docs/agent-vs-rule/results.json", JSON.stringify(res, null, 1));
+writeFileSync(POP ? "docs/agent-vs-rule/results-pop.json" : SAME ? "docs/agent-vs-rule/results-same.json" : "docs/agent-vs-rule/results.json", JSON.stringify(res, null, 1));
 console.log(JSON.stringify({ ...res, rows: undefined }, null, 1));

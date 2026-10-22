@@ -94,8 +94,8 @@
    0.104
   ],
   "agent_more": 3,
-  "rule_more": 2,
-  "ties": 43
+  "ties": 43,
+  "other_more": 2
  },
  "agent_minus_taste": {
   "mean": -0.063,
@@ -104,8 +104,8 @@
    0.021
   ],
   "agent_more": 1,
-  "rule_more": 4,
-  "ties": 43
+  "ties": 43,
+  "other_more": 4
  },
  "agent_minus_popularity": {
   "mean": -0.083,
@@ -114,8 +114,8 @@
    0
   ],
   "agent_more": 1,
-  "rule_more": 5,
-  "ties": 42
+  "ties": 42,
+  "other_more": 5
  },
  "same_three_as_rule": 31,
  "rows": [
@@ -465,14 +465,14 @@
    "A": {
     "shows": [
      "Dear Gabby",
-     "EXPANDED Podcast by To Be Magnetic™"
+     "EXPANDED Podcast by To Be Magnetic\u2122"
     ],
     "hits": 1,
     "outside_data": 0
    },
    "R": {
     "shows": [
-     "EXPANDED Podcast by To Be Magnetic™",
+     "EXPANDED Podcast by To Be Magnetic\u2122",
      "Dear Gabby"
     ],
     "hits": 1,
@@ -480,7 +480,7 @@
    },
    "T": {
     "shows": [
-     "EXPANDED Podcast by To Be Magnetic™",
+     "EXPANDED Podcast by To Be Magnetic\u2122",
      "Dear Gabby"
     ],
     "hits": 1,
@@ -489,7 +489,7 @@
    "P": {
     "shows": [
      "Dear Gabby",
-     "EXPANDED Podcast by To Be Magnetic™"
+     "EXPANDED Podcast by To Be Magnetic\u2122"
     ],
     "hits": 1,
     "outside_data": 0
@@ -1416,7 +1416,7 @@
    "model_turns": 2,
    "A": {
     "shows": [
-     "EXPANDED Podcast by To Be Magnetic™",
+     "EXPANDED Podcast by To Be Magnetic\u2122",
      "Dear Gabby"
     ],
     "hits": 1,
@@ -1424,7 +1424,7 @@
    },
    "R": {
     "shows": [
-     "EXPANDED Podcast by To Be Magnetic™",
+     "EXPANDED Podcast by To Be Magnetic\u2122",
      "Dear Gabby"
     ],
     "hits": 1,
@@ -1432,7 +1432,7 @@
    },
    "T": {
     "shows": [
-     "EXPANDED Podcast by To Be Magnetic™",
+     "EXPANDED Podcast by To Be Magnetic\u2122",
      "Dear Gabby"
     ],
     "hits": 1,
@@ -1441,7 +1441,7 @@
    "P": {
     "shows": [
      "Dear Gabby",
-     "EXPANDED Podcast by To Be Magnetic™"
+     "EXPANDED Podcast by To Be Magnetic\u2122"
     ],
     "hits": 1,
     "outside_data": 0
@@ -1712,14 +1712,14 @@
    "A": {
     "shows": [
      "Dear Gabby",
-     "EXPANDED Podcast by To Be Magnetic™"
+     "EXPANDED Podcast by To Be Magnetic\u2122"
     ],
     "hits": 1,
     "outside_data": 0
    },
    "R": {
     "shows": [
-     "EXPANDED Podcast by To Be Magnetic™",
+     "EXPANDED Podcast by To Be Magnetic\u2122",
      "Dear Gabby"
     ],
     "hits": 1,
@@ -1727,7 +1727,7 @@
    },
    "T": {
     "shows": [
-     "EXPANDED Podcast by To Be Magnetic™",
+     "EXPANDED Podcast by To Be Magnetic\u2122",
      "Dear Gabby"
     ],
     "hits": 1,
@@ -1736,7 +1736,7 @@
    "P": {
     "shows": [
      "Dear Gabby",
-     "EXPANDED Podcast by To Be Magnetic™"
+     "EXPANDED Podcast by To Be Magnetic\u2122"
     ],
     "hits": 1,
     "outside_data": 0
@@ -2120,5 +2120,6 @@
    "same_as_rule": true,
    "reason": "Both shows sell ads and have high taste fit, and Ferriss already carries sleep brands, which shows the category works there, while Mylett has no sleep brand yet."
   }
- ]
+ ],
+ "field_note": "other_more: brands where the compared policy found more (renamed from rule_more on 22 Oct; same numbers)."
 }
