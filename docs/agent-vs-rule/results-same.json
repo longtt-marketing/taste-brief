@@ -1,0 +1,2124 @@
+{
+ "run_at": "2026-10-22T08:57:03.685Z",
+ "model": "claude-sonnet-5-5",
+ "plan": "docs/agent-vs-rule/PLAN-2.md",
+ "brands": 62,
+ "compared": 48,
+ "skipped": [
+  {
+   "brand": "Caraway",
+   "why": "no show in the ad data"
+  },
+  {
+   "brand": "Audible",
+   "why": "no show in the ad data"
+  },
+  {
+   "brand": "Netflix",
+   "why": "no show in the ad data"
+  },
+  {
+   "brand": "Hulu",
+   "why": "no show in the ad data"
+  },
+  {
+   "brand": "Wayfair",
+   "why": "no show in the ad data"
+  },
+  {
+   "brand": "Macy's",
+   "why": "no show in the ad data"
+  },
+  {
+   "brand": "Walmart",
+   "why": "no show in the ad data"
+  },
+  {
+   "brand": "Talkspace",
+   "why": "no show in the ad data"
+  },
+  {
+   "brand": "ZipRecruiter",
+   "why": "no show in the ad data"
+  },
+  {
+   "brand": "Stitch Fix",
+   "why": "no show in the ad data"
+  }
+ ],
+ "errors": [
+  {
+   "brand": "Skims",
+   "error": "the model never called draft_outreach"
+  },
+  {
+   "brand": "Booking.com",
+   "error": "the model never called draft_outreach"
+  },
+  {
+   "brand": "Quince",
+   "error": "Qloo /v2/insights 400: {\"errors\":[{\"message\":\"All of the provided signal.interests.entities were invalid. At least one valid signal or filter is required for entity insights.\",\"path\":\"signal.interests.entities\"}]}"
+  },
+  {
+   "brand": "Magic Spoon",
+   "error": "the model never called draft_outreach"
+  }
+ ],
+ "answers_in_lists": 26,
+ "policies": {
+  "agent": {
+   "hits": 20,
+   "mean_hits": 0.417,
+   "picks_outside_data": 0
+  },
+  "rule": {
+   "hits": 19,
+   "mean_hits": 0.396,
+   "picks_outside_data": 0
+  },
+  "taste": {
+   "hits": 23,
+   "mean_hits": 0.479,
+   "picks_outside_data": 0
+  },
+  "popularity": {
+   "hits": 24,
+   "mean_hits": 0.5,
+   "picks_outside_data": 0
+  }
+ },
+ "agent_minus_rule": {
+  "mean": 0.021,
+  "ci95": [
+   -0.063,
+   0.104
+  ],
+  "agent_more": 3,
+  "rule_more": 2,
+  "ties": 43
+ },
+ "agent_minus_taste": {
+  "mean": -0.063,
+  "ci95": [
+   -0.146,
+   0.021
+  ],
+  "agent_more": 1,
+  "rule_more": 4,
+  "ties": 43
+ },
+ "agent_minus_popularity": {
+  "mean": -0.083,
+  "ci95": [
+   -0.188,
+   0
+  ],
+  "agent_more": 1,
+  "rule_more": 5,
+  "ties": 42
+ },
+ "same_three_as_rule": 31,
+ "rows": [
+  {
+   "brand": "WHOOP",
+   "category": "fitness tech",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "Mind Pump: Raw Fitness Truth",
+     "The Tim Ferriss Show",
+     "The Genius Life"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "Mind Pump: Raw Fitness Truth",
+     "The Model Health Show",
+     "The Tim Ferriss Show"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "Mind Pump: Raw Fitness Truth",
+     "The Model Health Show",
+     "The Tim Ferriss Show"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "Mind Pump: Raw Fitness Truth",
+     "The Tim Ferriss Show",
+     "The Model Health Show"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "same_as_rule": false,
+   "reason": "All three sell ads (4, 5 and 4 advertisers found), none has a fitness tech brand yet, and their subjects fit a fitness tech product with high taste fit (0.952, 0.905, 0.903)."
+  },
+  {
+   "brand": "Eight Sleep",
+   "category": "sleep and bedding",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "The Tim Ferriss Show",
+     "This Week in Startups",
+     "Invest Like the Best with Patrick O'Shaughnessy"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "My First Million",
+     "This Week in Startups",
+     "Invest Like the Best with Patrick O'Shaughnessy"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "My First Million",
+     "The Tim Ferriss Show",
+     "This Week in Startups"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "The Tim Ferriss Show",
+     "My First Million",
+     "This Week in Startups"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "same_as_rule": false,
+   "reason": "Tim Ferriss and This Week in Startups both sell ads (4 and 6 advertisers found), and Helix Sleep on Ferriss shows sleep sells there; Invest Like the Best has 2 advertisers and a high taste fit."
+  },
+  {
+   "brand": "Lululemon",
+   "category": "apparel",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "The Viall Files",
+     "Dear Shandy",
+     "Off The Vine with Kaitlyn Bristowe"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "Reality Steve Podcast",
+     "The Viall Files",
+     "Off The Vine with Kaitlyn Bristowe"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "Off The Vine with Kaitlyn Bristowe",
+     "The Viall Files",
+     "Reality Steve Podcast"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "Off The Vine with Kaitlyn Bristowe",
+     "The Viall Files",
+     "Reality Steve Podcast"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "same_as_rule": false,
+   "reason": "All three sell ads (11, 9 and 5 advertisers found), the audiences are a close taste fit (0.972, 0.943, 0.977), and apparel brands already advertise there (Quince, Skims, Fabletics, Knix), so the category works on these shows."
+  },
+  {
+   "brand": "Knix",
+   "category": "apparel",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "Dear Gabby",
+     "Pillow Talks"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "Dear Gabby",
+     "Pillow Talks"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "Dear Gabby",
+     "Pillow Talks"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "Dear Gabby",
+     "Pillow Talks"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "same_as_rule": true,
+   "reason": "Both shows sell ads (6 and 3 advertisers found) and have high taste fit (0.914 and 0.896), and an apparel brand already runs on each (Skims, Quince), which shows the category works there."
+  },
+  {
+   "brand": "Drink LMNT",
+   "category": "supplements",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "Mind Pump: Raw Fitness Truth"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "Mind Pump: Raw Fitness Truth"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "The Model Health Show",
+     "Mind Pump: Raw Fitness Truth"
+    ],
+    "hits": 2,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "Mind Pump: Raw Fitness Truth",
+     "The Model Health Show"
+    ],
+    "hits": 2,
+    "outside_data": 0
+   },
+   "same_as_rule": true,
+   "reason": "Mind Pump sells ads (3 advertisers found) and its health and fitness subject suits a supplement, though the taste fit comes from an unverified seed."
+  },
+  {
+   "brand": "Sephora",
+   "category": "beauty and grooming",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "Off The Vine with Kaitlyn Bristowe",
+     "Dear Gabby",
+     "On Purpose with Jay Shetty"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "On Purpose with Jay Shetty",
+     "Armchair Expert with Dax Shepard",
+     "Off The Vine with Kaitlyn Bristowe"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "On Purpose with Jay Shetty",
+     "Armchair Expert with Dax Shepard",
+     "Off The Vine with Kaitlyn Bristowe"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "Armchair Expert with Dax Shepard",
+     "Off The Vine with Kaitlyn Bristowe",
+     "On Purpose with Jay Shetty"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "same_as_rule": false,
+   "reason": "All three sell ads (5, 6 and 3 advertisers found), none has a beauty and grooming brand in its notes, and taste fit is high (0.909, 0.907, 0.921)."
+  },
+  {
+   "brand": "Vuori",
+   "category": "apparel",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "Mind Pump: Raw Fitness Truth",
+     "The Genius Life",
+     "The Model Health Show"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "Mind Pump: Raw Fitness Truth",
+     "The Model Health Show",
+     "The Genius Life"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "Mind Pump: Raw Fitness Truth",
+     "The Model Health Show",
+     "The Genius Life"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "Mind Pump: Raw Fitness Truth",
+     "The Model Health Show",
+     "The Genius Life"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "same_as_rule": true,
+   "reason": "All three sell ads and have high taste fit, and no apparel brand is listed on any of them; Mind Pump and The Genius Life have the most advertisers found."
+  },
+  {
+   "brand": "Caraway",
+   "category": "home and kitchen",
+   "skipped": "no show in the ad data"
+  },
+  {
+   "brand": "MasterClass",
+   "category": "learning",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "The Tim Ferriss Show",
+     "THE ED MYLETT SHOW",
+     "On Purpose with Jay Shetty"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "The Tim Ferriss Show",
+     "THE ED MYLETT SHOW",
+     "On Purpose with Jay Shetty"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "The Tim Ferriss Show",
+     "THE ED MYLETT SHOW",
+     "On Purpose with Jay Shetty"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "The Tim Ferriss Show",
+     "The Model Health Show",
+     "On Purpose with Jay Shetty"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "same_as_rule": true,
+   "reason": "These three sell ads (5, 3 and 3 advertisers found), none has a learning brand yet, and their self-improvement and education subjects suit a learning product."
+  },
+  {
+   "brand": "Ritual",
+   "category": "supplements",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "Dear Gabby",
+     "EXPANDED Podcast by To Be Magnetic™"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "EXPANDED Podcast by To Be Magnetic™",
+     "Dear Gabby"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "EXPANDED Podcast by To Be Magnetic™",
+     "Dear Gabby"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "Dear Gabby",
+     "EXPANDED Podcast by To Be Magnetic™"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "same_as_rule": true,
+   "reason": "Both shows sell ads (5 and 4 advertisers found), already carry a supplement brand (Athletic Greens, Nutrafol) which shows the category works there, and have the highest taste fit (0.947 and 0.953) with a wellness-minded tone."
+  },
+  {
+   "brand": "FanDuel",
+   "category": "betting",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "Harris Fantasy Football Podcast",
+     "The Late-Round Fantasy Football Podcast"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "The Audible",
+     "The Late-Round Fantasy Football Podcast",
+     "Harris Fantasy Football Podcast"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "The Late-Round Fantasy Football Podcast",
+     "Harris Fantasy Football Podcast",
+     "The Audible"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "Harris Fantasy Football Podcast",
+     "The Late-Round Fantasy Football Podcast",
+     "The Audible"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "same_as_rule": false,
+   "reason": "Both shows have high taste fit and DraftKings already advertises there, which shows betting works on them, and Harris lists ten advertisers so it clearly sells ads."
+  },
+  {
+   "brand": "Airbnb",
+   "category": "travel",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "The Tim Ferriss Show",
+     "The Rich Roll Podcast",
+     "10% Happier with Dan Harris"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "10% Happier with Dan Harris",
+     "The Tim Ferriss Show",
+     "On Purpose with Jay Shetty"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "10% Happier with Dan Harris",
+     "The Tim Ferriss Show",
+     "On Purpose with Jay Shetty"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "The Tim Ferriss Show",
+     "On Purpose with Jay Shetty",
+     "10% Happier with Dan Harris"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "same_as_rule": false,
+   "reason": "These shows have the most advertisers found in their notes (5 to 8) and the highest taste fit, and none has a travel brand listed yet."
+  },
+  {
+   "brand": "Skims",
+   "category": "apparel",
+   "model_turns": 3,
+   "error": "the model never called draft_outreach"
+  },
+  {
+   "brand": "Honeylove",
+   "category": "apparel",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "Woman Evolve with Sarah Jakes Roberts",
+     "Here's The Thing"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "Woman Evolve with Sarah Jakes Roberts",
+     "Here's The Thing",
+     "Therapy for Black Girls"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "Woman Evolve with Sarah Jakes Roberts",
+     "Here's The Thing",
+     "Therapy for Black Girls"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "Here's The Thing",
+     "Therapy for Black Girls",
+     "Woman Evolve with Sarah Jakes Roberts"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "same_as_rule": false,
+   "reason": "Both shows sell ads (three advertisers found each), have no apparel brand present so no exclusivity conflict, and carry the highest taste fit (0.934 and 0.909)."
+  },
+  {
+   "brand": "Rosetta Stone",
+   "category": "learning",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "The Tim Ferriss Show"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "The Tim Ferriss Show"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "The Tim Ferriss Show"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "The Tim Ferriss Show"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "same_as_rule": true,
+   "reason": "It sells ads (5 advertisers found), has a self-improvement and learning tone, and the highest taste fit returned (0.898), though the seed I used was unverified."
+  },
+  {
+   "brand": "DraftKings",
+   "category": "betting",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "Pat Mayo Experience",
+     "Establish The Run Fantasy Football"
+    ],
+    "hits": 2,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "Pat Mayo Experience"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "Pat Mayo Experience",
+     "The Late-Round Fantasy Football Podcast",
+     "Establish The Run Fantasy Football"
+    ],
+    "hits": 3,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "Pat Mayo Experience",
+     "The Late-Round Fantasy Football Podcast",
+     "Establish The Run Fantasy Football"
+    ],
+    "hits": 3,
+    "outside_data": 0
+   },
+   "same_as_rule": false,
+   "reason": "Pat Mayo Experience sells ads (6 advertisers found, Underdog Fantasy already there shows betting works on it) and has the top taste fit of 0.967; Establish The Run covers prop and sports betting directly with a taste fit of 0.919."
+  },
+  {
+   "brand": "Gusto",
+   "category": "business software",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "This Week in Startups",
+     "My First Million"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "The Tim Ferriss Show",
+     "This Week in Startups",
+     "My First Million"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "This Week in Startups",
+     "My First Million",
+     "The Tim Ferriss Show"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "The Tim Ferriss Show",
+     "My First Million",
+     "This Week in Startups"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "same_as_rule": false,
+   "reason": "Both shows sell ads to business software brands (Vanta and NetSuite on This Week in Startups, HubSpot on My First Million) and rank highest on taste fit (0.912 and 0.909)."
+  },
+  {
+   "brand": "Bombas",
+   "category": "apparel",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "Armchair Expert with Dax Shepard"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "Armchair Expert with Dax Shepard"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "Armchair Expert with Dax Shepard"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "Armchair Expert with Dax Shepard"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "same_as_rule": true,
+   "reason": "It is the only show returned, with high taste fit (0.904) and one advertiser found (Allstate), and no apparel brand appears in its notes."
+  },
+  {
+   "brand": "Nutrafol",
+   "category": "supplements",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "Well with Arielle Lorre",
+     "The Liz Moody Podcast"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "Breaking Beauty Podcast",
+     "Well with Arielle Lorre",
+     "The Liz Moody Podcast"
+    ],
+    "hits": 2,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "Breaking Beauty Podcast",
+     "Well with Arielle Lorre",
+     "The Liz Moody Podcast"
+    ],
+    "hits": 2,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "The Liz Moody Podcast",
+     "Well with Arielle Lorre",
+     "Breaking Beauty Podcast"
+    ],
+    "hits": 2,
+    "outside_data": 0
+   },
+   "same_as_rule": false,
+   "reason": "Both shows sell ads and already carry supplement brands, which shows the category works there, and their wellness subject and tone suit a supplement at this price, with taste fit above 0.90."
+  },
+  {
+   "brand": "SeatGeek",
+   "category": "tickets",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "Spittin Chiclets"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "Spittin Chiclets"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "Spittin Chiclets"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "Spittin Chiclets"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "same_as_rule": true,
+   "reason": "It is the only show returned, it has 6 advertisers found, no ticket brand is present, and live sports events fit a tickets product."
+  },
+  {
+   "brand": "hims",
+   "category": "health services",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "The Church of What's Happening Now: The New Testament"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "The Joe Budden Podcast",
+     "The Brilliant Idiots",
+     "The Church of What's Happening Now: The New Testament"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "The Joe Budden Podcast",
+     "The Brilliant Idiots",
+     "The Church of What's Happening Now: The New Testament"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "The Church of What's Happening Now: The New Testament",
+     "The Brilliant Idiots",
+     "The Joe Budden Podcast"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "same_as_rule": false,
+   "reason": "It sells ads (two advertisers found, including BetterHelp, so health services already work on the show) and has high taste fit (0.912)."
+  },
+  {
+   "brand": "Etsy",
+   "category": "retailers",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "LadyGang",
+     "Off The Vine with Kaitlyn Bristowe",
+     "Juicy Scoop with Heather McDonald"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "Armchair Expert with Dax Shepard",
+     "Bitch Bible",
+     "Juicy Scoop with Heather McDonald"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "Armchair Expert with Dax Shepard",
+     "LadyGang",
+     "Off The Vine with Kaitlyn Bristowe"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "Juicy Scoop with Heather McDonald",
+     "Armchair Expert with Dax Shepard",
+     "Off The Vine with Kaitlyn Bristowe"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "same_as_rule": false,
+   "reason": "These three sell ads (8, 5 and 18 advertisers found), two already carry retailers like Nordstrom, Macy's and Wayfair, and they have taste fit of 0.927, 0.92 and 0.916."
+  },
+  {
+   "brand": "Green Chef",
+   "category": "meal kits",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "And That's Why We Drink",
+     "Sinisterhood"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "And That's Why We Drink",
+     "Sinisterhood"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "And That's Why We Drink",
+     "Sinisterhood"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "And That's Why We Drink",
+     "Sinisterhood"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "same_as_rule": true,
+   "reason": "Both shows sell ads (12 and 6 advertisers found), already carry meal kit brands so the category works there, and have the highest taste fit (0.913 and 0.903)."
+  },
+  {
+   "brand": "Notion",
+   "category": "productivity apps",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "The Tim Ferriss Show",
+     "Invest Like the Best with Patrick O'Shaughnessy",
+     "My First Million"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "My First Million",
+     "The Tim Ferriss Show",
+     "Invest Like the Best with Patrick O'Shaughnessy"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "My First Million",
+     "The Tim Ferriss Show",
+     "Invest Like the Best with Patrick O'Shaughnessy"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "The Tim Ferriss Show",
+     "My First Million",
+     "Animal Spirits Podcast"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "same_as_rule": true,
+   "reason": "These shows have the highest taste fit (0.924, 0.913, 0.929), sell ads to software and business brands, and have an audience interested in personal efficiency, with no productivity app sponsor found yet."
+  },
+  {
+   "brand": "Audible",
+   "category": "audiobooks",
+   "skipped": "no show in the ad data"
+  },
+  {
+   "brand": "Squarespace",
+   "category": "website builders",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "Creative Pep Talk"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "Creative Pep Talk"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "Creative Pep Talk"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "Creative Pep Talk"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "same_as_rule": true,
+   "reason": "Highest taste fit (0.922) in the only result returned, and its creative-business subject suits a website builder, though no advertisers were found in its notes."
+  },
+  {
+   "brand": "Netflix",
+   "category": "streaming",
+   "skipped": "no show in the ad data"
+  },
+  {
+   "brand": "Hulu",
+   "category": "streaming",
+   "skipped": "no show in the ad data"
+  },
+  {
+   "brand": "Wayfair",
+   "category": "retailers",
+   "skipped": "no show in the ad data"
+  },
+  {
+   "brand": "Chime",
+   "category": "personal finance",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "Here's The Thing",
+     "The Brilliant Idiots"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "Here's The Thing",
+     "The Brilliant Idiots"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "Here's The Thing",
+     "The Brilliant Idiots"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "The Brilliant Idiots",
+     "Here's The Thing"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "same_as_rule": true,
+   "reason": "Both shows sell ads and carry Cash App, which shows personal finance works there, and both have high taste fit (0.924 and 0.922); Here's The Thing has three advertisers found, so it goes first."
+  },
+  {
+   "brand": "Macy's",
+   "category": "retailers",
+   "skipped": "no show in the ad data"
+  },
+  {
+   "brand": "Hungryroot",
+   "category": "meal kits",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "Absolutely Not",
+     "Girls Gotta Eat",
+     "The Liz Moody Podcast"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "Girls Gotta Eat",
+     "The Liz Moody Podcast",
+     "Absolutely Not"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "Girls Gotta Eat",
+     "The Liz Moody Podcast",
+     "Absolutely Not"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "Girls Gotta Eat",
+     "Absolutely Not",
+     "The Liz Moody Podcast"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "same_as_rule": true,
+   "reason": "Absolutely Not and Girls Gotta Eat sell many ads (18 and 13 advertisers found) with no meal kit brand present, and The Liz Moody Podcast has a food and wellness tone with high taste fit (0.91)."
+  },
+  {
+   "brand": "Athletic Greens",
+   "category": "supplements",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "The Genius Life",
+     "The Dr. Tyna Show",
+     "The Model Health Show"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "The Model Health Show",
+     "The Genius Life",
+     "The Dr. Tyna Show"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "The Model Health Show",
+     "The Genius Life",
+     "The Dr. Tyna Show"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "The Model Health Show",
+     "The Genius Life",
+     "The Dr. Tyna Show"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "same_as_rule": true,
+   "reason": "All three are health and nutrition shows with high taste fit (0.922, 0.909, 0.983), and The Genius Life and The Dr. Tyna Show carry several advertisers, so they sell ads; Drink LMNT is on all three, which shows the category works there."
+  },
+  {
+   "brand": "Cash App",
+   "category": "personal finance",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "The Brilliant Idiots"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "The Brilliant Idiots"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "The Brilliant Idiots"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "The Brilliant Idiots"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "same_as_rule": true,
+   "reason": "It is the only show returned, with taste fit 0.961, but no advertisers were found in its episode notes, so ad demand is unproven."
+  },
+  {
+   "brand": "Manscaped",
+   "category": "beauty and grooming",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "The Fighter & The Kid",
+     "THE ED MYLETT SHOW"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "Cameron Hanes - Keep Hammering Collective",
+     "The Fighter & The Kid",
+     "THE ED MYLETT SHOW"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "Cameron Hanes - Keep Hammering Collective",
+     "The Fighter & The Kid",
+     "THE ED MYLETT SHOW"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "The Fighter & The Kid",
+     "THE ED MYLETT SHOW",
+     "Cameron Hanes - Keep Hammering Collective"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "same_as_rule": false,
+   "reason": "Both shows sell ads (4 and 3 advertisers found, including Shopify and Quince), no beauty or grooming brand appears on either so exclusivity is unlikely to block us, and taste fit is high (0.898 and 0.894)."
+  },
+  {
+   "brand": "Indeed",
+   "category": "hiring",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "The Tim Ferriss Show",
+     "This Week in Startups"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "The Tim Ferriss Show",
+     "This Week in Startups"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "The Tim Ferriss Show",
+     "This Week in Startups"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "The Tim Ferriss Show",
+     "This Week in Startups"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "same_as_rule": true,
+   "reason": "Both shows sell ads to many advertisers and have a founder and startup audience that fits a hiring product, with high taste fit (0.926 and 0.9)."
+  },
+  {
+   "brand": "Booking.com",
+   "category": "travel",
+   "model_turns": 3,
+   "error": "the model never called draft_outreach"
+  },
+  {
+   "brand": "Warby Parker",
+   "category": "eyewear and accessories",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "The Popcast With Knox and Jamie",
+     "A Beautiful Mess Podcast"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "A Beautiful Mess Podcast",
+     "The Popcast With Knox and Jamie"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "A Beautiful Mess Podcast",
+     "The Popcast With Knox and Jamie"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "The Popcast With Knox and Jamie",
+     "A Beautiful Mess Podcast"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "same_as_rule": true,
+   "reason": "Both shows sell ads (6 and 4 advertisers found) and have high taste fit (0.912 and 0.929), but no eyewear brand appears on either, and the seed ID behind this list was not verified."
+  },
+  {
+   "brand": "Chewy",
+   "category": "pets",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "Dear Gabby",
+     "Armchair Expert with Dax Shepard"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "Armchair Expert with Dax Shepard",
+     "Dear Gabby"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "Armchair Expert with Dax Shepard",
+     "Dear Gabby"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "Armchair Expert with Dax Shepard",
+     "Dear Gabby"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "same_as_rule": true,
+   "reason": "Dear Gabby sells ads (6 advertisers found) and Smalls, a pet brand, already runs there, so the category works on that show; Armchair Expert has high taste fit (0.907) and a broad audience."
+  },
+  {
+   "brand": "BetterHelp",
+   "category": "mental wellness",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "EXPANDED Podcast by To Be Magnetic™",
+     "Dear Gabby"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "EXPANDED Podcast by To Be Magnetic™",
+     "Dear Gabby"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "EXPANDED Podcast by To Be Magnetic™",
+     "Dear Gabby"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "Dear Gabby",
+     "EXPANDED Podcast by To Be Magnetic™"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "same_as_rule": true,
+   "reason": "Both shows sell ads (4 and 5 advertisers found), have high taste fit (0.945 and 0.94), and focus on self-improvement and inner work, which suits a mental wellness product; no category brand was found on either."
+  },
+  {
+   "brand": "Olipop",
+   "category": "drinks",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "The Dr. Tyna Show",
+     "The Model Health Show"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "The Dr. Tyna Show",
+     "The Model Health Show"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "The Dr. Tyna Show",
+     "The Model Health Show"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "The Model Health Show",
+     "The Dr. Tyna Show"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "same_as_rule": true,
+   "reason": "Both shows carry ads (Drink LMNT appears on both, so drinks work there) and have the highest taste fit in the list (0.917 and 0.911), though the product itself is unknown so tone fit is unconfirmed."
+  },
+  {
+   "brand": "Liquid I.V.",
+   "category": "supplements",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "Dear Gabby"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "On Purpose with Jay Shetty",
+     "Dear Gabby"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "Dear Gabby",
+     "On Purpose with Jay Shetty"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "On Purpose with Jay Shetty",
+     "Dear Gabby"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "same_as_rule": false,
+   "reason": "Dear Gabby has six advertisers found, including two supplement brands (Athletic Greens, Ritual) that show the category works there, and the highest taste fit at 0.913."
+  },
+  {
+   "brand": "Walmart",
+   "category": "retailers",
+   "skipped": "no show in the ad data"
+  },
+  {
+   "brand": "Shopify",
+   "category": "website builders",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "The Tim Ferriss Show",
+     "My First Million",
+     "THE ED MYLETT SHOW"
+    ],
+    "hits": 2,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "The Tim Ferriss Show",
+     "THE ED MYLETT SHOW",
+     "My First Million"
+    ],
+    "hits": 2,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "The Tim Ferriss Show",
+     "THE ED MYLETT SHOW",
+     "My First Million"
+    ],
+    "hits": 2,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "The Tim Ferriss Show",
+     "THE ED MYLETT SHOW",
+     "My First Million"
+    ],
+    "hits": 2,
+    "outside_data": 0
+   },
+   "same_as_rule": true,
+   "reason": "All three are entrepreneurship shows with taste fit above 0.9 and advertisers found in their notes, and none has a website builder already, so the category is open."
+  },
+  {
+   "brand": "Thrive Market",
+   "category": "grocery delivery",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "The Genius Life",
+     "The Dr. Tyna Show",
+     "The Model Health Show"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "The Model Health Show",
+     "The Dr. Hyman Show",
+     "The Dr. Tyna Show"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "The Model Health Show",
+     "The Dr. Tyna Show",
+     "The Genius Life"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "The Model Health Show",
+     "The Dr. Hyman Show",
+     "The Genius Life"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "same_as_rule": false,
+   "reason": "The Genius Life and The Dr. Tyna Show both sell ads (4 advertisers each) and already carry ButcherBox, which shows food delivery works there, and The Model Health Show has the highest taste fit (0.951) on a nutrition topic that suits groceries."
+  },
+  {
+   "brand": "Huel",
+   "category": "supplements",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "The Rich Roll Podcast",
+     "Mind Pump: Raw Fitness Truth",
+     "The Genius Life"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "Mind Pump: Raw Fitness Truth",
+     "The Rich Roll Podcast",
+     "The Genius Life"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "Mind Pump: Raw Fitness Truth",
+     "The Model Health Show",
+     "The Genius Life"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "Mind Pump: Raw Fitness Truth",
+     "The Model Health Show",
+     "The Rich Roll Podcast"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "same_as_rule": true,
+   "reason": "All three sell ads (9, 4 and 4 advertisers found), supplement brands like Drink LMNT and Athletic Greens already run there so the category works, and the health and fitness subject suits a supplement with high taste fit (0.903, 0.966, 0.907)."
+  },
+  {
+   "brand": "Talkspace",
+   "category": "mental wellness",
+   "skipped": "no show in the ad data"
+  },
+  {
+   "brand": "Fabletics",
+   "category": "apparel",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "Off The Vine with Kaitlyn Bristowe"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "Off The Vine with Kaitlyn Bristowe"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "Off The Vine with Kaitlyn Bristowe"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "Off The Vine with Kaitlyn Bristowe"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "same_as_rule": true,
+   "reason": "The show sells ads (5 advertisers found, including Macy's and Wayfair), Knix shows apparel already works there, and taste fit is 0.907."
+  },
+  {
+   "brand": "ZipRecruiter",
+   "category": "hiring",
+   "skipped": "no show in the ad data"
+  },
+  {
+   "brand": "Blueland",
+   "category": "home and kitchen",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "Dear Gabby",
+     "EXPANDED Podcast by To Be Magnetic™"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "EXPANDED Podcast by To Be Magnetic™",
+     "Dear Gabby"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "EXPANDED Podcast by To Be Magnetic™",
+     "Dear Gabby"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "Dear Gabby",
+     "EXPANDED Podcast by To Be Magnetic™"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "same_as_rule": true,
+   "reason": "Both shows sell ads (6 and 3 advertisers found), no home and kitchen brand holds the category on either, and Expanded already carries Cozy Earth, a home brand, which suggests home products work there."
+  },
+  {
+   "brand": "Raycon",
+   "category": "consumer electronics",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "THE ED MYLETT SHOW"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "THE ED MYLETT SHOW",
+     "The Steve Harvey Morning Show",
+     "The Brilliant Idiots"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "THE ED MYLETT SHOW",
+     "The Steve Harvey Morning Show",
+     "The Brilliant Idiots"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "The Brilliant Idiots",
+     "THE ED MYLETT SHOW",
+     "The Steve Harvey Morning Show"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "same_as_rule": false,
+   "reason": "It has the highest taste fit (0.922) and three advertisers found in its episode notes, so it sells ads."
+  },
+  {
+   "brand": "Quince",
+   "category": "apparel",
+   "error": "Qloo /v2/insights 400: {\"errors\":[{\"message\":\"All of the provided signal.interests.entities were invalid. At least one valid signal or filter is required for entity insights.\",\"path\":\"signal.interests.entities\"}]}"
+  },
+  {
+   "brand": "HelloFresh",
+   "category": "meal kits",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "Dear Gabby"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "Dear Gabby"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "Dear Gabby"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "Dear Gabby"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "same_as_rule": true,
+   "reason": "It sells ads (6 advertisers found, including food brand ButcherBox), no meal kit brand is listed so exclusivity is unlikely to block us, and its taste fit is 0.916."
+  },
+  {
+   "brand": "Stitch Fix",
+   "category": "apparel",
+   "skipped": "no show in the ad data"
+  },
+  {
+   "brand": "ButcherBox",
+   "category": "grocery delivery",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "The Genius Life",
+     "Mind Pump: Raw Fitness Truth",
+     "The Model Health Show"
+    ],
+    "hits": 2,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "The Model Health Show",
+     "Mind Pump: Raw Fitness Truth",
+     "The Genius Life"
+    ],
+    "hits": 2,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "The Model Health Show",
+     "Mind Pump: Raw Fitness Truth",
+     "The Genius Life"
+    ],
+    "hits": 2,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "Mind Pump: Raw Fitness Truth",
+     "The Model Health Show",
+     "The Genius Life"
+    ],
+    "hits": 2,
+    "outside_data": 0
+   },
+   "same_as_rule": true,
+   "reason": "All three are nutrition-led shows with high taste fit, and The Genius Life and Mind Pump show several advertisers while no grocery delivery brand appears in any of them."
+  },
+  {
+   "brand": "Mint Mobile",
+   "category": "mobile carrier",
+   "model_turns": 3,
+   "A": {
+    "shows": [
+     "The Weekly Show with Jon Stewart",
+     "The MeidasTouch Podcast",
+     "Club Random with Bill Maher"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "Club Random with Bill Maher",
+     "The MeidasTouch Podcast",
+     "The Weekly Show with Jon Stewart"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "Club Random with Bill Maher",
+     "The MeidasTouch Podcast",
+     "The Weekly Show with Jon Stewart"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "The MeidasTouch Podcast",
+     "The Weekly Show with Jon Stewart",
+     "Club Random with Bill Maher"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "same_as_rule": true,
+   "reason": "All three sell ads (10, 6 and 3 advertisers found), none shows a mobile carrier already, and taste fit is high (0.889, 0.892, 0.893); the Weekly Show has the deepest ad history."
+  },
+  {
+   "brand": "Magic Spoon",
+   "category": "packaged food",
+   "model_turns": 3,
+   "error": "the model never called draft_outreach"
+  },
+  {
+   "brand": "Zocdoc",
+   "category": "health services",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "The Rich Roll Podcast"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "Keeping It Real: Conversations with Jillian Michaels",
+     "The Rich Roll Podcast"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "Keeping It Real: Conversations with Jillian Michaels",
+     "The Rich Roll Podcast"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "The Rich Roll Podcast",
+     "Keeping It Real: Conversations with Jillian Michaels"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "same_as_rule": false,
+   "reason": "Rich Roll has nine advertisers found, a health and wellness subject that suits a health service, and a taste fit of 0.875."
+  },
+  {
+   "brand": "Home Chef",
+   "category": "meal kits",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "Pillow Talks",
+     "The Carpool with Kelly and Lizz"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "The Carpool with Kelly and Lizz",
+     "Pillow Talks"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "The Carpool with Kelly and Lizz",
+     "Pillow Talks"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "The Carpool with Kelly and Lizz",
+     "Pillow Talks"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "same_as_rule": true,
+   "reason": "Pillow Talks has three advertisers found and a couples audience that suits a shared dinner product, while The Carpool has a family audience with one advertiser found; the seed entity behind this list was not verified through search, so treat the taste fit as provisional."
+  },
+  {
+   "brand": "Factor",
+   "category": "meal kits",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "Mind Pump: Raw Fitness Truth",
+     "The Model Health Show"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "The Model Health Show",
+     "Mind Pump: Raw Fitness Truth"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "The Model Health Show",
+     "Mind Pump: Raw Fitness Truth"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "Mind Pump: Raw Fitness Truth",
+     "The Model Health Show"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "same_as_rule": true,
+   "reason": "Both shows have the highest taste fit (0.933 and 0.957) in a nutrition-focused audience, and Mind Pump has four advertisers found including ButcherBox, a food delivery brand."
+  },
+  {
+   "brand": "NordVPN",
+   "category": "online privacy",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "Darknet Diaries",
+     "Lex Fridman Podcast",
+     "The Joe Rogan Experience"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "Darknet Diaries",
+     "Lex Fridman Podcast",
+     "The Joe Rogan Experience"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "Darknet Diaries",
+     "Lex Fridman Podcast",
+     "The Joe Rogan Experience"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "Philosophize This!",
+     "The Joe Rogan Experience",
+     "Darknet Diaries"
+    ],
+    "hits": 1,
+    "outside_data": 0
+   },
+   "same_as_rule": true,
+   "reason": "Darknet Diaries has the top taste fit and a subject about breaches that suits a privacy product, while Lex Fridman and Joe Rogan sell ads across many advertisers and show no rival privacy brand."
+  },
+  {
+   "brand": "Casper",
+   "category": "sleep and bedding",
+   "model_turns": 2,
+   "A": {
+    "shows": [
+     "The Tim Ferriss Show",
+     "THE ED MYLETT SHOW"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "R": {
+    "shows": [
+     "THE ED MYLETT SHOW",
+     "The Tim Ferriss Show"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "T": {
+    "shows": [
+     "The Tim Ferriss Show",
+     "THE ED MYLETT SHOW"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "P": {
+    "shows": [
+     "The Tim Ferriss Show",
+     "THE ED MYLETT SHOW"
+    ],
+    "hits": 0,
+    "outside_data": 0
+   },
+   "same_as_rule": true,
+   "reason": "Both shows sell ads and have high taste fit, and Ferriss already carries sleep brands, which shows the category works there, while Mylett has no sleep brand yet."
+  }
+ ]
+}

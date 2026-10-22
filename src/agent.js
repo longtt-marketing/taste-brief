@@ -23,8 +23,8 @@ Method:
    places are really in that city.
 4. demographics: get the age and gender skew of the seed entities (Qloo's demographics are not location-specific).
 5. podcasts: call it once with the seed entity ids and the product's category. It returns the 20 podcasts this
-   audience likes most in the US (not by city), with the advertisers found in each show's episode notes and the brands
-   of the category found there.
+   audience likes most in Qloo's podcast catalogue (mostly US shows; the same for every city), each with its description
+   and tags, the advertisers found in its episode notes and the brands of the category found there.
 6. draft_outreach: choose up to three shows to ask for rates first and call it with their exact names and one sentence of
    reason. Weigh four things and name the ones that decided it: does the show sell ads (advertisers found; one is thin
    evidence, many is strong); is a brand of the category already there (it may hold exclusivity, or it may show the

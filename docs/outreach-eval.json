@@ -508,5 +508,14 @@
    "asked": 1,
    "sameness": null
   }
- ]
+ ],
+ "sameness_note": "Mean word overlap (Jaccard) between the drafts of one product, after taking out each show's name and code; only products with two or more drafts (6 of 10 here).",
+ "sameness_before_per_show_prompt": {
+  "email_body": 0.961,
+  "host_read": 0.821,
+  "products": 6,
+  "source": "the drafts of the run of 22 Oct 05:09 UTC (earlier.run_at), before drafts were written from each show's description; computed from its full drafts, kept outside the repo because they quote Qloo results"
+ },
+ "known_issue": "Monarch Money matched the Qloo brand 'Money' (seed_matched_exactly false), so its drafts name the wrong reference brand.",
+ "false_alarm": "The one failed draft is flagged for '40' from E-40, an artist's name Qloo returned; the draft invents no number."
 }
