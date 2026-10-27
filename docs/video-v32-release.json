@@ -1,0 +1,45 @@
+{
+  "verifiedAt": "2026-10-27T14:41:37.739085+00:00",
+  "version": "v32",
+  "durationSeconds": 124.854687,
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "checks": [
+    {
+      "url": "https://taste-brief.thelongmarketing.workers.dev/judge",
+      "status": 200,
+      "bytes": 46420,
+      "sha256": "acdc406d1d33a8b45d087b2978b0c71c3a5dd2c80596f582b2bd2ce3437b7e52",
+      "matchesLocal": true
+    },
+    {
+      "url": "https://taste-brief.thelongmarketing.workers.dev/walkthrough/taste-brief-v32.mp4",
+      "status": 200,
+      "bytes": 16650578,
+      "sha256": "848df979bbabebbc6d0b597d90cfbb0fbec868019292be7b5d3d69b757db1cee",
+      "matchesLocal": true
+    },
+    {
+      "url": "https://taste-brief.thelongmarketing.workers.dev/walkthrough/taste-brief-v32.en.srt",
+      "status": 200,
+      "bytes": 3624,
+      "sha256": "b363a6339d305cad038e854ea6794fd351d2f333e0ac93102bb416d02e49d45e",
+      "matchesLocal": true
+    }
+  ],
+  "workerVersion": "9ba3a1a2-cdb1-41bb-a03c-e0f8f6c0bac8",
+  "bodyAudio": {
+    "integratedLUFS": -16.34,
+    "truePeakDb": -1.45
+  },
+  "format": "Edited actual UI captures, motion graphics, illustrative AI opening, generated studio still and synthetic narration",
+  "fullDecodePassed": true,
+  "sceneProofsReviewed": 11,
+  "colorRangeMismatchFixed": true,
+  "youtubeUrl": "https://youtu.be/GJhJsQ5ahnQ",
+  "youtubePublished": true,
+  "devpostVerified": false,
+  "youtubePublishedAt": "2026-10-27",
+  "previousUpload": "PID4J49RIKk remains private; superseded before publication after shortening the opening"
+}
