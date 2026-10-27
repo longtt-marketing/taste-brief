@@ -41,17 +41,7 @@
     "mode": "replay",
     "scope": "podcasts",
     "product": "Specialty coffee subscription, $25/month",
-    "recordedAt": {
-      "at": "2026-10-27T09:33:34.795Z",
-      "version": "local-development",
-      "source": "local real-provider run",
-      "inputs": {
-        "product": "Specialty coffee subscription, $25/month",
-        "market": "Austin, TX",
-        "compare_market": "",
-        "references": "Blue Bottle Coffee"
-      }
-    }
+    "recordedAt": "2026-10-27T09:33:34.795Z"
   },
   "productionSmoke": {
     "at": "2026-10-27T12:44:47.201Z",
@@ -73,5 +63,32 @@
     "Single production smoke run is not a reliability estimate",
     "No independent buyer pilot, campaign outcome or forward-study result",
     "Competitor review does not establish an overall contest ranking"
-  ]
+  ],
+  "publicSource": {
+    "commit": "2086faf7d3bb15344ebd06b75a7a205da1b5b95d",
+    "ci": "https://github.com/longtt-marketing/taste-brief/actions/runs/40509364710",
+    "conclusion": "success"
+  },
+  "submission": {
+    "verifiedAt": "2026-10-27T14:12:42.796Z",
+    "url": "https://devpost.com/software/taste-brief-s4k0cg",
+    "title": "Taste Brief: The Sponsorship Decision Desk",
+    "status": "SUBMITTED",
+    "completedSteps": 5,
+    "totalSteps": 5,
+    "storyMatchesSource": true,
+    "screenshotCount": 5,
+    "screenshotOrder": [
+      "start",
+      "shortlist",
+      "scenario",
+      "price change",
+      "unknown terms"
+    ],
+    "publicEmbedId": "rAXJTU69WJc",
+    "videoUrl": "https://www.youtube.com/watch?v=rAXJTU69WJc",
+    "browser": "Chrome Work",
+    "saveConfirmation": "Your edits have been saved!",
+    "localEvidence": ".results/release-2026-10-27/"
+  }
 }
