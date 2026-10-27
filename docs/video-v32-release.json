@@ -1,5 +1,5 @@
 {
-  "verifiedAt": "2026-10-27T14:41:37.739085+00:00",
+  "verifiedAt": "2026-10-27T15:11:59.125650+00:00",
   "version": "v32",
   "durationSeconds": 124.854687,
   "width": 1920,
@@ -41,5 +41,11 @@
   "youtubePublished": true,
   "devpostVerified": false,
   "youtubePublishedAt": "2026-10-27",
-  "previousUpload": "PID4J49RIKk remains private; superseded before publication after shortening the opening"
+  "previousUpload": "PID4J49RIKk remains private; superseded before publication after shortening the opening",
+  "sourceCommit": "9ce656e36b3ad46c2663365ee0892b14b5597f32",
+  "ci": {
+    "url": "https://github.com/longtt-marketing/taste-brief/actions/runs/40528376609",
+    "conclusion": "success"
+  },
+  "devpostBlocker": "Cloudflare security verification on the project edit page in Chrome Work; previous rAXJTU69WJc embed unchanged"
 }
