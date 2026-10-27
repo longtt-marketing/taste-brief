@@ -15,7 +15,7 @@ The historical study below tests Qloo against outside sponsorship labels, not ca
 **31 / 33 / 36 seconds** in the latest requested round. Earlier 35 / 29 / 49-second attempts remain. The first turntable run was rejected after source review caught an ended show; its rerun
 passed correctness but missed the 45-second timing target. See [all attempts](docs/podcast-focus-results.json),
 [decision logic and browser QA](docs/decision-desk.md), and [scenario results](docs/decision-desk-results.json).
-These changes are local until publication; the old online demo/video may differ.
+The release pairs this source with the 27 October recorded coffee run and the [current walkthrough](https://taste-brief.thelongmarketing.workers.dev/walkthrough/taste-brief-v31.mp4). The walkthrough uses actual browser captures and synthetic narration; quoted scenario terms are invented. The 22 October full-analysis record remains historical evidence.
 
 Built for the [Qloo Agentic Hackathon](https://qloo.devpost.com/).
 

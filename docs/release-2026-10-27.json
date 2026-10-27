@@ -1,0 +1,77 @@
+{
+  "verifiedAt": "2026-10-27T13:04:53.955Z",
+  "checks": [
+    {
+      "url": "https://taste-brief.thelongmarketing.workers.dev/",
+      "status": 200,
+      "bytes": 103576,
+      "sha256": "7e10391c1f4bdb9a9d49f373e05bcb8dd13b380d5b5ecd5b90763a323e1cf71f",
+      "matchesLocal": true
+    },
+    {
+      "url": "https://taste-brief.thelongmarketing.workers.dev/judge",
+      "status": 200,
+      "bytes": 46310,
+      "sha256": "853fac85131b8f85beb1dc912f4ed5638a68a14db11b27fc3cb8f560dea7e879",
+      "matchesLocal": true
+    },
+    {
+      "url": "https://taste-brief.thelongmarketing.workers.dev/quote-decision.js",
+      "status": 200,
+      "bytes": 15161,
+      "sha256": "528eaf2bf48158976409a96c0adf0817b9b7fb9b68a5e060f4f302d6920c9dbc",
+      "matchesLocal": true
+    },
+    {
+      "url": "https://taste-brief.thelongmarketing.workers.dev/quote-desk.js",
+      "status": 200,
+      "bytes": 19993,
+      "sha256": "e1d86d22b275af5fa251651e5351a8916eaa86488751f15db21bca3a2c4a89c4",
+      "matchesLocal": true
+    },
+    {
+      "url": "https://taste-brief.thelongmarketing.workers.dev/walkthrough/taste-brief-v31.mp4",
+      "status": 200,
+      "bytes": 5301622,
+      "sha256": "90b1b9c202a6f062d62d2d10780947d28096c71843c01021d3adb4c7ee10b54d",
+      "matchesLocal": true
+    }
+  ],
+  "publicReplay": {
+    "mode": "replay",
+    "scope": "podcasts",
+    "product": "Specialty coffee subscription, $25/month",
+    "recordedAt": {
+      "at": "2026-10-27T09:33:34.795Z",
+      "version": "local-development",
+      "source": "local real-provider run",
+      "inputs": {
+        "product": "Specialty coffee subscription, $25/month",
+        "market": "Austin, TX",
+        "compare_market": "",
+        "references": "Blue Bottle Coffee"
+      }
+    }
+  },
+  "productionSmoke": {
+    "at": "2026-10-27T12:44:47.201Z",
+    "mode": "live",
+    "scope": "podcasts",
+    "seconds": 26,
+    "shows": [
+      "The Sporkful",
+      "Home Cooking"
+    ],
+    "passed": true
+  },
+  "walkthrough": {
+    "youtube": "https://youtu.be/rAXJTU69WJc",
+    "durationSeconds": 134.29,
+    "format": "Actual browser still captures; synthetic narration; invented scenario terms explicitly labelled"
+  },
+  "limits": [
+    "Single production smoke run is not a reliability estimate",
+    "No independent buyer pilot, campaign outcome or forward-study result",
+    "Competitor review does not establish an overall contest ranking"
+  ]
+}
