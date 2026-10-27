@@ -43,18 +43,23 @@ export async function pickRival(qloo, brief, registry, seeds) {
 export function makeSelfCheck({ qloo, market, meta = null }) {
   let rival; // chosen once per run, so the revised brief is checked on the same audience
   return async (brief, { registry, seeds }) => {
-    rival = rival || await pickRival(qloo, brief, registry, seeds);
     const names = list(brief.meta_interests).map((i) => clean(i?.interest)).filter(Boolean);
-    const inMeta = meta && names.length ? await meta(names).catch(() => null) : null;
+    // Meta and Qloo are independent providers; overlap their work without changing either verdict.
+    const [inMeta, graded] = await Promise.all([
+      meta && names.length ? Promise.resolve().then(() => meta(names)).catch(() => null) : null,
+      (async () => {
+        rival = rival || await pickRival(qloo, brief, registry, seeds);
+        if (!rival) return null;
+        const known = new Map(list(registry).map((e) => [norm(e.name), e]));
+        return gradePicks(qloo, names, [rival.entity_id], market, known);
+      })(),
+    ]);
     const metaOf = (n) => (inMeta?.get(n) ? { meta: inMeta.get(n).status, ...(inMeta.get(n).nearest?.length ? { meta_nearest: inMeta.get(n).nearest } : {}) } : {});
     const notInMeta = (ps) => ps.filter((p) => p.meta === "not_found").map((p) => p.name);
     if (!rival) {
       const picks = names.map((name) => ({ name, verdict: "unchecked", ...metaOf(name) }));
       return { rival: null, picks, weak: [], not_in_meta: notInMeta(picks) };
     }
-    // the entity the run itself returned under that name comes first, so a pick is never graded as a namesake
-    const known = new Map(list(registry).map((e) => [norm(e.name), e]));
-    const graded = await gradePicks(qloo, names, [rival.entity_id], market, known);
     const picks = graded.map((g) => ({ name: g.name, affinity: g.affinity, verdict: verdictOf(g), qloo_name: g.match?.name || null, ...metaOf(g.name) }));
     return { rival, picks, weak: picks.filter((p) => p.verdict === "weak" || p.verdict === "not_in_qloo").map((p) => p.name), not_in_meta: notInMeta(picks) };
   };
@@ -72,5 +77,5 @@ export function feedback(report) {
   const looked = report.picks.some((p) => p.meta) ? ", and each was looked up in Meta's interest search" : "";
   return `Self-check before the brief is shown: ${head}${looked}.
 ${lines.join("\n")}
-${weak.length ? `Weak or not in Qloo: ${weak.join(", ")}. ` : ""}${missing.length ? `Not in Meta, so a buyer cannot target them: ${missing.join(", ")}. ` : ""}Replace each with a result you already have from Qloo that fits this product and that Meta is likely to have (use Meta's exact name when it is listed above), or drop it. No targeting test may name an interest that is not in Meta: rewrite or drop those tests. Keep everything else. Then call submit_brief again with the full brief.`;
+${weak.length ? `Weak or not in Qloo: ${weak.join(", ")}. ` : ""}${missing.length ? `Not in Meta, so a buyer cannot target them: ${missing.join(", ")}. ` : ""}Replace each with a result you already have from Qloo that fits this product and that Meta is likely to have (use Meta's exact name when it is listed above), or drop it. No targeting test may name an interest that is not in Meta: rewrite or drop those tests. Call revise_interests with the complete replacement meta_interests and test_plan lists. Other sections are retained by the app and rechecked; do not resend or shorten them.`;
 }

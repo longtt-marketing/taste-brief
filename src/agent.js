@@ -4,35 +4,56 @@ import { sourcesFrom, registryFrom, annotateBrief, checkEvidence } from "./evide
 import { INSIGHT_TYPES } from "./qloo.js";
 import CATS from "./data/categories.json" with { type: "json" };
 import { feedback, needsRewrite } from "./selfcheck.js";
+import { rethrowIdentityError } from "./provider-integrity.js";
+import { RULE } from "../public/verdict.js";
 
 export const CATEGORIES = Object.keys(CATS.categories);
+const QLOO_READ_TOOLS = new Set(["search", "tags", "insights", "demographics"]);
+const PODCAST_TOOLS = new Set(["search", "podcasts", "draft_outreach"]);
+export const podcastTools = () => TOOLS.filter((t) => PODCAST_TOOLS.has(t.name));
+export const PODCAST_SYSTEM = `You help a media buyer shortlist podcast sponsors using Qloo.
+Resolve 1-3 actual Qloo seed entities with search, using the reference brand if supplied. Reject wrong-name matches.
+Call podcasts with their exact entity ids and the product category. Its catalogue is mostly US shows and is not
+city-specific. Read the descriptions, taste affinity, popularity, advertiser observations, availability and buyer policy.
+Then call draft_outreach with up to three exact show names and a short reason naming the deciding tradeoffs.
+Respect excluded shows and rival policy. Category advertisers may indicate demand or an exclusivity issue, never
+confirmed availability. Popularity is Qloo catalogue popularity, never downloads. Affinity is taste overlap, never
+conversion likelihood. Prioritize a coherent fit for this product and price, not just the largest affinity number.
+The draft tool checks the requests and host reads. Correct a failed choice or draft if it reports a problem.
+A successful checked draft finishes this podcast-only task. Do not generate Meta interests or a campaign brief.
+No quote prices, purchases, audience reach, performance claims or product facts may be invented.`;
 
 export const SYSTEM = `You are Taste Brief, a strategist for performance marketers.
 Given a product and a market, you use Qloo's taste graph to find whose tastes overlap with the product and what else
 that audience loves, then you write a campaign brief grounded ONLY in what Qloo returned.
 
 Method:
+Prioritize the podcast buying task: after resolving the seed, call podcasts and draft_outreach before the broader
+audience and Meta exploration. Do not delay the shortlist for the optional comparison. Never skip the remaining brief.
+Batch independent Qloo reads in one turn when their inputs are already known.
 1. search: find 1-3 Qloo entities that stand for the product: the product or brand itself if Qloo knows it, else the
    closest comparable brands (use the reference brands when given). If a search match is clearly the wrong thing (a
    magazine for a shoe brand), do not use it, and say so in caveats.
-2. tags: look up 1 or 2 Qloo tags for the product category itself (e.g. "running" for running shoes, "coffee" for a
-   coffee subscription); prefer brand or keyword tags. Then make at least one insights call that passes those tag_ids
-   together with the seed entity_ids, so the brief reflects the product and not only the comparable brand.
-3. insights: from the seed entity ids, pull cross-domain affinities in the market: at least brands, artists and one of
-   tv_show / movie / podcast. Pass the market as location. For places, also pass filter_location = the city, so the
-   places are really in that city.
-4. demographics: get the age and gender skew of the seed entities (Qloo's demographics are not location-specific).
-5. podcasts: call it once with the seed entity ids and the product's category. It returns the 20 podcasts this
+2. podcasts: call it once with the seed entity ids and the product's category. It returns the 20 podcasts this
    audience likes most in Qloo's podcast catalogue (mostly US shows; the same for every city), each with its description
    and tags, the advertisers found in its episode notes and the brands of the category found there.
-6. draft_outreach: choose up to three shows to ask for rates first and call it with their exact names and one sentence of
+3. draft_outreach: choose up to three shows to ask for rates first and call it with their exact names and one sentence of
    reason. Weigh five things and name the ones that decided it: does the show sell ads (advertisers found; one is thin
    evidence, many is strong); is a brand of the category already there (it may hold exclusivity, or it may show the
    category works on that show; if the result carries a buyer_policy that skips such shows, never choose them); does the show's subject and tone suit this product and price; taste fit; and
-   popularity (Qloo's 0 to 1 measure of how widely the show is liked, the nearest thing to reach you have). Skip a
+   popularity (Qloo's catalogue measure of how widely the show is liked, not downloads or local reach). Skip a
    show whose subject plainly clashes with the product (a children's show for alcohol). It writes a rate request and a
    host-read script for each and tells you whether each draft passed its checks.
-7. submit_brief. Rules for every item:
+4. tags: look up 1 or 2 Qloo tags for the product category itself (e.g. "running" for running shoes, "coffee" for a
+   coffee subscription); prefer brand or keyword tags. Then make at least one insights call that passes those tag_ids
+   together with the seed entity_ids, so the brief reflects the product and not only the comparable brand.
+5. insights: from the seed entity ids, pull cross-domain affinities in the market: at least brands, artists and one of
+   tv_show / movie / podcast. Pass the market as location. For places, also pass filter_location = the city, so the
+   places are really in that city.
+6. demographics: get the age and gender skew of the seed entities (Qloo's demographics are not location-specific).
+7. submit_brief. Submit the FULL brief, including at least two cited audience_traits and two meta_interests, on the
+   first submission. After interest-only self-check feedback use revise_interests, which preserves the other sections.
+   If feedback flags citations in any other section, use submit_brief with the FULL corrected brief instead. Rules for every item:
    - entity_ids: the Qloo entity_id(s) of the results the item rests on, copied exactly from the tool output. Cite the
      non-seed results that support the item. A seed may be cited only for an item about the seed itself.
    - evidence: short notes in the form "Name (affinity 0.956)", using the exact numbers Qloo returned.
@@ -45,12 +66,14 @@ Method:
      from the control, so a difference can be traced to it: variable = "creative" (a new angle, shown to the control's
      broad audience) or "targeting" (Qloo interests, shown the control's usual creative). hypothesis = what the Qloo
      results suggest; ad_set = exactly what this test changes; why = in one sentence, what a plain guess about this product
-     would miss that these Qloo results show; kpi = cost per add to cart (CTR only as a diagnostic); stop_if = an
-     exploratory pause rule with a spend cap per arm, in the market's currency, e.g. "Up to 300 per arm. Pause as worse if
-     cost per add to cart is 30% above the control once each arm has 20 add to carts. If an arm hits the cap first, the
-     result is inconclusive, not a loss." It is a rule for spending a small budget, not proof. For variable "targeting",
-     ad_set names the Qloo interests it targets; for "creative", it keeps the control's broad audience and names no
-     interests. Qloo
+     would miss that these Qloo results show. The app supplies the fixed KPI and exploratory spending rule; do not
+     generate kpi or stop_if fields. For variable "targeting",
+     targeting_entity_ids lists exactly the cited Qloo interests to target, and ad_set names those same interests.
+     Keep supporting citations out of targeting_entity_ids unless they are actually targeted. For "creative",
+     targeting_entity_ids is empty, creative_copy contains the EXACT proposed ad copy (never the hypothesis), and ad_set
+     keeps the control's broad audience and names no interests. For targeting tests creative_copy is an empty string.
+     Qloo affinity cannot substantiate product quality, superiority, endorsements, materials or performance. Never
+     equate the product to a cited brand's quality. A buyer must review creative_copy before locking it. Qloo
      adds hypotheses to test against the control; it does not replace it. Prefer interests big enough to reach in that
      market. Cite the results each test rests on. If the Qloo results show nothing a plain guess would not, propose one
      test and say so in caveats.
@@ -81,7 +104,11 @@ const strictSchema = (node) => {
   if (!node || typeof node !== "object") return node;
   const out = {};
   for (const [k, v] of Object.entries(node)) if (k !== "minItems" && k !== "maxItems") out[k] = strictSchema(v);
-  if (out.type === "object") out.additionalProperties = false;
+  if (out.type === "object") {
+    out.additionalProperties = false;
+    // Optional object keys multiply grammar branches. Empty lists/strings represent absent content instead.
+    out.required = Object.keys(out.properties || {});
+  }
   return out;
 };
 
@@ -132,6 +159,20 @@ export const TOOLS = [
     input_schema: { type: "object", properties: { shows: strArr, reason: str }, required: ["shows", "reason"] },
   },
   {
+    name: "revise_interests",
+    description: "After self-check feedback only: replace the full Meta-interest list and test plan. All other sections of the original brief are preserved and rechecked. Never use for the initial brief.",
+    // Keep one strict finishing schema: two exceed the provider grammar budget. The revision is still normalized,
+    // merged into the original brief, checked for completeness and checked against every Qloo citation below.
+    input_schema: {
+      type: "object",
+      properties: {
+        meta_interests: cited({ interest: str }),
+        test_plan: cited({ hypothesis: str, variable: { type: "string", enum: ["creative", "targeting"] }, targeting_entity_ids: strArr, creative_copy: str, ad_set: str, why: str }),
+      },
+      required: ["meta_interests", "test_plan"],
+    },
+  },
+  {
     name: "submit_brief",
     description: "Finish. Submit the campaign brief. Every item must cite Qloo evidence.",
     // strict: the API makes the input match the schema. Without it, 2 of 3 live runs (21/10) sent a list item as a
@@ -146,7 +187,7 @@ export const TOOLS = [
         creative_angles: cited({ angle: str, hook: str }),
         landing_page: { type: "object", properties: { headline: str, subheadline: str, entity_ids: strArr, evidence: strArr } },
         partnerships: cited({ partner: str, idea: str }),
-        test_plan: { ...cited({ hypothesis: str, variable: { type: "string", enum: ["creative", "targeting"] }, ad_set: str, why: str, kpi: str, stop_if: str }), minItems: 1, maxItems: 3 },
+        test_plan: { ...cited({ hypothesis: str, variable: { type: "string", enum: ["creative", "targeting"] }, targeting_entity_ids: strArr, creative_copy: str, ad_set: str, why: str }), minItems: 1, maxItems: 3 },
         caveats: strArr,
         holdout_rival: { type: "string", description: "one to three direct competitors you did not use, comma separated; your Meta interests are scored on the first one Qloo knows" },
         category: { type: "string", enum: [...CATEGORIES, "other"] },
@@ -165,7 +206,9 @@ export const TOOLS = [
  *  are weak the agent gets the report once and submits again, and the second report is the one shown. */
 /** actions (optional): {podcasts, draft_outreach} handlers, (input, {registry}) -> result for the model; without them
  *  those tools answer that they are not available in this run. */
-export async function runAgent({ llm, qloo, product, market, references = "", maxSteps = 12, onStep = () => {}, check = null, actions = null }) {
+export async function runAgent({ llm, qloo, product, market, references = "", maxSteps = 12, onStep = () => {}, check = null, actions = null, focus = "full" }) {
+  const podcastOnly = focus === "podcasts";
+  let podcastReady = false;
   const messages = [{
     role: "user",
     content: `Product: ${product}\nMarket: ${market}\nReference brands or competitors (optional): ${references || "none"}`,
@@ -174,7 +217,7 @@ export async function runAgent({ llm, qloo, product, market, references = "", ma
   const seen = [];
   const calls = []; // {tool, input, output} of every successful Qloo call: the evidence registry is built from these
   let rejected = 0;
-  let firstCheck = null, firstResult = null; // the first usable brief is kept until a rewrite succeeds
+  let firstCheck = null, firstResult = null, firstBrief = null; // keep the original until a rewrite succeeds
   const finish = (brief, incomplete, selfCheck) => {
     const reg = registryFrom(calls);
     const demo = calls.find((c) => c.tool === "demographics" && c.output?.length);
@@ -194,13 +237,40 @@ export async function runAgent({ llm, qloo, product, market, references = "", ma
     messages.push({ role: "assistant", content: turn.raw });
     if (!turn.calls.length) {
       // the model stopped without the finishing tool: ask once more, then give up
-      messages.push({ role: "user", content: "Finish now by calling submit_brief with what you have." });
+      messages.push({ role: "user", content: podcastOnly ? "Finish the podcast shortlist using podcasts and draft_outreach. Use only returned show names." : "Finish now by calling submit_brief with what you have." });
       continue;
     }
     const results = [];
-    for (const call of turn.calls) {
-      if (call.name === "submit_brief") {
-        const brief = normalizeBrief(call.input);
+    for (let callIndex = 0; callIndex < turn.calls.length; callIndex++) {
+      const call = turn.calls[callIndex];
+      if (podcastOnly && !PODCAST_TOOLS.has(call.name)) {
+        results.push({ id: call.id, name: call.name, content: JSON.stringify({ error: "This is a podcast-only run. Use search, podcasts and draft_outreach." }) });
+        continue;
+      }
+      // Reads in one model turn already have explicit inputs. Only a contiguous group of read-only Qloo tools may
+      // overlap; actions and submit_brief are barriers. Preserve request order in the trace and evidence registry.
+      if (QLOO_READ_TOOLS.has(call.name)) {
+        const batch = [call];
+        while (QLOO_READ_TOOLS.has(turn.calls[callIndex + 1]?.name) && (!podcastOnly || PODCAST_TOOLS.has(turn.calls[callIndex + 1]?.name))) batch.push(turn.calls[++callIndex]);
+        const completed = await Promise.all(batch.map(async (entry) => {
+          try { return { entry, out: await qloo[entry.name](entry.input) }; }
+          catch (e) { rethrowIdentityError(e); return { entry, out: { error: String(e.message || e) } }; }
+        }));
+        for (const { entry, out } of completed) {
+          if (!out?.error) { seen.push(out); calls.push({ tool: entry.name, input: entry.input, output: out }); }
+          trace.push({ tool: entry.name, input: entry.input, n: Array.isArray(out) ? out.length : undefined, error: out?.error });
+          onStep(trace.at(-1));
+          results.push({ id: entry.id, name: entry.name, content: JSON.stringify(out).slice(0, 6000) });
+        }
+        continue;
+      }
+      if (call.name === "submit_brief" || call.name === "revise_interests") {
+        if (call.name === "revise_interests" && !firstBrief) {
+          results.push({ id: call.id, name: call.name, content: JSON.stringify({ error: "No brief to revise. Call submit_brief first." }) });
+          continue;
+        }
+        const brief = normalizeBrief(call.name === "revise_interests"
+          ? { ...firstBrief, meta_interests: call.input?.meta_interests, test_plan: call.input?.test_plan } : call.input);
         const problem = briefProblem(brief);
         // A real run (20/10, London) once sent tool-call markup inside a field and a one-item brief: send it back once
         // or twice instead of accepting it; after that, return what came so the evidence gate can flag it.
@@ -219,14 +289,19 @@ export async function runAgent({ llm, qloo, product, market, references = "", ma
         if (incomplete && firstResult) return firstResult;
         const reg = registryFrom(calls);
         let selfCheck = null;
+        const citationCheck = summary(checkEvidence(brief, reg));
+        const citationProblems = citationCheck.flagged;
         if (check && !incomplete) {
-          const report = await check(brief, { registry: [...reg.entities.values()], seeds: [...reg.seeds] }).catch((e) => ({ error: String(e.message || e) }));
+          const report = await check(brief, { registry: [...reg.entities.values()], seeds: [...reg.seeds] }).catch((e) => { rethrowIdentityError(e); return { error: String(e.message || e) }; });
           trace.push({ tool: "self_check", rival: report.rival?.name, n: report.picks?.length, weak: report.weak?.length, not_in_meta: report.not_in_meta?.length, error: report.error });
           onStep(trace.at(-1));
-          if (!firstCheck && needsRewrite(report) && step < maxSteps - 1) {
+          if (!firstCheck && (needsRewrite(report) || citationProblems.length) && step < maxSteps - 1) {
             firstCheck = report;
+            firstBrief = structuredClone(brief);
             firstResult = finish(brief, null, { first: report, final: report, revised: false, rewrite_failed: true });
-            results.push({ id: call.id, name: call.name, content: feedback(report) });
+            const citationFeedback = citationProblems.length
+              ? `\nCitation repair is also required: ${JSON.stringify(citationProblems)}. The interest-only revision cannot fix other sections. Call submit_brief with the FULL corrected brief instead. Copy entity ids and numbers exactly from the tool results; drop an unsupported optional claim rather than inventing evidence. All sections will be checked again.` : "";
+            results.push({ id: call.id, name: call.name, content: feedback(report) + citationFeedback });
             continue;
           }
           selfCheck = report.error ? { error: report.error } : { first: firstCheck || report, final: report, revised: !!firstCheck };
@@ -237,16 +312,22 @@ export async function runAgent({ llm, qloo, product, market, references = "", ma
       if (call.name === "podcasts" || call.name === "draft_outreach") {
         // the agent's own buying steps: handled by the app, not by Qloo directly; their results are not citations
         out = actions?.[call.name]
-          ? await actions[call.name](call.input || {}, { registry: [...registryFrom(calls).entities.values()] }).catch((e) => ({ error: String(e.message || e) }))
+          ? await actions[call.name](call.input || {}, { registry: [...registryFrom(calls).entities.values()] }).catch((e) => { rethrowIdentityError(e); return { error: String(e.message || e) }; })
           : { error: "not available in this run" };
         trace.push({ tool: call.name, input: call.input, n: out?.n, error: out?.error });
         onStep(trace.at(-1));
         results.push({ id: call.id, name: call.name, content: JSON.stringify(out?.for_model ?? out).slice(0, 6000) });
+        if (call.name === "podcasts") podcastReady = !out?.error && out?.n > 0;
+        if (podcastOnly && podcastReady && call.name === "draft_outreach" && !out?.error && out?.n > 0
+          && out.for_model?.checks?.length === out.n && out.for_model.checks.every((x) => x.passed === true)) {
+          return { ...finish({}, null, null), scope: "podcasts" };
+        }
         continue;
       }
       try {
         out = await qloo[call.name](call.input);
       } catch (e) {
+        rethrowIdentityError(e);
         out = { error: String(e.message || e) };
       }
       if (!out?.error) { seen.push(out); calls.push({ tool: call.name, input: call.input, output: out }); }
@@ -257,7 +338,7 @@ export async function runAgent({ llm, qloo, product, market, references = "", ma
     messages.push({ role: "tool", results });
   }
   if (firstResult) return firstResult; // the agent never sent its rewrite: keep the first brief
-  throw new Error(`agent did not submit a brief in ${maxSteps} steps`);
+  throw new Error(podcastOnly ? `agent did not complete a checked podcast shortlist in ${maxSteps} steps` : `agent did not submit a brief in ${maxSteps} steps`);
 }
 
 export const BASELINE_SYSTEM = `You are a marketing strategist with no data access. Write the same campaign brief from general knowledge only.
@@ -320,6 +401,8 @@ export function briefProblem(brief) {
       if (typeof item?.[key] !== "string" || !item[key].trim()) return `test_plan item ${n + 1} must include a non-empty ${key}`;
     }
     if (!["creative", "targeting"].includes(item.variable)) return `test_plan item ${n + 1}: variable must be "creative" or "targeting"`;
+    if (item.variable === "targeting" && (!Array.isArray(item.targeting_entity_ids) || !item.targeting_entity_ids.length)) return `test_plan item ${n + 1}: include explicit targeting_entity_ids`;
+    if (item.variable === "creative" && ids(item.targeting_entity_ids).length) return `test_plan item ${n + 1}: creative keeps targeting_entity_ids empty`;
   }
   const items = ["audience_traits", "meta_interests", "creative_angles", "partnerships", "test_plan"].flatMap((k) => brief[k]);
   const uncited = items.filter((i) => !ids(i?.entity_ids).length).length;
@@ -352,6 +435,13 @@ export function normalizeBrief(b) {
     return o;
   };
   for (const k of LIST_FIELDS) if (k !== "caveats") out[k] = out[k].map(fix);
+  // A model cannot attest that a buyer reviewed its copy. Only the explicit browser review can create this field.
+  out.test_plan = out.test_plan.map((it) => {
+    if (!it || typeof it !== "object") return it;
+    const { creative_review, ...unreviewed } = it;
+    return { ...unreviewed, kpi: "Cost per add to cart (CTR only as a diagnostic)",
+      stop_if: `Up to ${RULE.cap} per arm in the account currency. Pause as worse if cost per add to cart is ${RULE.worseBy * 100}% above control once both arms have ${RULE.minAddsToCart} adds to cart. Hitting the cap first is inconclusive.` };
+  });
   for (const k of OBJ_FIELDS) if (out[k]) out[k] = fix(out[k]);
   out.caveats = out.caveats.map((c) => (typeof c === "string" ? c : JSON.stringify(c)));
   return out;

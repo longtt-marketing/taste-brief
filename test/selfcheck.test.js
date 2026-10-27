@@ -7,6 +7,84 @@ import { makeSelfCheck, verdictOf, pickRival, feedback } from "../src/selfcheck.
 import { resolvePick } from "../src/grade.js";
 import { categoryFor, rivalsIn } from "../src/podcasts.js";
 
+test("citation failures join self-check feedback even when all interests pass", async () => {
+  for (const repair of [true, false]) {
+    const inner = mockLLM(); let cleanBrief, feedbackSeen = false;
+    const llm = async (messages) => {
+      const note = messages.at(-1)?.results?.find((r) => String(r.content).includes("Citation repair is also required"));
+      if (note) {
+        feedbackSeen = true;
+        assert.match(note.content, /FULL corrected brief/);
+        assert.match(note.content, /audience_traits/);
+        const input = structuredClone(cleanBrief);
+        if (!repair) input.audience_traits[0].entity_ids = ["invented-id"];
+        const call = { id: "repair", name: "submit_brief", input };
+        return { calls: [call], raw: [{ type: "tool_use", ...call }] };
+      }
+      const turn = await inner(messages);
+      const submit = turn.calls.find((x) => x.name === "submit_brief");
+      if (submit) {
+        cleanBrief = structuredClone(submit.input);
+        submit.input.audience_traits[0].entity_ids = ["invented-id"];
+      }
+      return turn;
+    };
+    const result = await runAgent({ llm, qloo: mockQloo(), product: "Wool sneakers", market: "London",
+      check: async () => ({ picks: [], weak: [], not_in_meta: [] }) });
+    assert.equal(feedbackSeen, true);
+    assert.equal(result.check.ratio === 1, repair);
+    if (!repair) assert.equal(result.brief.audience_traits[0].grounded, false, "failed repair stays visibly unverified");
+  }
+});
+
+test("self-check overlaps providers and keeps the same rival across revisions", async () => {
+  let metaStarted = false, releaseRival, searches = 0;
+  const qloo = {
+    search: () => { searches++; return new Promise((resolve) => { releaseRival = resolve; }); },
+    insights: async ({ result_ids }) => result_ids.map((entity_id) => ({ entity_id, affinity: 0.95 })),
+  };
+  const check = makeSelfCheck({ qloo, market: "London", meta: async (names) => {
+    metaStarted = true; return new Map(names.map((name) => [name, { status: "not_found" }]));
+  } });
+  const context = { seeds: ["seed"], registry: [{ entity_id: "pick", name: "Pick", type: "urn:entity:brand" }] };
+  const brief = { holdout_rival: "Rival", meta_interests: [{ interest: "Pick", entity_ids: ["pick"] }] };
+  const pending = check(brief, context);
+  await Promise.resolve();
+  assert.equal(metaStarted, true, "Meta begins while the rival request is unresolved");
+  releaseRival([{ entity_id: "rival", name: "Rival", type: "urn:entity:brand" }]);
+  const first = await pending;
+  const second = await check({ ...brief, holdout_rival: "Different" }, context);
+  assert.equal(searches, 1);
+  assert.deepEqual(second.rival, first.rival);
+  assert.equal(first.picks[0].verdict, "strong");
+  assert.deepEqual(first.not_in_meta, ["Pick"], "good Qloo fit never overrides a missing Meta interest");
+});
+
+test("revision patch keeps other sections but rechecks every replaced interest and test", async () => {
+  const inner = mockLLM(); let original, checks = 0;
+  const llm = async (messages) => {
+    if (messages.at(-1)?.results?.some((r) => String(r.content).startsWith("Self-check"))) {
+      const input = { meta_interests: original.meta_interests.map((x, i) => i ? x : { ...x, interest: "Invented unrelated interest" }),
+        test_plan: original.test_plan, audience_traits: [], audience_summary: "MUST NOT REPLACE" };
+      const call = { id: "patch", name: "revise_interests", input };
+      return { calls: [call], raw: [{ type: "tool_use", ...call }] };
+    }
+    const turn = await inner(messages);
+    const submitted = turn.calls.find((c) => c.name === "submit_brief");
+    if (submitted) original = structuredClone(submitted.input);
+    return turn;
+  };
+  const out = await runAgent({ llm, qloo: mockQloo(), product: "Wool sneakers", market: "London", check: async () => {
+    checks++; return { picks: [], weak: checks === 1 ? ["replace"] : [] };
+  } });
+  assert.deepEqual(out.brief.audience_traits.map((t) => t.trait), original.audience_traits.map((t) => t.trait));
+  assert.equal(out.brief.audience_summary, original.audience_summary);
+  assert.equal(checks, 2);
+  assert.equal(out.incomplete, null);
+  assert.equal(out.brief.meta_interests[0].grounded, false, "partial revision cannot bypass evidence checking");
+  assert.equal(out.trace.some((t) => /fewer than 2 audience_traits/.test(t.error || "")), false);
+});
+
 test("self-check: weak picks go back to the agent once, and the revised brief drops them", async () => {
   const qloo = mockQloo();
   const out = await runAgent({ llm: mockLLM(), qloo, product: "wool sneakers", market: "London", references: "Allbirds", check: makeSelfCheck({ qloo, market: "London" }) });

@@ -5,6 +5,70 @@ import { makeQloo } from "../src/qloo.js";
 import { mockQloo } from "../src/mock-qloo.js";
 import { anthropicLLM, mockLLM } from "../src/llm.js";
 
+test("podcast mode cannot finish on rejected or unchecked drafts or escape into campaign tools", async () => {
+  const calls = ["submit_brief", "podcasts", "draft_outreach", "draft_outreach"];
+  let step = 0, drafted = 0;
+  const result = await runAgent({ focus: "podcasts", product: "test", market: "Austin", qloo: {},
+    llm: async () => ({ raw: [], calls: [{ id: String(step), name: calls[step++], input: {} }] }),
+    check: async () => { throw new Error("must not run"); }, actions: {
+      podcasts: async () => ({ n: 3 }),
+      draft_outreach: async () => ({ n: 1, for_model: { checks: [{ passed: ++drafted > 1 }] } }),
+    } });
+  assert.equal(drafted, 2);
+  assert.equal(result.scope, "podcasts");
+  assert.deepEqual(result.brief.test_plan, []);
+  assert.ok(!result.trace.some((x) => x.tool === "submit_brief"));
+  await assert.rejects(runAgent({ focus: "podcasts", product: "test", market: "Austin", qloo: {}, maxSteps: 2,
+    llm: async () => ({ raw: [], calls: [{ id: "x", name: "draft_outreach", input: {} }] }),
+    actions: { draft_outreach: async () => ({ n: 1, for_model: { checks: [{ passed: true }] } }) },
+  }), /did not complete a checked podcast shortlist/);
+});
+
+test("Anthropic keeps the signed conversation prefix unchanged when self-check requests a revision", async () => {
+  const sent = [], raw = [{ type: "thinking", thinking: "test fixture", signature: "opaque-test-signature" },
+    { type: "tool_use", id: "s1", name: "submit_brief", input: {} }];
+  const llm = anthropicLLM({ apiKey: "test", fetchImpl: async (_, init) => {
+    sent.push(JSON.parse(init.body)); return Response.json({ content: raw, stop_reason: "tool_use" });
+  } });
+  const messages = [{ role: "user", content: "Synthetic product" }];
+  const first = await llm(messages);
+  await llm([...messages, { role: "assistant", content: first.raw }, { role: "tool", results: [
+    { id: "s1", name: "submit_brief", content: "Self-check before the brief is shown: replace an interest." },
+  ] }]);
+  assert.deepEqual(sent[1].tools, sent[0].tools);
+  assert.equal(sent[1].system, sent[0].system);
+  assert.deepEqual(sent[1].messages[1].content, raw, "signed blocks must be passed back unmodified");
+});
+
+test("agent overlaps independent reads but finishes them before a buying action", async () => {
+  const realMock = mockQloo(), model = mockLLM();
+  let first = true, searchPending = false, overlapped = false, active = 0;
+  const qloo = Object.fromEntries(Object.entries(realMock).map(([name, method]) => [name, async (input) => {
+    active++;
+    try {
+      if (name === "search") { searchPending = true; await new Promise((r) => setTimeout(r, 15)); }
+      if (name === "tags" && input.query === "parallel-test") overlapped = searchPending;
+      return await method(input);
+    } finally { if (name === "search") searchPending = false; active--; }
+  }]));
+  const llm = async (messages) => {
+    const turn = await model(messages);
+    if (first) {
+      first = false;
+      const extra = { id: "parallel-tag", name: "tags", input: { query: "parallel-test" } };
+      turn.calls.push(extra);
+      turn.raw.push({ type: "tool_use", ...extra });
+    }
+    return turn;
+  };
+  const out = await runAgent({ llm, qloo, product: "Wool sneakers", market: "London", actions: {
+    podcasts: async (_, { registry }) => { assert.equal(active, 0); assert.ok(registry.length); return { n: 0 }; },
+  } });
+  assert.equal(overlapped, true);
+  assert.deepEqual(out.trace.slice(0, 2).map((x) => x.tool), ["search", "tags"]);
+  assert.equal(out.check.ratio, 1, "parallel completion must not corrupt the evidence registry");
+});
+
 test("mock run ends with a brief whose items all carry evidence", async () => {
   const { brief, trace } = await runAgent({ llm: mockLLM(), qloo: mockQloo(), product: "wool sneakers", market: "London" });
   assert.equal(trace.at(-1).tool, "submit_brief");
@@ -288,7 +352,7 @@ test("test plan: each ad test goes through the evidence gate like any other line
   const { registryFrom, checkEvidence } = await import("../src/evidence.js");
   const reg = registryFrom(REG_CALLS);
   const brief = { test_plan: [
-    { hypothesis: "Studio fitness cues beat running cues", variable: "targeting", ad_set: "Interest: Outdoor Voices", why: "A plain guess targets runners", kpi: "CTR", stop_if: "CTR under control after 3,000 impressions", entity_ids: ["OV"], evidence: ["Outdoor Voices (affinity 0.966)"] },
+    { hypothesis: "Studio fitness cues beat running cues", variable: "targeting", targeting_entity_ids: ["OV"], ad_set: "Interest: Outdoor Voices", why: "A plain guess targets runners", kpi: "CTR", stop_if: "CTR under control after 3,000 impressions", entity_ids: ["OV"], evidence: ["Outdoor Voices (affinity 0.966)"] },
     { hypothesis: "Runners convert", ad_set: "Interest: Strava", kpi: "CTR", stop_if: "x", entity_ids: [], evidence: ["guess"] },
   ] };
   assert.deepEqual(checkEvidence(brief, reg).rows.map((r) => [r.field, r.grounded]), [["test_plan", true], ["test_plan", false]]);

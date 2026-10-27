@@ -14,6 +14,8 @@ export function anthropicLLM({ apiKey, workspaceId, model = "claude-sonnet-5-5",
     return { role: m.role, content: m.content };
   });
   const run = async (messages) => {
+    const started = Date.now();
+    // Keep tools and system unchanged across the conversation: current Claude thinking signatures bind that prefix.
     const res = await fetchImpl("https://api.anthropic.com/v1/messages", {
       method: "POST",
       signal: AbortSignal.timeout(timeoutMs),
@@ -26,6 +28,7 @@ export function anthropicLLM({ apiKey, workspaceId, model = "claude-sonnet-5-5",
       }),
     });
     const body = await res.json();
+    usage.call_ms.push(Date.now() - started);
     if (!res.ok) throw new Error(`Anthropic ${res.status}: ${JSON.stringify(body).slice(0, 300)}`);
     const calls = body.content.filter((b) => b.type === "tool_use").map((b) => ({ id: b.id, name: b.name, input: b.input }));
     usage.calls++;
@@ -36,7 +39,7 @@ export function anthropicLLM({ apiKey, workspaceId, model = "claude-sonnet-5-5",
     return { raw: body.content, calls };
   };
   // token count of every call made through this adapter, to measure the real cost of one brief
-  const usage = { calls: 0, input_tokens: 0, output_tokens: 0, truncated: 0 };
+  const usage = { calls: 0, input_tokens: 0, output_tokens: 0, truncated: 0, call_ms: [] };
   run.usage = usage;
   return run;
 }
@@ -45,7 +48,7 @@ export function anthropicLLM({ apiKey, workspaceId, model = "claude-sonnet-5-5",
  * Scripted stand-in for the model, so the app, the loop and the UI can be built and tested before any key exists.
  * It follows the same method the system prompt asks for and writes the brief only from tool results it received.
  */
-export function mockLLM() {
+export function mockLLM({ focus = "full" } = {}) {
   let step = 0;
   const seen = {};
   return async (messages) => {
@@ -63,7 +66,7 @@ export function mockLLM() {
     const seedQuery = refs[0] || product;
     const ids = () => (Object.entries(seen).find(([k]) => k.startsWith("search:"))?.[1] || []).map((e) => e.entity_id).slice(0, 2);
     const tagIds = () => (Object.entries(seen).find(([k]) => k.startsWith("tags:"))?.[1] || []).map((t) => t.tag_id).slice(0, 2);
-    const plan = [
+    const fullPlan = [
       () => [{ name: "search", input: { query: seedQuery, types: "urn:entity:brand", take: 3 } }],
       () => [{ name: "tags", input: { query: product.split(",")[0], take: 2 } }],
       () => [
@@ -76,6 +79,7 @@ export function mockLLM() {
       () => [{ name: "draft_outreach", input: { shows: (Object.entries(seen).find(([k]) => k.startsWith("podcasts:"))?.[1]?.shows || []).slice(0, 2).map((s) => s.name), reason: "[SYNTHETIC] highest taste fit" } }],
       () => [{ name: "submit_brief", input: briefFrom(seen, product, weak) }],
     ];
+    const plan = focus === "podcasts" ? [fullPlan[0], fullPlan[3], fullPlan[4]] : fullPlan;
     const calls = (plan[step] || plan[plan.length - 1])().map((c, i) => ({ ...c, id: `mock_${step}_${i}` }));
     step++;
     return { raw: calls.map((c) => ({ type: "tool_use", id: c.id, name: c.name, input: c.input })), calls };
@@ -93,7 +97,7 @@ function briefFrom(seen, product, weak = []) {
     creative_angles: pods.slice(0, 2).map((p) => ({ angle: `Speak like ${p.name}`, hook: "Placeholder hook from a synthetic run", entity_ids: [p.entity_id], evidence: [p.name] })),
     landing_page: { headline: "[SYNTHETIC] Headline written from taste signals", subheadline: "Replace by a live run", entity_ids: brands.slice(0, 1).map((b) => b.entity_id), evidence: brands.slice(0, 1).map((b) => b.name) },
     partnerships: brands.slice(3, 5).map((b) => ({ partner: b.name, idea: "Co-branded drop (synthetic)", entity_ids: [b.entity_id], evidence: [b.name] })),
-    test_plan: brands.slice(0, 2).map((b, i) => ({ hypothesis: `[SYNTHETIC] This audience responds to ${b.name} cues`, variable: i ? "targeting" : "creative", ad_set: i ? `Interest: ${b.name}, with the control's usual creative` : `A creative in ${b.name}'s tone, shown to the control's broad audience`, why: "[SYNTHETIC] A plain guess would not name this brand.", kpi: "Cost per add to cart", stop_if: "Spend up to $300. Pause if cost per add to cart is 30% above the control once each arm has 20 add to carts, or at the cap.", entity_ids: [b.entity_id], evidence: [`${b.name} (affinity ${b.affinity})`] })),
+    test_plan: brands.slice(0, 2).map((b, i) => ({ hypothesis: `[SYNTHETIC] This audience responds to ${b.name} cues`, variable: i ? "targeting" : "creative", targeting_entity_ids: i ? [b.entity_id] : [], creative_copy: i ? "" : "Synthetic example copy for the demo product.", ad_set: i ? `Interest: ${b.name}, with the control's usual creative` : `A creative in ${b.name}'s tone, shown to the control's broad audience`, why: "[SYNTHETIC] A plain guess would not name this brand.", kpi: "Cost per add to cart", stop_if: "Spend up to $300. Pause if cost per add to cart is 30% above the control once each arm has 20 add to carts, or at the cap.", entity_ids: [b.entity_id], evidence: [`${b.name} (affinity ${b.affinity})`] })),
     caveats: ["Synthetic run: all Qloo data is made up, not a real recommendation. Live mode uses real Qloo data."],
     holdout_rival: "Sample Rival Brand", category: "footwear",
   };

@@ -45,9 +45,31 @@ test("streaming Worker delivers progress then complete synthetic result", async 
   assert.equal(records[0].type, "start");
   assert.equal(records[0].mode, "synthetic");
   assert.ok(records.some((event) => event.type === "step"));
+  const partial = records.find((event) => event.type === "shortlist");
+  assert.ok(partial?.podcasts?.outreach?.shows?.length, "a usable podcast shortlist arrives before the optional checks finish");
+  assert.equal(partial.mode, "synthetic");
+  assert.equal(partial.brief, undefined, "no unfinished Meta plan is exposed");
+  assert.ok(records.indexOf(partial) < records.findIndex((event) => event.type === "result"));
   const finish = records.find((event) => event.type === "result");
   assert.ok(finish?.brief?.test_plan?.length >= 1);
   assert.equal(finish.check.ratio, 1);
+});
+
+test("podcast scope completes checked drafts without the optional campaign work", async () => {
+  const response = await worker.fetch(post({ ...example, focus: "podcasts", stream: true }), mockEnv);
+  const events = (await response.text()).trim().split("\n").map(JSON.parse);
+  const result = events.find((x) => x.type === "result");
+  assert.ok(result, JSON.stringify(events.at(-1)));
+  assert.equal(result.scope, "podcasts");
+  assert.ok(result.podcasts.outreach.shows.length);
+  assert.ok(result.seeds.length);
+  assert.equal(result.baseline, null);
+  assert.equal(result.markets, null);
+  assert.equal(result.meta_check, null);
+  assert.equal(result.demographics, null);
+  assert.deepEqual(result.brief.test_plan, []);
+  assert.ok(!events.some((x) => x.type === "shortlist"), "no unfinished plan is exposed in focused mode");
+  assert.ok(result.trace.every((x) => ["search", "podcasts", "draft_outreach"].includes(x.tool)));
 });
 
 test("incorrect judge code returns 401, never downgrades silently to mock", async () => {

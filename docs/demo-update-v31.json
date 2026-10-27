@@ -1,0 +1,37 @@
+[
+  {
+    "image": "01-start.png",
+    "label": "LOCAL STILL-SCREEN WALKTHROUGH | SYNTHETIC NARRATION",
+    "text": "A podcast can be a great audience fit and still be the wrong first buy. Taste Brief helps a media buyer find the fit, ask for the terms, and see what would change the decision."
+  },
+  {
+    "image": "02-shortlist.png",
+    "label": "REAL QLOO RESULT RECORDED 27 OCT 2026, 09:33 UTC",
+    "text": "This coffee shortlist comes from a recorded real Qloo run. The agent chose these shows using taste, subject and sponsor evidence, then drafted the outreach. Official contacts are linked where verified. Prices, local reach and available dates remain unknown."
+  },
+  {
+    "image": "03-scenario.png",
+    "label": "SCENARIO: RECORDED QLOO DATA, INVENTED PRICES AND DELIVERY",
+    "text": "Now try the separate scenario. The assumed budget is one thousand dollars, the target-market CPM cap is sixty, and each package requires three placements. Home Cooking fits at six hundred dollars. The Sporkful costs less. Taste and popularity choose the same show here. The terms are invented and labelled."
+  },
+  {
+    "image": "04-price-change.png",
+    "label": "SCENARIO: CHANGE A TERM, REVIEW AGAIN, RECOMPUTE",
+    "text": "The price ceiling is two hundred dollars per placement at the low delivery estimate. Raise it to two hundred and twenty, review the changed terms, and The Sporkful becomes the preference. Home Cooking now needs at least eleven thousand target-market ad impressions. This explains what to negotiate. It does not predict sales."
+  },
+  {
+    "image": "05-unknown-terms.png",
+    "label": "ACTUAL QUOTE MODE: NO PUBLISHER OFFER ENTERED",
+    "text": "Back in actual quote mode, prices stay empty. Copy the terms request, enter the publisher's minimum, fees, delivery estimates and dates, then review the source. Save the inputs and decision memo. Reloading recalculates and asks for review again. Nothing is sent, booked or spent."
+  },
+  {
+    "image": "06-evidence.png",
+    "label": "HISTORICAL SPONSOR LABELS | NOT CONVERSION OR CAUSAL LIFT",
+    "text": "Why Qloo? In our locked historical study, taste ranked detected sponsorships above undetected relationships sixty five percent of the time, compared with fifty two for chart rank. Missing labels do not prove no advertising. The agent did not outperform popularity in a separate shortlist test. We keep that result visible."
+  },
+  {
+    "image": "07-operational.png",
+    "label": "LOCAL QA: 27 OCT 2026 | NO INDEPENDENT BUYER PILOT",
+    "text": "The latest operational round finished coffee, sneakers and turntables in thirty one, thirty three and thirty six seconds. Earlier attempts remain in the record, including a rejected ended show and a slower run. We also removed unchecked selection claims from the interface. The forward check is pending. Taste Brief turns a taste signal into a decision whose assumptions you can inspect."
+  }
+]

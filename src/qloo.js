@@ -1,5 +1,6 @@
 // Qloo client. Hackathon keys only work against this base URL (see Qloo hackathon developer guide).
 export const QLOO_BASE = "https://hackathon.api.qloo.com";
+import { assertIdentities, invalidEntityId, identityError } from "./provider-integrity.js";
 
 // Entity types the Insights API accepts for filter.type during the hackathon.
 export const INSIGHT_TYPES = [
@@ -61,12 +62,13 @@ export function makeQloo({ apiKey, fetchImpl = fetch, base = QLOO_BASE, concurre
   return {
     async search({ query, types, take = 5 }) {
       const r = await get("/search", { query, types, take });
-      return (r.results || []).map(slimEntity);
+      return assertIdentities(r.results || []).map(slimEntity);
     },
     // location nudges the ranking toward a city (signal); filter_location keeps only entities located there (places)
     // result_ids restricts the results to given entities: used to score a named pick against the same audience
     async insights({ filter_type, entity_ids, tag_ids, location, filter_location, result_ids, explain, take = 10 }) {
       if (!INSIGHT_TYPES.includes(filter_type)) throw new Error(`unsupported filter.type ${filter_type}`);
+      if ([...(entity_ids || []), ...(result_ids || [])].some(invalidEntityId)) throw identityError();
       const r = await get("/v2/insights", {
         "filter.type": filter_type,
         "signal.interests.entities": entity_ids,
@@ -77,9 +79,10 @@ export function makeQloo({ apiKey, fetchImpl = fetch, base = QLOO_BASE, concurre
         "feature.explainability": explain ? "true" : undefined,
         take,
       });
-      return (r.results?.entities || []).map(slimEntity);
+      return assertIdentities(r.results?.entities || []).map(slimEntity);
     },
     async demographics({ entity_ids, tag_ids }) {
+      if ((entity_ids || []).some(invalidEntityId)) throw identityError();
       const r = await get("/v2/insights", {
         "filter.type": "urn:demographics",
         "signal.interests.entities": entity_ids,

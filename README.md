@@ -1,23 +1,31 @@
 # Taste Brief
 
-An agent for brands buying podcast and social ads. Give it a product, a market and your brand or a close competitor; it
-reads the audience's taste in Qloo (brands, artists, shows, podcasts, places, age and gender) and returns a podcast plan
-(three shows to ask first, each with an agent-written rate request and host-read script; every show in a worksheet grouped
-as sells ads with no category brand found, a rival already advertises, or not in our ad data), Meta interests
-that the agent checks on a rival's audience before you see them, creative angles, and up to three ad tests, each changing
-one thing from an obvious control and locked before spending. Every structured recommendation cites its Qloo sources, and code checks the cited ids
-and values against what Qloo returned.
+A sponsorship decision desk for a media buyer: Qloo finds up to three podcast partners by taste, then Taste Brief
+requests the missing terms and compares offers under a single-show pilot budget and target-market CPM cap. The
+agent resolves seed entities, reads podcast evidence, chooses shows and drafts the outreach. Deterministic checks
+enforce exclusions; the quote desk shows minimum commitments, fees, delivery uncertainty and the price at which a
+choice changes.
+Quote inputs stay in the browser and can be saved with a decision memo. A separate opt-in scenario is always labelled.
+
+The default podcast workflow finishes after checked drafts. Full analysis is optional: cross-domain taste, Meta
+interest verification, creative and a locked test plan. Existing citation and exact-copy review gates still apply.
+The historical study below tests Qloo against outside sponsorship labels, not campaign profitability.
+
+27 October local validation: **136 tests**, quote scenarios on three recorded runs, and fresh podcast runs in
+**31 / 33 / 36 seconds** in the latest requested round. Earlier 35 / 29 / 49-second attempts remain. The first turntable run was rejected after source review caught an ended show; its rerun
+passed correctness but missed the 45-second timing target. See [all attempts](docs/podcast-focus-results.json),
+[decision logic and browser QA](docs/decision-desk.md), and [scenario results](docs/decision-desk-results.json).
+These changes are local until publication; the old online demo/video may differ.
 
 Built for the [Qloo Agentic Hackathon](https://qloo.devpost.com/).
 
 ## Does Qloo pick the podcasts brands sponsor?
 
-The answer key is real sponsorships: sponsor reads that podcasts publish in their own episode notes (public RSS), never
+The answer key is observed sponsor reads that podcasts publish in their own episode notes (public RSS), never
 shown to Qloo. Hypotheses were locked and pushed before any held-out show was read
 ([docs/podcast-check/PREREGISTRATION.md](docs/podcast-check/PREREGISTRATION.md); check the fingerprints on any OS with
 `python scripts/podcast/verify_lock.py`). With the strict sponsor label declared before analysis (82 of 100 matches are
-sponsor reads, read by Claude and then by a person blind to the per-item labels: the same 82, 15 not, 3 unsure), on 216 held-out US podcasts and 62 brands, Qloo ranked a show the brand sponsors above one
-it doesn't 65% of the time (AUC 0.647, 95% interval 0.60 to 0.70 resampling brands and shows), against Apple chart rank 0.522, Qloo popularity 0.526 and
+sponsor reads, read by Claude and then by a person blind to the per-item labels: the same 82, 15 not, 3 unsure), on 216 held-out US podcasts and 62 brands, Qloo ranked a detected sponsor relationship above an undetected one 65% of the time (AUC 0.647, 95% interval 0.60 to 0.70 resampling brands and shows), against Apple chart rank 0.522, Qloo popularity 0.526 and
 ad volume 0.582. With the pre-registered label: 0.663 on 259 shows and 76 brands. The three pre-registered hypotheses pass on
 both. Exploratory checks, not pre-registered ([robustness.json](docs/podcast-check/robustness.json),
 [recency.json](docs/podcast-check/recency.json)): the brand's own Qloo score beats other brands' scores on the same shows
@@ -38,8 +46,8 @@ and by a negative control (86 of 139 picks at 0.9+ on the right competitor again
 
 ## How it works
 - `src/agent.js`: tool-using agent loop on Claude. Tools: `search`, `insights`, `demographics`, `tags`, and
-  `submit_brief` (the only way to finish, including the `test_plan`, the product `category` and up to three
-  `holdout_rival`s). The agent looks up tags for the product category and passes them next to the brand, so the brief
+  `submit_brief` for the initial result (including `test_plan`, product `category` and up to three `holdout_rival`s), and
+  `revise_interests` to correct only interests and tests. The agent looks up tags for the product category and passes them next to the brand, so the brief
   reflects the product too. Every item must cite the Qloo `entity_id`s it rests on.
 - `src/outreach.js`: behind the agent's `draft_outreach` tool (the agent picks the shows from its own `podcasts` call,
   which gives it the facts and not the page's rule; `askFirst` in `public/rank.js` is the fallback and the comparison
@@ -60,9 +68,13 @@ and by a negative control (86 of 139 picks at 0.9+ on the right competitor again
   get verdicts only when the receipt matches.
 - `public/verdict.js`: lock the test plan (SHA-256 of the control, tests and rule, with a timestamp), write the planning
   sheet named with the plan id, and read an Ads Manager export back with the locked rule. Pure functions, no model.
+  Targeting tests carry explicit selected entity IDs and verified Meta IDs; unavailable or unchecked targets stay out
+  of the lock. The page, Markdown and CSV share that check. Loading a saved plan restores that plan's targets, market
+  and rule for exports, even when the current brief differs. Older v1 receipts remain readable; targeting without a
+  verified target list cannot be exported as ready. New v3 plans store explicit creative copy and a review tied to that exact text/product; edits invalidate it. The model cannot supply buyer approval, and a hypothesis is never substituted for ad copy.
 - `src/podcasts.js`: podcasts ranked by Qloo for the brand with `feature.explainability`, plus the advertisers each
   show's episode notes already run (`src/data/podcast-sponsors.json`, 662 shows) and which of them are in the product's
-  category (`src/data/categories.json`), so the page can mark a show open or taken. `public/rank.js` orders shows by taste
+  category (`src/data/categories.json`), so the page can mark observed category sponsor mentions; unknown coverage stays unknown. `public/rank.js` orders shows by taste
   plus ad count; open shows by taste alone.
 - `src/grade.js`: one grader for any list of picks: exact name lookup in Qloo, then the affinity Qloo gives that
   entity for the brand's audience in the market (`filter.results.entities`). Used by the page and the benchmark.
@@ -71,10 +83,18 @@ and by a negative control (86 of 139 picks at 0.9+ on the right competitor again
   ranking, so the top 12 of each list are compared (only in A, only in B, in both).
 - `src/qloo.js`: Qloo client for `https://hackathon.api.qloo.com` (GET + `X-Api-Key`), trims verbose fields, keeps at
   most two requests in flight, retries HTTP 429 with backoff, times out hung calls.
+  `src/provider-integrity.js` rejects missing/nil or colliding entity identities before they can support a live brief.
+- `public/data/podcast-contacts.js`: dated official contact routes, with source links and separate advertising/general
+  labels, plus separate publishing-status sources. Confirmed archival shows are excluded from new host-read outreach; unknown activity stays unknown. `public/buyer-decision.js` derives each next action and the questions to resolve. These do not change the locked sponsorship dataset or imply rates, reach, inventory or exclusivity.
 - `src/llm.js`: Claude adapter (Messages API tool use) and a scripted stand-in model for tests and synthetic mode.
 - `src/mock-qloo.js`: synthetic data with the same shapes. No real Qloo responses are stored here (Qloo's terms).
 - `src/worker.js` + `public/`: Cloudflare Worker serving the page and `POST /api/brief`. The agent and a no-data baseline
   (same question, no Qloo) run side by side; every step is streamed to the page as NDJSON while it happens.
+  A provisional `shortlist` event makes the podcast plan available after its drafts pass their checks, while Meta and
+  comparisons finish. A later failed run removes the provisional result. The final run records `shortlist_seconds`
+  separately from total time; this changes time to the primary result, not necessarily total calls or compute.
+
+`public/draft-checks.js` shares finite draft checks between model feedback, UI, Markdown and copy eligibility. A failed draft stays visible for editing with a reason; passing is not full factual verification.
 
 ## Live demo
 https://taste-brief.thelongmarketing.workers.dev (Cloudflare Worker). **See a recorded live run now** shows the last real run
@@ -91,11 +111,14 @@ Requires Node 20 or newer.
 ```bash
 npm test                          # the full offline test suite, no network
 node scripts/evidence-gate.mjs    # agent end to end on synthetic data; fails if any claim is unsupported
+npm run preview                   # loopback Node preview, synthetic, no Cloudflare login or deployment
 npm run dev                       # local Worker on synthetic data (MOCK=1)
 ```
 Real run: create `.dev.vars` (git-ignored) with `ANTHROPIC_API_KEY=...` and `QLOO_API_KEY=...`, then either
 `npm run live -- "Wool running sneakers, $120" "London, UK" "Allbirds"` (command line, result in `.results/`) or
 `npx wrangler dev --var MOCK:0`. `GATE_LIVE=1 node scripts/evidence-gate.mjs` runs the evidence gate on live data.
+`npm run preview -- --live` uses the existing ignored `.dev.vars` for real provider calls, with memory-only local
+receipts and quota. It binds to `127.0.0.1:8791`; set `PORT` to use another port. It never writes production KV.
 Deploy: `npx wrangler secret put` for both keys (and `DEMO_CODE` for the access code), create a KV namespace for the
 daily free-run counter (`npx wrangler kv namespace create QUOTA`, id into `wrangler.jsonc`), then `npm run deploy`.
 Keys stay server-side; never commit them.
@@ -119,7 +142,9 @@ claim through, and a pipeline-failure triage that never lowers the evidence thre
 - Creative angles, the landing page, the summary and the test plan are the model's interpretation of the cited results,
   and are labelled so.
 - The city comparison looks at each city's top 12; a name missing from one top 12 may still rank lower there.
-- Each interest is looked up in Meta's interest search inside the agent's self-check (`src/meta.js`, needs `META_ACCESS_TOKEN`, search only, no ad account); a missing one goes back to the agent once to be replaced. A targeting test that still names one after the rewrite is marked "not ready to launch" (`docs/meta-loop/`). Meta's audience sizes are worldwide.
+- Each interest is looked up in Meta's interest search inside the agent's self-check (`src/meta.js`, needs `META_ACCESS_TOKEN`, search only, no ad account); a missing one goes back to the agent once to be replaced. A targeting test with missing, unknown or failed checks is held out of the saved plan (`docs/meta-loop/`). Meta's audience sizes are worldwide.
 - When Qloo returns a wrong match (e.g. a magazine for a shoe brand) the agent is told to skip it and say so; it may miss.
 
-Built by a marketer with AI coding assistance (Claude Code); every change reviewed and tested. License: MIT.
+The local follow-up checked on 27 October passed 121 tests. The latest passing local QA result for each of three declared cases produced draft-ready shortlists at 44, 35 and 36 seconds, and full results at 101, 103 and 96 seconds. Coffee was rerun after a citation-feedback fix; the preceding 99-second coffee result retained a flagged audience claim. All attempts are retained. These observations meet the declared 45/120-second targets but are not a latency guarantee or a buyer outcome. See [the QA record](docs/qa-round2-results.json) for failures and scope.
+
+Built by a marketer with AI coding assistance (Claude Code and Codex). Local validation and its limits: [26 October record](docs/validation-2026-10-26.md). License: MIT.

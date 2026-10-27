@@ -12,6 +12,23 @@ const qloo = {
   insights: async ({ result_ids }) => Object.values(DB).filter((e) => result_ids.includes(e.entity_id) && e.aff != null).map((e) => ({ ...e, affinity: e.aff })),
 };
 
+test("parallel grading preserves input identity/order and shares duplicate lookups", async () => {
+  const releases = new Map(), started = [];
+  const delayed = {
+    search: ({ query }) => new Promise((resolve) => { started.push(query); releases.set(query, resolve); }),
+    insights: async ({ result_ids }) => result_ids.map((entity_id) => ({ entity_id, affinity: 0.92 })),
+  };
+  const result = gradePicks(delayed, ["Strava", "Tracksmith", "Strava", "Missing"], ["seed"], "London");
+  assert.deepEqual(started, ["Strava", "Tracksmith", "Missing"]);
+  releases.get("Missing")([]);
+  releases.get("Tracksmith")([DB.tracksmith]);
+  releases.get("Strava")([DB.strava]);
+  const rows = await result;
+  assert.deepEqual(rows.map((x) => x.name), ["Strava", "Tracksmith", "Strava", "Missing"]);
+  assert.deepEqual(rows.map((x) => x.match?.entity_id), ["S", "T", "S", undefined]);
+  assert.deepEqual(rows.map((x) => x.status), ["scored", "scored", "scored", "no_match"]);
+});
+
 test("grader: candidates split 'A or B', exact names only, and each pick ends scored, not found or not scored", async () => {
   assert.deepEqual(candidates("Veja or On Running"), ["Veja or On Running", "Veja", "On Running"]);
   assert.equal((await resolvePick(qloo, "Parkrun")), null, "a place in Poland is not the parkrun interest");

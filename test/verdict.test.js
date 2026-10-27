@@ -1,10 +1,10 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { RULE, canonicalPlan, planHash, adSetRows, toCsv, parseCsv, readResults, verdicts, num, problemWith, creativeOf } from "../public/verdict.js";
+import { RULE, canonicalPlan, planHash, adSetRows, toCsv, parseCsv, readResults, verdicts, num, problemWith, creativeOf, reviewCreative } from "../public/verdict.js";
 
 const tests = [
-  { variable: "targeting", hypothesis: "Minimalist running fans", ad_set: "Usual creative to Tracksmith fans", verified: [{ name: "Tracksmith" }, { name: "Outdoor Voices" }] },
-  { variable: "creative", hypothesis: "Materials story", ad_set: "Materials and price story, broad audience", verified: [{ name: "Everlane" }] },
+  { variable: "targeting", hypothesis: "Minimalist running fans", ad_set: "Usual creative to Tracksmith and Outdoor Voices fans", verified: [{ name: "Tracksmith" }, { name: "Outdoor Voices" }], targets: [{ entity_id: "T", name: "Tracksmith", meta_id: "1", meta_name: "Tracksmith" }, { entity_id: "OV", name: "Outdoor Voices", meta_id: "2", meta_name: "Outdoor Voices" }] },
+  reviewCreative({ variable: "creative", hypothesis: "Materials story", verified: [{ name: "Everlane" }] }, { copy: "Wool sneakers.", product: "Wool sneakers", at: "2026-10-26T00:00:00Z" }),
 ];
 
 test("locking: the same plan hashes the same, any change to it changes the hash", async () => {
@@ -17,13 +17,13 @@ test("locking: the same plan hashes the same, any change to it changes the hash"
 });
 
 test("ad set sheet: a control plus one row per test, named with the plan id; targeting tests list the Qloo interests", () => {
-  const rows = adSetRows({ market: "London, UK", tests, planId: "abc123de" });
+  const rows = adSetRows({ market: "London, UK", product: "Wool sneakers", tests, planId: "abc123de" });
   assert.deepEqual(rows.map((r) => r.ad_set), ["TB-abc123de Control", "TB-abc123de Test 1", "TB-abc123de Test 2"]);
   assert.match(rows[1].targeting, /Interests: Tracksmith; Outdoor Voices, London/);
   assert.equal(rows[2].targeting, "Broad, London");
-  assert.match(toCsv(rows).split("\n")[0], /^ad_set,changes,targeting,creative,ages,optimization,placements,budget,schedule,attribution$/);
-  assert.equal(rows[2].creative, "Materials story", "a creative test without 'creative:' uses its hypothesis");
-  assert.equal(creativeOf({ ad_set: "Broad New York audience, new creative: 'Run in the morning.'" }), "'Run in the morning.'");
+  assert.match(toCsv(rows).split("\n")[0], /^ad_set,changes,targeting,meta_interest_ids,creative,ages,optimization,placements,budget,schedule,attribution$/);
+  assert.equal(rows[2].creative, "Wool sneakers.", "the export uses only the explicitly reviewed copy");
+  assert.equal(creativeOf({ ad_set: "Broad New York audience, new creative: 'Run in the morning.'" }), "", "legacy ad_set text is never guessed into copy");
 });
 
 test("results: exact column names win, European numbers and semicolons are read, problems are named", () => {
@@ -76,14 +76,15 @@ test("results: hitting the cap before enough adds to cart is inconclusive, never
 
 test("verdict: a targeting test that names an interest Meta lacks is never ready, and is left out of the lock", async () => {
   const { missingInMeta, readyTests } = await import("../public/verdict.js");
-  const meta = { taste_brief: [{ name: "Outdoor Voices", status: "not_found" }, { name: "Bombas", status: "targetable" }] };
+  const meta = { taste_brief: [{ name: "Outdoor Voices", status: "not_found" }, { name: "Bombas", status: "targetable", interest: { id: "123", name: "Bombas" } }] };
+  const verified = [{ entity_id: "B", name: "Bombas" }, { entity_id: "OV", name: "Outdoor Voices" }];
   const tests = [
-    { variable: "targeting", ad_set: "Usual creative, interests Bombas and Outdoor Voices" },
-    { variable: "targeting", ad_set: "Usual creative, interests Bombas" },
-    { variable: "creative", ad_set: "Broad audience; a creative about Outdoor Voices fans" },
+    { variable: "targeting", ad_set: "Usual creative, interests Bombas and Outdoor Voices", grounded: true, verified, entity_ids: ["B", "OV"], targeting_entity_ids: ["B", "OV"] },
+    { variable: "targeting", ad_set: "Usual creative, interests Bombas", grounded: true, verified, entity_ids: ["B", "OV"], targeting_entity_ids: ["B"] },
+    { variable: "creative", ad_set: "Broad audience; a creative about Outdoor Voices fans", grounded: true, targeting_entity_ids: [] },
   ];
   assert.deepEqual(missingInMeta(tests[0], meta), ["Outdoor Voices"]);
   assert.deepEqual(missingInMeta(tests[2], meta), [], "a creative test names no interest to target");
-  assert.deepEqual(readyTests(tests, meta).map((t) => t.ad_set), [tests[1].ad_set, tests[2].ad_set]);
-  assert.equal(readyTests(tests, null).length, 3, "without a Meta check nothing is held back");
+  assert.deepEqual(readyTests(tests, meta).map((t) => t.ad_set), [tests[1].ad_set]);
+  assert.equal(readyTests(tests, null).length, 0, "without Meta and copy review neither test can proceed");
 });

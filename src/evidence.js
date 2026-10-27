@@ -11,6 +11,7 @@
 // - a Meta interest or partner must be one thing: "A / B" combinations are flagged.
 
 export const ITEM_FIELDS = ["audience_traits", "meta_interests", "creative_angles", "partnerships", "test_plan"];
+import { invalidEntityId, identityName } from "./provider-integrity.js";
 const LABEL = { audience_traits: "trait", meta_interests: "interest", creative_angles: "angle", partnerships: "partner", test_plan: "hypothesis" };
 const SINGLE = new Set(["meta_interests", "partnerships"]);
 
@@ -23,6 +24,7 @@ const ids = (v) => (Array.isArray(v) ? v : v == null ? [] : [v]).map(String).fil
  */
 export function registryFrom(calls) {
   const entities = new Map();
+  const ambiguous = new Set();
   const seeds = new Set();
   const demographics = new Map(); // seed id -> {age, gender} as Qloo returned them
   for (const { tool, input, output } of calls) {
@@ -34,8 +36,11 @@ export function registryFrom(calls) {
       continue;
     }
     for (const e of output) {
-      if (!e?.entity_id) continue;
+      if (invalidEntityId(e?.entity_id) || ambiguous.has(e.entity_id)) continue;
       const prev = entities.get(e.entity_id);
+      if (prev && identityName(prev.name) !== identityName(e.name)) {
+        ambiguous.add(e.entity_id); entities.delete(e.entity_id); continue;
+      }
       // the same entity can come back from several calls (with and without tags, several cities) with different
       // affinities: keep every number Qloo returned for it, and show the first insights one
       const affinities = [...(prev?.affinities || []), ...(typeof e.affinity === "number" ? [e.affinity] : [])];
@@ -83,7 +88,7 @@ export function verifyItem(field, item, reg) {
   // an age / gender claim may rest on the seed: its numbers are then checked against Qloo's demographics for that seed
   const demoVals = verified.filter((e) => reg.seeds.has(e.entity_id)).flatMap((e) => {
     const d = reg.demographics?.get(e.entity_id);
-    return d ? [...Object.values(d.age), ...Object.values(d.gender)].map((v) => Math.abs(Number(v))) : [];
+    return d ? [...Object.values(d.age), ...Object.values(d.gender)].map(Number) : [];
   });
   const demographic = demoVals.length > 0 && /\b(age|aged|female|male|women|men|gender|younger|older|skew\w*|over-?index\w*|\d{2}\s*(?:-|–|to)\s*\d{2})\b/i.test(`${label} ${text}`);
   if (verified.length && !nonSeed.length && !seedNamed && !demographic) problems.push("only the seed entity is cited, and the claim is not about the seed");
@@ -94,6 +99,15 @@ export function verifyItem(field, item, reg) {
     }
     // the one variable is checked against what the ad set says, not taken on the model's word
     const adSet = norm(item?.ad_set);
+    if (item?.variable === "targeting") {
+      const selected = ids(item.targeting_entity_ids);
+      if (!Array.isArray(item.targeting_entity_ids) || !selected.length) problems.push("targeting test has no explicit targeting_entity_ids");
+      for (const id of selected) {
+        if (!verified.some((e) => e.entity_id === id)) problems.push(`target ${id} has no verified citation`);
+        const target = verified.find((e) => e.entity_id === id);
+        if (target && !adSet.includes(norm(target.name))) problems.push(`targeting text does not name selected target ${target.name}`);
+      }
+    } else if (ids(item?.targeting_entity_ids).length) problems.push("creative test must have no targeting_entity_ids");
     const namesCited = verified.some((e) => { const n = norm(e.name); return n.length >= 3 && adSet.includes(n); });
     if (item?.variable === "targeting" && !namesCited) problems.push("targeting test does not name the Qloo interests it targets");
     // "No interest targeting" is the right thing for a creative test to say; "Interests: X" or "targeting X fans" is not
@@ -110,11 +124,14 @@ export function verifyItem(field, item, reg) {
   }
   // numbers in the free text must be ones Qloo returned for the cited entities: an affinity, a popularity score, or a
   // demographic index
-  for (const m of text.matchAll(/\b0\.\d{2,3}\b/g)) {
-    const v = Number(m[0]);
+  for (const m of text.matchAll(/(?:^|[^\w.])([+-]?(?:\d+(?:\.\d+)?|\.\d+)(?:e[+-]?\d+)?)(\s*%)?(?![\w.])/gi)) {
+    const context = text.slice(Math.max(0, m.index - 35), m.index + m[0].indexOf(m[1]));
+    // Plain integers may be part of an entity's name or an age range. Check them when explicitly called a score.
+    if (!m[2] && !/[.e]/i.test(m[1]) && !/\b(affinity|taste fit|popularity|index|score)\s*[:=(]?\s*$/i.test(context)) continue;
+    const v = Number(m[1]) / (m[2] ? 100 : 1);
     const isAffinity = verified.some((e) => [e.affinity, e.popularity, ...(e.affinities || [])].some((a) => typeof a === "number" && Math.abs(a - v) < 0.0015));
     const isDemo = demographic && demoVals.some((d) => Math.abs(d - v) < 0.006);
-    if (!isAffinity && !isDemo) problems.push(`${m[0]} does not match a number Qloo returned for the cited entities`);
+    if (!isAffinity && !isDemo) problems.push(`${m[1]}${m[2] || ""} does not match a number Qloo returned for the cited entities`);
   }
   // a content check, not only provenance: Qloo affinity is taste overlap, so a line that says the audience buys or will
   // buy something claims more than the data shows

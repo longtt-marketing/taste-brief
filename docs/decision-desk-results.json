@@ -1,0 +1,116 @@
+{
+  "at": "2026-10-27T11:54:27.649Z",
+  "kind": "operational QA: hypothetical offers on three recorded Qloo runs",
+  "source_sha256": "528eaf2bf48158976409a96c0adf0817b9b7fb9b68a5e060f4f302d6920c9dbc",
+  "scope": "No new provider run, feed collection, human buyer test, publisher quote or ad-performance measurement. Comparators use the same Qloo-derived shortlist.",
+  "cases": [
+    {
+      "case": "coffee",
+      "source": ".results/qa-round2/2026-10-26T18-09-50-801Z/coffee.json",
+      "run_at": "2026-10-26T18:11:31.521Z",
+      "market": "Austin, TX",
+      "mode": "scenario",
+      "chosen": "Home Cooking",
+      "popularity_same_limits": "Home Cooking",
+      "cheapest_same_limits": "The Sporkful",
+      "qloo_changes_popularity_choice": false,
+      "offer_states": [
+        {
+          "show": "Home Cooking",
+          "status": "within_limits",
+          "hypothetical_package_cost": 600
+        },
+        {
+          "show": "The Sporkful",
+          "status": "within_limits",
+          "hypothetical_package_cost": 450
+        },
+        {
+          "show": "10% Happier with Dan Harris",
+          "status": "over_budget",
+          "hypothetical_package_cost": 1800
+        }
+      ],
+      "counterfactual": {
+        "changed_show": "Home Cooking",
+        "max_unit_price": 200,
+        "new_unit_price": 200.01,
+        "new_status": "delivery_sensitive",
+        "new_preference": "The Sporkful",
+        "unreviewed_offer_remained_ineligible": true
+      }
+    },
+    {
+      "case": "sneakers",
+      "source": ".results/qa-round2/2026-10-26T16-17-13-597Z/sneakers.json",
+      "run_at": "2026-10-26T16:20:35.564Z",
+      "market": "New York, NY",
+      "mode": "scenario",
+      "chosen": "Armchair Expert with Dax Shepard",
+      "popularity_same_limits": "Armchair Expert with Dax Shepard",
+      "cheapest_same_limits": "A Beautiful Mess Podcast",
+      "qloo_changes_popularity_choice": false,
+      "offer_states": [
+        {
+          "show": "Armchair Expert with Dax Shepard",
+          "status": "within_limits",
+          "hypothetical_package_cost": 600
+        },
+        {
+          "show": "A Beautiful Mess Podcast",
+          "status": "within_limits",
+          "hypothetical_package_cost": 450
+        },
+        {
+          "show": "The Liz Moody Podcast",
+          "status": "over_budget",
+          "hypothetical_package_cost": 1800
+        }
+      ],
+      "counterfactual": {
+        "changed_show": "Armchair Expert with Dax Shepard",
+        "max_unit_price": 200,
+        "new_unit_price": 200.01,
+        "new_status": "delivery_sensitive",
+        "new_preference": "A Beautiful Mess Podcast",
+        "unreviewed_offer_remained_ineligible": true
+      }
+    },
+    {
+      "case": "turntable",
+      "source": ".results/qa-round2/2026-10-26T16-17-13-597Z/turntable.json",
+      "run_at": "2026-10-26T16:22:11.417Z",
+      "market": "Chicago, IL",
+      "mode": "scenario",
+      "chosen": "Nintendo Voice Chat",
+      "popularity_same_limits": "Giant Bombcast",
+      "cheapest_same_limits": "Giant Bombcast",
+      "qloo_changes_popularity_choice": true,
+      "offer_states": [
+        {
+          "show": "Nintendo Voice Chat",
+          "status": "within_limits",
+          "hypothetical_package_cost": 600
+        },
+        {
+          "show": "Giant Bombcast",
+          "status": "within_limits",
+          "hypothetical_package_cost": 450
+        },
+        {
+          "show": "Retronauts",
+          "status": "over_budget",
+          "hypothetical_package_cost": 1800
+        }
+      ],
+      "counterfactual": {
+        "changed_show": "Nintendo Voice Chat",
+        "max_unit_price": 200,
+        "new_unit_price": 200.01,
+        "new_status": "delivery_sensitive",
+        "new_preference": "Giant Bombcast",
+        "unreviewed_offer_remained_ineligible": true
+      }
+    }
+  ]
+}

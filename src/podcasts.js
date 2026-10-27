@@ -4,6 +4,7 @@
 import SPONSORS from "./data/podcast-sponsors.json" with { type: "json" };
 import CATS from "./data/categories.json" with { type: "json" };
 import ALSO from "./data/category-also.json" with { type: "json" };
+import { contactFor } from "../public/contacts.js";
 
 const norm = (s) => String(s || "").toLowerCase().replace(/[^a-z0-9]/g, "");
 const INDEX = new Map(Object.entries(SPONSORS.shows || {}).map(([name, brands]) => [norm(name), { name, brands }]));
@@ -47,6 +48,7 @@ export async function podcastPartners({ qloo, seeds, take = 10, category = null 
       driven_by: (s.explain || []).filter((x) => x.score > 0).sort((a, b) => b.score - a.score).map((x) => ({ name: names.get(x.entity_id) || x.entity_id, score: x.score })),
       advertisers: advertisersFor(s.name),
       rivals: rivalsIn(advertisersFor(s.name), category),
+      contact: contactFor(s.name),
     })),
     category,
     data: { shows_with_sponsor_data: INDEX.size, source: SPONSORS.source, collected: SPONSORS.collected },

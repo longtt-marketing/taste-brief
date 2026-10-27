@@ -7,7 +7,7 @@
 import { planHash } from "../public/verdict.js";
 
 const MAX = 16000;                        // a plan is a few KB; anything larger is not a plan
-const TTL = 120 * 86400;                  // kept well past judging (16 Nov 2026)
+const TTL = 120 * 86400;                  // keep receipts beyond judging and follow-up
 const HEX = /^[0-9a-f]{64}$/;
 
 export function makeReceipts(kv, now = () => new Date().toISOString()) {
@@ -17,7 +17,7 @@ export function makeReceipts(kv, now = () => new Date().toISOString()) {
       if (typeof canonical !== "string" || !canonical || canonical.length > MAX) return { error: "send the plan text" };
       let plan;
       try { plan = JSON.parse(canonical); } catch { return { error: "the plan must be JSON" }; }
-      if (plan?.v !== 1 || !Array.isArray(plan.tests) || !plan.rule) return { error: "not a Taste Brief plan" };
+      if (![1, 2, 3].includes(plan?.v) || !Array.isArray(plan.tests) || !plan.rule) return { error: "not a Taste Brief plan" };
       const hash = await planHash(canonical);
       const key = `lock:${hash}`;
       const old = await kv.get(key);

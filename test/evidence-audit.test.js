@@ -42,7 +42,7 @@ test("search seed can still support a claim about the seed itself", () => {
 
 test("ad test needs all four action fields despite having a valid Qloo citation", () => {
   const reg = registryFrom([seed, insight]);
-  const partial = { hypothesis: "Outdoor Voices audience", variable: "targeting", ad_set: "Outdoor Voices", why: "A plain guess targets runners",
+  const partial = { hypothesis: "Outdoor Voices audience", variable: "targeting", targeting_entity_ids: ["INSIGHT"], ad_set: "Outdoor Voices", why: "A plain guess targets runners",
     kpi: "", stop_if: "", entity_ids: ["INSIGHT"], evidence: ["Outdoor Voices 0.956"] };
   const result = verifyItem("test_plan", partial, reg);
   assert.equal(result.grounded, false);
@@ -106,7 +106,7 @@ test("signal strength counts strong non-seed insights results and calls fewer th
 test("the one variable is checked against the ad set: targeting names its Qloo interests, creative keeps the broad audience", () => {
   const reg = registryFrom([seed, insight]);
   const base = { hypothesis: "h", why: "w", kpi: "Cost per add to cart", stop_if: "Up to 300 per arm", entity_ids: ["INSIGHT"], evidence: ["Outdoor Voices 0.956"] };
-  const ok = (t) => verifyItem("test_plan", { ...base, ...t }, reg);
+  const ok = (t) => verifyItem("test_plan", { ...base, targeting_entity_ids: t.variable === "targeting" ? ["INSIGHT"] : [], ...t }, reg);
   assert.equal(ok({ variable: "targeting", ad_set: "Usual creative, shown to Outdoor Voices fans" }).grounded, true);
   assert.match(ok({ variable: "targeting", ad_set: "Usual creative, shown to sneaker fans" }).problems.join(), /does not name the Qloo interests/);
   assert.equal(ok({ variable: "creative", ad_set: "A materials story in an Outdoor Voices tone, shown to the control's broad audience" }).grounded, true);

@@ -40,8 +40,14 @@ export async function scoreEntity(qloo, entity, seedIds, location) {
 /** Grade a list of pick names: [{name, status: "scored" | "no_match" | "no_score", match, affinity}].
  *  known: optional Map of norm(name) -> the Qloo entity the run itself returned under that name (used before a search). */
 export async function gradePicks(qloo, names, seedIds, location, known = new Map()) {
-  const matches = [];
-  for (const name of names) matches.push(known.get(norm(name)) || await resolvePick(qloo, name));
+  // Independent lookups share the Qloo client's concurrency limit. Promise.all preserves input order.
+  const pending = new Map();
+  const matches = await Promise.all(names.map((name) => {
+    const key = norm(name);
+    if (known.has(key)) return known.get(key);
+    if (!pending.has(key)) pending.set(key, resolvePick(qloo, name));
+    return pending.get(key);
+  }));
   // one insights call per entity type scores every pick of that type: filter.results.entities takes a list, and the
   // scores equal one call per pick (checked 22 Oct). A Worker run has a fixed budget of outgoing requests.
   const byType = new Map();
@@ -53,10 +59,10 @@ export async function gradePicks(qloo, names, seedIds, location, known = new Map
     byType.get(ft).add(m.entity_id);
   }
   const scores = new Map();
-  for (const [filter_type, ids] of byType) {
+  await Promise.all([...byType].map(async ([filter_type, ids]) => {
     const r = await qloo.insights({ filter_type, entity_ids: seedIds, location, result_ids: [...ids], take: ids.size }).catch(() => []);
     for (const e of r) if (ids.has(e.entity_id) && typeof e.affinity === "number") scores.set(e.entity_id, e.affinity);
-  }
+  }));
   return names.map((name, i) => {
     const match = matches[i];
     if (!match) return { name, status: "no_match", match: null, affinity: null };

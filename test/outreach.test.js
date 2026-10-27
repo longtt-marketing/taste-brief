@@ -1,6 +1,17 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { draftOutreach, checkOutreach, outreachInput, mockOutreachLLM, lintDraft } from "../src/outreach.js";
+import { reviewDraft, draftReviewText } from "../public/draft-checks.js";
+
+test("outreach: failed final drafts remain held in the shared user/export status", () => {
+  const d = { show: "Example", code: "EXAMPLE2", email_body: "Hello Example team, please share rates, downloads, host-read slots, dates and exclusivity. Code EXAMPLE2.", host_read: "[BRAND]. Code EXAMPLE2.", why_fit: "A possible fit." };
+  assert.equal(reviewDraft(d).passed, true);
+  const bad = reviewDraft({ ...d, host_read: "50,000 listeners already love us. Code EXAMPLE2." });
+  assert.equal(bad.passed, false);
+  assert.match(draftReviewText(bad), /HELD.*50,000.*disabled/);
+  assert.equal(reviewDraft({ ...d, host_read: undefined }).passed, false);
+  assert.match(draftReviewText(null), /checks unavailable/);
+});
 
 const shows = [
   { name: "Absolutely Not", affinity: 0.954, advertisers: ["Quince", "Nutrafol"], rivals: [], about: "Comedian Heather McMahan | on life", tags: ["Comedy", "Society"] },
@@ -8,9 +19,15 @@ const shows = [
 ];
 const codes = ["ABSOLUTELY", "ARMCHAIR"];
 
+test("outreach: numeric suffix in a supplied promo code is not a fabricated price", () => {
+  const draft = { show: "Sample show", code: "SAMPLE2", email_body: "Use SAMPLE2.", host_read: "Use SAMPLE2.", why_fit: "" };
+  assert.deepEqual(lintDraft(draft).invented_numbers, []);
+  assert.deepEqual(lintDraft({ ...draft, email_body: "Use SAMPLE2 for $2 off." }).invented_numbers, ["2"]);
+});
+
 test("outreach: the model sees each show's fit, ads, category brands and code, and nothing about rates", () => {
   const msg = outreachInput({ product: "Wool sneakers, $120", market: "New York", shows, codes, category: "footwear", alsoLike: ["Everlane"] });
-  assert.match(msg, /1\. Absolutely Not \| about: Comedian Heather McMahan \/ on life \| tags: Comedy, Society \| taste fit 0\.95 \| advertisers in notes: Quince, Nutrafol \| footwear brands in notes: none found \| proposed code: ABSOLUTELY/);
+  assert.match(msg, /1\. Absolutely Not \| about: Comedian Heather McMahan \/ on life \| tags: Comedy, Society \| taste fit 0\.95 \| advertisers in notes: Quince, Nutrafol \| footwear brands in notes: none found \| official contact type: unverified \| proposed code: ABSOLUTELY/);
   assert.match(msg, /2\. Armchair Expert with Dax Shepard \| about: no description \| taste fit 0\.93/, "a show without a description says so, so nothing is made up for it");
   assert.match(msg, /also likes \(Qloo\): Everlane/);
   assert.doesNotMatch(msg, /downloads|rate/i);

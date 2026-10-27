@@ -1,0 +1,466 @@
+{
+  "as_of": "2026-10-27",
+  "scope": "Local development QA across changing revisions; not deployment reliability, buyer validation, or a new prediction benchmark. All eight attempts retained, including citation and provider failures.",
+  "protocol": "qa-round2-plan.md",
+  "attempts": [
+    {
+      "attempt": "2026-10-26T14-21-13-396Z",
+      "source_sha256_selected_files": "27977ce2dc3f23c78c7f45f09e09f1ee144cda06d6ca2f8f8d20b09a696373bc",
+      "cases": [
+        {
+          "key": "coffee",
+          "completed": true,
+          "run": {
+            "version": "local-development",
+            "seconds": 124,
+            "shortlist_seconds": 38,
+            "qloo_calls": 36,
+            "model_calls": 8,
+            "at": "2026-10-26T14:23:17.134Z"
+          },
+          "provisional_seconds": 38,
+          "timing_target_pass": false,
+          "selected": [
+            "10% Happier with Dan Harris",
+            "Home Cooking",
+            "The Sporkful"
+          ],
+          "ready_tests": 1,
+          "proposed_tests": 2,
+          "problems": [],
+          "draft_checks_passed": 3
+        },
+        {
+          "key": "sneakers",
+          "completed": true,
+          "run": {
+            "version": "local-development",
+            "seconds": 102,
+            "shortlist_seconds": 35,
+            "qloo_calls": 28,
+            "model_calls": 7,
+            "at": "2026-10-26T14:24:59.557Z"
+          },
+          "provisional_seconds": 35,
+          "timing_target_pass": true,
+          "selected": [
+            "The Liz Moody Podcast",
+            "A Beautiful Mess Podcast",
+            "Armchair Expert with Dax Shepard"
+          ],
+          "ready_tests": 2,
+          "proposed_tests": 2,
+          "problems": [],
+          "draft_checks_passed": 3
+        },
+        {
+          "key": "turntable",
+          "completed": true,
+          "run": {
+            "version": "local-development",
+            "seconds": 138,
+            "shortlist_seconds": 40,
+            "qloo_calls": 38,
+            "model_calls": 8,
+            "at": "2026-10-26T14:27:17.625Z"
+          },
+          "provisional_seconds": 40,
+          "timing_target_pass": false,
+          "selected": [
+            "The Kinda Funny Podcast",
+            "Giant Bombcast",
+            "Harmontown"
+          ],
+          "ready_tests": 2,
+          "proposed_tests": 3,
+          "problems": [],
+          "draft_checks_passed": 3
+        }
+      ]
+    },
+    {
+      "attempt": "2026-10-26T14-47-15-452Z",
+      "source_sha256_selected_files": "eb584cd59d46a6e7bb0fc24690260b18ecefaea526679cb582c65d3aa6d8a4e0",
+      "cases": [
+        {
+          "key": "coffee",
+          "completed": false,
+          "error_category": "provider_schema_grammar",
+          "seconds": 1,
+          "draft_checks_passed": 0
+        },
+        {
+          "key": "sneakers",
+          "completed": false,
+          "error_category": "provider_schema_grammar",
+          "seconds": 1,
+          "draft_checks_passed": 0
+        },
+        {
+          "key": "turntable",
+          "completed": false,
+          "error_category": "provider_schema_grammar",
+          "seconds": 0,
+          "draft_checks_passed": 0
+        }
+      ]
+    },
+    {
+      "attempt": "2026-10-26T14-48-27-466Z",
+      "source_sha256_selected_files": "d3598bee500c50ada9281e4745df73a0dc02a283fa52ac104a428093c38002d4",
+      "cases": [
+        {
+          "key": "coffee",
+          "completed": false,
+          "error_category": "provider_schema_grammar",
+          "seconds": 1,
+          "draft_checks_passed": 0
+        },
+        {
+          "key": "sneakers",
+          "completed": false,
+          "error_category": "provider_schema_grammar",
+          "seconds": 1,
+          "draft_checks_passed": 0
+        },
+        {
+          "key": "turntable",
+          "completed": false,
+          "error_category": "provider_schema_grammar",
+          "seconds": 0,
+          "draft_checks_passed": 0
+        }
+      ]
+    },
+    {
+      "attempt": "2026-10-26T14-50-10-325Z",
+      "source_sha256_selected_files": "c95c23e7532d96320e3225ba435749d5c0baac2f42e5d88d97195b02f4e62f9b",
+      "cases": [
+        {
+          "key": "coffee",
+          "completed": false,
+          "error_category": "provider_schema_grammar",
+          "seconds": 1,
+          "draft_checks_passed": 0
+        },
+        {
+          "key": "sneakers",
+          "completed": false,
+          "error_category": "provider_schema_grammar",
+          "seconds": 0,
+          "draft_checks_passed": 0
+        },
+        {
+          "key": "turntable",
+          "completed": false,
+          "error_category": "provider_schema_grammar",
+          "seconds": 0,
+          "draft_checks_passed": 0
+        }
+      ]
+    },
+    {
+      "attempt": "2026-10-26T14-52-54-573Z",
+      "source_sha256_selected_files": "4c382843e28aa01dd6eba95637d6514a18e544061102eda4ca709ab27fc36d80",
+      "cases": [
+        {
+          "key": "coffee",
+          "completed": false,
+          "error_category": "provider_conversation_signature",
+          "seconds": 73,
+          "draft_checks_passed": 0
+        },
+        {
+          "key": "sneakers",
+          "completed": false,
+          "error_category": "provider_conversation_signature",
+          "seconds": 82,
+          "draft_checks_passed": 0
+        },
+        {
+          "key": "turntable",
+          "completed": false,
+          "error_category": "provider_conversation_signature",
+          "seconds": 76,
+          "draft_checks_passed": 0
+        }
+      ]
+    },
+    {
+      "attempt": "2026-10-26T14-59-08-481Z",
+      "source_sha256_selected_files": "b9d44955cb95fc863a80d4b5aa159d99a0453d888eb38007db4e691a178df0e0",
+      "cases": [
+        {
+          "key": "coffee",
+          "completed": true,
+          "run": {
+            "version": "local-development",
+            "seconds": 96,
+            "shortlist_seconds": 35,
+            "qloo_calls": 33,
+            "model_calls": 7,
+            "at": "2026-10-26T15:00:44.122Z"
+          },
+          "provisional_seconds": 35,
+          "timing_target_pass": true,
+          "selected": [
+            "10% Happier with Dan Harris",
+            "The Sporkful",
+            "Home Cooking"
+          ],
+          "ready_tests": 2,
+          "proposed_tests": 3,
+          "problems": [],
+          "draft_checks_passed": 3
+        },
+        {
+          "key": "sneakers",
+          "completed": true,
+          "run": {
+            "version": "local-development",
+            "seconds": 127,
+            "shortlist_seconds": 51,
+            "qloo_calls": 31,
+            "model_calls": 7,
+            "at": "2026-10-26T15:02:50.875Z"
+          },
+          "provisional_seconds": 51,
+          "timing_target_pass": false,
+          "selected": [
+            "The Liz Moody Podcast",
+            "A Beautiful Mess Podcast",
+            "Armchair Expert with Dax Shepard"
+          ],
+          "ready_tests": 0,
+          "proposed_tests": 3,
+          "problems": [],
+          "draft_checks_passed": 3
+        },
+        {
+          "key": "turntable",
+          "completed": true,
+          "run": {
+            "version": "local-development",
+            "seconds": 122,
+            "shortlist_seconds": 36,
+            "qloo_calls": 39,
+            "model_calls": 9,
+            "at": "2026-10-26T15:04:53.178Z"
+          },
+          "provisional_seconds": 36,
+          "timing_target_pass": false,
+          "selected": [
+            "The Kinda Funny Podcast",
+            "The Legacy Music Hour Video Game Music Podcast",
+            "Giant Bombcast"
+          ],
+          "ready_tests": 1,
+          "proposed_tests": 3,
+          "problems": [],
+          "draft_checks_passed": 3
+        }
+      ]
+    },
+    {
+      "attempt": "2026-10-26T16-17-13-597Z",
+      "source_sha256_selected_files": "6ac764baf2894b1fd51e7b172799c89efea727869ce8ac97d43910b5a80aa872",
+      "cases": [
+        {
+          "key": "coffee",
+          "completed": true,
+          "run": {
+            "version": "local-development",
+            "seconds": 99,
+            "shortlist_seconds": 37,
+            "timings": {
+              "agent_ms": 92827,
+              "grading_ms": 5901,
+              "agent_model_ms": [
+                2495,
+                2037,
+                5343,
+                34801,
+                14200
+              ],
+              "baseline_model_ms": [
+                15617
+              ],
+              "outreach_model_ms": [
+                24865
+              ]
+            },
+            "qloo_calls": 38,
+            "model_calls": 7,
+            "at": "2026-10-26T16:18:52.512Z"
+          },
+          "provisional_seconds": 37,
+          "timing_target_pass": true,
+          "selected": [
+            "The Sporkful",
+            "Home Cooking",
+            "10% Happier with Dan Harris"
+          ],
+          "ready_tests": 1,
+          "proposed_tests": 3,
+          "problems": [
+            "some structured claims failed the evidence gate"
+          ],
+          "draft_checks_passed": 3,
+          "citation_check": {
+            "grounded": 18,
+            "total": 19,
+            "ratio": 0.9473684210526315
+          }
+        },
+        {
+          "key": "sneakers",
+          "completed": true,
+          "run": {
+            "version": "local-development",
+            "seconds": 103,
+            "shortlist_seconds": 35,
+            "timings": {
+              "agent_ms": 92792,
+              "grading_ms": 6268,
+              "agent_model_ms": [
+                1880,
+                2630,
+                6911,
+                31451,
+                12818
+              ],
+              "baseline_model_ms": [
+                13376
+              ],
+              "outreach_model_ms": [
+                21856
+              ]
+            },
+            "qloo_calls": 34,
+            "model_calls": 7,
+            "at": "2026-10-26T16:20:35.564Z"
+          },
+          "provisional_seconds": 35,
+          "timing_target_pass": true,
+          "selected": [
+            "The Liz Moody Podcast",
+            "A Beautiful Mess Podcast",
+            "Armchair Expert with Dax Shepard"
+          ],
+          "ready_tests": 2,
+          "proposed_tests": 3,
+          "problems": [],
+          "draft_checks_passed": 3,
+          "citation_check": {
+            "grounded": 21,
+            "total": 21,
+            "ratio": 1
+          }
+        },
+        {
+          "key": "turntable",
+          "completed": true,
+          "run": {
+            "version": "local-development",
+            "seconds": 96,
+            "shortlist_seconds": 36,
+            "timings": {
+              "agent_ms": 86100,
+              "grading_ms": 5003,
+              "agent_model_ms": [
+                2142,
+                2933,
+                4020,
+                4864,
+                26905,
+                10500
+              ],
+              "baseline_model_ms": [
+                16589
+              ],
+              "outreach_model_ms": [
+                25418
+              ]
+            },
+            "qloo_calls": 38,
+            "model_calls": 8,
+            "at": "2026-10-26T16:22:11.417Z"
+          },
+          "provisional_seconds": 36,
+          "timing_target_pass": true,
+          "selected": [
+            "Giant Bombcast",
+            "Retronauts",
+            "Nintendo Voice Chat"
+          ],
+          "ready_tests": 1,
+          "proposed_tests": 3,
+          "problems": [],
+          "draft_checks_passed": 3,
+          "citation_check": {
+            "grounded": 15,
+            "total": 15,
+            "ratio": 1
+          }
+        }
+      ]
+    },
+    {
+      "attempt": "2026-10-26T18-09-50-801Z",
+      "source_sha256_selected_files": "37709a5ec187d333597ba2c6617c235380c570d07601cfe0a410527757833f28",
+      "cases": [
+        {
+          "key": "coffee",
+          "completed": true,
+          "run": {
+            "version": "local-development",
+            "seconds": 101,
+            "shortlist_seconds": 44,
+            "timings": {
+              "agent_ms": 95142,
+              "grading_ms": 4735,
+              "agent_model_ms": [
+                2620,
+                1996,
+                5433,
+                32092,
+                12742
+              ],
+              "baseline_model_ms": [
+                15628
+              ],
+              "outreach_model_ms": [
+                30588
+              ]
+            },
+            "qloo_calls": 36,
+            "model_calls": 7,
+            "at": "2026-10-26T18:11:31.521Z"
+          },
+          "provisional_seconds": 44,
+          "timing_target_pass": true,
+          "selected": [
+            "The Sporkful",
+            "Home Cooking",
+            "10% Happier with Dan Harris"
+          ],
+          "ready_tests": 2,
+          "proposed_tests": 3,
+          "problems": [],
+          "draft_checks_passed": 3,
+          "citation_check": {
+            "grounded": 17,
+            "total": 17,
+            "ratio": 1
+          }
+        }
+      ]
+    }
+  ],
+  "manual_findings_first_attempt": [
+    "Coffee creative implied Houndstooth-equivalent product quality without product evidence.",
+    "Free-text creative extraction could export a hypothesis instead of ad copy.",
+    "Turntable shortlist included archival Harmontown."
+  ],
+  "final_gate_recheck_note": "Final recorded sneakers readiness was 0 because terminal punctuation prevented one verified Meta lookup from matching. A later formatting-only fix makes it 1; generation and timings were not rerun. Creative tests remain held pending exact-copy buyer review."
+}

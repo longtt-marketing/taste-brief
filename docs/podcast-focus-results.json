@@ -1,0 +1,317 @@
+{
+  "kind": "Operational QA, all attempts retained",
+  "protocol": "docs/podcast-focus-qa.md",
+  "attempts": [
+    {
+      "at": "2026-10-27T03:03:09.225Z",
+      "protocol": "docs/podcast-focus-qa.md",
+      "source_sha256": "e2b058ca20c0a75ba6a67130d8a89daff5486a98b98f793aab19edf31d2d92bb",
+      "cases": [
+        {
+          "key": "coffee",
+          "input": {
+            "product": "Specialty coffee subscription, $25/month",
+            "market": "Austin, TX",
+            "references": "Blue Bottle Coffee",
+            "rivals": "allow"
+          },
+          "completed": true,
+          "run": {
+            "version": "local-development",
+            "seconds": 35,
+            "shortlist_seconds": 35,
+            "timings": {
+              "agent_ms": 34765,
+              "grading_ms": 0,
+              "agent_model_ms": [
+                1638,
+                1784,
+                2097,
+                3176
+              ],
+              "baseline_model_ms": [],
+              "outreach_model_ms": [
+                23525
+              ]
+            },
+            "qloo_calls": 4,
+            "model_calls": 5,
+            "at": "2026-10-27T03:03:44.038Z"
+          },
+          "observed_seconds": 35,
+          "selected": [
+            "Home Cooking",
+            "The Sporkful"
+          ],
+          "problems": [],
+          "timing_target_pass": true
+        },
+        {
+          "key": "sneakers",
+          "input": {
+            "product": "Wool running sneakers, $120",
+            "market": "New York, NY",
+            "references": "Allbirds",
+            "rivals": "skip"
+          },
+          "completed": true,
+          "run": {
+            "version": "local-development",
+            "seconds": 29,
+            "shortlist_seconds": 29,
+            "timings": {
+              "agent_ms": 28501,
+              "grading_ms": 0,
+              "agent_model_ms": [
+                1414,
+                1134,
+                5256
+              ],
+              "baseline_model_ms": [],
+              "outreach_model_ms": [
+                19332
+              ]
+            },
+            "qloo_calls": 2,
+            "model_calls": 4,
+            "at": "2026-10-27T03:04:12.553Z"
+          },
+          "observed_seconds": 29,
+          "selected": [
+            "The Liz Moody Podcast",
+            "A Beautiful Mess Podcast",
+            "Armchair Expert with Dax Shepard"
+          ],
+          "problems": [],
+          "timing_target_pass": true
+        },
+        {
+          "key": "turntable",
+          "input": {
+            "product": "Beginner turntable, $250",
+            "market": "Chicago, IL",
+            "references": "Audio-Technica",
+            "rivals": "allow"
+          },
+          "completed": true,
+          "run": {
+            "version": "local-development",
+            "seconds": 42,
+            "shortlist_seconds": 42,
+            "timings": {
+              "agent_ms": 42445,
+              "grading_ms": 0,
+              "agent_model_ms": [
+                1179,
+                1195,
+                2959,
+                1859,
+                2482,
+                5525
+              ],
+              "baseline_model_ms": [],
+              "outreach_model_ms": [
+                24201
+              ]
+            },
+            "qloo_calls": 7,
+            "model_calls": 7,
+            "at": "2026-10-27T03:04:55.006Z"
+          },
+          "observed_seconds": 42,
+          "selected": [
+            "WTF with Marc Maron Podcast",
+            "Roderick on the Line"
+          ],
+          "problems": [],
+          "timing_target_pass": true
+        }
+      ],
+      "post_run_review": {
+        "case": "turntable",
+        "accepted": false,
+        "reason": "Automated false pass: WTF with Marc Maron had ended, but the curated availability directory omitted it. Official finale verified after the run. Original response and timing retained.",
+        "source": "https://www.wtfpod.com/podcast/episode-1686-barack-obama",
+        "checked_at": "2026-10-27"
+      }
+    },
+    {
+      "at": "2026-10-27T03:11:36.449Z",
+      "protocol": "docs/podcast-focus-qa.md",
+      "source_sha256": "0bc1033804996a9b0d4436b45ef03f93eabfb562808791e1d449669951ecea72",
+      "cases": [
+        {
+          "key": "turntable",
+          "input": {
+            "product": "Beginner turntable, $250",
+            "market": "Chicago, IL",
+            "references": "Audio-Technica",
+            "rivals": "allow"
+          },
+          "completed": true,
+          "run": {
+            "version": "local-development",
+            "seconds": 49,
+            "shortlist_seconds": 49,
+            "timings": {
+              "agent_ms": 49290,
+              "grading_ms": 0,
+              "agent_model_ms": [
+                1362,
+                1539,
+                3105,
+                3895
+              ],
+              "baseline_model_ms": [],
+              "outreach_model_ms": [
+                36932
+              ]
+            },
+            "qloo_calls": 4,
+            "model_calls": 5,
+            "at": "2026-10-27T03:12:25.771Z"
+          },
+          "observed_seconds": 49,
+          "selected": [
+            "Retronauts",
+            "Giant Bombcast",
+            "Nintendo Voice Chat"
+          ],
+          "problems": [],
+          "timing_target_pass": false
+        }
+      ]
+    },
+    {
+      "at": "2026-10-27T09:33:03.789Z",
+      "protocol": "docs/podcast-focus-qa.md",
+      "source_sha256": "0bc1033804996a9b0d4436b45ef03f93eabfb562808791e1d449669951ecea72",
+      "cases": [
+        {
+          "key": "coffee",
+          "input": {
+            "product": "Specialty coffee subscription, $25/month",
+            "market": "Austin, TX",
+            "references": "Blue Bottle Coffee",
+            "rivals": "allow"
+          },
+          "completed": true,
+          "run": {
+            "version": "local-development",
+            "seconds": 31,
+            "shortlist_seconds": 31,
+            "timings": {
+              "agent_ms": 30953,
+              "grading_ms": 0,
+              "agent_model_ms": [
+                1667,
+                1631,
+                1691,
+                3806
+              ],
+              "baseline_model_ms": [],
+              "outreach_model_ms": [
+                20496
+              ]
+            },
+            "qloo_calls": 3,
+            "model_calls": 5,
+            "at": "2026-10-27T09:33:34.795Z"
+          },
+          "observed_seconds": 31,
+          "selected": [
+            "Home Cooking",
+            "The Sporkful"
+          ],
+          "problems": [],
+          "timing_target_pass": true
+        },
+        {
+          "key": "sneakers",
+          "input": {
+            "product": "Wool running sneakers, $120",
+            "market": "New York, NY",
+            "references": "Allbirds",
+            "rivals": "skip"
+          },
+          "completed": true,
+          "run": {
+            "version": "local-development",
+            "seconds": 33,
+            "shortlist_seconds": 33,
+            "timings": {
+              "agent_ms": 32602,
+              "grading_ms": 0,
+              "agent_model_ms": [
+                1450,
+                1562,
+                4653
+              ],
+              "baseline_model_ms": [],
+              "outreach_model_ms": [
+                23589
+              ]
+            },
+            "qloo_calls": 2,
+            "model_calls": 4,
+            "at": "2026-10-27T09:34:07.410Z"
+          },
+          "observed_seconds": 33,
+          "selected": [
+            "The Liz Moody Podcast",
+            "A Beautiful Mess Podcast",
+            "Armchair Expert with Dax Shepard"
+          ],
+          "problems": [],
+          "timing_target_pass": true
+        },
+        {
+          "key": "turntable",
+          "input": {
+            "product": "Beginner turntable, $250",
+            "market": "Chicago, IL",
+            "references": "Audio-Technica",
+            "rivals": "allow"
+          },
+          "completed": true,
+          "run": {
+            "version": "local-development",
+            "seconds": 36,
+            "shortlist_seconds": 36,
+            "timings": {
+              "agent_ms": 35815,
+              "grading_ms": 0,
+              "agent_model_ms": [
+                1481,
+                1256,
+                3116,
+                1937,
+                4305
+              ],
+              "baseline_model_ms": [],
+              "outreach_model_ms": [
+                20463
+              ]
+            },
+            "qloo_calls": 6,
+            "model_calls": 6,
+            "at": "2026-10-27T09:34:43.231Z"
+          },
+          "observed_seconds": 36,
+          "selected": [
+            "The Legacy Music Hour Video Game Music Podcast",
+            "Giant Bombcast"
+          ],
+          "problems": [],
+          "timing_target_pass": true
+        }
+      ],
+      "post_run_review": {
+        "issue": "Automated structural checks passed, but free-form selection rationale overclaimed category availability and mentioned a show absent from the final selection.",
+        "fix": "UI now uses the actual shortlist comparison and per-show evidence, not the unverified rationale. Original run retained.",
+        "scope": "Presentation fix only; provider outputs, ranking and historical attempts unchanged."
+      }
+    }
+  ],
+  "interpretation": "A requested fresh operational round completed coffee/sneakers/turntable in 31/33/36s. All passed structural checks; source review found an unchecked-rationale presentation issue, fixed without rerunning. Earlier 35/29/49s and the rejected 42s turntable remain. No controlled speedup, buyer outcome or provider reliability claim."
+}

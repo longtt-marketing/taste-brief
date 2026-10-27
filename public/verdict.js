@@ -6,28 +6,72 @@
 export const RULE = { cap: 300, minAddsToCart: 20, worseBy: 0.3, betterBy: 0.15 };
 
 const list = (v) => (Array.isArray(v) ? v : []);
-const named = (text, name) => new RegExp(`(^|[^\\p{L}\\p{N}])${String(name).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}($|[^\\p{L}\\p{N}])`, "iu").test(String(text || ""));
+// Formatting equivalence only: keep all words, accents and qualifiers. Never guess that Pitchfork means Pitchfork Media.
+const lookupName = (name) => String(name || "").normalize("NFKC").trim().toLowerCase().replace(/\s+/g, " ").replace(/\.$/, "");
 
-/** Interests a targeting test names that Meta's interest search did not find in this run (empty for creative tests). */
-export function missingInMeta(test, metaCheck) {
-  if (test?.variable !== "targeting") return [];
-  return list(metaCheck?.taste_brief).filter((m) => m?.status === "not_found" && named(test.ad_set, m.name)).map((m) => m.name);
+/** A single explicit target list feeds the readiness decision, plan receipt and CSV. Old recorded targeting tests
+ * without a selection remain readable, but cannot silently become a launchable plan. */
+export function testReadiness(test, metaCheck, product = "") {
+  const issues = [], targets = [], missing = [];
+  if (test?.grounded !== true) issues.push("The test's Qloo evidence has not passed its checks.");
+  if (!["creative", "targeting"].includes(test?.variable)) issues.push("Choose one variable: creative or targeting.");
+  const selected = list(test?.targeting_entity_ids);
+  if (test?.variable === "creative" && selected.length) issues.push("A creative test must keep the broad control audience.");
+  if (test?.variable === "creative") issues.push(...creativeIssues(test, product));
+  if (test?.variable === "targeting") {
+    if (!Array.isArray(test.targeting_entity_ids) || !selected.length) issues.push("This plan has no explicit targeting selection. Generate a new plan before locking it.");
+    for (const id of new Set(selected)) {
+      const entity = list(test.verified).find((e) => e.entity_id === id);
+      if (!entity?.name || !list(test.entity_ids).includes(id)) { issues.push("A selected target has no verified Qloo citation."); continue; }
+      const matches = list(metaCheck?.taste_brief).filter((m) => lookupName(m.name) === lookupName(entity.name));
+      const identities = new Set(matches.filter((m) => m.status === "targetable").map((m) => String(m.interest?.id || "")));
+      if (identities.size > 1) { issues.push(`Meta has ambiguous identities for ${entity.name}.`); continue; }
+      const check = matches.find((m) => m.status === "targetable") || matches[0];
+      if (check?.status === "not_found") { missing.push(entity.name); issues.push(`Meta did not find ${entity.name}.`); }
+      else if (metaCheck?.error || check?.status !== "targetable" || !/^\d+$/.test(String(check?.interest?.id || "")) || !check?.interest?.name) {
+        issues.push(`Meta has not verified ${entity.name}.`);
+      } else targets.push({ entity_id: id, name: entity.name, meta_id: String(check.interest.id), meta_name: check.interest.name });
+    }
+  }
+  return { ready: issues.length === 0, issues, targets, missing };
 }
 
-/** The tests that can be launched as written. The gate is code, not the model: two AI reviews we ran on 22 Oct asked that a test
+/** Kept for callers that need the specific missing names; readiness also rejects unknown/error states. */
+export function missingInMeta(test, metaCheck) {
+  if (test?.variable !== "targeting") return [];
+  return testReadiness(test, metaCheck).missing;
+}
+
+/** Tests that passed the evidence and interest checks, ready for a planning sheet (not an advertising approval). Two AI reviews on 22 Oct asked that a test
  *  naming a missing interest never be presented, or locked, as ready. */
-export function readyTests(tests, metaCheck) {
-  return list(tests).filter((t) => !missingInMeta(t, metaCheck).length);
+export function readyTests(tests, metaCheck, product = "") {
+  return list(tests).flatMap((t) => {
+    const checked = testReadiness(t, metaCheck, product);
+    return checked.ready ? [{ ...t, targets: checked.targets }] : [];
+  });
+}
+
+/** The human-readable download uses the same gate as the page, receipt and planning sheet. */
+export function testPlanMarkdown(tests, metaCheck, product = "") {
+  return list(tests).map((test, i) => {
+    const check = testReadiness(test, metaCheck, product);
+    return `- Test ${i + 1}: ${check.ready ? "ELIGIBLE for the planning sheet; review in Ads Manager before spending" : `HELD: ${check.issues.join(" ")}`}\n`
+      + `  Hypothesis: ${test.hypothesis || ""}\n  Proposed change (${test.variable || "unknown"}): ${test.ad_set || ""}\n`
+      + (test.variable === "creative" ? `  Proposed copy: ${creativeOf(test) || "not supplied as explicit copy"}\n  Buyer review: ${creativeIssues(test, product).length ? "not completed for this copy and product" : test.creative_review.reviewed_at}\n` : "")
+      + (check.targets.length ? `  Verified targets: ${check.targets.map((t) => `${t.meta_name} (${t.meta_id})`).join("; ")}\n` : "")
+      + `  Why: ${test.why || ""}`;
+  }).join("\n");
 }
 
 /** The plan as it gets locked: control, tests and rule, in a fixed key order so the same plan always hashes the same. */
 export function canonicalPlan({ product, market, references, tests, rule = RULE, lockedAt }) {
   return JSON.stringify({
-    v: 1, product: String(product || ""), market: String(market || ""), references: String(references || ""),
+    v: 3, product: String(product || ""), market: String(market || ""), references: String(references || ""),
     rule: { cap: rule.cap, minAddsToCart: rule.minAddsToCart, worseBy: rule.worseBy, betterBy: rule.betterBy },
     control: "Broad targeting in the market, same ages, the usual message",
     tests: (tests || []).map((t, i) => ({ arm: `Test ${i + 1}`, variable: t.variable || "", hypothesis: t.hypothesis || "", ad_set: t.ad_set || "",
-      cited: (t.verified || []).map((e) => e.name).filter(Boolean) })),
+      cited: (t.verified || []).map((e) => e.name).filter(Boolean), targets: checkedTargets(t),
+      ...(t.variable === "creative" ? lockedCreative(t, product) : {}) })),
     locked_at: lockedAt,
   });
 }
@@ -39,27 +83,70 @@ export async function planHash(canonical) {
   return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
-/** The new creative of a creative test: the text after "creative:" in its ad set line, else its hypothesis. */
+/** Exact copy only. A hypothesis or a loose substring of ad_set must never become an ad in the CSV. */
 export function creativeOf(t) {
-  const m = /creative:\s*(.+)$/i.exec(String(t?.ad_set || ""));
-  return (m ? m[1] : String(t?.hypothesis || t?.ad_set || "")).trim();
+  return typeof t?.creative_copy === "string" ? t.creative_copy.trim() : "";
+}
+
+export function creativeIssues(test, product = "") {
+  const copy = creativeOf(test), review = test?.creative_review;
+  const issues = [];
+  if (!copy) issues.push("Enter the exact ad copy; a hypothesis is not ad copy.");
+  if (/\[[^\]]+\]/.test(copy)) issues.push("Resolve the copy's bracketed placeholders before reviewing it.");
+  if (!review || review.copy !== copy || review.product !== String(product || "") || !Number.isFinite(Date.parse(review.reviewed_at))) {
+    issues.push("Review the product claims in this exact copy. Qloo checks audience evidence, not product quality or endorsements.");
+  }
+  return issues;
+}
+
+/** Buyer attestation, not an automated fact check. Editing the copy or product invalidates it. */
+export function reviewCreative(test, { copy, product, at }) {
+  const text = String(copy || "").trim();
+  if (test?.variable !== "creative" || !text || /\[[^\]]+\]/.test(text) || !Number.isFinite(Date.parse(at))) {
+    throw new Error("Enter complete creative copy without bracketed placeholders before reviewing it.");
+  }
+  return { ...test, creative_copy: text,
+    ad_set: "Keep the control's broad audience and ages. Use the reviewed copy below instead of the usual creative.",
+    creative_review: { copy: text, product: String(product || ""), reviewed_at: at } };
+}
+
+function lockedCreative(test, product) {
+  const issues = creativeIssues(test, product);
+  if (issues.length) throw new Error(issues.join(" "));
+  return { creative_copy: creativeOf(test), creative_review: { ...test.creative_review } };
+}
+
+function checkedTargets(test) {
+  if (test.variable !== "targeting") return [];
+  if (!Array.isArray(test.targets) || !test.targets.length || test.targets.some((t) =>
+    !t.entity_id || !t.name || !t.meta_name || !/^\d+$/.test(String(t.meta_id || "")))) {
+    throw new Error("This plan has no verified targeting list. Generate and check it before exporting.");
+  }
+  return test.targets.map(({ entity_id, name, meta_id, meta_name }) => ({ entity_id, name, meta_id, meta_name }));
 }
 
 /** The ad set sheet: one row per arm, named with the plan id so results can be matched back to the locked plan, with the
  *  settings every arm shares so they differ only in the one thing each test changes. */
-export function adSetRows({ market, tests, planId, rule = RULE }) {
+export function adSetRows({ market, product = "", tests, planId, rule = RULE }) {
   const city = String(market || "").split(",")[0];
-  const names = (t) => (t.verified || []).map((e) => e.name).filter(Boolean);
   const same = { ages: "same as your usual ad", optimization: "Add to cart", placements: "Advantage+ placements", budget: `lifetime, up to ${rule.cap} in your account currency`, schedule: "7 days, all arms start together", attribution: "7-day click, 1-day view" };
-  const rows = [{ ad_set: `TB-${planId} Control`, changes: "nothing (the control)", targeting: `Broad, ${city}`, creative: "Your usual ad", ...same }];
+  const rows = [{ ad_set: `TB-${planId} Control`, changes: "nothing (the control)", targeting: `Broad, ${city}`, meta_interest_ids: "", creative: "Your usual ad", ...same }];
   (tests || []).forEach((t, i) => rows.push({
     ad_set: `TB-${planId} Test ${i + 1}`,
     changes: t.variable === "targeting" ? "targeting only" : t.variable === "creative" ? "creative only" : String(t.variable || ""),
-    targeting: t.variable === "targeting" ? `Interests: ${names(t).join("; ")}, ${city}` : `Broad, ${city}`,
-    creative: t.variable === "creative" ? creativeOf(t) : "Your usual ad",
+    targeting: t.variable === "targeting" ? `Interests: ${checkedTargets(t).map((x) => x.meta_name).join("; ")}, ${city}` : `Broad, ${city}`,
+    meta_interest_ids: checkedTargets(t).map((x) => x.meta_id).join("; "),
+    creative: t.variable === "creative" ? lockedCreative(t, product).creative_copy : "Your usual ad",
     ...same,
   }));
   return rows;
+}
+
+/** A loaded receipt is the sole source of every exported setting, regardless of the brief currently on screen. */
+export function lockedPlanRows(locked) {
+  const plan = JSON.parse(locked.canonical);
+  if (![1, 2, 3].includes(plan.v) || !Array.isArray(plan.tests)) throw new Error("Unsupported locked plan.");
+  return adSetRows({ market: plan.market, product: plan.product, tests: plan.tests, rule: plan.rule, planId: locked.id });
 }
 
 export function toCsv(rows) {

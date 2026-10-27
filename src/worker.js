@@ -6,7 +6,9 @@
 // - a wrong code: HTTP 401 "access code not recognised" (never a silent switch to synthetic data);
 // - no code: live while today's free quota lasts (FREE_DAILY, default 25 runs, counted in the QUOTA KV namespace), then
 //   synthetic data, clearly labelled. Without DEMO_CODE configured (local dev) everything is live when keys exist.
-import { runAgent, runBaseline, BASELINE_SYSTEM, TOOLS } from "./agent.js";
+import { buyerDecision } from "../public/buyer-decision.js";
+import { reviewDraft } from "../public/draft-checks.js";
+import { runAgent, runBaseline, BASELINE_SYSTEM, TOOLS, PODCAST_SYSTEM, podcastTools } from "./agent.js";
 import { unbackedBy } from "./evidence.js";
 import { gradePicks, summarize, norm } from "./grade.js";
 import { makeMeta, checkInterests } from "./meta.js";
@@ -19,7 +21,8 @@ import { podcastPartners, categoryFor } from "./podcasts.js";
 import { makeQloo } from "./qloo.js";
 import { mockQloo } from "./mock-qloo.js";
 import { anthropicLLM, mockLLM, mockBaselineLLM } from "./llm.js";
-import { draftOutreach, mockOutreachLLM, lintDraft, OUTREACH_SYSTEM, OUTREACH_TOOL } from "./outreach.js";
+import { draftOutreach, mockOutreachLLM, OUTREACH_SYSTEM, OUTREACH_TOOL } from "./outreach.js";
+import { archivedShows } from "../public/contacts.js";
 import { askFirst, promoCodes, rivalPolicy, policyBlocks } from "../public/rank.js";
 
 /** Constant-time compare for the demo access code. */
@@ -144,7 +147,8 @@ export default {
       const product = String(body.product || "").slice(0, 400).trim();
       const market = String(body.market || "").slice(0, 120).trim();
       const references = String(body.references || "").slice(0, 300).trim();
-      const marketB = String(body.compare_market || "").slice(0, 120).trim();
+      const podcastOnly = body.focus === "podcasts";
+      const marketB = podcastOnly ? "" : String(body.compare_market || "").slice(0, 120).trim();
       const rivals = rivalPolicy(body.rivals); // the buyer's choice for shows where a category brand already advertises
       if (product.length < 3 || market.length < 2) return json({ error: "product and market are required" }, 400);
 
@@ -153,9 +157,15 @@ export default {
       const live = acc.live;
       // every Qloo call of the run is counted here, the agent's, the self-check's and the fixed steps', so the page reports the real number
       let qlooCount = 0;
+      let providerError = null;
       const rawQloo = live ? makeQloo({ apiKey: env.QLOO_API_KEY }) : mockQloo();
-      const qloo = Object.fromEntries(Object.entries(rawQloo).map(([k, f]) => [k, typeof f === "function" ? (...a) => { qlooCount++; return f(...a); } : f]));
-      const llm = live ? anthropicLLM({ apiKey: env.ANTHROPIC_API_KEY, workspaceId: env.ANTHROPIC_WORKSPACE_ID, model: env.MODEL || undefined }) : mockLLM();
+      const qloo = Object.fromEntries(Object.entries(rawQloo).map(([k, f]) => [k, typeof f === "function" ? async (...a) => {
+        if (providerError) throw providerError;
+        qlooCount++;
+        try { return await f(...a); } catch (e) { if (e?.code === "QLOO_INVALID_IDENTITIES") providerError = e; throw e; }
+      } : f]));
+      const llm = live ? anthropicLLM({ apiKey: env.ANTHROPIC_API_KEY, workspaceId: env.ANTHROPIC_WORKSPACE_ID, model: env.MODEL || undefined,
+        ...(podcastOnly ? { system: PODCAST_SYSTEM, tools: podcastTools() } : {}) }) : mockLLM({ focus: podcastOnly ? "podcasts" : "full" });
       const baseLLM = live
         ? anthropicLLM({ apiKey: env.ANTHROPIC_API_KEY, workspaceId: env.ANTHROPIC_WORKSPACE_ID, model: env.MODEL || undefined, system: BASELINE_SYSTEM,
           tools: TOOLS.filter((t) => t.name === "submit_brief") }) // forced tool_choice is rejected by the model; the prompt asks for it
@@ -170,6 +180,13 @@ export default {
       // Qloo-only comparison on the agent's own seed entities. A failed baseline or comparison never sinks the brief.
       const run = async (send) => {
         const t0 = Date.now();
+        let shortlistSeconds = null;
+        const timings = {};
+        const timed = async (name, work) => {
+          const start = Date.now();
+          try { return await work(); }
+          finally { timings[name] = Date.now() - start; }
+        };
         // the agent's buying steps: it reads Qloo's podcast ranking with the ad data and chooses which shows get drafts (src/agent.js)
         const bought = { pods: null, outreach: null };
         const alsoLikeFrom = (registry, seedIds) => registry.filter((e) => !seedIds.includes(e.entity_id) && typeof e.affinity === "number" && /brand|artist/.test(String(e.type)))
@@ -184,7 +201,9 @@ export default {
             // the facts only: the page's fixed rule (askFirst) is not passed, so the choice is the agent's own
             return { n: p.shows.length, for_model: { category: p.category, buyer_policy: rivals === "skip" ? "The buyer skips shows where a brand of the category already advertises: do not choose them." : "The buyer allows shows where a brand of the category already advertises; weigh exclusivity.", shows: p.shows.map((x) => ({ name: x.name, about: String(x.about || "").slice(0, 160), tags: list(x.tags), taste_fit: Math.round(x.affinity * 1000) / 1000,
               popularity: Math.round((Number(x.popularity) || 0) * 1000) / 1000, advertisers_found: Array.isArray(x.advertisers) ? x.advertisers.length : "not in our data", sample_advertisers: list(x.advertisers).slice(0, 6),
-              category_brands_found: x.rivals ?? "unknown" })) } };
+              category_brands_found: x.rivals ?? "unknown", ad_contact: x.contact?.kind || "unverified",
+              next_research_action: buyerDecision(x, { market, category: p.category, policy: rivals }).next,
+              excluded_from_new_host_reads: archivedShows([x]).length > 0 })) } };
           },
           draft_outreach: async ({ shows, reason }, { registry }) => {
             const p = bought.pods;
@@ -194,23 +213,33 @@ export default {
             // the buyer's "skip" is enforced here, whatever the model chose
             const blocked = policyBlocks(chosen, rivals);
             if (blocked.length) return { error: `The buyer chose to skip shows where a ${p.category || "category"} brand already advertises: ${blocked.map((x) => x.name).join(", ")}. Choose other shows.` };
+            const archived = archivedShows(chosen);
+            if (archived.length) return { error: `These shows have no current host-read schedule verified and are excluded: ${archived.map((x) => x.name).join(", ")}. Choose other shows.` };
             const codes = promoCodes(chosen.map((x) => x.name));
             const o = await draftOutreach({ llm: outLLM, product, market, shows: chosen, codes, category: p.category, alsoLike: alsoLikeFrom(registry, bought.seeds.map((x) => x.entity_id)),
               reference: bought.seeds.map((x) => x.name).join(", "), timeoutMs: Math.min(60000, RUN_TIMEOUT_MS - (Date.now() - t0) - 30000) });
             bought.outreach = { ...o, chosen_by: "agent", reason: String(reason || "").replace(/\s+[—–]\s+/g, ", ").slice(0, 300) };
-            const checks = o.shows.map((d) => { const show = chosen.find((x) => x.name === d.show); const l = lintDraft(d, { product, fit: show?.affinity, rivals: show?.rivals });
-              return { show: d.show, passed: l.asks_all && l.code && !l.invented_numbers.length && !l.host_read_repeats.length && !l.host_read_padding && !l.names_rival.length, names_rival: l.names_rival, repeats: l.host_read_repeats, padding: l.host_read_padding, missing_asks: Object.keys(l.asks).filter((k) => !l.asks[k]), invented_numbers: l.invented_numbers }; });
+            const checks = o.shows.map((d) => { const show = chosen.find((x) => x.name === d.show); const l = reviewDraft(d, { product, fit: show?.affinity, rivals: show?.rivals });
+              return { show: d.show, passed: l.passed, names_rival: l.names_rival, repeats: l.host_read_repeats, padding: l.host_read_padding, missing_asks: Object.keys(l.asks).filter((k) => !l.asks[k]), invented_numbers: l.invented_numbers }; });
+            // The primary buying task is already available. Optional interest grading and city comparisons can finish
+            // while the buyer reads it. A partial plan is explicitly provisional and is discarded on a later error.
+            if (!providerError && checks.length && checks.every((x) => x.passed)) {
+              shortlistSeconds ??= Math.round((Date.now() - t0) / 1000);
+              if (!podcastOnly) send({ type: "shortlist", ...meta, product, references, market, rival_policy: rivals,
+                podcasts: { ...p, outreach: bought.outreach }, seconds: shortlistSeconds });
+            }
             return { n: o.shows.length, for_model: { drafts: o.shows.length, checks } };
           },
         };
         const [out, baseline] = await Promise.all([
-          runAgent({ llm, qloo, product, market, references, check: makeSelfCheck({ qloo, market, meta: metaFor }), actions, onStep: (s) => send({ type: "step", run: market, step: s }) }),
-          body.compare === false ? null : runBaseline({ llm: baseLLM, product, market, references })
+          timed("agent_ms", () => runAgent({ llm, qloo, product, market, references, focus: podcastOnly ? "podcasts" : "full", check: podcastOnly ? null : makeSelfCheck({ qloo, market, meta: metaFor }), actions, onStep: (s) => send({ type: "step", run: market, elapsed_ms: Date.now() - t0, step: s }) })),
+          podcastOnly || body.compare === false ? null : runBaseline({ llm: baseLLM, product, market, references })
             .then((b) => { send({ type: "step", run: "no-data baseline", step: { tool: "baseline_done" } }); return b; })
             .catch((e) => ({ error: String(e.message || e) })),
         ]);
         // demographics straight from Qloo when the agent skipped them
-        if (!out.demographics && out.seeds.length) {
+        if (podcastOnly) out.seeds = (bought.seeds || []).map((x) => x.entity_id);
+        if (!podcastOnly && !out.demographics && out.seeds.length) {
           const d = await qloo.demographics({ entity_ids: out.seeds }).catch(() => []);
           if (d[0]) out.demographics = { seeds: out.seeds.map((id) => out.registry.find((e) => e.entity_id === id)?.name || id), age: d[0].age, gender: d[0].gender };
         }
@@ -221,7 +250,7 @@ export default {
         const gradeBoth = async () => {
           if (!baseline || baseline.error || !out.seeds.length) return null;
           const known = new Map(out.registry.map((e) => [norm(e.name), e])); // the brief's own picks are graded as the entities it cited
-          const [tb, plain] = [await gradePicks(qloo, picks(out.brief), out.seeds, market, known), await gradePicks(qloo, picks(baseline), out.seeds, market, known)];
+          const [tb, plain] = await Promise.all([gradePicks(qloo, picks(out.brief), out.seeds, market, known), gradePicks(qloo, picks(baseline), out.seeds, market, known)]);
           send({ type: "step", run: market, step: { tool: "graded", n: tb.length + plain.length } });
           return { taste_brief: { graded: tb, ...summarize(tb) }, plain: { graded: plain, ...summarize(plain) } };
         };
@@ -231,11 +260,11 @@ export default {
             ? compareMarkets({ qloo, seedIds: out.seeds.slice(0, 3), marketA: market, marketB,
               onStep: (s) => send({ type: "step", run: `${market} vs ${marketB}`, step: s }) }).catch((e) => ({ error: String(e.message || e) }))
             : null,
-          gradeBoth().catch(() => null),
+          timed("grading_ms", gradeBoth).catch(() => null),
           // the agent's own podcast step when it took it; otherwise the same steps run here as a fallback
           bought.pods ? Promise.resolve({ ...bought.pods, outreach: bought.outreach || undefined }).then(async (p) => {
             if (p.outreach) return p;
-            const first = askFirst(p.shows, 3, { skipRivals: rivals === "skip" }).shows;
+            const first = askFirst(p.shows, 3, { skipRivals: rivals === "skip", checkAvailability: true }).shows;
             if (!first.length) return p;
             p.outreach = await draftOutreach({ llm: outLLM, product, market, shows: first, codes: promoCodes(first.map((x) => x.name)), category: p.category,
               alsoLike: alsoLikeFrom(out.registry, out.seeds), reference: seedEntities.map((e) => e.name).join(", "), timeoutMs: Math.min(60000, RUN_TIMEOUT_MS - (Date.now() - t0) - 15000) })
@@ -245,7 +274,7 @@ export default {
           }) : seedEntities.length ? podcastPartners({ qloo, seeds: seedEntities, take: 20, category: categoryFor(references, out.brief?.category) })
             // the agent's outreach drafts for the shows to ask first, as soon as the shows are known
             .then(async (p) => {
-              const first = askFirst(p?.shows, 3, { skipRivals: rivals === "skip" }).shows;
+              const first = askFirst(p?.shows, 3, { skipRivals: rivals === "skip", checkAvailability: true }).shows;
               if (!first.length) return p;
               const codes = promoCodes(first.map((s) => s.name));
               const seedSet = new Set(out.seeds);
@@ -259,8 +288,8 @@ export default {
               return p;
             })
             .catch((e) => ({ error: String(e.message || e) })) : null,
-          live ? metaCheck(metaFor, out.brief, baseline, seedNames)
-            .then((m) => { if (m) send({ type: "step", run: market, step: { tool: "meta_check", n: m.taste_brief.length + m.plain.length, found: [...m.taste_brief, ...m.plain].filter((x) => x.status === "targetable").length } }); return m; })
+          live && !podcastOnly ? metaCheck(metaFor, out.brief, baseline, seedNames)
+            .then((m) => { if (m && !m.error) send({ type: "step", run: market, step: { tool: "meta_check", n: m.taste_brief.length + m.plain.length, found: [...m.taste_brief, ...m.plain].filter((x) => x.status === "targetable").length } }); return m; })
             .catch((e) => ({ error: String(e.message || e) })) : null,
         ]);
         // what the plain guess would target that Qloo did not return anywhere in this run (entities, tags or city lists)
@@ -271,7 +300,10 @@ export default {
         const graded = [...(scored?.taste_brief?.graded || []), ...(scored?.plain?.graded || [])];
         const qlooCalls = qlooCount;
         const runInfo = { version: env.CF_VERSION_METADATA?.id || "local", seconds: Math.round((Date.now() - t0) / 1000),
+          shortlist_seconds: shortlistSeconds,
+          timings: { ...timings, agent_model_ms: llm.usage?.call_ms || [], baseline_model_ms: baseLLM.usage?.call_ms || [], outreach_model_ms: outLLM.usage?.call_ms || [] },
           qloo_calls: qlooCalls, model_calls: (llm.usage?.calls || 0) + (baseLLM.usage?.calls || 0) + (outLLM.usage?.calls || 0), at: new Date().toISOString() };
+        if (providerError) throw providerError;
         // the inputs go back to the same visitor only, so the page can lock the test plan with them
         const result = { ...meta, product, references, compare_market: marketB, market, rival_policy: rivals, ...out, baseline, unbacked, scored, markets, podcasts, meta_check, run: runInfo };
         // only the owner's runs (access code) replace the recorded example: a visitor's free run of the same inputs must

@@ -5,7 +5,7 @@ import { canonicalPlan, planHash } from "../public/verdict.js";
 
 const memKV = () => { const m = new Map(); return { get: async (k) => m.get(k) ?? null, put: async (k, v) => { m.set(k, v); }, m }; };
 const plan = (lockedAt) => canonicalPlan({ product: "Wool sneakers", market: "London, UK", references: "Allbirds", lockedAt,
-  tests: [{ variable: "targeting", hypothesis: "h", ad_set: "a", verified: [{ name: "Tracksmith" }] }] });
+  tests: [{ variable: "targeting", hypothesis: "h", ad_set: "a", verified: [{ name: "Tracksmith" }], targets: [{ entity_id: "T", name: "Tracksmith", meta_id: "1", meta_name: "Tracksmith" }] }] });
 
 test("receipt: the server keeps the first lock with its own time and never overwrites it", async () => {
   const kv = memKV();
