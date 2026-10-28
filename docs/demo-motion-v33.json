@@ -1,0 +1,46 @@
+[
+  {
+    "key": "question",
+    "text": "The harder question is: at what price? A great audience fit can still be the wrong first buy. Taste Brief brings both sides together."
+  },
+  {
+    "key": "brief",
+    "text": "Start with what you sell, your market, and a reference brand. Here, a coffee subscription in Austin, for people who like Blue Bottle Coffee."
+  },
+  {
+    "key": "shortlist",
+    "text": "This recorded Qloo run finds Home Cooking and The Sporkful. The agent adds evidence and drafts a rate request. Local reach, prices and dates still need confirmation."
+  },
+  {
+    "key": "limits",
+    "text": "Now, a separate scenario with invented terms. One thousand dollars to test. A sixty dollar target-market CPM cap. Three placements per package."
+  },
+  {
+    "key": "baseline",
+    "text": "At two hundred dollars per placement, Home Cooking costs six hundred and fits the entered limits. The Sporkful costs less. Taste and popularity agree here."
+  },
+  {
+    "key": "change",
+    "text": "Raise the price to two hundred and twenty. The app clears the review. Check the changed terms again, and the preference switches to The Sporkful."
+  },
+  {
+    "key": "ceiling",
+    "text": "Home Cooking now needs at least eleven thousand target-market ad impressions. That's a term to negotiate, not a prediction of sales."
+  },
+  {
+    "key": "unknown",
+    "text": "In real quote mode, unknown terms stay blank. Ask the publisher, review the source, and save the decision. Reloading requires review again. Nothing is sent or booked."
+  },
+  {
+    "key": "proof",
+    "text": "Why Qloo? In our historical study, taste ranked detected sponsorships above undetected relationships sixty five percent of the time. Chart rank scored fifty two. This is association, not conversion lift."
+  },
+  {
+    "key": "limitsproof",
+    "text": "Under the hood, a Claude agent searches Qloo, ranks podcasts for the brand's fans, and drafts the requests. Code checks every claim. In a locked test the agent did not beat popularity, so ranking stays with Qloo and the rules."
+  },
+  {
+    "key": "close",
+    "text": "Taste Brief. Find the fit. Know your limits. See what changes the decision. Try the recorded run, then change the terms yourself."
+  }
+]

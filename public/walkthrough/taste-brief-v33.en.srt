@@ -1,0 +1,215 @@
+1
+00:00:02,600 --> 00:00:04,900
+Which podcast should we sponsor?
+
+2
+00:00:05,448 --> 00:00:07,912
+The harder question is: at what price?
+
+3
+00:00:08,132 --> 00:00:10,020
+A great audience fit can still be the
+
+4
+00:00:09,860 --> 00:00:11,221
+wrong first buy.
+
+5
+00:00:11,453 --> 00:00:13,819
+Taste Brief brings both sides together.
+
+6
+00:00:15,115 --> 00:00:17,603
+Start with what you sell, your market, and
+
+7
+00:00:17,443 --> 00:00:18,436
+a reference brand.
+
+8
+00:00:18,705 --> 00:00:21,414
+Here, a coffee subscription in Austin, for people
+
+9
+00:00:21,254 --> 00:00:22,775
+who like Blue Bottle Coffee.
+
+10
+00:00:24,081 --> 00:00:27,379
+This recorded Qloo run finds Home Cooking and
+
+11
+00:00:27,219 --> 00:00:28,028
+The Sporkful.
+
+12
+00:00:28,260 --> 00:00:31,153
+The agent adds evidence and drafts a rate
+
+13
+00:00:31,005 --> 00:00:31,803
+request.
+
+14
+00:00:32,023 --> 00:00:35,651
+Local reach, prices and dates still need confirmation.
+
+15
+00:00:36,948 --> 00:00:40,135
+Now, a separate scenario with invented terms.
+
+16
+00:00:40,379 --> 00:00:42,145
+One thousand dollars to test.
+
+17
+00:00:42,377 --> 00:00:45,074
+A sixty dollar target-market CPM cap.
+
+18
+00:00:45,392 --> 00:00:47,022
+Three placements per package.
+
+19
+00:00:48,336 --> 00:00:50,996
+At two hundred dollars per placement, Home Cooking
+
+20
+00:00:50,836 --> 00:00:53,643
+costs six hundred and fits the entered limits.
+
+21
+00:00:53,887 --> 00:00:55,616
+The Sporkful costs less.
+
+22
+00:00:55,860 --> 00:00:58,177
+Taste and popularity agree here.
+
+23
+00:00:59,481 --> 00:01:01,284
+Raise the price to two hundred and twenty.
+
+24
+00:01:01,528 --> 00:01:02,938
+The app clears the review.
+
+25
+00:01:03,170 --> 00:01:05,806
+Check the changed terms again, and the preference
+
+26
+00:01:05,658 --> 00:01:07,313
+switches to The Sporkful.
+
+27
+00:01:08,660 --> 00:01:11,725
+Home Cooking now needs at least eleven thousand
+
+28
+00:01:11,565 --> 00:01:13,208
+target-market ad impressions.
+
+29
+00:01:13,452 --> 00:01:16,051
+That's a term to negotiate, not a prediction
+
+30
+00:01:15,903 --> 00:01:16,847
+of sales.
+
+31
+00:01:18,124 --> 00:01:21,163
+In real quote mode, unknown terms stay blank.
+
+32
+00:01:21,408 --> 00:01:24,938
+Ask the publisher, review the source, and save
+
+33
+00:01:24,778 --> 00:01:25,538
+the decision.
+
+34
+00:01:25,771 --> 00:01:27,683
+Reloading requires review again.
+
+35
+00:01:27,903 --> 00:01:29,411
+Nothing is sent or booked.
+
+36
+00:01:30,715 --> 00:01:31,316
+Why Qloo?
+
+37
+00:01:31,548 --> 00:01:35,188
+In our historical study, taste ranked detected sponsorships
+
+38
+00:01:35,200 --> 00:01:38,755
+above undetected relationships sixty five percent of the
+
+39
+00:01:38,607 --> 00:01:39,122
+time.
+
+40
+00:01:39,367 --> 00:01:41,181
+Chart rank scored fifty two.
+
+41
+00:01:41,425 --> 00:01:44,245
+This is association, not conversion lift.
+
+42
+00:01:45,502 --> 00:01:48,175
+Under the hood, a Claude agent searches Qloo,
+
+43
+00:01:48,468 --> 00:01:51,214
+ranks podcasts for the brand's fans, and drafts
+
+44
+00:01:51,066 --> 00:01:52,059
+the requests.
+
+45
+00:01:52,292 --> 00:01:53,738
+Code checks every claim.
+
+46
+00:01:53,971 --> 00:01:56,373
+In a locked test the agent did not
+
+47
+00:01:56,225 --> 00:01:59,498
+beat popularity, so ranking stays with Qloo and
+
+48
+00:01:59,338 --> 00:02:00,086
+the rules.
+
+49
+00:02:01,369 --> 00:02:02,301
+Taste Brief.
+
+50
+00:02:02,570 --> 00:02:03,318
+Find the fit.
+
+51
+00:02:03,538 --> 00:02:04,483
+Know your limits.
+
+52
+00:02:04,715 --> 00:02:06,210
+See what changes the decision.
+
+53
+00:02:06,443 --> 00:02:09,029
+Try the recorded run, then change the terms
+
+54
+00:02:08,869 --> 00:02:09,642
+yourself.
