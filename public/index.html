@@ -242,7 +242,17 @@ body.result #how{display:none}
 .prow .rv{font-size:13px;color:var(--mute)}.prow .rv .ml{display:none;font-style:normal;color:var(--faint)}@media (max-width:700px){.prow .rv .ml{display:inline}}.prow .rv.open{color:var(--ok)}.prow .rv.rival{color:var(--warn)}
 .prow .go{display:flex;flex-direction:column;gap:0}.prow .code{font-family:var(--mono);font-size:12px;color:var(--faint)}
 .more-n{margin:8px 0 0;font-size:13px;color:var(--faint)}
-.plan .lede2{margin:8px 0 0;font-size:15px;color:var(--mute);max-width:80ch}
+.plan .lede2{margin:8px 0 0;font-size:16px;color:var(--mute);max-width:80ch}
+.sumband{display:grid;gap:12px;grid-template-columns:repeat(4,minmax(0,1fr))}
+.sumband div{background:#0d182b;border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.sumband b{font-family:var(--mono);font-size:clamp(20px,2.4vw,28px);line-height:1.1;color:var(--ok);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.sumband span{font-size:14px;line-height:1.4;color:var(--mute)}
+.sumband .unk{background:var(--warn-bg);border-color:var(--warn-line)}.sumband .unk b{color:var(--warn)}
+.nextbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;border-radius:14px;background:var(--ok-bg);border:1px solid var(--ok-line)}
+.nextbar p{margin:0;font-size:16px;color:var(--ink)}
+.nextbar a{display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border-radius:10px;border:1px solid var(--ok);color:var(--ok);font-weight:700;text-decoration:none}
+.nextbar a:hover{background:var(--ok-soft)}
+@media (max-width:760px){.sumband{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .asks{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr))}
 .ask{border:1px solid var(--line);border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:12px;background:#0d182b}
 .ask-h{display:flex;align-items:center;gap:12px}.ask-h>div{display:flex;flex-direction:column;gap:2px;min-width:0}.ask-h h3{margin:0;font-family:var(--display);font-size:19px;line-height:1.2}
@@ -803,11 +813,18 @@ function planPanel(j) {
   };
   const body = plan.groups.map((g) => `<div class="grp ${g.key}"><h3>${esc(g.title)}</h3><span>${esc(g.note)}</span></div>${g.rows.map(row).join("")}${g.more ? `<p class="more-n">${g.more} more in the podcasts CSV.</p>` : ""}`).join("");
   const coverage = shortlistEvidence(plan.first, plan.cat);
+  const routes = plan.first.filter((s) => contactFor(s.name)).length;
+  const band = `<div class="sumband"><div><b>${list(j.podcasts.shows).length} → ${plan.first.length}</b><span>Qloo podcast matches read, then shortlisted${plan.byAgent ? " by the agent" : ""}</span></div>`
+    + `<div><b>${plan.first.map((s) => Number(s.affinity).toFixed(2)).join(" · ")}</b><span>Qloo taste fit for ${fans}</span></div>`
+    + `<div><b>${routes} of ${plan.first.length}</b><span>official contact route${plan.first.length === 1 ? "" : "s"} found and dated</span></div>`
+    + `<div class="unk"><b>Unknown</b><span>Local reach, rates, dates and exclusivity: ask before booking</span></div></div>`;
   const lede = esc(`${coverage.adsFound} of ${plan.first.length} have sponsor mentions${coverage.adsUnknown ? `; coverage is unknown for ${coverage.adsUnknown}` : ""}. Confirm local reach, rates, dates and exclusivity before booking.`);
   return `<section class="plan" id="plan" tabindex="-1"><div><p class="stepk">01 / Your podcast shortlist</p><h2>${plan.first.length} show${plan.first.length === 1 ? "" : "s"} to ask first${hasDrafts ? ", with outreach drafts" : ""}</h2><p class="lede2">US-wide taste matches for ${fans}. ${lede}</p>${j.type !== "shortlist" ? `<a class="qd-jump" href="#quote-desk">Compare offers and price limits ↓</a>` : ""}</div>
+    ${band}
     ${plan.archived.length ? `<p class="note">Current publishing checks exclude ${plan.archived.map((s) => esc(s.name)).join(", ")} from new host-read outreach. The original recorded selection may predate these checks.</p>` : ""}
     ${plan.byAgent ? `<p class="agentwhy"><span class="pill live">Chosen by the agent</span> ${esc(plan.comparison?.text || "")} <span class="rulecmp">Taste and sponsor evidence for the final selection are shown on each card. Missing category evidence does not establish no rival conflict.</span></p>` : ""}${plan.skip ? `<p class="agentwhy"><span class="pill">Your choice</span> Skip shows where a ${esc(plan.cat || "category")} brand already advertises. The app holds the agent to it.</p>` : ""}${plan.byRule ? `<p class="agentwhy"><span class="pill">Chosen by the fixed rule</span> The agent did not choose shows this time, so the page used its fixed rule: shows that sell ads with no ${esc(plan.cat || "category")} brand found, then taste fit.</p>` : ""}
     <div class="asks">${plan.first.map(firstCard).join("")}</div>
+    ${j.type !== "shortlist" ? `<div class="nextbar"><p><b>Next:</b> bring back the quotes and see the price that would change this choice.</p><a href="#quote-desk">Compare offers ↓</a></div>` : ""}
     ${hasDrafts ? `<p class="note" style="margin:0">Drafts written by the agent from this run's Qloo results and the product facts you gave; unknown facts should stay in [brackets]. Review every claim before copying or using a draft. Nothing is sent by this app. A proposed code works once the show agrees to read it: it shows which orders came from each show, and the tagged link counts clicks. Neither counts how often the ad played.</p>` : plan.outreachError ? `<p class="note err" style="margin:0">The agent could not write the drafts this time: ${esc(plan.outreachError)}</p>` : ""}
     ${tests ? `<p class="note" style="margin:0">Next to the podcasts: ${tests} proposed Meta test${tests === 1 ? "" : "s"} against your usual ad; <span class="ready-count">${readyTests(j.brief.test_plan, j.meta_check, j.product).length}</span> eligible for the planning sheet. <a href="#tests">Review and lock the tests</a></p>` : ""}
     <details class="draft qd-candidates"><summary>Every candidate and the full worksheet</summary>

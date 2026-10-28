@@ -35,8 +35,7 @@ Qloo plus ad volume (the H3 combination, which the app uses to order podcasts) f
 against 1.6 for either alone (an exploratory count). Among open shows, where no brand of the category had advertised yet,
 Qloo pointed to the one the category moved into next with AUC 0.58 across 12 categories (0.48 to 0.67), against 0.50 for
 ad volume and 0.42 for the chart: not conclusive, and mostly apparel ([open-shows.json](docs/podcast-check/open-shows.json)).
-A prospective check is locked: Qloo's ranks were frozen on 21 Oct 2026 and sponsorships in
-later episodes are read on 29 or 30 Oct ([PREREGISTRATION-2.md](docs/podcast-check/PREREGISTRATION-2.md)). Details and
+Details and
 scripts: [docs/podcast-check](docs/podcast-check/), [scripts/podcast](scripts/podcast/).
 
 A second set of benchmarks is graded by Qloo itself on a held-out competitor's audience (61% of Taste Brief's interests
